@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.openbaton:catalogue:0.16-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/gradle/wrapper/dists/gradle-2.3-all/w01pvxy5gty3tegjrai84pm3/gradle-2.3/caches/modules-2/files-2.1/org.openbaton/catalogue/0.16-SNAPSHOT/796b77e0523f72a4e2be82e8dc1fd269783b36a9/catalogue-0.16-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/gradle/wrapper/dists/gradle-2.3-all/w01pvxy5gty3tegjrai84pm3/gradle-2.3/caches/modules-2/files-2.1/org.openbaton/catalogue/0.16-SNAPSHOT/8add8a6db37a7509087e2abbeff1e40ace9c2069/catalogue-0.16-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
