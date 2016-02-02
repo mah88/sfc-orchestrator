@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/sfc-controller.iml" filepath="$PROJECT_DIR$/sfc-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org-controller.iml" filepath="$PROJECT_DIR$/org-controller.iml" />
     </modules>
   </component>
 </project>

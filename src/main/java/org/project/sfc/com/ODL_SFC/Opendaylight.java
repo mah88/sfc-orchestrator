@@ -1,9 +1,18 @@
-package org.project.sfc.ODL_SFC;
+package org.project.sfc.com.ODL_SFC;
 import java.text.MessageFormat;
 import java.util.*;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.project.sfc.com.SFCJSON.ServiceFunctionChains;
+import org.project.sfc.com.SFFJSON.ServiceFunctionForwarders;
+import org.project.sfc.com.SFJSON.SFJSON;
+import org.project.sfc.com.SFJSON.ServiceFunction;
+import org.project.sfc.com.SFJSON.ServiceFunctions;
+import org.project.sfc.com.SFJSON.SfDataPlaneLocator;
+import org.project.sfc.com.SFPJSON.ServiceFunctionPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static java.lang.System.*;
@@ -158,10 +167,12 @@ public class Opendaylight {
 
     public String createODLsff(Gson sffJSON){
         com.google.gson.Gson gson = new com.google.gson.Gson();
-        String sffJSON_string= sffJSON.toString();  //gson.toJson(sffJSON, String.class);
-        Type type = new TypeToken<HashMap<String, HashMap<Integer,String>>>(){}.getType();
-        HashMap myMap  = gson.fromJson(sffJSON_string,type);
-        String sff_name= myMap.put("service-function-forwarder",myMap.put(0,"name")).toString();
+
+        String json = gson.toJson(sffJSON, String.class);
+        Response respuesta = gson.fromJson(json,Response.class);
+        Type mapOfMapsType = new TypeToken<Map<String, ServiceFunctionForwarders>>() {}.getType();
+        Map<String, ServiceFunctionForwarders> map = gson.fromJson(respuesta.getFr(), mapOfMapsType);
+        String sff_name = map.get("service-function-forwarders").getServiceFunctionForwarder().get(0).getName();
         String sff_result = this.sendRest(sffJSON, "PUT", MessageFormat.format(this.Config_SFF_URL,sff_name));
         return sff_result;
     }
@@ -179,10 +190,12 @@ public class Opendaylight {
     //ODL SFs Stuff (Create, Update, Delete)
     public String createODLsf(Gson sfJSON){
         com.google.gson.Gson gson = new com.google.gson.Gson();
-        String sfJSON_string= sfJSON.toString();  //gson.toJson(sfJSON, String.class);
-        Type type = new TypeToken<HashMap<String, HashMap<Integer,String>>>(){}.getType();
-        HashMap myMap  = gson.fromJson(sfJSON_string,type);
-        String sf_name= myMap.put("service-function",myMap.put(0,"name")).toString();
+
+        String json = gson.toJson(sfJSON, String.class);
+        Response respuesta = gson.fromJson(json,Response.class);
+        Type mapOfMapsType = new TypeToken<Map<String, ServiceFunctions>>() {}.getType();
+        Map<String, ServiceFunctions> map = gson.fromJson(respuesta.getFr(), mapOfMapsType);
+        String sf_name = map.get("service-functions").getServiceFunction().get(0).getName();
         String sf_result = this.sendRest(sfJSON, "PUT", MessageFormat.format(this.Config_SF_URL,sf_name));
         return sf_result;
     }
@@ -199,10 +212,12 @@ public class Opendaylight {
     //ODL SFC stuff (Create, Update, Delete)
     public String createODLsfc(Gson sfcJSON){
         com.google.gson.Gson gson = new com.google.gson.Gson();
-        String sfcJSON_string= sfcJSON.toString();  //gson.toJson(sfJSON, String.class);
-        Type type = new TypeToken<HashMap<String, HashMap<Integer,String>>>(){}.getType();
-        HashMap myMap  = gson.fromJson(sfcJSON_string,type);
-        String sfc_name= myMap.put("service-function-chain",myMap.put(0,"name")).toString();
+
+        String json = gson.toJson(sfcJSON, String.class);
+        Response respuesta = gson.fromJson(json,Response.class);
+        Type mapOfMapsType = new TypeToken<Map<String, ServiceFunctionChains>>() {}.getType();
+        Map<String, ServiceFunctionChains> map = gson.fromJson(respuesta.getFr(), mapOfMapsType);
+        String sfc_name = map.get("service-function-chains").getServiceFunctionChain().get(0).getName();
         String sfc_result = this.sendRest(sfcJSON, "PUT", MessageFormat.format(this.Config_SFC_URL,sfc_name));
         return sfc_result;
     }
@@ -219,10 +234,12 @@ public class Opendaylight {
     //ODL SFP stuff (Create, Update, Delete)
     public String createODLsfp(Gson sfpJSON){
         com.google.gson.Gson gson = new com.google.gson.Gson();
-        String sfpJSON_string= sfpJSON.toString();  //gson.toJson(sfJSON, String.class);
-        Type type = new TypeToken<HashMap<String, HashMap<Integer,String>>>(){}.getType();
-        HashMap myMap  = gson.fromJson(sfpJSON_string,type);
-        String sfp_name= myMap.put("service-function-path",myMap.put(0,"name")).toString();
+
+        String json = gson.toJson(sfpJSON, String.class);
+        Response respuesta = gson.fromJson(json,Response.class);
+        Type mapOfMapsType = new TypeToken<Map<String, ServiceFunctionPaths>>() {}.getType();
+        Map<String, ServiceFunctionPaths> map = gson.fromJson(respuesta.getFr(), mapOfMapsType);
+        String sfp_name = map.get("service-function-paths").getServiceFunctionPath().get(0).getName();
         String sfp_result = this.sendRest(sfpJSON, "PUT", MessageFormat.format(this.Config_SFP_URL,sfp_name));
         return sfp_result;
     }
@@ -247,6 +264,117 @@ public class Opendaylight {
         String rsp_result = this.sendRest(rspJSON, "DELETE", url);
         return rsp_result;
     }
+
+    public Integer CreateSFC(SFCdict sfc_dict, Map<Integer,VNFdict> vnf_dict){
+     Long SFC_id=sfc_dict.getId();
+        String dp_loc="sf-data-plane-locator";
+        ServiceFunctions sfs_json=new ServiceFunctions();
+        HashMap<Integer,Long> sf_net_map=new HashMap<Integer, Long>();
+        SFJSON FullSFjson=new SFJSON();
+        Integer SF_ID;
+        List<ServiceFunction> list_sfs=new ArrayList<>();
+        for(int sf_i=0;sf_i<sfc_dict.getChain().size();sf_i++){
+            ServiceFunction sf_json=new ServiceFunction();
+            SF_ID=sf_i;
+            sf_json.setName(vnf_dict.get(sf_i).getName());
+            SfDataPlaneLocator dplocDict=new  SfDataPlaneLocator ();
+            dplocDict.setName("vxlan");
+            dplocDict.setIp(vnf_dict.get(sf_i).getIP());
+            dplocDict.setPort("6633");
+            dplocDict.setTransport("service-locator:vxlan-gpe");
+            dplocDict.setServiceFunctionForwarder("dummy");
+            sf_json.setNshAware("true");
+            sf_json.setIpMgmtAddress(vnf_dict.get(sf_i).getIP());
+            sf_json.setType("service-function-type:"+vnf_dict.get(sf_i).getType());
+            List< SfDataPlaneLocator > list_dploc=new ArrayList<>();
+            list_dploc.add(0,dplocDict);
+            sf_json.setSfDataPlaneLocator(list_dploc);
+            list_sfs.add(SF_ID,sf_json);
+            sfs_json.setServiceFunction(list_sfs);
+            FullSFjson.setServiceFunctions(sfs_json);
+            sf_net_map.put(SF_ID,vnf_dict.get(sf_i).getNeutronPortId();
+        }
+
+        //ovs_mapping=locate_ovs_to_sf(set_net_map); need a function for locating
+
+
+
+
+
+
+    }
+
+
+
+    public class SFCdict{
+        private Long id;
+        private String name;
+        private List<String> chain=new ArrayList<String>();
+        private Boolean symmetrical;
+
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public Long getId() {
+            return id;
+        }
+        public void setId(Long ID) {
+            this.id = ID;
+        }
+        public List<String> getChain() {
+            return chain;
+        }
+        public void setChain(List<String> chain) {
+            this.chain = chain;
+        }
+        public Boolean isSymmetrical() {
+            return symmetrical;
+        }
+        public void setSymmetrical(Boolean symm) {
+            this.symmetrical = symm;
+        }
+
+    }
+
+    public class VNFdict{
+        private String ip;
+        private String name;
+        private String type;
+        private Long neutronPortId;
+
+
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public Long getNeutronPortId() {
+            return neutronPortId;
+        }
+        public void setNeutronPortId(Long ID) {
+            this.neutronPortId = ID;
+        }
+        public String getIP() {
+            return ip;
+        }
+        public void setIP(String ip) {
+            this.ip = ip;
+        }
+        public String getType() {
+            return type;
+        }
+        public void setType(String type) {
+            this.type = type;
+        }
+
+
+    }
+
+
 
     public class Response{
 
