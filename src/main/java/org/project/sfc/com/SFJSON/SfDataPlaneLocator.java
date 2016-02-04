@@ -13,7 +13,7 @@ public class SfDataPlaneLocator {
     private String name;
     @SerializedName("port")
     @Expose
-    private Integer port;
+    private String port;
     @SerializedName("ip")
     @Expose
     private String ip;
@@ -47,7 +47,7 @@ public class SfDataPlaneLocator {
      * @return
      *     The port
      */
-    public Integer getPort() {
+    public String getPort() {
         return port;
     }
 
@@ -56,7 +56,7 @@ public class SfDataPlaneLocator {
      * @param port
      *     The port
      */
-    public void setPort(Integer port) {
+    public void setPort(String port) {
         this.port = port;
     }
 
