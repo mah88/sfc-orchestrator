@@ -19,7 +19,7 @@ public class ServiceFunctionPath {
     private Integer startingIndex;
     @SerializedName("symmetric")
     @Expose
-    private String symmetric;
+    private Boolean symmetric;
 
     /**
      * 
@@ -80,7 +80,7 @@ public class ServiceFunctionPath {
      * @return
      *     The symmetric
      */
-    public String getSymmetric() {
+    public Boolean getSymmetric() {
         return symmetric;
     }
 
@@ -89,7 +89,7 @@ public class ServiceFunctionPath {
      * @param symmetric
      *     The symmetric
      */
-    public void setSymmetric(String symmetric) {
+    public void setSymmetric(Boolean symmetric) {
         this.symmetric = symmetric;
     }
 

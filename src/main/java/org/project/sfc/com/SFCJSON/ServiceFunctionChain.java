@@ -15,7 +15,7 @@ public class ServiceFunctionChain {
     private String name;
     @SerializedName("symmetric")
     @Expose
-    private String symmetric;
+    private Boolean symmetric;
     @SerializedName("org-service-function")
     @Expose
     private List<SfcServiceFunction> sfcServiceFunction = new ArrayList<SfcServiceFunction>();
@@ -43,7 +43,7 @@ public class ServiceFunctionChain {
      * @return
      *     The symmetric
      */
-    public String getSymmetric() {
+    public Boolean getSymmetric() {
         return symmetric;
     }
 
@@ -52,7 +52,7 @@ public class ServiceFunctionChain {
      * @param symmetric
      *     The symmetric
      */
-    public void setSymmetric(String symmetric) {
+    public void setSymmetric(Boolean symmetric) {
         this.symmetric = symmetric;
     }
 

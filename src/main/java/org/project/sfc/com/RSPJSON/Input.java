@@ -17,7 +17,7 @@ public class Input {
     private String parentServiceFunctionPath;
     @SerializedName("symmetric")
     @Expose
-    private String symmetric;
+    private Boolean symmetric;
 
     /**
      * 
@@ -60,7 +60,7 @@ public class Input {
      * @return
      *     The symmetric
      */
-    public String getSymmetric() {
+    public Boolean getSymmetric() {
         return symmetric;
     }
 
@@ -69,7 +69,7 @@ public class Input {
      * @param symmetric
      *     The symmetric
      */
-    public void setSymmetric(String symmetric) {
+    public void setSymmetric(Boolean symmetric) {
         this.symmetric = symmetric;
     }
 

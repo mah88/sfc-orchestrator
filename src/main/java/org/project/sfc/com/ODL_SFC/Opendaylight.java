@@ -3,6 +3,9 @@ import java.text.MessageFormat;
 import java.util.*;
 
 import org.apache.commons.codec.binary.Base64;
+import org.project.sfc.com.NetworkJSON.NetworkJSON;
+import org.project.sfc.com.NetworkJSON.NetworkTopology;
+import org.project.sfc.com.NetworkJSON.Topology;
 import org.project.sfc.com.SFCJSON.SFCJSON;
 import org.project.sfc.com.SFCJSON.ServiceFunctionChain;
 import org.project.sfc.com.SFCJSON.ServiceFunctionChains;
@@ -15,6 +18,7 @@ import org.project.sfc.com.SFJSON.SfDataPlaneLocator;
 import org.project.sfc.com.SFPJSON.SFPJSON;
 import org.project.sfc.com.SFPJSON.ServiceFunctionPath;
 import org.project.sfc.com.SFPJSON.ServiceFunctionPaths;
+import org.project.sfc.com.SFCdict.SFCdict;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.project.sfc.com.RSPJSON.RSPJSON;
@@ -41,6 +45,8 @@ public class Opendaylight {
     public String Config_SFF_URL="restconf/config/service-function-forwarder:service-function-forwarders/service-function-forwarder/{}/";
     public String Config_SFC_URL="restconf/config/service-function-chain:service-function-chains/service-function-chain/{}/ ";
     public String Config_SFP_URL="restconf/config/service-function-path:service-function-paths/service-function-path/{}";
+    public int sff_counter=1;
+
     private static Logger logger = LoggerFactory.getLogger(Opendaylight.class);
 
     private void init(){
@@ -53,7 +59,7 @@ public class Opendaylight {
         this.Config_SFC_URL=Config_SFC_URL;
         this.Config_SFF_URL=Config_SFF_URL;
         this.Config_SFP_URL=Config_SFP_URL;
-        int sff_counter=1;
+      this.sff_counter=sff_counter;
 
 
 
@@ -394,6 +400,39 @@ public class Opendaylight {
         return request;
 
     }
+/// Send request for getting the Network TOPOLOGY
+    public ResponseEntity<String> sendRest_NetworkTopology(NetworkJSON data, String rest_type, String url){
+
+        String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
+        String plainCreds = this.ODL_username+":"+this.ODL_ip;
+        byte[] plainCredsBytes = plainCreds.getBytes();
+        byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+        String base64Creds = new String(base64CredsBytes);
+        RestTemplate template=new RestTemplate();
+        HttpHeaders headers=new HttpHeaders();
+        //   http.createBasicAuthenticationHttpHeaders(username, password);
+        headers.add("Accept","application/json");
+        headers.add("content-type","application/json;charset=utf-8");
+        headers.add("Authorization","Basic " + base64Creds);
+        Gson mapper=new Gson();
+        NetworkJSON result=new NetworkJSON();
+        ResponseEntity<String> request=null;
+      if (rest_type=="GET"){
+            HttpEntity <String> getEntity=new HttpEntity<>(headers);
+            request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+            if(!request.getStatusCode().is2xxSuccessful()){
+                result=null;
+            }
+            else {
+                result = mapper.fromJson(request.getBody(),NetworkJSON.class);
+                logger.debug("Setting of SFC has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
+
+            }
+        }
+
+        return request;
+
+    }
 
      /*
     public String sendRest(Gson data,String rest_type,String url)
@@ -482,10 +521,10 @@ public class Opendaylight {
 
     }
     */
-    //we have to know how should look like the NetworkTopologyList
-    public String getNetworkTopologyList(){
+    /// Get Network Topology
+    public ResponseEntity<String> getNetworkTopologyList(){
         String url = "restconf/operational/network-topology:network-topology/";
-        String network = this.sendRest(null, "GET", url);
+        ResponseEntity<String> network = this.sendRest_NetworkTopology(null, "GET", url);
         return network;
     }
     //ODL SFF Stuff (Get, Create, Update, Delete)
@@ -598,14 +637,13 @@ public class Opendaylight {
     }
 
     public String CreateSFC(SFCdict sfc_dict, HashMap<Integer,VNFdict> vnf_dict){
-     Long SFC_id=sfc_dict.getId();
         String dp_loc="sf-data-plane-locator";
         ServiceFunctions sfs_json=new ServiceFunctions();
-        HashMap<Integer,Long> sf_net_map=new HashMap<Integer, Long>();
+        HashMap<Integer,String> sf_net_map=new HashMap<Integer, String>();
         SFJSON FullSFjson=new SFJSON();
         Integer SF_ID;
         List<ServiceFunction> list_sfs=new ArrayList<>();
-        for(int sf_i=0;sf_i<sfc_dict.getChain().size();sf_i++){
+        for(int sf_i=0;sf_i<sfc_dict.getSfcDict().getChain().size();sf_i++){
             ServiceFunction sf_json=new ServiceFunction();
             SF_ID=sf_i;
             sf_json.setName(vnf_dict.get(sf_i).getName());
@@ -624,7 +662,7 @@ public class Opendaylight {
             list_sfs.add(SF_ID,sf_json);
             sfs_json.setServiceFunction(list_sfs);
          //   FullSFjson.setServiceFunctions(sfs_json);
-            sf_net_map.put(SF_ID,vnf_dict.get(sf_i).getNeutronPortId());
+            sf_net_map.put(SF_ID,vnf_dict.get(sfc_dict.getSfcDict().getChain().get(sf_i)).getNeutronPortId());
         }
         // need to be adjusted
         HashMap<String,BridgeMapping> ovs_mapping=Locate_ovs_to_sf(sf_net_map);
@@ -688,9 +726,9 @@ public class Opendaylight {
     public static SFPJSON create_sfp_json(SFCdict sfc_dict){
         SFPJSON sfp_json=new SFPJSON();
         ServiceFunctionPath sfp=new ServiceFunctionPath();
-        sfp.setName("Path-"+sfc_dict.getName());
-        sfp.setServiceChainName(sfc_dict.getName());
-        sfp.setSymmetric(sfc_dict.isSymmetrical());
+        sfp.setName("Path-"+sfc_dict.getSfcDict().getName());
+        sfp.setServiceChainName(sfc_dict.getSfcDict().getName());
+        sfp.setSymmetric(sfc_dict.getSfcDict().getSymmetrical());
         // need to change the 0 to the size of the current SFP --> need database creation
         sfp_json.getServiceFunctionPaths().getServiceFunctionPath().add(0,sfp);
         return sfp_json;
@@ -700,61 +738,190 @@ public class Opendaylight {
     public static SFCJSON create_sfc_json(SFCdict sfc_dict, HashMap<Integer,VNFdict> vnf_dict){
         ServiceFunctionChain sfc=new ServiceFunctionChain();
         SFCJSON sfc_json=new SFCJSON();
-       for (int sf=0;sf<sfc_dict.getChain().size();sf++){
+       for (int sf=0;sf<sfc_dict.getSfcDict().getChain().size();sf++){
            sfc.getSfcServiceFunction().get(sf).setName(vnf_dict.get(sf).getName());
            sfc.getSfcServiceFunction().get(sf).setType("service-function-type:"+vnf_dict.get(sf).getType());
            // need to change the 0 to the size of the current SFCs --> need database creation
            sfc_json.getServiceFunctionChains().getServiceFunctionChain().add(0,sfc);
        }
-        sfc_json.getServiceFunctionChains().getServiceFunctionChain().get(0).setName(sfc_dict.getName());
-        sfc_json.getServiceFunctionChains().getServiceFunctionChain().get(0).setSymmetric(sfc_dict.isSymmetrical());
+        sfc_json.getServiceFunctionChains().getServiceFunctionChain().get(0).setName(sfc_dict.getSfcDict().getName());
+        sfc_json.getServiceFunctionChains().getServiceFunctionChain().get(0).setSymmetric(sfc_dict.getSfcDict().getSymmetrical());
         return sfc_json;
 
     }
 //// TODO: 2/4/2016  
     //param sfs_dict: dictionary of SFs by id to network id (neutron port id)
     //return: dictionary mapping sfs to bridge name
-    public HashMap<String,BridgeMapping> Locate_ovs_to_sf(HashMap<Integer,Long> sfs_dict){
-        String response=getNetworkTopologyList();
+    public HashMap<String,BridgeMapping> Locate_ovs_to_sf(HashMap<Integer,VNFdict> sfs_dict){
+        ResponseEntity<String> response=getNetworkTopologyList();
      //   if(response.getStatusCode!=200)
-        String network = response;  //need to be modified
+        if (!response.getStatusCode().is2xxSuccessful()){
+            logger.error("Unable to get network topology");
 
-        if(network==null){
+        }
+       String network_s=response.getBody();
+        if(network_s==null){
             return null;
         }
+        Gson mapper=new Gson();
+        NetworkJSON network=new NetworkJSON();
+        logger.debug("Network is "+network_s);
+        network=mapper.fromJson(response.getBody(),NetworkJSON.class);
 
-        BridgeMapping br_mapping=new BridgeMapping();
+       HashMap<String, BridgeMapping> br_mapping=new HashMap<String,BridgeMapping>();
+        NetworkTopology networkmap=new NetworkTopology();
+        networkmap=network.getNetworkTopology();
 
-        //network map=network.getNetworkTopology.getTopology(); need to be adjusted
+        Brdict br_dict=new Brdict();
         for(int i=0;i<sfs_dict.size();i++){
-          //  br_dict=Find_ovs_br(sfs_dict.get(i),network_map); //need to be adjusted
+            br_dict=find_ovs_br(sfs_dict.get(i),networkmap); //need to be adjusted
+            logger.debug("br_dict from find_ovs:" +br_dict.toString());
+            if (br_dict!=null){
+                String br_name=br_dict.getBr_name();
+                if (br_mapping.get(br_name)!=null){
+                    br_mapping.get(br_name).getSfs().add(sfs_dict.get(i).getName());
+                    br_mapping.get(br_name).getSFdict().get(sfs_dict.get(i).getName()).setTap_port(br_dict.getTap_port());
+                } else{
+                    br_mapping.get(br_name).getSfs().add(sfs_dict.get(i).getName());
+                    br_mapping.get(br_name).setOVSip(br_dict.getOVSIp());
+                    String sff_name="sff"+sff_counter;
+                    br_mapping.get(br_name).setSFFname(sff_name);
+                    br_mapping.get(br_name).getSFdict().get(sfs_dict.get(i).getName()).setTap_port(br_dict.getTap_port());
+                    sff_counter++;
+
+                }
+            }else {
+                logger.debug("Could not find OVS bridge for "+ sfs_dict.get(i).getName());
+            }
 
         }
+
+        return br_mapping;
     }
 
-    public class BridgeMapping{
-        private String br_name;
-        private List<SF_dict> sfs=new ArrayList<>();
-       // private SF_dict SF_id=new SF_dict();
-        private String ovs_ip;
-        private String sff_name;
+    public static class Brdict{
+       private String ovs_ip;
+       private String br_name;
+       private String tap_port;
+       private Integer ovs_port;
+
+        public String getTap_port() {
+            return tap_port;
+        }
+        public void setTap_port(String name) {
+            this.tap_port = name;
+        }
+
+        public String getOVSIp() {
+            return ovs_ip;
+        }
+        public void setOVSIp(String name) {
+            this.ovs_ip = name;
+        }
+
+        public Integer getOVS_port() {
+            return ovs_port;
+        }
+        public void setOVS_port(Integer port) {
+            this.ovs_port = port;
+        }
+
         public String getBr_name() {
             return br_name;
         }
         public void setBr_name(String name) {
             this.br_name = name;
         }
-      /*  public SF_dict getSFId(){
-            return SF_id;
+
+    }
+
+    public static Brdict find_ovs_br(VNFdict sf_id, NetworkTopology network_map){
+
+        Brdict bridge_dict=new Brdict();
+        String Node_id="";
+        for(int net=0;net<network_map.getTopology().size();net++){
+            if(network_map.getTopology().get(net).getNode()!=null){
+
+                for(int node_entry=0;node_entry<network_map.getTopology().get(net).getNode().size();node_entry++){
+                    if(network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint()!=null){
+                        for(int endpoint=0;endpoint<network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().size();endpoint++){
+                               /*   if(bridge_dict.equals(network_map.getTopology().get(0).getNode().get(node_entry).getTerminationPoint().get(endpoint))){
+                                      break;
+                                  }*/
+                            if(network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds()!=null){
+                                for (int external_id=0;external_id<network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds().size();external_id++){
+                                    if(network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds().get(external_id).getExternalIdValue()!=null){
+                                        if (network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds().get(external_id).getExternalIdValue()==sf_id.getNeutronPortId()){
+
+                                            System.out.println("Found");
+                                            System.out.println("OVSDB Bridge Name: "+network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeName());
+                                            bridge_dict.setBr_name(network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeName());
+                                            String full_node_id=network_map.getTopology().get(net).getNode().get(node_entry).getNodeId();
+                                            String remove_it="/bridge/"+bridge_dict.getBr_name();
+                                            Node_id=full_node_id.replaceAll(remove_it,"");
+                                            bridge_dict.setTap_port(network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbName());
+                                            break;
+
+                                        }else {
+                                            System.out.println("NOT Found");
+
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                if(bridge_dict.getBr_name()!=null){
+                    for(int node_entry=0;node_entry<network_map.getTopology().get(net).getNode().size();node_entry++){
+                        if(network_map.getTopology().get(net).getNode().get(node_entry).getNodeId()==Node_id && network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbConnectionInfo()!=null){
+                            bridge_dict.setOVS_port(network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbConnectionInfo().getRemotePort());
+                            bridge_dict.setOVSIp(network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbConnectionInfo().getRemoteIp());
+                            break;
+
+                        }
+                    }
+
+                }
+            }
+
         }
-        public void setSFId(SF_dict ID) {
-            this.SF_id = ID;
+
+        if(bridge_dict.getBr_name()!=null && bridge_dict.getOVS_port()!=null && bridge_dict.getOVSIp()!=null && bridge_dict.getTap_port()!=null)
+        {
+            return bridge_dict;
+        }else
+        {
+            logger.error("bridge dictionary is not created successfully!!");
+            return null;
         }
-        */
-        public List<SF_dict> getSfs() {
+
+
+
+
+
+    }
+
+    public class BridgeMapping{
+
+        private List<String> sfs=new ArrayList<>();
+       // private SF_dict SF_id=new SF_dict();
+        private String ovs_ip;
+        private String sff_name;
+        private HashMap<String, SF_dict> sf=new HashMap<String,SF_dict>();
+
+        public HashMap<String, SF_dict>getSFdict() {
+            return sf;
+        }
+        public void setSFdict(HashMap<String, SF_dict> sf) {
+            this.sf = sf;
+        }
+        public List<String> getSfs() {
             return sfs;
         }
-        public void setSfs(List<SF_dict> sfs) {
+        public void setSfs(List<String> sfs) {
             this.sfs = sfs;
         }
         public String getOVSip() {
@@ -771,7 +938,7 @@ public class Opendaylight {
         }
     }
     public class SF_dict{
-        private Integer sf_id;
+
         private String tap_port;
         public String getTap_port() {
             return tap_port;
@@ -779,63 +946,27 @@ public class Opendaylight {
         public void setTap_port(String name) {
             this.tap_port = name;
         }
-        public Integer getSFId() {
-            return sf_id;
-        }
-        public void setSFId(Integer ID) {
-            this.sf_id = ID;
-        }
-    }
-    public class SFCdict{
-        private Long id;
-        private String name;
-        private List<String> chain=new ArrayList<String>();
-        private String symmetrical;
-
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-        public Long getId() {
-            return id;
-        }
-        public void setId(Long ID) {
-            this.id = ID;
-        }
-        public List<String> getChain() {
-            return chain;
-        }
-        public void setChain(List<String> chain) {
-            this.chain = chain;
-        }
-        public String isSymmetrical() {
-            return symmetrical;
-        }
-        public void setSymmetrical(String symm) {
-            this.symmetrical = symm;
-        }
 
     }
+
 
     public class VNFdict{
+
+
+        private String neutronPortId;
         private String ip;
-        private String name;
         private String type;
-        private Long neutronPortId;
-
-
+        private String name;
         public String getName() {
             return name;
         }
         public void setName(String name) {
             this.name = name;
         }
-        public Long getNeutronPortId() {
+        public String getNeutronPortId() {
             return neutronPortId;
         }
-        public void setNeutronPortId(Long ID) {
+        public void setNeutronPortId(String ID) {
             this.neutronPortId = ID;
         }
         public String getIP() {
