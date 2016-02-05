@@ -656,7 +656,7 @@ public class Opendaylight {
             sf_json.setIpMgmtAddress(vnf_dict.get(sf_i).getIP());
             sf_json.setType("service-function-type:"+vnf_dict.get(sf_i).getType());
             List< SfDataPlaneLocator> list_dploc=new ArrayList<SfDataPlaneLocator>();
-            list_dploc.add(0,dplocDict);
+            list_dploc.add(dplocDict);
             sf_json.setSfDataPlaneLocator(list_dploc);
             list_sfs.add(SF_ID,sf_json);
             sfs_json.setServiceFunction(list_sfs);
@@ -683,7 +683,7 @@ public class Opendaylight {
         }
 
         for(int sf_j=0;sf_j<sfs_json.getServiceFunction().size();sf_j++){
-            FullSFjson.getServiceFunctions().getServiceFunction().add(sf_j,sfs_json.getServiceFunction().get(sf_j));
+            FullSFjson.getServiceFunctions().getServiceFunction().add(sfs_json.getServiceFunction().get(sf_j));
             ResponseEntity<String> sf_result=createODLsf(FullSFjson);
             if(!sf_result.getStatusCode().is2xxSuccessful()){
                 logger.error("Unable to create ODL SF "+ FullSFjson.toString());
@@ -754,8 +754,8 @@ public class Opendaylight {
         sfp.setName("Path-"+sfc_dict.getSfcDict().getName());
         sfp.setServiceChainName(sfc_dict.getSfcDict().getName());
         sfp.setSymmetric(sfc_dict.getSfcDict().getSymmetrical());
-        // need to change the 0 to the size of the current SFP --> need database creation
-        sfp_json.getServiceFunctionPaths().getServiceFunctionPath().add(0,sfp);
+
+        sfp_json.getServiceFunctionPaths().getServiceFunctionPath().add(sfp);
         return sfp_json;
 
     }
@@ -1160,7 +1160,28 @@ public class Opendaylight {
 
 
     }
+public void DeleteSFC(String instance_id,boolean isSymmetric){
 
+
+    List<String> instance_list=new ArrayList<String>();
+    instance_list.add(instance_id);
+    if(isSymmetric==true){
+        String reverse_id = instance_id+"-Reverse";
+        instance_list.add(reverse_id);
+
+    }
+    for (int ins=0;ins<instance_list.size();ins++){
+        RSPJSON rsp_dict=new RSPJSON();
+        rsp_dict.getInput().setName(instance_list.get(ins));
+        ResponseEntity<String> rsp_result=deleteODLrsp(rsp_dict);
+
+        if(!rsp_result.getStatusCode().is2xxSuccessful()){
+
+            logger.error("Unable to delete RSP ! ");
+        }
+
+    }
+}
 
 
     public class Response{
