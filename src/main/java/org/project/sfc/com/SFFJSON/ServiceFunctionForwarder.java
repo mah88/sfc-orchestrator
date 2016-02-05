@@ -13,6 +13,9 @@ public class ServiceFunctionForwarder {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("ip-mgmt-address")
+    @Expose
+    private String ipMgmtAddress;
     @SerializedName("service-node")
     @Expose
     private String serviceNode;
@@ -42,6 +45,20 @@ public class ServiceFunctionForwarder {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getIpMgmtAddress() {
+        return ipMgmtAddress;
+    }
+
+    /**
+     *
+     * @param ipMgmtAddress
+     *     The ip-mgmt-address
+     */
+    public void setIpMgmtAddress(String ipMgmtAddress) {
+        this.ipMgmtAddress = ipMgmtAddress;
     }
 
     /**

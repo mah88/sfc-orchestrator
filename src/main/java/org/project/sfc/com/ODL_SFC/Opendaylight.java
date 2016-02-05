@@ -9,8 +9,7 @@ import org.project.sfc.com.NetworkJSON.Topology;
 import org.project.sfc.com.SFCJSON.SFCJSON;
 import org.project.sfc.com.SFCJSON.ServiceFunctionChain;
 import org.project.sfc.com.SFCJSON.ServiceFunctionChains;
-import org.project.sfc.com.SFFJSON.SFFJSON;
-import org.project.sfc.com.SFFJSON.ServiceFunctionForwarders;
+import org.project.sfc.com.SFFJSON.*;
 import org.project.sfc.com.SFJSON.SFJSON;
 import org.project.sfc.com.SFJSON.ServiceFunction;
 import org.project.sfc.com.SFJSON.ServiceFunctions;
@@ -639,7 +638,7 @@ public class Opendaylight {
     public String CreateSFC(SFCdict sfc_dict, HashMap<Integer,VNFdict> vnf_dict){
         String dp_loc="sf-data-plane-locator";
         ServiceFunctions sfs_json=new ServiceFunctions();
-        HashMap<Integer,String> sf_net_map=new HashMap<Integer, String>();
+        HashMap<Integer,VNFdict> sf_net_map=new HashMap<Integer, VNFdict>();
         SFJSON FullSFjson=new SFJSON();
         Integer SF_ID;
         List<ServiceFunction> list_sfs=new ArrayList<>();
@@ -662,7 +661,7 @@ public class Opendaylight {
             list_sfs.add(SF_ID,sf_json);
             sfs_json.setServiceFunction(list_sfs);
          //   FullSFjson.setServiceFunctions(sfs_json);
-            sf_net_map.put(SF_ID,vnf_dict.get(sfc_dict.getSfcDict().getChain().get(sf_i)).getNeutronPortId());
+            sf_net_map.put(SF_ID,vnf_dict.get(sfc_dict.getSfcDict().getChain().get(sf_i)));
         }
         // need to be adjusted
         HashMap<String,BridgeMapping> ovs_mapping=Locate_ovs_to_sf(sf_net_map);
@@ -685,8 +684,28 @@ public class Opendaylight {
             }
         }
 
+        List<ServiceFunctionForwarder> sff_list= new ArrayList<>();
+        //building SFF
+        ServiceFunctionForwarder prev_sff_dict=find_existing_sff(ovs_mapping);
+        if(prev_sff_dict!=null){
+            logger.debug("Previous SFF is detected ");
+            sff_list=create_sff_json(ovs_mapping,FullSFjson,prev_sff_dict);
+        }else {
+             sff_list=create_sff_json(ovs_mapping,FullSFjson,null);
 
-        //building SFF need to be added // TODO: 2/4/2016  
+        }
+
+        for (int sff_index=0;sff_index<sff_list.size();sff_index++){
+            SFFJSON sff_json=new SFFJSON();
+            sff_json.getServiceFunctionForwarders().getServiceFunctionForwarder().add(sff_list.get(sff_index));
+            Gson mapper=new Gson();
+            logger.debug("json request formatted sff json: "+ sff_json.toString());
+           ResponseEntity<String> sff_result= createODLsff(sff_json);
+            if(!sff_result.getStatusCode().is2xxSuccessful()){
+                logger.error("Unable to create SFFs");
+            }
+        }
+
 
          //create SFC
         SFCJSON sfc_json=create_sfc_json(sfc_dict,vnf_dict);
@@ -742,19 +761,19 @@ public class Opendaylight {
            sfc.getSfcServiceFunction().get(sf).setName(vnf_dict.get(sf).getName());
            sfc.getSfcServiceFunction().get(sf).setType("service-function-type:"+vnf_dict.get(sf).getType());
            // need to change the 0 to the size of the current SFCs --> need database creation
-           sfc_json.getServiceFunctionChains().getServiceFunctionChain().add(0,sfc);
+           sfc_json.getServiceFunctionChains().getServiceFunctionChain().add(sfc);
        }
         sfc_json.getServiceFunctionChains().getServiceFunctionChain().get(0).setName(sfc_dict.getSfcDict().getName());
         sfc_json.getServiceFunctionChains().getServiceFunctionChain().get(0).setSymmetric(sfc_dict.getSfcDict().getSymmetrical());
         return sfc_json;
 
     }
-//// TODO: 2/4/2016  
+
     //param sfs_dict: dictionary of SFs by id to network id (neutron port id)
     //return: dictionary mapping sfs to bridge name
     public HashMap<String,BridgeMapping> Locate_ovs_to_sf(HashMap<Integer,VNFdict> sfs_dict){
         ResponseEntity<String> response=getNetworkTopologyList();
-     //   if(response.getStatusCode!=200)
+
         if (!response.getStatusCode().is2xxSuccessful()){
             logger.error("Unable to get network topology");
 
@@ -769,12 +788,12 @@ public class Opendaylight {
         network=mapper.fromJson(response.getBody(),NetworkJSON.class);
 
        HashMap<String, BridgeMapping> br_mapping=new HashMap<String,BridgeMapping>();
-        NetworkTopology networkmap=new NetworkTopology();
+        NetworkTopology networkmap;
         networkmap=network.getNetworkTopology();
 
-        Brdict br_dict=new Brdict();
+        Brdict br_dict;
         for(int i=0;i<sfs_dict.size();i++){
-            br_dict=find_ovs_br(sfs_dict.get(i),networkmap); //need to be adjusted
+            br_dict=find_ovs_br(sfs_dict.get(i),networkmap);
             logger.debug("br_dict from find_ovs:" +br_dict.toString());
             if (br_dict!=null){
                 String br_name=br_dict.getBr_name();
@@ -835,6 +854,156 @@ public class Opendaylight {
 
     }
 
+
+    public ServiceFunctionForwarder find_existing_sff(HashMap<String, BridgeMapping> BridgeMapping){
+
+        ResponseEntity<String> response=getODLsff();
+        if (!response.getStatusCode().is2xxSuccessful()){
+            logger.warn("Unable to get SFFs from ODL");
+            return null;
+        }
+         Gson mapper=new Gson();
+           SFFJSON sff_json_response=mapper.fromJson(response.getBody(),SFFJSON.class);
+        List<ServiceFunctionForwarder> odl_sff_list=sff_json_response.getServiceFunctionForwarders().getServiceFunctionForwarder();
+        ServiceFunctionForwarder sff_br_dict=new ServiceFunctionForwarder();
+        Iterator br=BridgeMapping.entrySet().iterator();
+        while(br.hasNext()){
+            for(int sff=0;sff<odl_sff_list.size();sff++){
+                Map.Entry Bridge_name = (Map.Entry)br.next();;
+               if (odl_sff_list.get(sff).getIpMgmtAddress().equals(BridgeMapping.get(Bridge_name.getKey()).getOVSip())){
+                   sff_br_dict=odl_sff_list.get(sff);
+                   continue;
+               }
+            }
+            br.remove();
+        }
+        if (sff_br_dict!=null){
+            return sff_br_dict;
+        }else {
+            logger.debug("SFF is null -- sff_br_dict");
+            return null;
+        }
+
+
+    }
+    public static List<ServiceFunctionForwarder> create_sff_json(HashMap<String, BridgeMapping> bridgemapping,SFJSON sfs_json,ServiceFunctionForwarder prev_sff_dict ){
+        SffDataPlaneLocator  temp_sff_dp_loc=new SffDataPlaneLocator ();
+        SffDataPlaneLocator sff_dp_loc=new SffDataPlaneLocator();
+        DataPlaneLocator dp_loc=new DataPlaneLocator();
+        dp_loc.setTransport("service-locator:vxlan-gpe");
+        dp_loc.setIp("");
+        dp_loc.setPort(null);
+        sff_dp_loc.setName("");
+        ServiceFunctionForwarderOvsOvsOptions sffopts=new ServiceFunctionForwarderOvsOvsOptions();
+        sffopts.setDstPort("6633");
+        sffopts.setKey("flow");
+        sffopts.setNshc1("flow");
+        sffopts.setNshc2("flow");
+        sffopts.setNshc3("flow");
+        sffopts.setNshc4("flow");
+        sffopts.setNsi("flow");
+        sffopts.setNsp("flow");
+        sffopts.setRemoteIp("flow");
+        sff_dp_loc.setServiceFunctionForwarderOvsOvsOptions(sffopts);
+        sff_dp_loc.setDataPlaneLocator(dp_loc);
+        Iterator br=bridgemapping.entrySet().iterator();
+        ServiceFunctionDictionary sf_dict=new ServiceFunctionDictionary();
+        ServiceFunctionDictionary temp_sf_dict=new ServiceFunctionDictionary();
+        sf_dict.setName("");
+        SffSfDataPlaneLocator sff_sf_dp_loc=new SffSfDataPlaneLocator();
+        sff_sf_dp_loc.setSfDplName("");
+        sff_sf_dp_loc.setSffDplName("");
+        SffSfDataPlaneLocator temp_sff_sf_dp_loc=new SffSfDataPlaneLocator();
+        List<ServiceFunctionDictionary> sf_dicts_list=new ArrayList<>();
+        List<ServiceFunctionForwarder> sff_list=new ArrayList<>();
+
+
+        while (br.hasNext()){
+            Map.Entry Bridge_name = (Map.Entry)br.next();
+            temp_sff_dp_loc=sff_dp_loc;
+            temp_sff_dp_loc.setName("vxgpe");
+            temp_sff_dp_loc.getDataPlaneLocator().setPort(6633);
+            temp_sff_dp_loc.getDataPlaneLocator().setIp(bridgemapping.get(Bridge_name.getKey()).getOVSip());
+            String bridge_name=Bridge_name.getKey().toString();
+           for(int sf=0;sf<bridgemapping.get(Bridge_name.getKey()).getSfs().size();sf++){
+               temp_sf_dict=sf_dict;
+               int SF_counter=100;
+
+               //for loop to search in sfs_json for this SF in bridge mapping
+               for(int sf_counter=0;sf_counter<sfs_json.getServiceFunctions().getServiceFunction().size();sf_counter++){
+                   if(sfs_json.getServiceFunctions().getServiceFunction().get(sf_counter).getName()==bridgemapping.get(Bridge_name.getKey()).getSfs().get(sf)){
+                       SF_counter=sf_counter;
+                       break;
+                   }
+               }
+               if(SF_counter==100){
+                   logger.error("Can not find the SF in bridgemapping");
+               }
+               temp_sf_dict.setName(sfs_json.getServiceFunctions().getServiceFunction().get(SF_counter).getName());
+               temp_sff_sf_dp_loc=sff_sf_dp_loc;
+               temp_sff_sf_dp_loc.setSffDplName("vxgpe");
+               temp_sff_sf_dp_loc.setSfDplName(sfs_json.getServiceFunctions().getServiceFunction().get(SF_counter).getSfDataPlaneLocator().get(0).getName());
+
+               temp_sf_dict.setSffSfDataPlaneLocator(temp_sff_sf_dp_loc);
+               sf_dicts_list.add(temp_sf_dict);
+
+
+
+
+           }
+            ServiceFunctionForwarder temp_sff=new ServiceFunctionForwarder();
+
+            if(prev_sff_dict!=null && bridgemapping.get(Bridge_name.getKey()).getSFFname()==prev_sff_dict.getName()){
+
+                temp_sff=prev_sff_dict;
+                List<ServiceFunctionDictionary>  prev_sff_sf_list=temp_sff.getServiceFunctionDictionary();
+                for(int new_sf=0;new_sf<sf_dicts_list.size();new_sf++){
+                    boolean new_sf_update=false;
+                    for(int index=0; index<prev_sff_sf_list.size();index++){
+                        if(prev_sff_sf_list.get(index).getName()==sf_dicts_list.get(new_sf).getName()){
+                            temp_sff.getServiceFunctionDictionary().add(index,sf_dicts_list.get(new_sf));
+                            new_sf_update=true;
+                            break;
+                        }
+                    }
+                    if(new_sf_update==false){
+                        temp_sff.getServiceFunctionDictionary().add(sf_dicts_list.get(new_sf));
+
+                    }
+                }
+
+            }
+            else{
+                temp_sff.setName(bridgemapping.get(Bridge_name.getKey()).getSFFname());
+                temp_sff.getSffDataPlaneLocator().add(temp_sff_dp_loc);
+                temp_sff.setServiceFunctionDictionary(sf_dicts_list);
+                temp_sff.setIpMgmtAddress(bridgemapping.get(Bridge_name.getKey()).getOVSip());
+                temp_sff.setServiceNode("");
+                temp_sff.getServiceFunctionForwarderOvsOvsBridge().setBridgeName(Bridge_name.getKey().toString());
+
+
+
+            }
+
+            sff_list.add(temp_sff);
+
+
+
+
+
+           br.remove();
+
+        }
+
+        logger.debug("SFF List output is "+ sff_list.toString());
+
+        return sff_list;
+
+
+
+
+
+    }
     public static Brdict find_ovs_br(VNFdict sf_id, NetworkTopology network_map){
 
         Brdict bridge_dict=new Brdict();
@@ -845,10 +1014,10 @@ public class Opendaylight {
                 for(int node_entry=0;node_entry<network_map.getTopology().get(net).getNode().size();node_entry++){
                     if(network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint()!=null){
                         for(int endpoint=0;endpoint<network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().size();endpoint++){
-                               /*   if(bridge_dict.equals(network_map.getTopology().get(0).getNode().get(node_entry).getTerminationPoint().get(endpoint))){
-                                      break;
-                                  }*/
-                            if(network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds()!=null){
+                            if(bridge_dict!=null){
+                                break;
+                            }
+                            else if(network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds()!=null){
                                 for (int external_id=0;external_id<network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds().size();external_id++){
                                     if(network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds().get(external_id).getExternalIdValue()!=null){
                                         if (network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().get(endpoint).getOvsdbInterfaceExternalIds().get(external_id).getExternalIdValue()==sf_id.getNeutronPortId()){
