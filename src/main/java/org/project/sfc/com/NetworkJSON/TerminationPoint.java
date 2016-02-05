@@ -32,7 +32,7 @@ public class TerminationPoint {
 
     @SerializedName("ovsdb:interface-external-ids")
     @Expose
-    private List<OvsdbInterfaceExternalId> OvsdbInterfaceExternalIds=new ArrayList<>();
+    private List<OvsdbInterfaceExternalId> OvsdbInterfaceExternalIds=new ArrayList<OvsdbInterfaceExternalId>();
 
 
 

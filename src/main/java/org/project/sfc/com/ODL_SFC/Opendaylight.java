@@ -81,7 +81,7 @@ public class Opendaylight {
         SFJSON result=new SFJSON();
         ResponseEntity<String> request=null;
         if(rest_type=="POST") {
-            HttpEntity <String> postEntity=new HttpEntity<>(mapper.toJson(data,SFJSON.class),headers);
+            HttpEntity <String> postEntity=new HttpEntity<String>(mapper.toJson(data,SFJSON.class),headers);
             request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
             logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -94,7 +94,7 @@ public class Opendaylight {
 
             }
         } else if (rest_type=="PUT"){
-            HttpEntity <String> putEntity=new HttpEntity<>(mapper.toJson(data,SFJSON.class),headers);
+            HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data,SFJSON.class),headers);
             request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
             logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -107,7 +107,7 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="DELETE"){
-            HttpEntity <String> delEntity=new HttpEntity<>(headers);
+            HttpEntity <String> delEntity=new HttpEntity<String>(headers);
              request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
             logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -120,7 +120,7 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="GET"){
-            HttpEntity <String> getEntity=new HttpEntity<>(headers);
+            HttpEntity <String> getEntity=new HttpEntity<String>(headers);
              request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -153,7 +153,7 @@ public class Opendaylight {
         SFFJSON result=new SFFJSON();
         ResponseEntity<String> request=null;
         if(rest_type=="POST") {
-            HttpEntity <String> postEntity=new HttpEntity<>(mapper.toJson(data,SFFJSON.class),headers);
+            HttpEntity <String> postEntity=new HttpEntity<String>(mapper.toJson(data,SFFJSON.class),headers);
              request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
             logger.debug("Setting of SFF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -166,7 +166,7 @@ public class Opendaylight {
 
             }
         } else if (rest_type=="PUT"){
-            HttpEntity <String> putEntity=new HttpEntity<>(mapper.toJson(data,SFJSON.class),headers);
+            HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data,SFJSON.class),headers);
             request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
             logger.debug("Setting of SFF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -179,7 +179,7 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="DELETE"){
-            HttpEntity <String> delEntity=new HttpEntity<>(headers);
+            HttpEntity <String> delEntity=new HttpEntity<String>(headers);
            request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
             logger.debug("Setting of SFF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -192,7 +192,7 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="GET"){
-            HttpEntity <String> getEntity=new HttpEntity<>(headers);
+            HttpEntity <String> getEntity=new HttpEntity<String>(headers);
              request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -226,7 +226,7 @@ public class Opendaylight {
         ResponseEntity<String> request=null;
 
         if(rest_type=="POST") {
-            HttpEntity <String> postEntity=new HttpEntity<>(mapper.toJson(data,SFPJSON.class),headers);
+            HttpEntity <String> postEntity=new HttpEntity<String>(mapper.toJson(data,SFPJSON.class),headers);
              request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
             logger.debug("Setting of SFP has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -239,7 +239,7 @@ public class Opendaylight {
 
             }
         } else if (rest_type=="PUT"){
-            HttpEntity <String> putEntity=new HttpEntity<>(mapper.toJson(data,SFPJSON.class),headers);
+            HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data,SFPJSON.class),headers);
            request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
             logger.debug("Setting of SFP has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -252,7 +252,7 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="DELETE"){
-            HttpEntity <String> delEntity=new HttpEntity<>(headers);
+            HttpEntity <String> delEntity=new HttpEntity<String>(headers);
              request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
             logger.debug("Setting of SFP has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -265,7 +265,7 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="GET"){
-            HttpEntity <String> getEntity=new HttpEntity<>(headers);
+            HttpEntity <String> getEntity=new HttpEntity<String>(headers);
              request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -298,7 +298,7 @@ public class Opendaylight {
         ResponseEntity<String> request=null;
 
         if(rest_type=="POST") {
-            HttpEntity <String> postEntity=new HttpEntity<>(mapper.toJson(data,RSPJSON.class),headers);
+            HttpEntity <String> postEntity=new HttpEntity<String>(mapper.toJson(data,RSPJSON.class),headers);
             request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
             logger.debug("Setting of RSP has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -311,7 +311,7 @@ public class Opendaylight {
 
             }
         } else if (rest_type=="DELETE"){
-            HttpEntity <String> delEntity=new HttpEntity<>(headers);
+            HttpEntity <String> delEntity=new HttpEntity<String>(headers);
             request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
             logger.debug("Setting of RSP has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -345,7 +345,7 @@ public class Opendaylight {
         SFCJSON result=new SFCJSON();
         ResponseEntity<String> request=null;
         if(rest_type=="POST") {
-            HttpEntity <String> postEntity=new HttpEntity<>(mapper.toJson(data,SFCJSON.class),headers);
+            HttpEntity <String> postEntity=new HttpEntity<String>(mapper.toJson(data,SFCJSON.class),headers);
             request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
             logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -358,7 +358,7 @@ public class Opendaylight {
 
             }
         } else if (rest_type=="PUT"){
-            HttpEntity <String> putEntity=new HttpEntity<>(mapper.toJson(data,SFCJSON.class),headers);
+            HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data,SFCJSON.class),headers);
             request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
             logger.debug("Setting of SFC has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -371,7 +371,7 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="DELETE"){
-            HttpEntity <String> delEntity=new HttpEntity<>(headers);
+            HttpEntity <String> delEntity=new HttpEntity<String>(headers);
              request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
             logger.debug("Setting of SFC has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -384,7 +384,7 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="GET"){
-            HttpEntity <String> getEntity=new HttpEntity<>(headers);
+            HttpEntity <String> getEntity=new HttpEntity<String>(headers);
              request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -417,7 +417,7 @@ public class Opendaylight {
         NetworkJSON result=new NetworkJSON();
         ResponseEntity<String> request=null;
       if (rest_type=="GET"){
-            HttpEntity <String> getEntity=new HttpEntity<>(headers);
+            HttpEntity <String> getEntity=new HttpEntity<String>(headers);
             request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -641,7 +641,7 @@ public class Opendaylight {
         HashMap<Integer,VNFdict> sf_net_map=new HashMap<Integer, VNFdict>();
         SFJSON FullSFjson=new SFJSON();
         Integer SF_ID;
-        List<ServiceFunction> list_sfs=new ArrayList<>();
+        List<ServiceFunction> list_sfs=new ArrayList<ServiceFunction>();
         for(int sf_i=0;sf_i<sfc_dict.getSfcDict().getChain().size();sf_i++){
             ServiceFunction sf_json=new ServiceFunction();
             SF_ID=sf_i;
@@ -655,7 +655,7 @@ public class Opendaylight {
             sf_json.setNshAware("true");
             sf_json.setIpMgmtAddress(vnf_dict.get(sf_i).getIP());
             sf_json.setType("service-function-type:"+vnf_dict.get(sf_i).getType());
-            List< SfDataPlaneLocator > list_dploc=new ArrayList<>();
+            List< SfDataPlaneLocator> list_dploc=new ArrayList<SfDataPlaneLocator>();
             list_dploc.add(0,dplocDict);
             sf_json.setSfDataPlaneLocator(list_dploc);
             list_sfs.add(SF_ID,sf_json);
@@ -666,14 +666,20 @@ public class Opendaylight {
         // need to be adjusted
         HashMap<String,BridgeMapping> ovs_mapping=Locate_ovs_to_sf(sf_net_map);
         logger.debug("OVS MAP: "+ovs_mapping.toString());
-        for(int br_map_counter=0;br_map_counter<ovs_mapping.size();br_map_counter++){
-            for(int sf_id_counter=0;sf_id_counter<ovs_mapping.get(br_map_counter).sfs.size();sf_id_counter++){
-                sfs_json.getServiceFunction().get(sf_id_counter).getSfDataPlaneLocator().get(0).setServiceFunctionForwarder(ovs_mapping.get(br_map_counter).getSFFname());
-                sfs_json.getServiceFunction().get(sf_id_counter).getSfDataPlaneLocator().get(0).setName(ovs_mapping.get(br_map_counter).getSfs().get(sf_id_counter).getTap_port());
+        Iterator br_map=ovs_mapping.entrySet().iterator();
+
+
+
+        while(br_map.hasNext()){
+            Map.Entry br_map_counter= (Map.Entry)br_map.next();;
+            for(int sf_id_counter=0;sf_id_counter<ovs_mapping.get(br_map_counter.getKey()).sfs.size();sf_id_counter++){
+                sfs_json.getServiceFunction().get(sf_id_counter).getSfDataPlaneLocator().get(0).setServiceFunctionForwarder(ovs_mapping.get(br_map_counter.getKey()).getSFFname());
+                sfs_json.getServiceFunction().get(sf_id_counter).getSfDataPlaneLocator().get(0).setName(ovs_mapping.get(br_map_counter.getKey()).getSFdict().get(ovs_mapping.get(br_map_counter.getKey()).getSfs().get(sf_id_counter)).getTap_port());
              //   FullSFjson.setServiceFunctions(sfs_json);
-                logger.debug("SF updated with SFF:"+ ovs_mapping.get(br_map_counter).getSFFname());
+                logger.debug("SF updated with SFF:"+ ovs_mapping.get(br_map_counter.getKey()).getSFFname());
 
             }
+            br_map.remove();
         }
 
         for(int sf_j=0;sf_j<sfs_json.getServiceFunction().size();sf_j++){
@@ -684,7 +690,7 @@ public class Opendaylight {
             }
         }
 
-        List<ServiceFunctionForwarder> sff_list= new ArrayList<>();
+        List<ServiceFunctionForwarder> sff_list= new ArrayList<ServiceFunctionForwarder>();
         //building SFF
         ServiceFunctionForwarder prev_sff_dict=find_existing_sff(ovs_mapping);
         if(prev_sff_dict!=null){
@@ -862,6 +868,7 @@ public class Opendaylight {
             logger.warn("Unable to get SFFs from ODL");
             return null;
         }
+
          Gson mapper=new Gson();
            SFFJSON sff_json_response=mapper.fromJson(response.getBody(),SFFJSON.class);
         List<ServiceFunctionForwarder> odl_sff_list=sff_json_response.getServiceFunctionForwarders().getServiceFunctionForwarder();
@@ -914,8 +921,8 @@ public class Opendaylight {
         sff_sf_dp_loc.setSfDplName("");
         sff_sf_dp_loc.setSffDplName("");
         SffSfDataPlaneLocator temp_sff_sf_dp_loc=new SffSfDataPlaneLocator();
-        List<ServiceFunctionDictionary> sf_dicts_list=new ArrayList<>();
-        List<ServiceFunctionForwarder> sff_list=new ArrayList<>();
+        List<ServiceFunctionDictionary> sf_dicts_list=new ArrayList<ServiceFunctionDictionary>();
+        List<ServiceFunctionForwarder> sff_list=new ArrayList<ServiceFunctionForwarder>();
 
 
         while (br.hasNext()){
@@ -1075,7 +1082,7 @@ public class Opendaylight {
 
     public class BridgeMapping{
 
-        private List<String> sfs=new ArrayList<>();
+        private List<String> sfs=new ArrayList<String>();
        // private SF_dict SF_id=new SF_dict();
         private String ovs_ip;
         private String sff_name;
