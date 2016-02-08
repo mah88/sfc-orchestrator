@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Actions {
 
-    @SerializedName("netvirt-org-acl:org-name")
+    @SerializedName("netvirt-sfc-acl:rsp-name")
     @Expose
     private String netvirtSfcAclSfcName;
 

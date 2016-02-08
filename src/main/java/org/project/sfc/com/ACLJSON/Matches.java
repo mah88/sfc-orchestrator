@@ -10,7 +10,11 @@ public class Matches {
 
     @SerializedName("protocol")
     @Expose
-    private String protocol;
+    private Integer protocol;
+    @SerializedName("dest-port")
+    @Expose
+    private Integer destPort;
+
     @SerializedName("destination-port-range")
     @Expose
     private DestinationPortRange destinationPortRange;
@@ -18,18 +22,37 @@ public class Matches {
     /**
      * 
      * @return
-     *     The protocol
+     *     The dest-port
      */
-    public String getProtocol() {
-        return protocol;
+    public Integer getDestPort() {
+        return destPort;
     }
 
     /**
      * 
+     * @param dest-port
+     *     The protocol
+     */
+    public void setDestPort(Integer port) {
+        this.destPort= port;
+    }
+
+
+    /**
+     *
+     * @return
+     *     The protocol
+     */
+    public Integer getProtocol() {
+        return protocol;
+    }
+
+    /**
+     *
      * @param protocol
      *     The protocol
      */
-    public void setProtocol(String protocol) {
+    public void setProtocol(Integer protocol) {
         this.protocol = protocol;
     }
 

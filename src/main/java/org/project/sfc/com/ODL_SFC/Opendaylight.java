@@ -1,4 +1,5 @@
 package org.project.sfc.com.ODL_SFC;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -36,7 +37,7 @@ import java.lang.reflect.Type;
 
 public class Opendaylight {
 
-    public String ODL_ip="127.0.0.1";
+    public String ODL_ip="192.168.0.135";
     public String ODL_port="8080";
     public String ODL_username="admin";
     public String ODL_password="admin";
@@ -67,7 +68,7 @@ public class Opendaylight {
     public  ResponseEntity<String> sendRest_SF(SFJSON data,String rest_type,String url){
 
         String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-        String plainCreds = this.ODL_username+":"+this.ODL_ip;
+        String plainCreds = this.ODL_username+":"+this.ODL_password;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
@@ -75,7 +76,7 @@ public class Opendaylight {
         HttpHeaders headers=new HttpHeaders();
              //   http.createBasicAuthenticationHttpHeaders(username, password);
         headers.add("Accept","application/json");
-        headers.add("content-type","application/json;charset=utf-8");
+      //  headers.add("content-type","application/json;charset=utf-8");
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
         SFJSON result=new SFJSON();
@@ -139,15 +140,15 @@ public class Opendaylight {
     public ResponseEntity<String> sendRest_SFF(SFFJSON data,String rest_type,String url){
 
         String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-        String plainCreds = this.ODL_username+":"+this.ODL_ip;
+        String plainCreds = this.ODL_username+":"+this.ODL_password;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
         RestTemplate template=new RestTemplate();
         HttpHeaders headers=new HttpHeaders();
         //   http.createBasicAuthenticationHttpHeaders(username, password);
-        headers.add("Accept","application/json");
-        headers.add("content-type","application/json;charset=utf-8");
+       headers.add("Accept","application/json");
+      //  headers.add("content-type","application/json;charset=utf-8");
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
         SFFJSON result=new SFFJSON();
@@ -211,15 +212,15 @@ public class Opendaylight {
     public ResponseEntity<String> sendRest_SFP(SFPJSON data, String rest_type, String url){
 
         String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-        String plainCreds = this.ODL_username+":"+this.ODL_ip;
+        String plainCreds = this.ODL_username+":"+this.ODL_password;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
         RestTemplate template=new RestTemplate();
         HttpHeaders headers=new HttpHeaders();
         //   http.createBasicAuthenticationHttpHeaders(username, password);
-        headers.add("Accept","application/json");
-        headers.add("content-type","application/json;charset=utf-8");
+       headers.add("Accept","application/json");
+      ///  headers.add("content-type","application/json;charset=utf-8");
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
         SFPJSON result=new SFPJSON();
@@ -283,7 +284,7 @@ public class Opendaylight {
     public ResponseEntity<String> sendRest_RSP(RSPJSON data, String rest_type, String url){
 
         String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-        String plainCreds = this.ODL_username+":"+this.ODL_ip;
+        String plainCreds = this.ODL_username+":"+this.ODL_password;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
@@ -291,7 +292,7 @@ public class Opendaylight {
         HttpHeaders headers=new HttpHeaders();
         //   http.createBasicAuthenticationHttpHeaders(username, password);
         headers.add("Accept","application/json");
-        headers.add("content-type","application/json;charset=utf-8");
+       // headers.add("content-type","application/json;charset=utf-8");
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
         RSPJSON result=new RSPJSON();
@@ -331,7 +332,7 @@ public class Opendaylight {
     public ResponseEntity<String> sendRest_SFC(SFCJSON data, String rest_type, String url){
 
         String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-        String plainCreds = this.ODL_username+":"+this.ODL_ip;
+        String plainCreds = this.ODL_username+":"+this.ODL_password;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
@@ -339,7 +340,7 @@ public class Opendaylight {
         HttpHeaders headers=new HttpHeaders();
         //   http.createBasicAuthenticationHttpHeaders(username, password);
         headers.add("Accept","application/json");
-        headers.add("content-type","application/json;charset=utf-8");
+       // headers.add("content-type","application/json;charset=utf-8");
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
         SFCJSON result=new SFCJSON();
@@ -403,15 +404,15 @@ public class Opendaylight {
     public ResponseEntity<String> sendRest_NetworkTopology(NetworkJSON data, String rest_type, String url){
 
         String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-        String plainCreds = this.ODL_username+":"+this.ODL_ip;
-        byte[] plainCredsBytes = plainCreds.getBytes();
-        byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+        String plainCreds = this.ODL_username+":"+this.ODL_password;
+      //  byte[] plainCredsBytes = plainCreds.getBytes();
+        byte[] base64CredsBytes = Base64.encodeBase64(plainCreds.getBytes(Charset.forName("US-ASCII")));
         String base64Creds = new String(base64CredsBytes);
         RestTemplate template=new RestTemplate();
         HttpHeaders headers=new HttpHeaders();
         //   http.createBasicAuthenticationHttpHeaders(username, password);
         headers.add("Accept","application/json");
-        headers.add("content-type","application/json;charset=utf-8");
+   //     headers.add("content-type","application/json;charset=utf-8");
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
         NetworkJSON result=new NetworkJSON();
@@ -1126,40 +1127,7 @@ public class Opendaylight {
     }
 
 
-    public class VNFdict{
 
-
-        private String neutronPortId;
-        private String ip;
-        private String type;
-        private String name;
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-        public String getNeutronPortId() {
-            return neutronPortId;
-        }
-        public void setNeutronPortId(String ID) {
-            this.neutronPortId = ID;
-        }
-        public String getIP() {
-            return ip;
-        }
-        public void setIP(String ip) {
-            this.ip = ip;
-        }
-        public String getType() {
-            return type;
-        }
-        public void setType(String type) {
-            this.type = type;
-        }
-
-
-    }
 public void DeleteSFC(String instance_id,boolean isSymmetric){
 
 
