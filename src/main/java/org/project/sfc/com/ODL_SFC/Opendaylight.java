@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.project.sfc.com.RSPJSON.RSPJSON;
 import org.springframework.http.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 
@@ -204,15 +205,11 @@ public class Opendaylight {
 
             }
         }else if (rest_type=="GET"){
-            HttpEntity <String> getEntity=new HttpEntity<String>(headers);
-             request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
-            if(!request.getStatusCode().is2xxSuccessful()){
+            try {
+                HttpEntity<String> getEntity = new HttpEntity<String>(headers);
+                request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+            }catch(HttpClientErrorException ce) {
                 result=null;
-            }
-            else {
-                result = mapper.fromJson(request.getBody(),ServiceFunctionForwarders.class);
-                logger.debug("Setting of SFF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
-
             }
         }
 
@@ -927,8 +924,13 @@ public class Opendaylight {
     public ServiceFunctionForwarder find_existing_sff(HashMap<String, BridgeMapping> BridgeMapping){
 
         ResponseEntity<String> response=getODLsff();
-        if (!response.getStatusCode().is2xxSuccessful()){
-            logger.warn("Unable to get SFFs from ODL");
+
+        if(response!=null) {
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                logger.warn("Unable to get SFFs from ODL");
+                return null;
+            }
+        }else{
             return null;
         }
 
@@ -1247,22 +1249,5 @@ public void DeleteSFC(String instance_id,boolean isSymmetric){
 }
 
 
-    public class Response{
 
-        private String example;
-        private String fr;
-
-        public String getExample() {
-            return example;
-        }
-        public void setExample(String example) {
-            this.example = example;
-        }
-        public String getFr() {
-            return fr;
-        }
-        public void setFr(String fr) {
-            this.fr = fr;
-        }
-    }
 }

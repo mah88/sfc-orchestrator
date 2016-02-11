@@ -1,9 +1,0 @@
-{"source_ip_prefix": "source-ipv4-network",
-  "dest_ip_prefix": "destination-ipv4-network",
-  "source_port": {"source-port-range": ["lower-port",
-                                       "upper-port"]
-                 },
-  "dest_port": {"destination-port-range": ["lower-port",
-                                           "upper-port"]
-                }
-}
