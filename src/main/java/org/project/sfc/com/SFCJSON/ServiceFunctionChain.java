@@ -9,14 +9,14 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class ServiceFunctionChain {
-
-    @SerializedName("name")
-    @Expose
-    private String name;
     @SerializedName("symmetric")
     @Expose
     private Boolean symmetric;
-    @SerializedName("org-service-function")
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    @SerializedName("sfc-service-function")
     @Expose
     private List<SfcServiceFunction> sfcServiceFunction = new ArrayList<SfcServiceFunction>();
 

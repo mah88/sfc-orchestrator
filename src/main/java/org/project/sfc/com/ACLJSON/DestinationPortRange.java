@@ -10,17 +10,17 @@ public class DestinationPortRange {
 
     @SerializedName("lower-port")
     @Expose
-    private String lowerPort;
+    private Integer lowerPort;
     @SerializedName("upper-port")
     @Expose
-    private String upperPort;
+    private Integer upperPort;
 
     /**
      * 
      * @return
      *     The lowerPort
      */
-    public String getLowerPort() {
+    public Integer getLowerPort() {
         return lowerPort;
     }
 
@@ -29,7 +29,7 @@ public class DestinationPortRange {
      * @param lowerPort
      *     The lower-port
      */
-    public void setLowerPort(String lowerPort) {
+    public void setLowerPort(Integer lowerPort) {
         this.lowerPort = lowerPort;
     }
 
@@ -38,7 +38,7 @@ public class DestinationPortRange {
      * @return
      *     The upperPort
      */
-    public String getUpperPort() {
+    public Integer getUpperPort() {
         return upperPort;
     }
 
@@ -47,7 +47,7 @@ public class DestinationPortRange {
      * @param upperPort
      *     The upper-port
      */
-    public void setUpperPort(String upperPort) {
+    public void setUpperPort(Integer upperPort) {
         this.upperPort = upperPort;
     }
 

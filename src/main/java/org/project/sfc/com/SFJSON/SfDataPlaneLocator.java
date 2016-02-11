@@ -8,15 +8,16 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class SfDataPlaneLocator {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
+
     @SerializedName("port")
     @Expose
     private String port;
     @SerializedName("ip")
     @Expose
     private String ip;
+    @SerializedName("name")
+    @Expose
+    private String name;
     @SerializedName("transport")
     @Expose
     private String transport;

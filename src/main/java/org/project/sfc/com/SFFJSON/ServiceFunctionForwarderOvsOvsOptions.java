@@ -11,30 +11,33 @@ public class ServiceFunctionForwarderOvsOvsOptions {
     @SerializedName("remote-ip")
     @Expose
     private String remoteIp;
-    @SerializedName("dst-port")
-    @Expose
-    private String dstPort;
-    @SerializedName("key")
-    @Expose
-    private String key;
-    @SerializedName("nsp")
-    @Expose
-    private String nsp;
     @SerializedName("nsi")
     @Expose
     private String nsi;
-    @SerializedName("nshc1")
-    @Expose
-    private String nshc1;
-    @SerializedName("nshc2")
-    @Expose
-    private String nshc2;
     @SerializedName("nshc3")
     @Expose
     private String nshc3;
+    @SerializedName("nshc2")
+    @Expose
+    private String nshc2;
+    @SerializedName("nshc1")
+    @Expose
+    private String nshc1;
     @SerializedName("nshc4")
     @Expose
     private String nshc4;
+    @SerializedName("key")
+    @Expose
+    private String key;
+    @SerializedName("dst-port")
+    @Expose
+    private String dstPort;
+
+    @SerializedName("nsp")
+    @Expose
+    private String nsp;
+
+
 
     /**
      * 

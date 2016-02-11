@@ -8,16 +8,17 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class DataPlaneLocator {
 
-    @SerializedName("transport")
-    @Expose
-    private String transport;
-    @SerializedName("port")
-    @Expose
-    private Integer port;
+
+
     @SerializedName("ip")
     @Expose
     private String ip;
-
+    @SerializedName("port")
+    @Expose
+    private String port;
+    @SerializedName("transport")
+    @Expose
+    private String transport;
     /**
      * 
      * @return
@@ -41,7 +42,7 @@ public class DataPlaneLocator {
      * @return
      *     The port
      */
-    public Integer getPort() {
+    public String getPort() {
         return port;
     }
 
@@ -50,7 +51,7 @@ public class DataPlaneLocator {
      * @param port
      *     The port
      */
-    public void setPort(Integer port) {
+    public void setPort(String port) {
         this.port = port;
     }
 

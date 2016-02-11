@@ -7,7 +7,9 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class ServiceFunctionPath {
-
+    @SerializedName("symmetric")
+    @Expose
+    private Boolean symmetric;
     @SerializedName("name")
     @Expose
     private String name;
@@ -17,9 +19,6 @@ public class ServiceFunctionPath {
     @SerializedName("starting-index")
     @Expose
     private Integer startingIndex;
-    @SerializedName("symmetric")
-    @Expose
-    private Boolean symmetric;
 
     /**
      * 
@@ -58,7 +57,7 @@ public class ServiceFunctionPath {
     }
 
     /**
-     * 
+     *
      * @return
      *     The startingIndex
      */
@@ -67,7 +66,7 @@ public class ServiceFunctionPath {
     }
 
     /**
-     * 
+     *
      * @param startingIndex
      *     The starting-index
      */

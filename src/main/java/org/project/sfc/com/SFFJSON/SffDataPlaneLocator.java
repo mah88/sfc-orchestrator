@@ -7,16 +7,16 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class SffDataPlaneLocator {
-
+    @SerializedName("service-function-forwarder-ovs:ovs-options")
+    @Expose
+    private ServiceFunctionForwarderOvsOvsOptions serviceFunctionForwarderOvsOvsOptions;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("data-plane-locator")
     @Expose
     private DataPlaneLocator dataPlaneLocator;
-    @SerializedName("service-function-forwarder-ovs:ovs-options")
-    @Expose
-    private ServiceFunctionForwarderOvsOvsOptions serviceFunctionForwarderOvsOvsOptions;
+
 
     /**
      * 

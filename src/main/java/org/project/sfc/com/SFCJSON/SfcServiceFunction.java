@@ -7,13 +7,13 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class SfcServiceFunction {
-
-    @SerializedName("name")
-    @Expose
-    private String name;
     @SerializedName("type")
     @Expose
     private String type;
+    @SerializedName("name")
+    @Expose
+    private String name;
+
 
     /**
      * 

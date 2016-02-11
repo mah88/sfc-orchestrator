@@ -7,6 +7,9 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class Matches {
+    @SerializedName("destination-port-range")
+    @Expose
+    private DestinationPortRange destinationPortRange;
 
     @SerializedName("protocol")
     @Expose
@@ -15,9 +18,6 @@ public class Matches {
     @Expose
     private Integer destPort;
 
-    @SerializedName("destination-port-range")
-    @Expose
-    private DestinationPortRange destinationPortRange;
 
     /**
      * 

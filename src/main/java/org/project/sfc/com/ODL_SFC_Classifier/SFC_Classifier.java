@@ -3,11 +3,10 @@ package org.project.sfc.com.ODL_SFC_Classifier;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.codec.binary.Base64;
-import org.project.sfc.com.ACLJSON.ACLJSON;
-import org.project.sfc.com.ACLJSON.AccessListEntries;
-import org.project.sfc.com.ACLJSON.Ace;
-import org.project.sfc.com.ACLJSON.Matches;
+import org.project.sfc.com.ACLJSON.*;
+import org.project.sfc.com.ClassifierJSON.Classifier;
 import org.project.sfc.com.ClassifierJSON.ClassifierJSON;
+import org.project.sfc.com.ClassifierJSON.Classifiers;
 import org.project.sfc.com.ODL_SFC_Classifier.MatchTranslation.MatchTranslation;
 import org.project.sfc.com.ODL_SFC_Classifier.SFCCdict.AclMatchCriteria;
 import org.project.sfc.com.ODL_SFC_Classifier.SFCCdict.SFCCdict;
@@ -16,15 +15,13 @@ import org.project.sfc.com.SFPJSON.SFPJSON;
 import org.project.sfc.com.SFPJSON.ServiceFunctionPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +32,12 @@ import java.util.Map;
  */
 public class SFC_Classifier {
 
-    public String ODL_ip="127.0.0.1";
+    public String ODL_ip="192.168.0.135";
     public String ODL_port="8080";
     public String ODL_username="admin";
     public String ODL_password="admin";
-    public String Config_acl_url="restconf/config/ietf-access-control-list:access-lists/acl/{}";
-    public String Config_netvirtsfc_url="restconf/config/netvirt-sfc-classifier:classifiers/classifier/{}";
+    public String Config_acl_url="restconf/config/ietf-access-control-list:access-lists/acl/{0}";
+    public String Config_netvirtsfc_url="restconf/config/netvirt-sfc-classifier:classifiers/classifier/{0}";
     public MatchTranslation matching_translate=new MatchTranslation();
 
     // Gson mapper=new Gson();
@@ -93,10 +90,10 @@ public class SFC_Classifier {
 
     }
 
-    public ResponseEntity<String> sendRest_Classifier(ClassifierJSON data, String rest_type, String url){
+    public ResponseEntity<String> sendRest_Classifier(ClassifierJSON datax, String rest_type, String url){
 
         String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-        String plainCreds = this.ODL_username+":"+this.ODL_ip;
+        String plainCreds = this.ODL_username+":"+this.ODL_password;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
@@ -104,13 +101,16 @@ public class SFC_Classifier {
         HttpHeaders headers=new HttpHeaders();
         //   http.createBasicAuthenticationHttpHeaders(username, password);
         headers.add("Accept","application/json");
-        headers.add("content-type","application/json;charset=utf-8");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // headers.add("content-type","application/json;charset=utf-8");
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
-        ClassifierJSON result=new ClassifierJSON();
+        Classifiers result=new  Classifiers();
+        Classifiers data=datax.getClassifiers();
         ResponseEntity<String> request=null;
         if (rest_type=="PUT"){
-            HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data,ClassifierJSON.class),headers);
+            HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data, Classifiers.class),headers);
             request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
             logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -118,8 +118,8 @@ public class SFC_Classifier {
                 result=null;
             }
             else {
-                result = mapper.fromJson(request.getBody(),ClassifierJSON.class);
-                logger.debug("RESULT IS " + request.getStatusCode() + " with body " + mapper.toJson(result,ClassifierJSON.class));
+                result = mapper.fromJson(request.getBody(), Classifiers.class);
+                logger.debug("RESULT IS " + request.getStatusCode() + " with body " + mapper.toJson(result, Classifiers.class));
 
             }
         }else if (rest_type=="DELETE"){
@@ -131,7 +131,7 @@ public class SFC_Classifier {
                 result=null;
             }
             else {
-                result = mapper.fromJson(request.getBody(),ClassifierJSON.class);
+                result = mapper.fromJson(request.getBody(), Classifiers.class);
                 logger.debug("RESULT IS " + request.getStatusCode() );
 
             }
@@ -142,10 +142,10 @@ public class SFC_Classifier {
         return request;
 
     }
-    public ResponseEntity<String> sendRest_ACL(ACLJSON data, String rest_type, String url){
+    public ResponseEntity<String> sendRest_ACL(ACLJSON datax, String rest_type, String url){
 
         String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-        String plainCreds = this.ODL_username+":"+this.ODL_ip;
+        String plainCreds = this.ODL_username+":"+this.ODL_password;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
@@ -153,13 +153,16 @@ public class SFC_Classifier {
         HttpHeaders headers=new HttpHeaders();
         //   http.createBasicAuthenticationHttpHeaders(username, password);
         headers.add("Accept","application/json");
-        headers.add("content-type","application/json;charset=utf-8");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // headers.add("content-type","application/json;charset=utf-8");
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
-        ACLJSON result=new ACLJSON();
+        AccessLists result=new AccessLists();
+        AccessLists data=datax.getAccessLists();
         ResponseEntity<String> request=null;
         if (rest_type=="PUT"){
-            HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data,ACLJSON.class),headers);
+            HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data,AccessLists.class),headers);
             request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
             logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
@@ -167,8 +170,8 @@ public class SFC_Classifier {
                 result=null;
             }
             else {
-                result = mapper.fromJson(request.getBody(),ACLJSON.class);
-                logger.debug("RESULT IS " + request.getStatusCode() + " with body " + mapper.toJson(result,ACLJSON.class));
+                result = mapper.fromJson(request.getBody(),AccessLists.class);
+                logger.debug("RESULT IS " + request.getStatusCode() + " with body " + mapper.toJson(result,AccessLists.class));
 
             }
         }else if (rest_type=="DELETE"){
@@ -180,7 +183,7 @@ public class SFC_Classifier {
                 result=null;
             }
             else {
-                result = mapper.fromJson(request.getBody(),ACLJSON.class);
+                result = mapper.fromJson(request.getBody(),AccessLists.class);
                 logger.debug("RESULT IS " + request.getStatusCode() );
 
             }
@@ -194,6 +197,9 @@ public class SFC_Classifier {
 
     public ClassifierJSON build_classifier_json(String sfcc_name){
         ClassifierJSON sfcc_json=new ClassifierJSON();
+        sfcc_json.setClassifiers(new Classifiers());
+        sfcc_json.getClassifiers().setClassifier(new ArrayList<Classifier>());
+        sfcc_json.getClassifiers().getClassifier().add(new Classifier());
         sfcc_json.getClassifiers().getClassifier().get(0).setName(sfcc_name);
         sfcc_json.getClassifiers().getClassifier().get(0).setAcl(sfcc_name);
         return sfcc_json;
@@ -202,23 +208,51 @@ public class SFC_Classifier {
 
     public ACLJSON build_acl_json(SFCCdict sfcc_dict, String rsp_id){
         ACLJSON acl_json=new ACLJSON();
+        acl_json.setAccessLists(new AccessLists());
+        acl_json.getAccessLists().setAcl(new ArrayList<Acl>());
+        acl_json.getAccessLists().getAcl().add(new Acl());
         acl_json.getAccessLists().getAcl().get(0).setAclName(sfcc_dict.getName());
-        acl_json.getAccessLists().getAcl().get(0).getAccessListEntries().getAce().get(0).setRuleName(sfcc_dict.getName());
-        acl_json.getAccessLists().getAcl().get(0).getAccessListEntries().getAce().get(0).getActions().setNetvirtSfcAclSfcName(rsp_id);
+
         AccessListEntries match_dict=new AccessListEntries();
+     //  acl_json.getAccessLists().getAcl().get(0).setAccessListEntries(new AccessListEntries());
+
 
         //need to be fixed later
 
-        for(AclMatchCriteria key:sfcc_dict.getAclMatchCriteria()){
+        for(AclMatchCriteria value:sfcc_dict.getAclMatchCriteria()){
             int i =0;
-            if(key!=null){
-                match_dict.getAce().get(i).getMatches().setDestPort(key.getDestPort());
-                match_dict.getAce().get(i).getMatches().setProtocol(key.getProtocol());
+
+            if(value!=null){
+                match_dict.setAce(new ArrayList<Ace>());
+                match_dict.getAce().add(new Ace());
+                match_dict.getAce().get(i).setMatches(new Matches());
+                if(value.getDestPort()!=null){
+                    DestinationPortRange dpr=new DestinationPortRange();
+
+
+                        dpr.setLowerPort(value.getDestPort());
+                        dpr.setUpperPort(value.getDestPort());
+
+
+                    match_dict.getAce().get(i).getMatches().setDestinationPortRange(dpr);
+
+
+                }
+                match_dict.getAce().get(i).getMatches().setProtocol(value.getProtocol());
             }
-            i++;
 
 
+          i++;
         }
+
+       // match_dict.setAce(new ArrayList<Ace>());
+       // match_dict.getAce().add(new Ace());
+        match_dict.getAce().get(0).setActions(new Actions());
+        match_dict.getAce().get(0).setRuleName(sfcc_dict.getName());
+        match_dict.getAce().get(0).getActions().setNetvirtSfcAclSfcName(rsp_id);
+
+
+
 
         acl_json.getAccessLists().getAcl().get(0).setAccessListEntries(match_dict);
         return acl_json;
@@ -230,7 +264,7 @@ public class SFC_Classifier {
         String sfcc_name=sfcc_dict.getName();
 
 
-        ResponseEntity<String> acl_result=this.sendRest_ACL(acl_json,"put", MessageFormat.format(this.Config_acl_url,sfcc_name));
+        ResponseEntity<String> acl_result=this.sendRest_ACL(acl_json,"PUT", MessageFormat.format(this.Config_acl_url,sfcc_name));
 
         if(!acl_result.getStatusCode().is2xxSuccessful()){
             logger.error("Unable to create NetVirt ACL");

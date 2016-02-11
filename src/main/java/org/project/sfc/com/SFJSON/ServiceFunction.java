@@ -9,6 +9,15 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class ServiceFunction {
+    @SerializedName("sf-data-plane-locator")
+    @Expose
+    private List<SfDataPlaneLocator> sfDataPlaneLocator = new ArrayList<SfDataPlaneLocator>();
+    @SerializedName("nsh-aware")
+    @Expose
+    private String nshAware;
+    @SerializedName("type")
+    @Expose
+    private String type;
 
     @SerializedName("name")
     @Expose
@@ -16,15 +25,6 @@ public class ServiceFunction {
     @SerializedName("ip-mgmt-address")
     @Expose
     private String ipMgmtAddress;
-    @SerializedName("type")
-    @Expose
-    private String type;
-    @SerializedName("nsh-aware")
-    @Expose
-    private String nshAware;
-    @SerializedName("sf-data-plane-locator")
-    @Expose
-    private List<SfDataPlaneLocator> sfDataPlaneLocator = new ArrayList<SfDataPlaneLocator>();
 
     /**
      * 

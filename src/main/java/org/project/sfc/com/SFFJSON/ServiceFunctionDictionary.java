@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class ServiceFunctionDictionary {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
+
     @SerializedName("sff-sf-data-plane-locator")
     @Expose
     private SffSfDataPlaneLocator sffSfDataPlaneLocator;
-
+    @SerializedName("name")
+    @Expose
+    private String name;
     /**
      * 
      * @return

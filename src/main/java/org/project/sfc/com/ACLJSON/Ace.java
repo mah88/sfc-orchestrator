@@ -8,16 +8,16 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Ace {
 
-    @SerializedName("rule-name")
-    @Expose
-    private String ruleName;
+
     @SerializedName("matches")
     @Expose
     private Matches matches;
     @SerializedName("actions")
     @Expose
     private Actions actions;
-
+    @SerializedName("rule-name")
+    @Expose
+    private String ruleName;
     /**
      * 
      * @return

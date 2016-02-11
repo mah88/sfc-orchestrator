@@ -13,18 +13,20 @@ public class ServiceFunctionForwarder {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("ip-mgmt-address")
-    @Expose
-    private String ipMgmtAddress;
-    @SerializedName("service-node")
-    @Expose
-    private String serviceNode;
-    @SerializedName("service-function-forwarder-ovs:ovs-bridge")
-    @Expose
-    private ServiceFunctionForwarderOvsOvsBridge serviceFunctionForwarderOvsOvsBridge;
     @SerializedName("service-function-dictionary")
     @Expose
     private List<ServiceFunctionDictionary> serviceFunctionDictionary = new ArrayList<ServiceFunctionDictionary>();
+    @SerializedName("service-node")
+    @Expose
+    private String serviceNode;
+    @SerializedName("ip-mgmt-address")
+    @Expose
+    private String ipMgmtAddress;
+
+    @SerializedName("service-function-forwarder-ovs:ovs-bridge")
+    @Expose
+    private ServiceFunctionForwarderOvsOvsBridge serviceFunctionForwarderOvsOvsBridge;
+
     @SerializedName("sff-data-plane-locator")
     @Expose
     private List<SffDataPlaneLocator> sffDataPlaneLocator = new ArrayList<SffDataPlaneLocator>();
