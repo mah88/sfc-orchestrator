@@ -27,7 +27,7 @@ public class SFC {
         sfc_dict.setSfcDict(sfc_dict_test);
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
 
-        //get info from openstack about each instantiated SF instance
+        //get info from openbaton  (and openstack for neutron port) about each instantiated SF instance
         //if there are multiple of sfs have the same type, we have to select only one and put it inside the vnfdicts
         for(int x=0;x<chain.size();x++){
 
