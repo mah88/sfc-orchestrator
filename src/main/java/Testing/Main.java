@@ -21,11 +21,11 @@ public class Main {
         VNFdict vnf1_test = new VNFdict();
        // VNFdict vnf2_test = new VNFdict();
 
-        vnf1_test.setIP("11.0.0.4");
+        vnf1_test.setIP("11.0.0.3");
        // vnf2_test.setIP("10.0.0.7");
         vnf1_test.setName("testVNF1");
         //vnf2_test.setName("DPI-1");
-        vnf1_test.setNeutronPortId("322f3542-4525-43ce-b4a9-ed0dbd40fe1b");
+        vnf1_test.setNeutronPortId("2c4a623b-2550-44a1-96e4-1e6b3ddeee0e");
        // vnf2_test.setNeutronPortId("22222222222");
         vnf1_test.setType("FW");
         //vnf1_test.setType("DPI");
@@ -43,7 +43,7 @@ public class Main {
         sfc_dict_test.setInfraDriver("ODL");
         sfc_dict_test.setSymmetrical(false);
         sfc_dict_test.setStatus("create");
-        sfc_dict_test.setTenantId("82cb8443f4c44c78839a78c6c3b92318 ");
+        sfc_dict_test.setTenantId("c89ca8e1c8084f09a0ed80ddfdc9273d");
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
         vnfdicts.put(0, vnf1_test);
         //vnfdicts.put(1, vnf2_test);
@@ -51,10 +51,11 @@ public class Main {
 
        String instance_id= test.CreateSFC(sfc_test, vnfdicts);
 
+
         SFC_Classifier classifier_test2=new SFC_Classifier();
         SFCCdict sfcc_dict=new SFCCdict();
         sfcc_dict.setStatus("create");
-        sfcc_dict.setTenantId("82cb8443f4c44c78839a78c6c3b92318 ");
+        sfcc_dict.setTenantId("c89ca8e1c8084f09a0ed80ddfdc9273d");
         sfcc_dict.setInfraDriver("netvirtsfc");
         sfcc_dict.setId("sfcc-test1");
         sfcc_dict.setChain(sfc_dict_test.getId());

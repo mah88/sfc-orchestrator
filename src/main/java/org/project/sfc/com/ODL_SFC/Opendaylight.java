@@ -591,7 +591,11 @@ public class Opendaylight {
         ResponseEntity<String> sf_result=this.sendRest_SF(sfJSON,"PUT",this.Config_SF_URL);
         return sf_result;
     }
-
+    public  ResponseEntity<String> getODLsf(){
+        String url = "restconf/config/service-function:service-functions";
+        ResponseEntity<String> sf_result=this.sendRest_SF(null,"GET",url);
+        return sf_result;
+    }
     public  ResponseEntity<String> deleteODLsf(SFJSON sfJSON){
         ResponseEntity<String> sf_result=this.sendRest_SF(sfJSON,"DELETE",this.Config_SF_URL);
         return sf_result;
@@ -853,24 +857,26 @@ public class Opendaylight {
                 br_dict = find_ovs_br(sfs_dict.get(i), networkmap);
                 //   logger.debug("br_dict from find_ovs:" +br_dict.);
                 if (br_dict.getBr_name() != null) {
-                    String br_name = br_dict.getBr_name();
-                    if (br_mapping.get(br_name) != null) {
+                    //set it to br_uuid
+                    String br_uuid = br_dict.getBr_uuid();
+                    if (br_mapping.get(br_uuid) != null) {
                         System.out.println("sfs_dict >>> " + sfs_dict.get(i).getName());
-                        System.out.println("br mapping get SFs  >>> " + br_mapping.get(br_name).getSfs());
-                        br_mapping.get(br_name).getSfs().add(sfs_dict.get(i).getName());
-                        br_mapping.get(br_name).getSFdict().get(sfs_dict.get(i).getName()).setTap_port(br_dict.getTap_port());
+                        System.out.println("br mapping get SFs  >>> " + br_mapping.get(br_uuid).getSfs());
+                        br_mapping.get(br_uuid).getSfs().add(sfs_dict.get(i).getName());
+                        br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()).setTap_port(br_dict.getTap_port());
                     } else {
 
-                        br_mapping.put(br_name,new BridgeMapping());
+                        br_mapping.put(br_uuid,new BridgeMapping());
 
-                        br_mapping.get(br_name).getSfs().add(sfs_dict.get(i).getName());
-                        br_mapping.get(br_name).getSFdict().put(sfs_dict.get(i).getName(),new SF_dict());
-                        br_mapping.get(br_name).setOVSip(br_dict.getOVSIp());
+                        br_mapping.get(br_uuid).getSfs().add(sfs_dict.get(i).getName());
+                        br_mapping.get(br_uuid).getSFdict().put(sfs_dict.get(i).getName(),new SF_dict());
+                        br_mapping.get(br_uuid).setOVSip(br_dict.getOVSIp());
+                        br_mapping.get(br_uuid).setBr_name(br_dict.getBr_name());
                         String sff_name = "sff" + sff_counter;
-                        br_mapping.get(br_name).setSFFname(sff_name);
-                        System.out.println("brmapping_dict name >>> " + br_mapping.get(br_name).getSFdict().get(sfs_dict.get(i).getName()));
+                        br_mapping.get(br_uuid).setSFFname(sff_name);
+                        System.out.println("brmapping_dict name >>> " + br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()));
 
-                        br_mapping.get(br_name).getSFdict().get(sfs_dict.get(i).getName()).setTap_port(br_dict.getTap_port());
+                        br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()).setTap_port(br_dict.getTap_port());
                         sff_counter++;
 
                     }
@@ -887,6 +893,7 @@ public class Opendaylight {
     public static class Brdict{
        private String ovs_ip;
        private String br_name;
+        private String br_uuid;
        private String tap_port;
        private Integer ovs_port;
 
@@ -916,6 +923,12 @@ public class Opendaylight {
         }
         public void setBr_name(String name) {
             this.br_name = name;
+        }
+        public String getBr_uuid() {
+            return br_uuid;
+        }
+        public void setBr_uuid(String uuid) {
+            this.br_uuid = uuid;
         }
 
     }
@@ -1008,7 +1021,7 @@ public class Opendaylight {
             temp_sff_dp_loc.getDataPlaneLocator().setPort("6633");
             temp_sff_dp_loc.getDataPlaneLocator().setIp(bridgemapping.get(Bridge_name.getKey()).getOVSip());
             String bridge_name=Bridge_name.getKey().toString();
-            logger.debug("bridge  Name >> "+Bridge_name.getKey().toString());
+            logger.debug("bridge  Name >> "+bridgemapping.get(Bridge_name.getKey()).getBr_name());
 
             for(int sf=0;sf<bridgemapping.get(Bridge_name.getKey()).getSfs().size();sf++){
                temp_sf_dict=sf_dict;
@@ -1068,7 +1081,7 @@ public class Opendaylight {
                 temp_sff.setIpMgmtAddress(bridgemapping.get(Bridge_name.getKey()).getOVSip());
                 temp_sff.setServiceNode("");
                 temp_sff.setServiceFunctionForwarderOvsOvsBridge(new ServiceFunctionForwarderOvsOvsBridge());
-                temp_sff.getServiceFunctionForwarderOvsOvsBridge().setBridgeName(Bridge_name.getKey().toString());
+                temp_sff.getServiceFunctionForwarderOvsOvsBridge().setBridgeName(bridgemapping.get(Bridge_name.getKey()).getBr_name());
 
 
 
@@ -1124,6 +1137,8 @@ public class Opendaylight {
 
                                             System.out.println("Found");
                                             System.out.println("OVSDB Bridge Name: "+network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeName());
+                                            System.out.println("OVSDB Bridge UUID: "+network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeUuid());
+                                            bridge_dict.setBr_uuid(network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeUuid());
                                             bridge_dict.setBr_name(network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeName());
                                             String full_node_id=network_map.getTopology().get(net).getNode().get(node_entry).getNodeId();
                                             String remove_it="/bridge/"+bridge_dict.getBr_name();
@@ -1185,6 +1200,7 @@ public class Opendaylight {
         private String ovs_ip;
         private String sff_name;
         private HashMap<String, SF_dict> sf=new HashMap<String,SF_dict>();
+        private String Br_name;
 
         public HashMap<String, SF_dict>getSFdict() {
             return sf;
@@ -1200,6 +1216,12 @@ public class Opendaylight {
         }
         public String getOVSip() {
             return ovs_ip;
+        }
+        public void setBr_name(String name) {
+            this.Br_name= name;
+        }
+        public String getBr_name() {
+            return Br_name;
         }
         public void setOVSip(String ovs_ip) {
             this.ovs_ip = ovs_ip;
