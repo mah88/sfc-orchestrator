@@ -50,7 +50,7 @@ public class OpenBatonManager {
 
         this.logger = LoggerFactory.getLogger(this.getClass());
         this.nfvoRequestor = new NFVORequestor(nfvoProperties.getOpenbatonUsername(), nfvoProperties.getOpenbatonPasswd(), nfvoProperties.getOpenbatonIP(), nfvoProperties.getOpenbatonPort(), "1");
-       this.apiPath = "/api/v1/nubomedia/paas";
+       this.apiPath = "/api/v1/sfco";
 
         try {
             vimInstance = this.nfvoRequestor.getVimInstanceAgent().create(vimInstance);

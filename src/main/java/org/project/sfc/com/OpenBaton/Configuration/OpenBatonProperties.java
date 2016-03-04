@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Created by maa on 22.01.16.
  */
 @Service
-@ConfigurationProperties(prefix="paas")
+@ConfigurationProperties(prefix="sfco")
 public class OpenBatonProperties {
 
     private String internalURL;

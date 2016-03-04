@@ -39,7 +39,7 @@ import java.util.*;
  */
 
 @RestController
-@RequestMapping("/api/v1/nubomedia/paas")
+@RequestMapping("/api/v1/sfco")
 public class ServiceFunctionAppManager {
 
     private static Map<String, OpenBatonCreateServer> deploymentMap = new HashMap<>();
@@ -58,7 +58,7 @@ public class ServiceFunctionAppManager {
         this.appIDGenerator = new SecureRandom();
     }
 
-    @RequestMapping(value = "/app",  method = RequestMethod.POST)
+    @RequestMapping(value = "/SFapp",  method = RequestMethod.POST)
     public @ResponseBody SFcreateAppResponse createApp(@RequestBody SFcreateAppRequest request) throws SDKException, DuplicatedException, NameStructureException {
 
 
@@ -114,7 +114,7 @@ public class ServiceFunctionAppManager {
         return res;
     }
 
-    @RequestMapping(value = "/app/{id}", method =  RequestMethod.GET)
+    @RequestMapping(value = "/SFapp/{id}", method =  RequestMethod.GET)
     public @ResponseBody Application getApp(@PathVariable("id") String id) throws ApplicationNotFoundException {
 
         logger.info("Request status for " + id + " app");
@@ -160,7 +160,7 @@ public class ServiceFunctionAppManager {
 
     }
 
-    @RequestMapping(value = "/app/{id}/buildlogs", method = RequestMethod.GET)
+    @RequestMapping(value = "/SFapp/{id}/buildlogs", method = RequestMethod.GET)
     public @ResponseBody SFBuildlogs getBuildLogs( @PathVariable("id") String id) {
 
 
@@ -206,7 +206,7 @@ public class ServiceFunctionAppManager {
         return res;
     }
 
-    @RequestMapping(value = "/app/{id}/logs", method = RequestMethod.GET)
+    @RequestMapping(value = "/SFapp/{id}/logs", method = RequestMethod.GET)
     public @ResponseBody String getApplicationLogs( @PathVariable("id") String id) throws  ApplicationNotFoundException {
 
 
@@ -224,7 +224,7 @@ public class ServiceFunctionAppManager {
 
     }
 
-    @RequestMapping(value = "/app", method = RequestMethod.GET)
+    @RequestMapping(value = "/SFapp", method = RequestMethod.GET)
     public @ResponseBody Iterable<Application> getApps() throws ApplicationNotFoundException {
 
 
@@ -240,7 +240,7 @@ public class ServiceFunctionAppManager {
         return applications;
     }
 
-    @RequestMapping(value = "/app/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/SFapp/{id}", method = RequestMethod.DELETE)
     public @ResponseBody SFdeleteAppResponse deleteApp(@PathVariable("id") String id)  {
 
 
@@ -373,7 +373,7 @@ public class ServiceFunctionAppManager {
             }
             */
 
-            //something wrong here : It should be create
+            //something wrong here :why delete here ?
             obmanager.deleteDescriptor(server.getNsdID());
 
             obmanager.deleteEvent(server.getEventAllocatedID());

@@ -1,5 +1,6 @@
 package Testing;
 
+import org.project.sfc.com.ODL_SFC.NeutronClient;
 import org.project.sfc.com.ODL_SFC.Opendaylight;
 import org.project.sfc.com.ODL_SFC.VNFdict;
 import org.project.sfc.com.ODL_SFC_Classifier.SFCCdict.AclMatchCriteria;
@@ -17,7 +18,10 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        Opendaylight test = new Opendaylight();
+
+        //testing the SFC deployment in ODL
+
+     /*   Opendaylight test = new Opendaylight();
         VNFdict vnf1_test = new VNFdict();
        // VNFdict vnf2_test = new VNFdict();
 
@@ -68,7 +72,11 @@ public class Main {
         sfcc_dict.setAclMatchCriteria(list_acl);
         classifier_test2.Create_SFC_Classifer(sfcc_dict,instance_id);
 
-
-
+*/
+        //testing the neutron port client
+    /*    NeutronClient NC=new NeutronClient();
+        String nc_port=NC.getNeutronPortID("11.0.0.5");
+        System.out.println("The NEUTRON PORT ID IS: "+nc_port);
+*/
     }
 }
