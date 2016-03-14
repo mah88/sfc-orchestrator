@@ -7,22 +7,23 @@ package org.project.sfc.com.SFCdb.RecordManagement;
 
 
 import org.openbaton.catalogue.util.IdGenerator;
-import org.project.sfc.com.ODL_SFC.NeutronClient;
+import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.NeutronClient;
 import org.project.sfc.com.SFCdb.catalogue.ServiceFunctionChainRecord;
 import org.project.sfc.com.SFCdb.catalogue.Status;
 import org.project.sfc.com.SFCdb.repository.ServiceFunctionChainRecordRepository;
-import org.project.sfc.com.SFCdict.SFCdict;
-import org.project.sfc.com.SFCdict.SfcDict;
+import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
+import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
 import org.slf4j.Logger;
         import org.slf4j.LoggerFactory;
         import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.beans.factory.annotation.Value;
-        import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
         import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.Set;
 
 /**
  * Created by lto on 11/05/15.
@@ -34,21 +35,12 @@ public class SFCRmanagement implements org.project.sfc.com.SFCdb.RecordManagemen
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
+   private Set<Status> ACTIVE_UPDATE=new HashSet<Status>(Arrays.asList(Status.ACTIVE,Status.PENDING_UPDATE));
+    private Set<Status> ACTIVE_UPDATE_ERROR_DEAD=new HashSet<Status>(Arrays.asList(Status.PENDING_CREATE,Status.ACTIVE,Status.PENDING_UPDATE,Status.ERROR,Status.DEAD));
 
 
     @Autowired
     private ServiceFunctionChainRecordRepository sfcrRepository;
-
-
-
-    @Value("${nfvo.delete.all-status:}")
-    private String deleteInAllStatus;
-
-    @Value("${nfvo.delete.vnfr:false}")
-    private String waitForDelete;
-
-    @Value("${nfvo.delete.vnfr:false}")
-    private boolean removeAfterTimeout;
 
 
 
@@ -125,38 +117,58 @@ public class SFCRmanagement implements org.project.sfc.com.SFCdb.RecordManagemen
 
     //start work from here need to adjust update,delete
 
-    public ServiceFunctionChainRecord get_SFC_Record(String sfc_id, Status Current_status,Status new_status){
+    public ServiceFunctionChainRecord get_SFC_Record(String sfc_id, Set<Status> Current_status,Status new_status){
       ServiceFunctionChainRecord sfcr=sfcrRepository.findFirstById(sfc_id);
+        if(ACTIVE_UPDATE.contains(sfcr.getStatus())==true){
+            log.info("SFC is Found");
+
+        }
+        if(sfcr.getStatus().equals(Status.PENDING_UPDATE)){
+            log.info("SFC In Use");
+
+        }
+        sfcr.setStatus(new_status);
+        sfcr=sfcrRepository.save(sfcr);
 
         return sfcr;
     }
-    public ServiceFunctionChainRecord SFC_update(ServiceFunctionChainRecord newSFCR, String sfc_id) {
+
+
+    public SFCdict SFC_update(ServiceFunctionChainRecord newSFCR, String sfc_id) {
         SFCdict sfcd=SFC_update_pre(sfc_id);
+        SFC_update_post(sfc_id,Status.ACTIVE);
         return sfcd;
     }
 
-    public ServiceFunctionChainRecord SFC_update_pre( String sfc_id) {
-       ServiceFunctionChainRecord sfcr=get_SFC_Record(sfc_id,)
+    public SFCdict SFC_update_pre( String sfc_id) {
+       ServiceFunctionChainRecord sfcr=get_SFC_Record(sfc_id,ACTIVE_UPDATE,Status.PENDING_UPDATE);
+        sfcr=sfcrRepository.save(sfcr);
+        SFCdict sfc=new SFCdict();
+        return sfc;
+    }
+    public void SFC_update_post( String sfc_id, Status new_status) {
+        if (sfcrRepository.findFirstById(sfc_id).getId()==sfc_id && sfcrRepository.findFirstById(sfc_id).getStatus().equals(Status.PENDING_UPDATE)){
+            sfcrRepository.findFirstById(sfc_id).setStatus(new_status);
+        }
+        sfcrRepository.save(sfcrRepository.findFirstById(sfc_id));
     }
 
 
 
-
-    @Override
     public ServiceFunctionChainRecord update(ServiceFunctionChainRecord newRsr, String idNsr) {
         sfcrRepository.exists(idNsr);
         newRsr = sfcrRepository.save(newRsr);
         return newRsr;
     }
 
-    @Override
+
     public Iterable<ServiceFunctionChainRecord> SFCs_query() {
         return sfcrRepository.findAll();
     }
 
 
 
-    @Override
+
     public ServiceFunctionChainRecord SFC_query(String id) {
         return sfcrRepository.findFirstById(id);
     }

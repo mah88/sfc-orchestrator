@@ -6,8 +6,7 @@ package org.project.sfc.com.SFCdb.catalogue;
 
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.openbaton.catalogue.util.IdGenerator;
-import org.project.sfc.com.SFCJSON.ServiceFunctionChain;
-import org.project.sfc.com.SFPJSON.ServiceFunctionPath;
+import org.project.sfc.com.ODL_SFC_driver.JSON.SFPJSON.ServiceFunctionPath;
 
 import javax.persistence.*;
 import java.io.Serializable;

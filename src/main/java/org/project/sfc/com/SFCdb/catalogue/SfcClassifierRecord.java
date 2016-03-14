@@ -8,9 +8,6 @@ package org.project.sfc.com.SFCdb.catalogue;
 
 
         import org.openbaton.catalogue.util.IdGenerator;
-        import org.project.sfc.com.RSPJSON.RSPJSON;
-        import org.project.sfc.com.SFCJSON.ServiceFunctionChain;
-        import org.project.sfc.com.SFPJSON.ServiceFunctionPath;
 
         import javax.persistence.*;
         import java.io.Serializable;

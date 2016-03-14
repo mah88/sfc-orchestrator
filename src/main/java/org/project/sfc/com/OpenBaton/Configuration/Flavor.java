@@ -4,10 +4,10 @@ package org.project.sfc.com.OpenBaton.Configuration;
  * Created by mah on 2/25/16.
  */
 public enum Flavor {
-    TINY("d1.tiny"),
-    SMALL("d1.small"),
-    MEDIUM("d1.medium"),
-    LARGE("d1.large"),
+    TINY("m1.tiny"),
+    SMALL("m1.small"),
+    MEDIUM("m1.medium"),
+    LARGE("m1.large"),
     CUSTOM("custom");
 
     private final String value;

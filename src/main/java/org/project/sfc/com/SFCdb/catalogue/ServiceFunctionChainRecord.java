@@ -2,13 +2,12 @@ package org.project.sfc.com.SFCdb.catalogue;
 
 
         import org.openbaton.catalogue.util.IdGenerator;
-        import org.project.sfc.com.SFCJSON.ServiceFunctionChain;
 
         import javax.persistence.*;
         import java.io.Serializable;
         import java.util.ArrayList;
         import java.util.List;
-        import java.util.Set;
+
 /**
  * Created by mah on 3/3/16.
  */

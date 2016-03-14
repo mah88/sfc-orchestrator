@@ -35,7 +35,7 @@ public class OpenBatonConfiguration {
     public VimInstance getVimInstance(){
         VimInstance vim = new VimInstance();
         logger.debug("Creating vim");
-        vim.setName("SFC-vim");
+        vim.setName("vim-odl-instance");
         vim.setAuthUrl(vimProperties.getAuthURL());
         vim.setKeyPair(vimProperties.getKeypair());
         vim.setPassword(vimProperties.getPassword());

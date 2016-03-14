@@ -3,15 +3,13 @@ package org.project.sfc.com.SFCdb.RecordManagementInterfaces;
 /**
  * Created by mah on 3/4/16.
  */
-import org.openbaton.catalogue.mano.descriptor.NetworkServiceDescriptor;
-import org.openbaton.catalogue.mano.descriptor.VNFComponent;
-import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
-import org.openbaton.catalogue.mano.record.VNFCInstance;
-import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
-import org.openbaton.catalogue.nfvo.messages.Interfaces.NFVMessage;
-import org.project.sfc.com.SFCdb.catalogue.ServiceFunctionChainRecord;
 
-import java.util.concurrent.ExecutionException;
+import org.project.sfc.com.SFCdb.catalogue.ServiceFunctionChainRecord;
+import org.project.sfc.com.SFCdb.catalogue.Status;
+import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
+import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
+
+import java.util.Set;
 
 /**
  * Created by mpa on 30/04/15.
@@ -24,15 +22,14 @@ public interface SFCRmanInterface {
      * validating a Network Service	Descriptor (NSD),
      * including any related VNFFGD and VLD.
      */
-    NetworkServiceRecord onboard(String nsd_id) throws InterruptedException, ExecutionException, VimException, NotFoundException, BadFormatException, VimDriverException, QuotaExceededException;
+    ServiceFunctionChainRecord Create_SFC_pre(SFCdict sfcd);
 
     /**
      * This operation allows submitting and
      * validating a Network Service	Descriptor (NSD),
      * including any related VNFFGD and VLD.
      */
-    NetworkServiceRecord onboard(NetworkServiceDescriptor networkServiceDescriptor) throws ExecutionException, InterruptedException, VimException, NotFoundException, NotFoundException, BadFormatException, VimDriverException, QuotaExceededException;
-
+    SfcDict Create_SFC_(SFCdict sfcd);
     /**
      * This operation allows updating a Network
      * Service Descriptor (NSD), including any
@@ -40,22 +37,23 @@ public interface SFCRmanInterface {
      * include creating/deleting new VNFFGDs
      * and/or new VLDs.
      *
-     * @param new_nsd
-     * @param old_id
      */
-    NetworkServiceRecord update(NetworkServiceRecord new_nsd, String old_id);
-
+    SfcDict create_device_pre(SFCdict sfcd);
     /**
      * This operation is used to query the
      * information of the Network Service
      * Descriptor (NSD), including any
      * related VNFFGD and VLD.
      */
-    Iterable<ServiceFunctionChainRecord> query();
+    Iterable<ServiceFunctionChainRecord> SFCs_query();
 
-    void executeAction(NFVMessage nfvMessage,String nsrId,String idVnf,String idVdu, String idVNFCI) ;
-
-    NetworkServiceRecord query(String id);
+    void Create_SFC_post(String sfc_id, String instance_id,SfcDict sfcd_) ;
+    void Create_SFC_status(String sfc_id, Status new_status);
+    ServiceFunctionChainRecord get_SFC_Record(String sfc_id, Set<Status> Current_status, Status new_status);
+    SFCdict SFC_update(ServiceFunctionChainRecord newSFCR, String sfc_id);
+    SFCdict SFC_update_pre( String sfc_id);
+    void SFC_update_post( String sfc_id, Status new_status);
+    ServiceFunctionChainRecord update(ServiceFunctionChainRecord newRsr, String idNsr);
 
     /**
      * This operation is used to remove a
@@ -63,7 +61,6 @@ public interface SFCRmanInterface {
      *
      * @param id
      */
-    void delete(String id) throws  ExecutionException, InterruptedException;
-
+    ServiceFunctionChainRecord SFC_query(String id);
 
 }
