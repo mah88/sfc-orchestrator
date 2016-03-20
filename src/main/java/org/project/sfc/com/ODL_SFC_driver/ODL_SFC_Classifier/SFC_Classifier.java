@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class SFC_Classifier {
 
-    public String ODL_ip="192.168.0.135";
+    public String ODL_ip="192.168.0.138";
     public String ODL_port="8080";
     public String ODL_username="admin";
     public String ODL_password="admin";

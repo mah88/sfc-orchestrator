@@ -36,35 +36,37 @@ String callbackurl="http://localhost:8081";
         */
 
         //testing the SFC deployment in ODL
+
         Opendaylight test = new Opendaylight();
         VNFdict vnf1_test = new VNFdict();
+     //test.DeleteSFC("Path-SFC-test", false);
        // VNFdict vnf2_test = new VNFdict();
-        NeutronClient NC=new NeutronClient();
+       NeutronClient NC=new NeutronClient();
 
 
-        vnf1_test.setIP("11.0.0.3");
+        vnf1_test.setIP("11.0.0.6");
        // vnf2_test.setIP("10.0.0.7");
-        vnf1_test.setName("SF-121");
+        vnf1_test.setName("http-SF-725");
         //vnf2_test.setName("DPI-1");
-        vnf1_test.setNeutronPortId(NC.getNeutronPortID(vnf1_test.getIP()));
+        vnf1_test.setNeutronPortId(NC.getNeutronPortID(vnf1_test.getIP())); //NC.getNeutronPortID(vnf1_test.getIP()));
        // vnf2_test.setNeutronPortId("22222222222");
-        vnf1_test.setType("FW");
+        vnf1_test.setType("http");
         //vnf1_test.setType("DPI");
 
         SFCdict sfc_test = new SFCdict();
         SfcDict sfc_dict_test=new SfcDict();
 
-        sfc_dict_test.setName("SFC-test");
+        sfc_dict_test.setName("SFC-demo");
         List<String> chain = new ArrayList<String>();
-        chain.add("SF-121");
+        chain.add("http-SF-725");
      //   chain.add("DPI-1");
         sfc_dict_test.setChain(chain);
-        sfc_dict_test.setId("SFC-test:1");
+        sfc_dict_test.setId("SFC-demo:1");
 
         sfc_dict_test.setInfraDriver("ODL");
         sfc_dict_test.setSymmetrical(false);
         sfc_dict_test.setStatus("create");
-        sfc_dict_test.setTenantId(NC.getTenantID());
+        sfc_dict_test.setTenantId(NC.getTenantID());//NC.getTenantID());
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
         vnfdicts.put(0, vnf1_test);
         //vnfdicts.put(1, vnf2_test);
@@ -72,15 +74,15 @@ String callbackurl="http://localhost:8081";
 
        String instance_id= test.CreateSFC(sfc_test, vnfdicts);
 
-
+System.out.println("INSTANCE ID "+ instance_id);
         SFC_Classifier classifier_test2=new SFC_Classifier();
         SFCCdict sfcc_dict=new SFCCdict();
         sfcc_dict.setStatus("create");
         sfcc_dict.setTenantId(NC.getTenantID());
         sfcc_dict.setInfraDriver("netvirtsfc");
-        sfcc_dict.setId("sfcc-test:1");
+        sfcc_dict.setId("sfcc-demo:1");
         sfcc_dict.setChain(sfc_dict_test.getId());
-        sfcc_dict.setName("sfc-classifier-testing");
+        sfcc_dict.setName("sfc-classifier-demo");
         AclMatchCriteria acl=new AclMatchCriteria();
         acl.setDestPort(80);
         acl.setProtocol(6);
@@ -88,8 +90,7 @@ String callbackurl="http://localhost:8081";
         list_acl.add(acl);
         sfcc_dict.setAclMatchCriteria(list_acl);
         classifier_test2.Create_SFC_Classifer(sfcc_dict,instance_id);
-        System.out.println("SF PORT ID "+NC.getNeutronPortID(vnf1_test.getIP()));
-        System.out.println("TENANT ID "+NC.getTenantID());
+
 
 
         //testing the neutron port client

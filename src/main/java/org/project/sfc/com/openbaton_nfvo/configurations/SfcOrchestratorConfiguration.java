@@ -15,7 +15,7 @@ import org.slf4j.Logger;
  * Created by maa on 01.02.16.
  */
 @Service
-@ConfigurationProperties(prefix = "sfcorchestrator")
+@ConfigurationProperties(prefix = "sfco")
 public class SfcOrchestratorConfiguration {
 
     private String baseUrl;

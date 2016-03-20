@@ -35,7 +35,7 @@ project.ext {
     /**
      * gradle Related Vars
      */
-    mainClass = 'org.project.org.Main'
+    mainClass = 'org.project.sfc.com.Main'
     //------------------------------------------------//
 }
 

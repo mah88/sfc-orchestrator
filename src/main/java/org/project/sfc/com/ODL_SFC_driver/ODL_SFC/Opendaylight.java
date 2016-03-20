@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class Opendaylight {
 
-    public String ODL_ip="192.168.0.135";
+    public String ODL_ip="192.168.0.138";
     public String ODL_port="8080";
     public String ODL_username="admin";
     public String ODL_password="admin";
@@ -446,93 +446,7 @@ public class Opendaylight {
 
     }
 
-     /*
-    public String sendRest(Gson data,String rest_type,String url)
-    {
-        String reply="ERROR Occured in Send REST";
 
-
-        String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
-
-
-        try  {
-            DefaultHttpClient httpclient = new DefaultHttpClient();
-
-            httpclient.getCredentialsProvider().setCredentials(
-                    new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
-                    new UsernamePasswordCredentials(this.ODL_username,this.ODL_password));
-            com.google.gson.Gson gson1 = new com.google.gson.Gson();
-            String json = gson1.toJson(data, String.class);
-            StringEntity params=new StringEntity(data.toString());
-            if (rest_type=="GET"){
-
-                HttpGet request=new HttpGet(Full_URL);
-                request.addHeader("content-type", "application/json");
-
-                HttpResponse result = httpclient.execute(request);
-
-                String jsonx = EntityUtils.toString(result.getEntity(), "UTF-8");
-                com.google.gson.Gson gson = new com.google.gson.Gson();
-                Response respuesta = gson.fromJson(json,Response.class);
-
-                System.out.println(respuesta.getExample());
-                System.out.println(respuesta.getFr());
-                reply=respuesta.getFr();
-                logger.debug("rest call response: "+ reply);
-
-
-            }else if (rest_type=="POST"){
-                HttpPost request=new HttpPost(Full_URL);
-                request.addHeader("content-type", "application/json");
-                request.setEntity(params);
-                HttpResponse result = httpclient.execute(request);
-
-                String jsonx = EntityUtils.toString(result.getEntity(), "UTF-8");
-                com.google.gson.Gson gson = new com.google.gson.Gson();
-                Response respuesta = gson.fromJson(json,Response.class);
-
-                System.out.println(respuesta.getExample());
-                System.out.println(respuesta.getFr());
-                reply=respuesta.getFr();
-                logger.debug("rest call response: "+ reply);
-
-            }else if (rest_type=="PUT"){
-                HttpPut request=new HttpPut(Full_URL);
-                request.addHeader("content-type", "application/json");
-                request.setEntity(params);
-                HttpResponse result = httpclient.execute(request);
-
-                String jsonx = EntityUtils.toString(result.getEntity(), "UTF-8");
-                com.google.gson.Gson gson = new com.google.gson.Gson();
-                Response respuesta = gson.fromJson(json,Response.class);
-
-                System.out.println(respuesta.getExample());
-                System.out.println(respuesta.getFr());
-                reply=respuesta.getFr();
-                logger.debug("rest call response: "+ reply);
-
-            }else if (rest_type=="DELETE"){
-                HttpDelete request=new HttpDelete(Full_URL);
-                request.addHeader("content-type", "application/json");
-                HttpResponse result = httpclient.execute(request);
-
-                String jsonx = EntityUtils.toString(result.getEntity(), "UTF-8");
-                com.google.gson.Gson gson = new com.google.gson.Gson();
-                Response respuesta = gson.fromJson(json,Response.class);
-
-                System.out.println(respuesta.getExample());
-                System.out.println(respuesta.getFr());
-                reply=respuesta.getFr();
-                logger.debug("rest call response: "+ reply);
-
-            }
-
-        } catch (IOException ex) {
-        }
-        return reply;
-
-    }
-    */
     /// Get Network Topology
     public ResponseEntity<String> getNetworkTopologyList(){
         String url = "restconf/operational/network-topology:network-topology/";
@@ -558,6 +472,7 @@ public class Opendaylight {
         ResponseEntity<String> sff_result = this.sendRest_SFF(sffJSON, "PUT", MessageFormat.format(this.Config_SFF_URL,sff_name));
         return sff_result;
     }
+    //FIXME need to be formated with the name as Create ODL SFF
 
     public  ResponseEntity<String> updateODLsff(SFFJSON sffJSON){
 
@@ -583,6 +498,8 @@ public class Opendaylight {
         ResponseEntity<String> sf_result = this.sendRest_SF(sfJSON, "PUT", MessageFormat.format(this.Config_SF_URL,sf_name));
         return sf_result;
     }
+    //FIXME need to be formated with the name as Create ODL SF
+
     public  ResponseEntity<String> updateODLsf(SFJSON sfJSON){
 
         ResponseEntity<String> sf_result=this.sendRest_SF(sfJSON,"PUT",this.Config_SF_URL);
@@ -610,6 +527,8 @@ public class Opendaylight {
         ResponseEntity<String> sfc_result = this.sendRest_SFC(sfcJSON, "PUT", MessageFormat.format(this.Config_SFC_URL,sfc_name));
         return sfc_result;
     }
+    //FIXME need to be formated with the name as Create ODL SFC
+
     public  ResponseEntity<String> updateODLsfc(SFCJSON sfcJSON){
 
         ResponseEntity<String> sfc_result=this.sendRest_SFC(sfcJSON,"PUT",this.Config_SFC_URL);
@@ -633,9 +552,10 @@ public class Opendaylight {
         ResponseEntity<String> sfp_result = this.sendRest_SFP(sfpJSON, "PUT", MessageFormat.format(this.Config_SFP_URL,sfp_name));
         return sfp_result;
     }
+    //FIXME need to be formated with the name as Create ODL SFP
     public  ResponseEntity<String> updateODLsfp(SFPJSON sfpJSON){
 
-        ResponseEntity<String> sfp_result=this.sendRest_SFP(sfpJSON,"PUT",this.Config_SFC_URL);
+        ResponseEntity<String> sfp_result=this.sendRest_SFP(sfpJSON,"PUT",this.Config_SFP_URL);
         return sfp_result;
     }
 
@@ -677,7 +597,8 @@ public class Opendaylight {
             dplocDict.setServiceFunctionForwarder("dummy");
             sf_json.setNshAware("true");
             sf_json.setIpMgmtAddress(vnf_dict.get(sf_i).getIP());
-            sf_json.setType("service-function-type:"+vnf_dict.get(sf_i).getType());
+            //sf_json.setType("service-function-type:"+vnf_dict.get(sf_i).getType());
+            sf_json.setType(vnf_dict.get(sf_i).getType());
             List< SfDataPlaneLocator> list_dploc=new ArrayList<SfDataPlaneLocator>();
             list_dploc.add(dplocDict);
             sf_json.setSfDataPlaneLocator(list_dploc);
@@ -815,7 +736,9 @@ public class Opendaylight {
            SfcServiceFunction sfc_sf=new SfcServiceFunction();
            sfc.getSfcServiceFunction().add(sfc_sf);
            sfc.getSfcServiceFunction().get(sf).setName(vnf_dict.get(sf).getName());
-           sfc.getSfcServiceFunction().get(sf).setType("service-function-type:"+vnf_dict.get(sf).getType());
+         //  sfc.getSfcServiceFunction().get(sf).setType("service-function-type:"+vnf_dict.get(sf).getType());
+           sfc.getSfcServiceFunction().get(sf).setType(vnf_dict.get(sf).getType());
+
            // need to change the 0 to the size of the current SFCs --> need database creation
 
            sfc_json.getServiceFunctionChains().getServiceFunctionChain().add(sfc);
@@ -1173,7 +1096,7 @@ public class Opendaylight {
 
         }
 
-        if(bridge_dict.getBr_name()!=null && bridge_dict.getOVS_port()!=null && bridge_dict.getOVSIp()!=null && bridge_dict.getTap_port()!=null)
+        if(bridge_dict.getBr_uuid()!=null&& bridge_dict.getBr_name()!=null && bridge_dict.getOVS_port()!=null && bridge_dict.getOVSIp()!=null && bridge_dict.getTap_port()!=null)
         {
             logger.debug("bridge dictionary is  created successfully!!");
 
@@ -1244,20 +1167,26 @@ public class Opendaylight {
 
 
 
-public void DeleteSFC(String instance_id,boolean isSymmetric){
+public ResponseEntity<String> DeleteSFC(String instance_id,boolean isSymmetric){
 
 
     List<String> instance_list=new ArrayList<String>();
-    instance_list.add(instance_id);
+    instance_list.add(0,instance_id);
     if(isSymmetric==true){
         String reverse_id = instance_id+"-Reverse";
-        instance_list.add(reverse_id);
+        instance_list.add(1,reverse_id);
 
     }
+    ResponseEntity<String> rsp_result=null;
     for (int ins=0;ins<instance_list.size();ins++){
         RSPJSON rsp_dict=new RSPJSON();
-        rsp_dict.getInput().setName(instance_list.get(ins));
-        ResponseEntity<String> rsp_result=deleteODLrsp(rsp_dict);
+        Input x=new Input();
+        x.setName(instance_list.get(ins));
+       // x.setSymmetric(isSymmetric);
+
+
+        rsp_dict.setInput(x);
+        rsp_result=deleteODLrsp(rsp_dict);
 
         if(!rsp_result.getStatusCode().is2xxSuccessful()){
 
@@ -1265,6 +1194,8 @@ public void DeleteSFC(String instance_id,boolean isSymmetric){
         }
 
     }
+
+    return rsp_result;
 }
 
 
