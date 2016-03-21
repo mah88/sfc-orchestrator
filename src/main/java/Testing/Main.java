@@ -44,9 +44,9 @@ String callbackurl="http://localhost:8081";
        NeutronClient NC=new NeutronClient();
 
 
-        vnf1_test.setIP("11.0.0.6");
+        vnf1_test.setIP("11.0.0.15");
        // vnf2_test.setIP("10.0.0.7");
-        vnf1_test.setName("http-SF-725");
+        vnf1_test.setName("SF-instance");
         //vnf2_test.setName("DPI-1");
         vnf1_test.setNeutronPortId(NC.getNeutronPortID(vnf1_test.getIP())); //NC.getNeutronPortID(vnf1_test.getIP()));
        // vnf2_test.setNeutronPortId("22222222222");
@@ -58,7 +58,7 @@ String callbackurl="http://localhost:8081";
 
         sfc_dict_test.setName("SFC-demo");
         List<String> chain = new ArrayList<String>();
-        chain.add("http-SF-725");
+        chain.add("SF-instance");
      //   chain.add("DPI-1");
         sfc_dict_test.setChain(chain);
         sfc_dict_test.setId("SFC-demo:1");
