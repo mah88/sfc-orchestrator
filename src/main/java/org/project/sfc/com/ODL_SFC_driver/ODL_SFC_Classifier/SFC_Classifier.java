@@ -229,6 +229,18 @@ public class SFC_Classifier {
 
 
                 }
+                if(value.getSrcPort()!=null){
+                    SourcePortRange spr=new SourcePortRange();
+
+
+                    spr.setLowerPort(value.getSrcPort());
+                    spr.setUpperPort(value.getSrcPort());
+
+
+                    match_dict.getAce().get(i).getMatches().setSourcePortRange(spr);
+
+
+                }
                 match_dict.getAce().get(i).getMatches().setProtocol(value.getProtocol());
             }
 

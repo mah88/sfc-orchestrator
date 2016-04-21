@@ -16,7 +16,9 @@ public class AclMatchCriteria {
     @SerializedName("dest_port")
     @Expose
     private Integer destPort;
-
+    @SerializedName("src_port")
+    @Expose
+    private Integer srcPort;
     /**
      *
      * @return
@@ -51,6 +53,24 @@ public class AclMatchCriteria {
      */
     public void setDestPort(Integer destPort) {
         this.destPort = destPort;
+    }
+
+    /**
+     *
+     * @return
+     * The destPort
+     */
+    public Integer getSrcPort() {
+        return srcPort;
+    }
+
+    /**
+     *
+     * @param destPort
+     * The dest_port
+     */
+    public void setSrcPort(Integer srcPort) {
+        this.srcPort = srcPort;
     }
 
 }

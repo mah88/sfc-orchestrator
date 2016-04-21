@@ -19,9 +19,9 @@ public class ServiceFunctionForwarder {
     @SerializedName("service-node")
     @Expose
     private String serviceNode;
-    @SerializedName("ip-mgmt-address")
+    @SerializedName("service-function-forwarder-ovs:ovs-node")
     @Expose
-    private String ipMgmtAddress;
+    private ServiceFunctionForwarderOvsOvsNode serviceFunctionForwarderOvsOvsNode;
 
     @SerializedName("service-function-forwarder-ovs:ovs-bridge")
     @Expose
@@ -50,8 +50,8 @@ public class ServiceFunctionForwarder {
     }
 
 
-    public String getIpMgmtAddress() {
-        return ipMgmtAddress;
+    public ServiceFunctionForwarderOvsOvsNode getServiceFunctionForwarderOvsOvsNode() {
+        return serviceFunctionForwarderOvsOvsNode;
     }
 
     /**
@@ -59,8 +59,8 @@ public class ServiceFunctionForwarder {
      * @param ipMgmtAddress
      *     The ip-mgmt-address
      */
-    public void setIpMgmtAddress(String ipMgmtAddress) {
-        this.ipMgmtAddress = ipMgmtAddress;
+    public void setServiceFunctionForwarderOvsOvsNode(ServiceFunctionForwarderOvsOvsNode servicefunctionforwarderOvsOvsNode) {
+        this.serviceFunctionForwarderOvsOvsNode = servicefunctionforwarderOvsOvsNode;
     }
 
     /**

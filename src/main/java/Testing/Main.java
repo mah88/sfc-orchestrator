@@ -9,6 +9,7 @@ import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFCCdict.SFCCdict;
 import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
 import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
 import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,12 +40,16 @@ String callbackurl="http://localhost:8081";
 
         Opendaylight test = new Opendaylight();
         VNFdict vnf1_test = new VNFdict();
-     //test.DeleteSFC("Path-SFC-test", false);
+     //test.DeleteSFC("Path-SFC-demo", false);
        // VNFdict vnf2_test = new VNFdict();
        NeutronClient NC=new NeutronClient();
+        ResponseEntity<String> netvirt= test.Configure_NETVIRT();
+        ResponseEntity<String> sfcodrender= test.Configure_SfcOfRenderer();
+        System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
+        System.out.println("SFC OF Render status code "+ sfcodrender.getStatusCode());
 
 
-        vnf1_test.setIP("11.0.0.15");
+        vnf1_test.setIP("11.0.0.3");
        // vnf2_test.setIP("10.0.0.7");
         vnf1_test.setName("SF-instance");
         //vnf2_test.setName("DPI-1");
@@ -58,7 +63,7 @@ String callbackurl="http://localhost:8081";
 
         sfc_dict_test.setName("SFC-demo");
         List<String> chain = new ArrayList<String>();
-        chain.add("SF-instance");
+        chain.add(  "SF-instance");
      //   chain.add("DPI-1");
         sfc_dict_test.setChain(chain);
         sfc_dict_test.setId("SFC-demo:1");
@@ -85,6 +90,8 @@ System.out.println("INSTANCE ID "+ instance_id);
         sfcc_dict.setName("sfc-classifier-demo");
         AclMatchCriteria acl=new AclMatchCriteria();
         acl.setDestPort(80);
+        acl.setSrcPort(0);
+
         acl.setProtocol(6);
         List<AclMatchCriteria> list_acl=new ArrayList<AclMatchCriteria>();
         list_acl.add(acl);

@@ -1,5 +1,7 @@
 package org.project.sfc.com.SfcHandler;
+import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
+import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
 import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
@@ -34,7 +36,14 @@ public class SFCcreator {
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
 
         int i=0;
+      // for getting the VNF instance NAME
+        String VNF_NAME;
         for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
+            for(VirtualDeploymentUnit vdu_x: vnfr.getVdu()){
+                for(VNFCInstance vnfc_instance:vdu_x.getVnfc_instance()){
+                   VNF_NAME= vnfc_instance.getHostname();
+                }
+            }
             VNFdict new_vnf=new VNFdict();
             vnf_test.add(new_vnf);
             Set<String> ip_address=vnfr.getVnf_address();
@@ -73,6 +82,7 @@ public class SFCcreator {
         sfcc_dict.setName("sfc-classifier-"+nsr.getName());
         AclMatchCriteria acl=new AclMatchCriteria();
         acl.setDestPort(80);
+        acl.setSrcPort(0);
         acl.setProtocol(6);
         List<AclMatchCriteria> list_acl=new ArrayList<AclMatchCriteria>();
         list_acl.add(acl);

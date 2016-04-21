@@ -25,6 +25,10 @@ public class SfDataPlaneLocator {
     @Expose
     private String serviceFunctionForwarder;
 
+    @SerializedName("service-function-ovs:ovs-port")
+    @Expose
+    private ServiceFunctionOvsOvsPort serviceFunctionOvsOvsPort;
+
     /**
      * 
      * @return
@@ -113,6 +117,24 @@ public class SfDataPlaneLocator {
      */
     public void setServiceFunctionForwarder(String serviceFunctionForwarder) {
         this.serviceFunctionForwarder = serviceFunctionForwarder;
+    }
+
+    /**
+     *
+     * @return
+     *     The serviceFunctionOvsOvsPort
+     */
+    public ServiceFunctionOvsOvsPort getServiceFunctionOvsOvsPort() {
+        return serviceFunctionOvsOvsPort;
+    }
+
+    /**
+     *
+     * @param servicefunctionOvsOvsPort
+     *     The servicefunctionOvsOvsPort
+     */
+    public void setServiceFunctionOvsOvsPort(ServiceFunctionOvsOvsPort servicefunctionOvsOvsPort) {
+        this.serviceFunctionOvsOvsPort = servicefunctionOvsOvsPort;
     }
 
 }

@@ -67,14 +67,31 @@ public class Matches {
     public DestinationPortRange getDestinationPortRange() {
         return destinationPortRange;
     }
-
     /**
-     * 
+     *
      * @param destinationPortRange
      *     The destination-port-range
      */
     public void setDestinationPortRange(DestinationPortRange destinationPortRange) {
         this.destinationPortRange = destinationPortRange;
     }
+
+    /**
+     * 
+     * @param sourcePortRange
+     *     The source-port-range
+     */
+    public void setSourcePortRange(SourcePortRange sourcePortRange) {
+        this.sourcePortRange = sourcePortRange;
+    }
+    /**
+     *
+     * @return
+     *     The sourcePortRange
+     */
+    public SourcePortRange getSourcePortRange() {
+        return sourcePortRange;
+    }
+
 
 }
