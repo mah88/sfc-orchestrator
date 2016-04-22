@@ -84,6 +84,8 @@ public class OpenbatonEventSubscription {
         this.eventIds.add(eventEndpointCreation.getId());
         this.eventIds.add(eventEndpointDeletion.getId());
 
+
+
     }
 
     public void receiveNewNsr(String message) {

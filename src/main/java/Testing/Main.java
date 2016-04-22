@@ -51,7 +51,7 @@ String callbackurl="http://localhost:8081";
 
         vnf1_test.setIP("11.0.0.3");
        // vnf2_test.setIP("10.0.0.7");
-        vnf1_test.setName("SF-instance");
+        vnf1_test.setName("SF-instance-1");
         //vnf2_test.setName("DPI-1");
         vnf1_test.setNeutronPortId(NC.getNeutronPortID(vnf1_test.getIP())); //NC.getNeutronPortID(vnf1_test.getIP()));
        // vnf2_test.setNeutronPortId("22222222222");
@@ -76,8 +76,8 @@ String callbackurl="http://localhost:8081";
         vnfdicts.put(0, vnf1_test);
         //vnfdicts.put(1, vnf2_test);
         sfc_test.setSfcDict(sfc_dict_test);
-
-       String instance_id= test.CreateSFC(sfc_test, vnfdicts);
+        test.CreateSFC(sfc_test, vnfdicts);
+       String instance_id= test.CreateSFP(sfc_test, vnfdicts);
 
 System.out.println("INSTANCE ID "+ instance_id);
         SFC_Classifier classifier_test2=new SFC_Classifier();

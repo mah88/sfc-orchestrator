@@ -47,8 +47,8 @@ public class Opendaylight {
     public String Config_SFC_URL="restconf/config/service-function-chain:service-function-chains/service-function-chain/{0}/";
     public String Config_SFP_URL="restconf/config/service-function-path:service-function-paths/service-function-path/{0}";
     public int sff_counter=1;
-    public String Config_sfc_of_render_URL="/restconf/config/sfc-of-renderer:sfc-of-renderer-config";
-    public String Config_netvirt_URL="/restconf/config/netvirt-providers-config:netvirt-providers-config";
+    public String Config_sfc_of_render_URL="restconf/config/sfc-of-renderer:sfc-of-renderer-config";
+    public String Config_netvirt_URL="restconf/config/netvirt-providers-config:netvirt-providers-config";
 
 
     private static Logger logger = LoggerFactory.getLogger(Opendaylight.class);
@@ -671,7 +671,18 @@ public class Opendaylight {
         return rsp_result;
     }
 
-    public String CreateSFC(SFCdict sfc_dict, HashMap<Integer,VNFdict> vnf_dict){
+    public void CreateSFC(SFCdict sfc_dict,HashMap<Integer,VNFdict> vnf_dict) {
+        //create SFC
+        SFCJSON sfc_json=create_sfc_json(sfc_dict,vnf_dict);
+        ResponseEntity<String> sfc_result=createODLsfc(sfc_json);
+        if (!sfc_result.getStatusCode().is2xxSuccessful()){
+            logger.error("Unable to create ODL SFC");
+        }
+
+    }
+
+
+        public String CreateSFP(SFCdict sfc_dict, HashMap<Integer,VNFdict> vnf_dict){
         String dp_loc="sf-data-plane-locator";
         ServiceFunctions sfs_json=new ServiceFunctions();
         HashMap<Integer,VNFdict> sf_net_map=new HashMap<Integer, VNFdict>();
@@ -728,6 +739,8 @@ public class Opendaylight {
         }
 
         for(int sf_j=0;sf_j<sfs_json.getServiceFunction().size();sf_j++){
+
+            //check SF Exist in ODL ?
             ServiceFunctions service_functions=new ServiceFunctions();
             List<ServiceFunction> list_service_function=new ArrayList<ServiceFunction>();
             list_service_function.add(sfs_json.getServiceFunction().get(sf_j));
@@ -768,14 +781,14 @@ public class Opendaylight {
             }
         }
 
-
+/*
          //create SFC
         SFCJSON sfc_json=create_sfc_json(sfc_dict,vnf_dict);
         ResponseEntity<String> sfc_result=createODLsfc(sfc_json);
         if (!sfc_result.getStatusCode().is2xxSuccessful()){
             logger.error("Unable to create ODL SFC");
         }
-
+*/
         //create SFP
         SFPJSON sfp_json=create_sfp_json(sfc_dict);
         ResponseEntity<String> sfp_result=createODLsfp(sfp_json);
@@ -832,7 +845,7 @@ public class Opendaylight {
          //  System.out.println("sfc size>>> "+sfc.getSfcServiceFunction().get(sf));
            SfcServiceFunction sfc_sf=new SfcServiceFunction();
            sfc.getSfcServiceFunction().add(sfc_sf);
-           sfc.getSfcServiceFunction().get(sf).setName(vnf_dict.get(sf).getName());
+           sfc.getSfcServiceFunction().get(sf).setName(sfc_dict.getSfcDict().getChain().get(sf));//vnf_dict.get(sf).getName());
          //  sfc.getSfcServiceFunction().get(sf).setType("service-function-type:"+vnf_dict.get(sf).getType());
            sfc.getSfcServiceFunction().get(sf).setType(vnf_dict.get(sf).getType());
 

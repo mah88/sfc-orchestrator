@@ -98,12 +98,14 @@ public class SFC_Classifier {
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
         Classifiers result=new  Classifiers();
-        Classifiers data=datax.getClassifiers();
+
         ResponseEntity<String> request=null;
         if (rest_type=="PUT"){
+            Classifiers data=datax.getClassifiers();
+
             HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data, Classifiers.class),headers);
             request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
-            logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
+            logger.debug("Setting of Classifier has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -114,9 +116,11 @@ public class SFC_Classifier {
 
             }
         }else if (rest_type=="DELETE"){
+            System.out.println("Deleting of SFC CLASSIFIER ");
+
             HttpEntity <String> delEntity=new HttpEntity<String>(headers);
             request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
-            logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
+            logger.debug("Deleting Classifier produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -150,12 +154,13 @@ public class SFC_Classifier {
         headers.add("Authorization","Basic " + base64Creds);
         Gson mapper=new Gson();
         AccessLists result=new AccessLists();
-        AccessLists data=datax.getAccessLists();
         ResponseEntity<String> request=null;
         if (rest_type=="PUT"){
+            AccessLists data=datax.getAccessLists();
+
             HttpEntity <String> putEntity=new HttpEntity<String>(mapper.toJson(data,AccessLists.class),headers);
             request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
-            logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
+            logger.debug("Setting of ACL has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -166,9 +171,10 @@ public class SFC_Classifier {
 
             }
         }else if (rest_type=="DELETE"){
+            System.out.println("Deleting of ACL ");
             HttpEntity <String> delEntity=new HttpEntity<String>(headers);
             request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
-            logger.debug("Setting of SF has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
+            logger.debug("Deleting of ACL has produced http status:" + request.getStatusCode() + " with body: " + request.getBody());
 
             if(!request.getStatusCode().is2xxSuccessful()){
                 result=null;
@@ -281,12 +287,23 @@ public class SFC_Classifier {
         return sfcc_name;
     }
 
-    public ResponseEntity<String> Delete_SFC_Classifier(String rsp_id){
-        ResponseEntity<String> sfcc_result=this.sendRest_Classifier(null,"DELETE", MessageFormat.format(this.Config_netvirtsfc_url,rsp_id));
+    public ResponseEntity<String> Delete_SFC_Classifier(String classifier_name){
+        System.out.println("$$$$ delete Acl - SFC CLASSIFIER $$$$$$");
+
+        ResponseEntity<String> sfcc_result=this.sendRest_Classifier(null,"DELETE", MessageFormat.format(this.Config_netvirtsfc_url,classifier_name));
         if(!sfcc_result.getStatusCode().is2xxSuccessful()){
             logger.error("Unable to delete NetVirt Classifier");
+        }else{
+            System.out.println("Success to delete SFC CLassifier ");
         }
-        return sfcc_result;
+        ResponseEntity<String> acl_result=this.sendRest_ACL(null,"DELETE", MessageFormat.format(this.Config_acl_url,classifier_name));
+        if(!acl_result.getStatusCode().is2xxSuccessful()){
+            logger.error("Unable to delete Acl ");
+        }else{
+            System.out.println("Success to delete Acl ");
+        }
+
+        return acl_result;
     }
 
 

@@ -39,7 +39,7 @@ public class AddSFCExecutor implements Runnable{
     public void run() {
 
         logger.info("[ADD-SFC-EXECUTOR] allocating slice for " + nsr.getId() + " at time " + new Date().getTime());
-        logger.debug("Received vnfrs with qos");
+        logger.debug("Received vnfrs with --");
 
       /*  FlowAllocation flows = this.getSFlows(vnfrs);
         logger.debug("adding flows for " + flows.toString()); //print list@id

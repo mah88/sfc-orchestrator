@@ -50,7 +50,7 @@ public class SFCAllocator {
         logger.debug("Creating REMOVE Thread");
         RemoveSFCExecutor rqe = new RemoveSFCExecutor(nsrId);
         qtScheduler.schedule(rqe,10,TimeUnit.SECONDS);
-        logger.info("[QOS-ALLOCATOR] scheduled thread to handle the NSR" + nsrId + " to remove a SFC at time " + new Date().getTime());
+        logger.info("[SFC-ALLOCATOR] scheduled thread to handle the NSR" + nsrId + " to remove a SFC at time " + new Date().getTime());
         logger.debug("REMOVE Thread created and scheduled");
 
     }

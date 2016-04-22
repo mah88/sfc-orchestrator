@@ -3,6 +3,7 @@ import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
+import org.project.sfc.com.DynamicPathCreation.RandomPathSelection;
 import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
 import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
 import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.NeutronClient;
@@ -26,40 +27,34 @@ public class SFCcreator {
     NeutronClient NC=new NeutronClient();
     SFC_Classifier classifier_test2=new SFC_Classifier();
     SFCCdict sfcc_dict=new SFCCdict();
-    SFC sfc_db=new SFC();
+    SFC sfcc_db= org.project.sfc.com.SfcHandler.SFC.getInstance();
+
+
+
+
 
     int counter=1;
 
     public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr){
+
+//FIX ME change the place of this configuration //check if it is already configured or not, otherwise configure it
+        ResponseEntity<String> netvirt= SFC.Configure_NETVIRT();
+        ResponseEntity<String> sfcodrender= SFC.Configure_SfcOfRenderer();
+        System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
+        System.out.println("SFC OF Render status code "+ sfcodrender.getStatusCode());
+        //----------------------------------
+
+
         List<VNFdict> vnf_test =new ArrayList<>();
         List<String> chain = new ArrayList<String>();
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
 
-        int i=0;
-      // for getting the VNF instance NAME
-        String VNF_NAME;
+        RandomPathSelection RPS=new RandomPathSelection();
+        vnfdicts=RPS.CreatePath(vnfrs,nsr);
+
         for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
-            for(VirtualDeploymentUnit vdu_x: vnfr.getVdu()){
-                for(VNFCInstance vnfc_instance:vdu_x.getVnfc_instance()){
-                   VNF_NAME= vnfc_instance.getHostname();
-                }
-            }
-            VNFdict new_vnf=new VNFdict();
-            vnf_test.add(new_vnf);
-            Set<String> ip_address=vnfr.getVnf_address();
-            for ( String ip:vnfr.getVnf_address()) {
-                vnf_test.get(i).setIP(ip);
-                break;
-            }
-            vnf_test.get(i).setType(vnfr.getType());
-            vnf_test.get(i).setName(vnfr.getName());
-            vnf_test.get(i).setNeutronPortId(NC.getNeutronPortID(vnf_test.get(i).getIP()));
             chain.add(vnfr.getName());
-            vnfdicts.put(i,vnf_test.get(i));
-
-            i++;
         }
-
 
         sfc_dict_test.setName(nsr.getName());
         sfc_dict_test.setChain(chain);
@@ -70,9 +65,11 @@ public class SFCcreator {
         sfc_dict_test.setTenantId(NC.getTenantID());
         sfc_test.setSfcDict(sfc_dict_test);
 
-        String instance_id= SFC.CreateSFC(sfc_test, vnfdicts);
+        SFC.CreateSFC(sfc_test, vnfdicts);
+        String instance_id=SFC.CreateSFP(sfc_test, vnfdicts);
+        System.out.println(" ADD NSR ID as key to SFC DB:  " + nsr.getId() + " at time " + new Date().getTime());
+        System.out.println(" ADD to it Instance  ID:  " + instance_id + " at time " + new Date().getTime());
 
-        sfc_db.add(nsr.getId(),instance_id);
 
         sfcc_dict.setStatus("create");
         sfcc_dict.setTenantId(NC.getTenantID());
@@ -88,6 +85,10 @@ public class SFCcreator {
         list_acl.add(acl);
         sfcc_dict.setAclMatchCriteria(list_acl);
         String SFCC_name=classifier_test2.Create_SFC_Classifer(sfcc_dict,instance_id);
+
+        sfcc_db.add(nsr.getId(),instance_id,sfcc_dict.getName());
+        System.out.println(" GET  Instance  ID:  " + sfcc_db.getRspID(nsr.getId()) + " at time " + new Date().getTime());
+
         if (SFCC_name!=null && instance_id!=null){
             return true;
         }
@@ -97,10 +98,20 @@ public class SFCcreator {
     }
 
     public boolean Delete(String nsrID){
-        String instance_id=sfc_db.get(nsrID);
-        ResponseEntity<String> sfc_result=SFC.DeleteSFC(nsrID,false);
-        ResponseEntity<String> result= classifier_test2.Delete_SFC_Classifier(instance_id);
+        System.out.println("delete NSR ID:  " + nsrID + " at time " + new Date().getTime());
+        String rsp_id=sfcc_db.getRspID(nsrID);
+
+        String sffc_name=sfcc_db.getSfccName(nsrID);
+        System.out.println("instance id to be deleted:  " + sffc_name );
+
+        ResponseEntity<String> sfc_result=SFC.DeleteSFC(rsp_id,false);
+        System.out.println("Delete SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful() );
+        ResponseEntity<String> result= classifier_test2.Delete_SFC_Classifier(sffc_name);
+        System.out.println("Delete SFC Classifier :  " + result.getStatusCode().is2xxSuccessful() );
+
         if(result!=null && sfc_result!=null) {
+
+
             if (result.getStatusCode().is2xxSuccessful() && sfc_result.getStatusCode().is2xxSuccessful()) {
                 return true;
             } else {
