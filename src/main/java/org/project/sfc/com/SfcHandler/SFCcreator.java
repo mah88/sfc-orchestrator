@@ -2,6 +2,7 @@ package org.project.sfc.com.SfcHandler;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
+import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.project.sfc.com.DynamicPathCreation.RandomPathSelection;
 import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
@@ -36,14 +37,19 @@ public class SFCcreator {
     int counter=1;
 
     public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr){
+  // public boolean Create(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsr){
+//FIX ME change the place of this configuration
+        if(SFC.Check_Configuration_NETVIRT()==false) {
+            ResponseEntity<String> netvirt = SFC.Configure_NETVIRT();
+            System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
 
-//FIX ME change the place of this configuration //check if it is already configured or not, otherwise configure it
-        ResponseEntity<String> netvirt= SFC.Configure_NETVIRT();
-        ResponseEntity<String> sfcodrender= SFC.Configure_SfcOfRenderer();
-        System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
-        System.out.println("SFC OF Render status code "+ sfcodrender.getStatusCode());
-        //----------------------------------
+        }
 
+        if(SFC.Check_Configuration_SfcOfRenderer()==false) {
+            ResponseEntity<String> sfcodrender = SFC.Configure_SfcOfRenderer();
+            System.out.println("SFC OF Render status code " + sfcodrender.getStatusCode());
+            //----------------------------------
+        }
 
         List<VNFdict> vnf_test =new ArrayList<>();
         List<String> chain = new ArrayList<String>();
@@ -60,7 +66,7 @@ public class SFCcreator {
         sfc_dict_test.setChain(chain);
         sfc_dict_test.setId(nsr.getId());
         sfc_dict_test.setInfraDriver("ODL");
-        sfc_dict_test.setSymmetrical(false);
+        sfc_dict_test.setSymmetrical(true);
         sfc_dict_test.setStatus("create");
         sfc_dict_test.setTenantId(NC.getTenantID());
         sfc_test.setSfcDict(sfc_dict_test);

@@ -12,6 +12,7 @@ package org.project.sfc.com.openbaton_nfvo.openbaton;
         import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
         import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
         import org.openbaton.catalogue.mano.record.VNFCInstance;
+        import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
         import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
         import org.slf4j.Logger;
         import org.slf4j.LoggerFactory;
@@ -37,7 +38,9 @@ public class SFCAllocator {
     }
 
     public void addSFtoChain(Set<VirtualNetworkFunctionRecord> vnfrs,NetworkServiceRecord nsrId){
-        logger.info("[SFC-ALLOCATOR] received new set of vnfrs for " + nsrId + " to create a SFC at time " + new Date().getTime());
+      //  public void addSFtoChain(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsrId){
+
+            logger.info("[SFC-ALLOCATOR] received new set of vnfrs for " + nsrId + " to create a SFC at time " + new Date().getTime());
         logger.debug("Creating ADD Thread");
         AddSFCExecutor aqe = new AddSFCExecutor(vnfrs,nsrId);
         qtScheduler.schedule(aqe,100, TimeUnit.MILLISECONDS);

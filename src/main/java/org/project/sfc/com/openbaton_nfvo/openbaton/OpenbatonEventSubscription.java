@@ -118,7 +118,16 @@ public class OpenbatonEventSubscription {
             list_vnfrs.add(vnfr);
            // break vnfrloop;
         }
+      /*  if(nsr.getVnffgr()!=null){
+            creator.addSFtoChain(nsr.getVnffgr(), nsr);
+
+        }else {
+            logger.error(">>>>> VNF FG is EMPTY !!!!");
+
+        }*/
+
         creator.addSFtoChain(nsr.getVnfr(), nsr);
+
         logger.info("[OPENBATON-EVENT-SUBSCRIPTION] Ended message callback function at " + new Date().getTime());
     }
 

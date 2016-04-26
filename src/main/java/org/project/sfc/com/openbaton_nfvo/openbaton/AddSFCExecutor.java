@@ -11,6 +11,7 @@ package org.project.sfc.com.openbaton_nfvo.openbaton;
         import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
         import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
         import org.openbaton.catalogue.mano.record.VNFCInstance;
+        import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
         import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
         import org.project.sfc.com.SfcHandler.SFCcreator;
         import org.slf4j.Logger;
@@ -25,10 +26,13 @@ public class AddSFCExecutor implements Runnable{
 
   private SFCcreator sfchandler;
     private Logger logger;
-    private Set<VirtualNetworkFunctionRecord> vnfrs;
+   private Set<VirtualNetworkFunctionRecord> vnfrs;
+  //  private Set<VNFForwardingGraphRecord> vnfrs;
     private NetworkServiceRecord nsr;
 
     public AddSFCExecutor(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr) {
+   // public AddSFCExecutor(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsr) {
+
         this.sfchandler=new SFCcreator();
         this.vnfrs = vnfrs;
         this.nsr = nsr;
