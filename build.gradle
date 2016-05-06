@@ -41,12 +41,13 @@ project.ext {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         url "http://get.openbaton.org:8081/nexus/content/groups/public"
     }
 }
 dependencies {
-    compile 'org.openbaton:sdk:0.16-SNAPSHOT'
+    compile 'org.openbaton:sdk:1.9.9'
     //compile 'commons-dbcp:commons-dbcp:1.4'
     compile 'mysql:mysql-connector-java:5.1.35'
     compile 'org.springframework.boot:spring-boot-starter-test:' + springBootVersion

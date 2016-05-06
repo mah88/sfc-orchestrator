@@ -27,18 +27,29 @@ public class AddSFCExecutor implements Runnable{
   private SFCcreator sfchandler;
     private Logger logger;
    private Set<VirtualNetworkFunctionRecord> vnfrs;
-  //  private Set<VNFForwardingGraphRecord> vnfrs;
+
     private NetworkServiceRecord nsr;
 
-    public AddSFCExecutor(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr) {
+   public AddSFCExecutor(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr) {
    // public AddSFCExecutor(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsr) {
 
         this.sfchandler=new SFCcreator();
         this.vnfrs = vnfrs;
         this.nsr = nsr;
+
         this.logger = LoggerFactory.getLogger(this.getClass());
     }
+/*
+    public AddSFCExecutor(Set<VirtualNetworkFunctionRecord> vnfrs,VNFForwardingGraphRecord vnffgr, NetworkServiceRecord nsr) {
+        // public AddSFCExecutor(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsr) {
 
+        this.sfchandler=new SFCcreator();
+        this.vnfrs = vnfrs;
+        this.nsr = nsr;
+        this.vnffgr=vnffgr;
+        this.logger = LoggerFactory.getLogger(this.getClass());
+    }
+*/
     @Override
     public void run() {
 

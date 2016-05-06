@@ -39,7 +39,9 @@ import java.util.Map;
 
 public class Opendaylight {
 
-    public String ODL_ip="192.168.0.138";
+    //public String ODL_ip="192.168.0.138";
+    public String ODL_ip="192.168.145.120";
+
     public String ODL_port="8080";
     public String ODL_username="admin";
     public String ODL_password="admin";
@@ -145,7 +147,7 @@ public class Opendaylight {
     public  ResponseEntity<String> Configure_SfcOfRenderer(){
         SfcOfRendererConfigJSON dataJSON=new SfcOfRendererConfigJSON();
         dataJSON.setSfcOfRendererConfig(new SfcOfRendererConfig());
-        dataJSON.getSfcOfRendererConfig().setSfcOfAppEgressTableOffset(11);
+        dataJSON.getSfcOfRendererConfig().setSfcOfAppEgressTableOffset(20);
         dataJSON.getSfcOfRendererConfig().setSfcOfTableOffset(150);
         ResponseEntity<String>  sfc_OF_result=this.sendRest_SfcOFrender_conf(dataJSON,"PUT",this.Config_sfc_of_render_URL);
         return sfc_OF_result;
@@ -157,9 +159,12 @@ public class Opendaylight {
         boolean check_result=false;
 
         ResponseEntity<String>  sfc_OF_result=this.sendRest_SfcOFrender_conf(null,"GET",this.Config_sfc_of_render_URL);
-        dataJSON= mapper.fromJson(sfc_OF_result.getBody(), SfcOfRendererConfigJSON.class);
-        if (dataJSON.getSfcOfRendererConfig().getSfcOfAppEgressTableOffset()==11 && dataJSON.getSfcOfRendererConfig().getSfcOfTableOffset()==150){
-            check_result=true;
+
+        if (sfc_OF_result!=null) {
+            dataJSON = mapper.fromJson(sfc_OF_result.getBody(), SfcOfRendererConfigJSON.class);
+            if (dataJSON.getSfcOfRendererConfig().getSfcOfAppEgressTableOffset() == 20 && dataJSON.getSfcOfRendererConfig().getSfcOfTableOffset() == 150) {
+                check_result = true;
+            }
         }
         return check_result;
     }
@@ -203,6 +208,7 @@ public class Opendaylight {
 
             if (!request.getStatusCode().is2xxSuccessful()) {
                 result = null;
+                request=null;
             } else {
                 result = mapper.fromJson(request.getBody(), SfcOfRendererConfigJSON.class);
                 logger.debug("RESULT IS " + request.getStatusCode() + " with body " + mapper.toJson(result, SfcOfRendererConfigJSON.class));
@@ -880,12 +886,15 @@ public class Opendaylight {
         ResponseEntity<String> sfp_result=createODLsfp(sfp_json);
         if (!sfp_result.getStatusCode().is2xxSuccessful()){
             logger.error("Unable to create ODL SFP");
+            System.out.println("Unable to create ODL SFP");
+
         }
 
         RSPJSON rsp_json=create_rsp_json(sfp_json);
         ResponseEntity<String> rsp_result=createODLrsp(rsp_json);
         if (!rsp_result.getStatusCode().is2xxSuccessful()){
             logger.error("Unable to create ODL RSP");
+            System.out.println("Unable to create ODL RSP");
         }
 
 
@@ -1013,9 +1022,22 @@ public class Opendaylight {
                        // sff_counter++;
 
                         ServiceFunctionForwarder prev_SFF=find_existing_sff(br_mapping);
+                      /*  System.out.println("<<<<< CHECK PREV SFF >>>>>>> " );
 
+                        if(prev_SFF!=null) {
+                            System.out.println("PREV SFF= " + prev_SFF.getName());
+                            System.out.println("PREV SFF, Bridge name= " +prev_SFF.getServiceFunctionForwarderOvsOvsBridge().getBridgeName()
+                            );
 
-                        if(prev_SFF!=null && prev_SFF.getServiceFunctionForwarderOvsOvsBridge().getBridgeName().equals(br_mapping.get(br_uuid))){
+                            System.out.println("BR_MAPPING br_uuid (NAME)" + br_mapping.get(br_uuid));
+
+                        }else {
+                            System.out.println("PREV SFF is empty");
+
+                        }
+
+                         */
+                        if(prev_SFF!=null && prev_SFF.getServiceFunctionForwarderOvsOvsBridge().getBridgeName().equals(br_mapping.get(br_uuid).getBr_name())){
                             br_mapping.get(br_uuid).setSFFname(prev_SFF.getName());
                             System.out.println("<<<< PREV SFF not Null >>> ");
                             System.out.println("PREV SFF Found >>> " + prev_SFF.getName());
@@ -1337,7 +1359,8 @@ public class Opendaylight {
                                             String full_node_id=network_map.getTopology().get(net).getNode().get(node_entry).getNodeId();
                                             String remove_it="/bridge/"+bridge_dict.getBr_name();
                                             Node_id=full_node_id.replaceAll(remove_it,"");
-                                            String Openflow_node_id=network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeOpenflowNodeRef();
+                                            String Openflow_node_id=network_map.getTopology().get(net).getNode().get(node_entry).getOvsdbManagedBy(); //getOvsdbBridgeOpenflowNodeRef();
+                                            System.out.println("OF NODE ID ***** > "+Openflow_node_id);
 
                                             //added new
                                             bridge_dict.setNodeID(Openflow_node_id);
@@ -1374,6 +1397,7 @@ public class Opendaylight {
             }
 
         }
+
 
         if(bridge_dict.getBr_uuid()!=null&& bridge_dict.getBr_name()!=null && bridge_dict.getOVS_port()!=null && bridge_dict.getOVSIp()!=null && bridge_dict.getTap_port()!=null && bridge_dict.getNodeID()!=null)
         {
@@ -1456,46 +1480,7 @@ public class Opendaylight {
 public ResponseEntity<String> DeleteSFC(String instance_id,boolean isSymmetric){
 
 
-//--------------- delete SFs and Update SFF
 
-    Gson mapper=new Gson();
-    System.out.println("SFC NAME "+ instance_id.substring(5));
-    ResponseEntity<String> rsp_response= getODLrsp(instance_id);
-    RenderedServicePaths rsp = mapper.fromJson(rsp_response.getBody(), RenderedServicePaths.class);
-    Gson mapper_sff=new Gson();
-    ResponseEntity<String> sff_response= getODLsff();
-    SFFJSON sffs=mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
-
-    for (int y=0;y<rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().size();y++){
-        System.out.println("Deleted SF  NAME "+ rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().get(y).getServiceFunctionName());
-        for(int x=0;x<sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size();x++){
-            System.out.println("SFF SIZE "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size());
-
-            for (int z=0;z<sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().size();z++) {
-                System.out.println("SF Dictionary SIZE "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().size());
-
-                if (sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().get(z).getName().equals(rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().get(y).getServiceFunctionName())) {
-                    System.out.println("EQUAL >>>> "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().get(z).getName());
-
-                    sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().remove(z);
-                }
-            }
-            updateODLsff(sffs,sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getName());
-
-        }
-        deleteODLsf(rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().get(y).getServiceFunctionName());
-    }
-
-    System.out.println("SFF NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName());
-    System.out.println("SFF Data plane Locator NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getSffDataPlaneLocator().get(0).getName());
-    System.out.println("SFF Bridge NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionForwarderOvsOvsBridge().getBridgeName());
-    System.out.println("SFF Node ID "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionForwarderOvsOvsNode().getNodeId());
-    if (sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionDictionary().size()!=0) {
-        System.out.println("SF Dictionary SF- Name " + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionDictionary().get(0).getName());
-    }else{
-        System.out.println("SF Dictionary is empty " );
-    }
-    //-------------------------------
 
     List<String> instance_list=new ArrayList<String>();
     instance_list.add(0,instance_id);
@@ -1534,6 +1519,52 @@ public ResponseEntity<String> DeleteSFC(String instance_id,boolean isSymmetric){
 
     return rsp_result;
 }
+
+    public void DeleteSFs(String instance_id,boolean isSymmetric){
+        //--------------- delete SFs and Update SFF
+
+
+        // Need to check if the SFs involved in other RSPs !!!
+        Gson mapper=new Gson();
+        System.out.println("SFC NAME "+ instance_id.substring(5));
+        ResponseEntity<String> rsp_response= getODLrsp(instance_id);
+        RenderedServicePaths rsp = mapper.fromJson(rsp_response.getBody(), RenderedServicePaths.class);
+        Gson mapper_sff=new Gson();
+        ResponseEntity<String> sff_response= getODLsff();
+        SFFJSON sffs=mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
+
+
+        for (int y=0;y<rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().size();y++){
+            System.out.println("Deleted SF  NAME "+ rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().get(y).getServiceFunctionName());
+            for(int x=0;x<sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size();x++){
+                System.out.println("SFF SIZE "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size());
+
+                for (int z=0;z<sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().size();z++) {
+                    System.out.println("SF Dictionary SIZE "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().size());
+
+                    if (sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().get(z).getName().equals(rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().get(y).getServiceFunctionName())) {
+                        System.out.println("EQUAL >>>> "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().get(z).getName());
+
+                        sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().remove(z);
+                    }
+                }
+                updateODLsff(sffs,sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getName());
+
+            }
+            deleteODLsf(rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().get(y).getServiceFunctionName());
+        }
+
+        System.out.println("SFF NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName());
+        System.out.println("SFF Data plane Locator NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getSffDataPlaneLocator().get(0).getName());
+        System.out.println("SFF Bridge NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionForwarderOvsOvsBridge().getBridgeName());
+        System.out.println("SFF Node ID "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionForwarderOvsOvsNode().getNodeId());
+        if (sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionDictionary().size()!=0) {
+            System.out.println("SF Dictionary SF- Name " + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionDictionary().get(0).getName());
+        }else{
+            System.out.println("SF Dictionary is empty " );
+        }
+        //-------------------------------
+    }
 
 
 

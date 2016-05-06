@@ -6,6 +6,8 @@ package org.project.sfc.com.openbaton_nfvo.openbaton;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
+import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.openbaton_nfvo.configurations.NfvoConfiguration;
 import org.project.sfc.com.openbaton_nfvo.openbaton.OpenbatonEvent;
@@ -27,10 +29,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -77,8 +76,9 @@ public class OpenbatonEventSubscription {
         EventEndpoint eventEndpointDeletion = new EventEndpoint();
         eventEndpointDeletion.setType(EndpointType.RABBIT);
         eventEndpointDeletion.setEvent(Action.RELEASE_RESOURCES_FINISH);
+
         eventEndpointDeletion.setEndpoint(ConfigurationBeans.queueName_eventResourcesReleaseFinish);
-        eventEndpointDeletion.setName("eventNSRCreated");
+        eventEndpointDeletion.setName("eventNSRRelased");
         eventEndpointDeletion = requestor.getEventAgent().create(eventEndpointDeletion);
 
         this.eventIds.add(eventEndpointCreation.getId());
@@ -118,15 +118,11 @@ public class OpenbatonEventSubscription {
             list_vnfrs.add(vnfr);
            // break vnfrloop;
         }
-      /*  if(nsr.getVnffgr()!=null){
-            creator.addSFtoChain(nsr.getVnffgr(), nsr);
 
-        }else {
-            logger.error(">>>>> VNF FG is EMPTY !!!!");
 
-        }*/
 
         creator.addSFtoChain(nsr.getVnfr(), nsr);
+
 
         logger.info("[OPENBATON-EVENT-SUBSCRIPTION] Ended message callback function at " + new Date().getTime());
     }
@@ -152,7 +148,14 @@ public class OpenbatonEventSubscription {
         logger.debug("Deserialized!!!");
         logger.debug("ACTION: " + evt.getAction() + " PAYLOAD " + evt.getPayload().toString());
         NetworkServiceRecord nsr = evt.getPayload();
-        creator.removeSFC(nsr.getId());
+        for(VNFForwardingGraphRecord vnffgr:nsr.getVnffgr()) {
+            creator.removeSFC(vnffgr.getId());
+            try {
+                Thread.sleep(100);                 //100 milliseconds is 0.1 second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
 
     }
 

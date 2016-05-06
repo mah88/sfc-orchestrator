@@ -20,7 +20,7 @@ public class ConfigReader {
 
     public static Properties readProperties() throws IOException {
         Properties properties = new Properties();
-        File prop = new File("/var/tmp/sfcorchestrator/SFC.properties");
+        File prop = new File("/var/tmp/sfc-controller/src/main/resources/SFC.properties");
 
         if(!prop.exists()){
             logger.info("file not found using local one");

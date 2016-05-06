@@ -1,4 +1,5 @@
 package org.project.sfc.com.SfcHandler;
+import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
@@ -16,6 +17,7 @@ import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
 import org.springframework.http.ResponseEntity;
 
 import java.util.*;
+
 
 /**
  * Created by mah on 3/14/16.
@@ -37,36 +39,134 @@ public class SFCcreator {
     int counter=1;
 
     public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr){
-  // public boolean Create(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsr){
+
+        System.out.println("[SFC-Creation] (1) at time " + new Date().getTime());
+
+        for(VNFForwardingGraphRecord vnffgr:nsr.getVnffgr()){
+            Set<VirtualNetworkFunctionRecord> vnf_members=new HashSet<VirtualNetworkFunctionRecord>();
+            for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
+                for (Map.Entry<String, String> entry : nfp.getConnection().entrySet()) {
+
+                    for (VirtualNetworkFunctionRecord vnfr : vnfrs) {
+
+                        if (vnfr.getName().equals(entry.getValue())) {
+                            vnf_members.add(vnfr);
+
+                        }
+
+
+                    }
+                }
+            }
+
+            System.out.println("[Size of VNF MEMBERS for creating CHAIN] " + vnf_members.size() + " for SFC allocation to nsr handler at time " + new Date().getTime());
+            System.out.println("[ VNFFGR ID for creating CHAIN] " + vnffgr.getId() + " for SFC allocation to nsr handler at time " + new Date().getTime());
+            boolean Response =CreateChain(vnf_members,vnffgr,nsr);
+            if (Response==false){
+                System.out.println("[CHAIN IS NOT CREATED] " );
+
+                return false;
+            }
+            try {
+                Thread.sleep(100);                 //100 milliseconds is 0.1 second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+
+        return true;
+    }
+
+
+    public boolean CreateChain(Set<VirtualNetworkFunctionRecord> vnfrs,VNFForwardingGraphRecord vnffgr, NetworkServiceRecord nsr){
+
+        // public boolean Create(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsr){
 //FIX ME change the place of this configuration
-        if(SFC.Check_Configuration_NETVIRT()==false) {
+     /*   if(SFC.Check_Configuration_NETVIRT()==false) {
             ResponseEntity<String> netvirt = SFC.Configure_NETVIRT();
             System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
 
-        }
-
-        if(SFC.Check_Configuration_SfcOfRenderer()==false) {
+      }
+ */
+      /*  if(SFC.Check_Configuration_SfcOfRenderer()==false) {
             ResponseEntity<String> sfcodrender = SFC.Configure_SfcOfRenderer();
             System.out.println("SFC OF Render status code " + sfcodrender.getStatusCode());
             //----------------------------------
         }
 
+
+   */
+
+
         List<VNFdict> vnf_test =new ArrayList<>();
         List<String> chain = new ArrayList<String>();
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
+      System.out.println("[SFC-Creation] (2) at time " + new Date().getTime());
 
         RandomPathSelection RPS=new RandomPathSelection();
-        vnfdicts=RPS.CreatePath(vnfrs,nsr);
+        System.out.println("[SFC-Creation] (3) at time " + new Date().getTime());
 
-        for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
-            chain.add(vnfr.getName());
+
+        vnfdicts = RPS.CreatePath(vnfrs,vnffgr,nsr);
+
+        System.out.println("[SFC-Creation] Creating Path Finished  at time " + new Date().getTime());
+
+
+      /*  if(vnffgr==null) {
+            for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
+                chain.add(vnfr.getName());
+            }
+            sfc_dict_test.setSymmetrical(false);
+        }else{
+
+*/
+
+
+
+        for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
+
+            for(int counter=0;counter<nfp.getConnection().size();counter++) {
+                for (Map.Entry<String, String> entry : nfp.getConnection().entrySet()) {
+                    Integer k = Integer.valueOf(entry.getKey());
+
+                      int  x = k.intValue();
+
+
+                    if(counter==x) {
+
+
+                        System.out.println("[SFC-Creation] integer vlaue " + counter);
+
+                        chain.add(entry.getValue());
+                    }
+
+
+                }
+            }
         }
 
-        sfc_dict_test.setName(nsr.getName());
+
+        sfc_dict_test.setSymmetrical(vnffgr.isSymmetrical());
+
+        //   }
+
+    /*    if(vnffgr==null) {
+            sfc_dict_test.setName(nsr.getName()+"-"+nsr.getId());
+            sfc_dict_test.setId(nsr.getId());
+
+
+        }else{*/
+
+
+        sfc_dict_test.setName(nsr.getName()+"-"+vnffgr.getId());
+        sfc_dict_test.setId(vnffgr.getId());
+
+        // }
+
         sfc_dict_test.setChain(chain);
-        sfc_dict_test.setId(nsr.getId());
         sfc_dict_test.setInfraDriver("ODL");
-        sfc_dict_test.setSymmetrical(true);
+
         sfc_dict_test.setStatus("create");
         sfc_dict_test.setTenantId(NC.getTenantID());
         sfc_test.setSfcDict(sfc_dict_test);
@@ -80,25 +180,53 @@ public class SFCcreator {
         sfcc_dict.setStatus("create");
         sfcc_dict.setTenantId(NC.getTenantID());
         sfcc_dict.setInfraDriver("netvirtsfc");
-        sfcc_dict.setId("sfcc-"+nsr.getId());
+        sfcc_dict.setId("sfcc-"+vnffgr.getId());
         sfcc_dict.setChain(sfc_dict_test.getId());
-        sfcc_dict.setName("sfc-classifier-"+nsr.getName());
         AclMatchCriteria acl=new AclMatchCriteria();
-        acl.setDestPort(80);
-        acl.setSrcPort(0);
-        acl.setProtocol(6);
+
+    /*    if(vnffgr==null) {
+
+            sfcc_dict.setName("sfc-classifier-"+nsr.getName());
+            acl.setDestPort(80);
+            acl.setSrcPort(0);
+            acl.setProtocol(6);
+        }else{*/
+
+        sfcc_dict.setName("sfc-classifier-"+nsr.getName()+"-"+vnffgr.getId());
+        for(NetworkForwardingPath nsp:vnffgr.getNetwork_forwarding_path()) {
+
+            acl.setDestPort(nsp.getPolicy().getMatchingCriteria().getDestinationPort());
+            acl.setSrcPort(nsp.getPolicy().getMatchingCriteria().getSourcePort());
+            acl.setProtocol(nsp.getPolicy().getMatchingCriteria().getProtocol());
+           // break;
+        }
+        //    }
+
+
         List<AclMatchCriteria> list_acl=new ArrayList<AclMatchCriteria>();
         list_acl.add(acl);
         sfcc_dict.setAclMatchCriteria(list_acl);
         String SFCC_name=classifier_test2.Create_SFC_Classifer(sfcc_dict,instance_id);
+     /*   if(vnffgr==null) {
 
-        sfcc_db.add(nsr.getId(),instance_id,sfcc_dict.getName());
-        System.out.println(" GET  Instance  ID:  " + sfcc_db.getRspID(nsr.getId()) + " at time " + new Date().getTime());
+            sfcc_db.add(nsr.getId(), instance_id, sfcc_dict.getName());
+            System.out.println(" GET  Instance  ID:  " + sfcc_db.getRspID(nsr.getId()) + " at time " + new Date().getTime());
+
+        }else{ */
+        sfcc_db.add(vnffgr.getId(), instance_id, sfcc_dict.getName());
+        System.out.println(" GET  Instance  ID:  " + sfcc_db.getRspID(vnffgr.getId()) + " at time " + new Date().getTime());
+
+
+        //}
 
         if (SFCC_name!=null && instance_id!=null){
+            System.out.println(" Chain Created successfully, instance id= " +instance_id);
+
             return true;
         }
         else {
+            System.out.println(" Chain Not Created at time " + new Date().getTime());
+
             return false;
         }
     }

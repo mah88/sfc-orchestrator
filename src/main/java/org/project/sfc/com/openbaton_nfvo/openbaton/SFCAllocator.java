@@ -47,7 +47,18 @@ public class SFCAllocator {
         logger.info("[SFC-ALLOCATOR] scheduled thread to handle the NSR" + nsrId + " to create a SFC at time " + new Date().getTime());
         logger.debug("ADD Thread created and scheduled");
     }
+/*
+    public void addSFtoChain(Set<VirtualNetworkFunctionRecord> vnfrs,VNFForwardingGraphRecord vnffgr,NetworkServiceRecord nsrId){
+        //  public void addSFtoChain(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsrId){
 
+        logger.info("[SFC-ALLOCATOR] received new set of vnfrs for " + nsrId + " to create a SFC at time " + new Date().getTime());
+        logger.debug("Creating ADD Thread");
+        AddSFCExecutor aqe = new AddSFCExecutor(vnfrs,vnffgr,nsrId);
+        qtScheduler.schedule(aqe,100, TimeUnit.MILLISECONDS);
+        logger.info("[SFC-ALLOCATOR] scheduled thread to handle the NSR" + nsrId + " to create a SFC at time " + new Date().getTime());
+        logger.debug("ADD Thread created and scheduled");
+    }
+*/
     public void removeSFC(String nsrId){
         logger.info("[SFC-ALLOCATOR] received new set of vnfrs for " + nsrId + " to remove a SFC at time " + new Date().getTime());
         logger.debug("Creating REMOVE Thread");

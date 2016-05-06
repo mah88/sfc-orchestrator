@@ -40,11 +40,11 @@ String callbackurl="http://localhost:8081";
 
         Opendaylight test = new Opendaylight();
         VNFdict vnf1_test = new VNFdict();
-   test.DeleteSFC("Path-SFC-demo", false);
+  //test.DeleteSFC("Path-SFC-demo", false);
       VNFdict vnf2_test = new VNFdict();
        NeutronClient NC=new NeutronClient();
 
-        if(test.Check_Configuration_NETVIRT()==false) {
+     /*   if(test.Check_Configuration_NETVIRT()==false) {
             ResponseEntity<String> netvirt = test.Configure_NETVIRT();
             System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
 
@@ -55,23 +55,24 @@ String callbackurl="http://localhost:8081";
             System.out.println("SFC OF Render status code " + sfcodrender.getStatusCode());
             //----------------------------------
         }
+        */
         //   ResponseEntity<String> netvirt= test.Configure_NETVIRT();
      //   ResponseEntity<String> sfcodrender= test.Configure_SfcOfRenderer();
     //    System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
       //  System.out.println("SFC OF Render status code "+ sfcodrender.getStatusCode());
-/*
 
-        vnf1_test.setIP("11.0.0.11");
-      //  vnf2_test.setIP("11.0.0.12");
+
+        vnf1_test.setIP("11.0.0.5");
+      //  vnf2_test.setIP("11.0.0.6");
         vnf1_test.setName("http-SF");
-      //  vnf2_test.setName("dpi-SF");
+     //   vnf2_test.setName("FW-SF");
         System.out.println("Config. : Neutron Port ID of VNF 1 "+NC.getNeutronPortID(vnf1_test.getIP()));
 
         vnf1_test.setNeutronPortId(NC.getNeutronPortID(vnf1_test.getIP())); //NC.getNeutronPortID(vnf1_test.getIP()));
-    //   System.out.println("Config. : Neutron Port ID of VNF 2 "+NC.getNeutronPortID(vnf2_test.getIP()));
-      //  vnf2_test.setNeutronPortId(NC.getNeutronPortID(vnf2_test.getIP()));
+       System.out.println("Config. : Neutron Port ID of VNF 2 "+NC.getNeutronPortID(vnf2_test.getIP()));
+        vnf2_test.setNeutronPortId(NC.getNeutronPortID(vnf2_test.getIP()));
         vnf1_test.setType("http");
-      //  vnf2_test.setType("DPI");
+    //    vnf2_test.setType("FW");
 
         SFCdict sfc_test = new SFCdict();
         SfcDict sfc_dict_test=new SfcDict();
@@ -79,7 +80,7 @@ String callbackurl="http://localhost:8081";
         sfc_dict_test.setName("SFC-demo");
         List<String> chain = new ArrayList<String>();
         chain.add(  "http-SF");
-      // chain.add("dpi-SF");
+    //   chain.add("FW-SF");
 
         sfc_dict_test.setChain(chain);
         sfc_dict_test.setId("SFC-demo:111122141");
