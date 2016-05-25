@@ -22,8 +22,8 @@ import java.util.List;
  */
 public class NeutronClient {
 
-    //public String Openstack_ip="192.168.0.138";
-    public String Openstack_ip="192.168.145.120";
+  // public String Openstack_ip="192.168.0.138";
+   public String Openstack_ip="192.168.145.120";
 
     public String Identity_port="5000";
     public String Networking_port="9696";

@@ -40,7 +40,7 @@ String callbackurl="http://localhost:8081";
 
         Opendaylight test = new Opendaylight();
         VNFdict vnf1_test = new VNFdict();
-  //test.DeleteSFC("Path-SFC-demo", false);
+ test.DeleteSFC("Path-SFC-demo", false);
       VNFdict vnf2_test = new VNFdict();
        NeutronClient NC=new NeutronClient();
 
@@ -61,26 +61,27 @@ String callbackurl="http://localhost:8081";
     //    System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
       //  System.out.println("SFC OF Render status code "+ sfcodrender.getStatusCode());
 
-
-        vnf1_test.setIP("11.0.0.5");
-      //  vnf2_test.setIP("11.0.0.6");
-        vnf1_test.setName("http-SF");
-     //   vnf2_test.setName("FW-SF");
+/*
+        vnf1_test.setIP("11.0.0.4");
+        vnf2_test.setIP("11.0.0.3");
+        vnf2_test.setName("http-SF");
+       vnf1_test.setName("FW-SF");
         System.out.println("Config. : Neutron Port ID of VNF 1 "+NC.getNeutronPortID(vnf1_test.getIP()));
 
         vnf1_test.setNeutronPortId(NC.getNeutronPortID(vnf1_test.getIP())); //NC.getNeutronPortID(vnf1_test.getIP()));
        System.out.println("Config. : Neutron Port ID of VNF 2 "+NC.getNeutronPortID(vnf2_test.getIP()));
         vnf2_test.setNeutronPortId(NC.getNeutronPortID(vnf2_test.getIP()));
-        vnf1_test.setType("http");
-    //    vnf2_test.setType("FW");
+        vnf2_test.setType("http");
+       vnf1_test.setType("FW");
 
         SFCdict sfc_test = new SFCdict();
         SfcDict sfc_dict_test=new SfcDict();
 
         sfc_dict_test.setName("SFC-demo");
         List<String> chain = new ArrayList<String>();
+        chain.add("FW-SF");
+
         chain.add(  "http-SF");
-    //   chain.add("FW-SF");
 
         sfc_dict_test.setChain(chain);
         sfc_dict_test.setId("SFC-demo:111122141");
@@ -91,7 +92,7 @@ String callbackurl="http://localhost:8081";
         sfc_dict_test.setTenantId(NC.getTenantID());//NC.getTenantID());
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
         vnfdicts.put(0, vnf1_test);
-        vnfdicts.put(1, vnf2_test);
+       vnfdicts.put(1, vnf2_test);
         sfc_test.setSfcDict(sfc_dict_test);
         test.CreateSFC(sfc_test, vnfdicts);
        String instance_id= test.CreateSFP(sfc_test, vnfdicts);

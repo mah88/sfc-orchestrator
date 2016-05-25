@@ -78,7 +78,6 @@
     <orderEntry type="library" exported="" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.springframework:spring-beans:4.1.7.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: org.openbaton:sdk:1.9.9" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.google.code.gson:gson:2.5" level="project" />
     <orderEntry type="library" exported="" name="Gradle: net.minidev:json-smart:2.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.mashape.unirest:unirest-java:1.4.5" level="project" />
@@ -92,6 +91,7 @@
     <orderEntry type="library" exported="" name="Gradle: org.apache.httpcomponents:httpcore-nio:4.3.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-codec:commons-codec:1.9" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.apache.httpcomponents:httpcore:4.4.4" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: org.openbaton:catalogue:1.9.9" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.openbaton:sdk:2.9.9" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.openbaton:catalogue:2.9.9" level="project" />
   </component>
 </module>

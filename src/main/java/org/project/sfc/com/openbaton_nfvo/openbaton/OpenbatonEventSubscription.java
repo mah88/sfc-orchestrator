@@ -24,6 +24,7 @@ import org.openbaton.sdk.api.exception.SDKException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -38,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  * Created by maa on 11.11.15.
  */
 @Service
-public class OpenbatonEventSubscription {
+public class OpenbatonEventSubscription implements CommandLineRunner {
 
     private NFVORequestor requestor;
     private Logger logger;
@@ -49,8 +50,8 @@ public class OpenbatonEventSubscription {
     private Gson mapper;
     private List<String> eventIds;
     private Properties properties;
+    private String Prev_NSR;
 
-    @PostConstruct
     private void init() throws SDKException, IOException {
 
         this.logger = LoggerFactory.getLogger(this.getClass());
@@ -83,6 +84,7 @@ public class OpenbatonEventSubscription {
 
         this.eventIds.add(eventEndpointCreation.getId());
         this.eventIds.add(eventEndpointDeletion.getId());
+        Prev_NSR="";
 
 
 
@@ -113,18 +115,26 @@ public class OpenbatonEventSubscription {
 
         //vnfrloop:
         for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
-            logger.debug("VNFR: " + vnfr.toString());
-            logger.info("[OPENBATON-EVENT-SUBSCRIPTION] sending the NSR " + evt.getPayload().getId() + "for SFC allocation to nsr handler at time " + new Date().getTime());
+           // logger.debug("VNFR: " + vnfr.toString());
+           // logger.info("[OPENBATON-EVENT-SUBSCRIPTION] sending the NSR " + evt.getPayload().getId() + "for SFC allocation to nsr handler at time " + new Date().getTime());
             list_vnfrs.add(vnfr);
            // break vnfrloop;
         }
 
+        if(nsr.getId().equals(Prev_NSR)){
+            logger.info("[OPENBATON-EVENT-SUBSCRIPTION] event MESSAGE is repeated at " + new Date().getTime());
 
 
-        creator.addSFtoChain(nsr.getVnfr(), nsr);
+        }else {
 
 
-        logger.info("[OPENBATON-EVENT-SUBSCRIPTION] Ended message callback function at " + new Date().getTime());
+            creator.addSFtoChain(nsr.getVnfr(), nsr);
+            Prev_NSR=nsr.getId();
+            logger.info("[OPENBATON-EVENT-SUBSCRIPTION] Ended message callback function at " + new Date().getTime());
+
+        }
+
+
     }
 
     public void deleteNsr(String message){
@@ -150,11 +160,11 @@ public class OpenbatonEventSubscription {
         NetworkServiceRecord nsr = evt.getPayload();
         for(VNFForwardingGraphRecord vnffgr:nsr.getVnffgr()) {
             creator.removeSFC(vnffgr.getId());
-            try {
+      /*      try {
                 Thread.sleep(100);                 //100 milliseconds is 0.1 second.
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
-            }
+            }*/
         }
 
     }
@@ -164,5 +174,10 @@ public class OpenbatonEventSubscription {
         for (String id : this.eventIds) {
             requestor.getEventAgent().delete(id);
         }
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        init();
     }
 }

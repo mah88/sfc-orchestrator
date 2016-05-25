@@ -67,11 +67,11 @@ public class SFCcreator {
 
                 return false;
             }
-            try {
+      /*      try {
                 Thread.sleep(100);                 //100 milliseconds is 0.1 second.
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
-            }
+            }*/
         }
 
 
@@ -213,7 +213,7 @@ public class SFCcreator {
             System.out.println(" GET  Instance  ID:  " + sfcc_db.getRspID(nsr.getId()) + " at time " + new Date().getTime());
 
         }else{ */
-        sfcc_db.add(vnffgr.getId(), instance_id, sfcc_dict.getName());
+        sfcc_db.add(vnffgr.getId(), instance_id, sfcc_dict.getName(),sfc_dict_test.getSymmetrical());
         System.out.println(" GET  Instance  ID:  " + sfcc_db.getRspID(vnffgr.getId()) + " at time " + new Date().getTime());
 
 
@@ -238,15 +238,17 @@ public class SFCcreator {
         String sffc_name=sfcc_db.getSfccName(nsrID);
         System.out.println("instance id to be deleted:  " + sffc_name );
 
-        ResponseEntity<String> sfc_result=SFC.DeleteSFC(rsp_id,false);
-        System.out.println("Delete SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful() );
+
         ResponseEntity<String> result= classifier_test2.Delete_SFC_Classifier(sffc_name);
         System.out.println("Delete SFC Classifier :  " + result.getStatusCode().is2xxSuccessful() );
+        ResponseEntity<String> sfc_result=SFC.DeleteSFC(rsp_id,sfcc_db.isSymmSFC(nsrID));
+        System.out.println("Delete SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful() );
 
         if(result!=null && sfc_result!=null) {
 
 
             if (result.getStatusCode().is2xxSuccessful() && sfc_result.getStatusCode().is2xxSuccessful()) {
+                sfcc_db.remove(nsrID);
                 return true;
             } else {
                 return false;

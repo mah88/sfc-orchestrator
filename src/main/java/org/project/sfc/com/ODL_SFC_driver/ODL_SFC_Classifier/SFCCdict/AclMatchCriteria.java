@@ -19,6 +19,15 @@ public class AclMatchCriteria {
     @SerializedName("src_port")
     @Expose
     private Integer srcPort;
+/*
+add later
+    @SerializedName("source_ip_prefix")
+    @Expose
+    private String srcIp;
+
+    @SerializedName("dest_ip_prefix")
+    @Expose
+    private String dstIp;
     /**
      *
      * @return
@@ -73,4 +82,42 @@ public class AclMatchCriteria {
         this.srcPort = srcPort;
     }
 
+
+//add later
+    /**
+     *
+     * @return
+     * The source_ip_prefix
+     */
+/*    public String getSrcIP() {
+        return srcIp;
+    }
+
+    /**
+     *
+     * @param srcIP
+     * The ssource_ip_prefix
+     */
+/*    public void setSrcIp(String srcIP) {
+        this.srcIp = srcIP;
+    }
+
+    /**
+     *
+     * @return
+     * The source_ip_prefix
+     */
+/*    public String getDstIP() {
+        return dstIp;
+    }
+
+    /**
+     *
+     * @param srcIP
+     * The ssource_ip_prefix
+     */
+/*    public void setDstIp(String dstIP) {
+        this.dstIp = dstIP;
+    }
+*/
 }

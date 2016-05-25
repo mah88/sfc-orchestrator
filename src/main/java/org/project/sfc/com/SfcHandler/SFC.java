@@ -27,10 +27,11 @@ public class SFC {
     }
 
     HashMap<String,SFC_Data> SFC_MAP=new HashMap<>();
-    public void add(String nsr_id, String rsp_id, String sfcc_name){
+    public void add(String nsr_id, String rsp_id, String sfcc_name, boolean Symm){
         SFC_Data sfc_data=new SFC_Data();
         sfc_data.setRspID(rsp_id);
         sfc_data.setSfccName(sfcc_name);
+        sfc_data.setSymm(Symm);
         SFC_MAP.put(nsr_id,sfc_data);
 
 
@@ -40,11 +41,12 @@ public class SFC {
         SFC_MAP.remove(nsr);
     }
 
-    public void update(String nsr_id,String new_rsp_id, String new_sfcc_name){
+    public void update(String nsr_id,String new_rsp_id, String new_sfcc_name, boolean Symm){
         SFC_MAP.remove(nsr_id);
         SFC_Data sfc_data=new SFC_Data();
         sfc_data.setRspID(new_rsp_id);
         sfc_data.setSfccName(new_sfcc_name);
+        sfc_data.setSymm(Symm);
         SFC_MAP.put(nsr_id,sfc_data);
     }
 
@@ -56,9 +58,15 @@ public class SFC {
         String sfcc_name=SFC_MAP.get(nsr_id).getSfccName();
         return sfcc_name;
     }
+
+    public boolean isSymmSFC(String nsr_id){
+        boolean Symm=SFC_MAP.get(nsr_id).isSymm();
+        return Symm;
+    }
     public class SFC_Data{
         String rsp_id;
         String SFCC_name;
+        boolean Symm;
 
         public String getRspID() {
             return rsp_id;
@@ -81,6 +89,17 @@ public class SFC {
         public void setSfccName(String name) {
             this.SFCC_name = name;
         }
+
+
+        public boolean isSymm() {
+            return Symm;
+        }
+
+
+        public void setSymm(boolean Symmx) {
+            this.Symm = Symmx;
+        }
+
 
     }
 }

@@ -250,6 +250,10 @@ public class SFC_Classifier {
 
                 }
                 match_dict.getAce().get(i).getMatches().setProtocol(value.getProtocol());
+             //   match_dict.getAce().get(i).getMatches().setDstIp(value.getDstIP());
+            //    match_dict.getAce().get(i).getMatches().setSrcIp(value.getSrcIP());
+
+
             }
 
 
