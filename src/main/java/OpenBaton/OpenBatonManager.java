@@ -68,12 +68,12 @@ public class OpenBatonManager {
                         }
                     }
                 }
-            } catch (SDKException | ClassNotFoundException e1) {
+            } catch (SDKException  | ClassNotFoundException e1) {
                 e1.printStackTrace();
             }
         }
 
-        this.records = new HashMap<>();
+        this.records = new HashMap<String, NetworkServiceRecord>();
     }
 
     public NfvoProperties Create_NFVO_Properties(){
@@ -215,7 +215,7 @@ System.out.println("FlavorID " + flavorID + " appID " + sfID + " callbackURL " +
         BuildingStatus res = BuildingStatus.CREATED;
         try {
             nsr = nfvoRequestor.getNetworkServiceRecordAgent().findById(nsrID);
-        } catch (SDKException | ClassNotFoundException e) {
+        } catch ( ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -285,17 +285,17 @@ System.out.println("FlavorID " + flavorID + " appID " + sfID + " callbackURL " +
 
     private NetworkServiceDescriptor injectFlavor(String flavour,int scaleInOut, NetworkServiceDescriptor networkServiceDescriptor){
 
-        Set<VirtualNetworkFunctionDescriptor> vnfds = new HashSet<>();
+        Set<VirtualNetworkFunctionDescriptor> vnfds = new HashSet<VirtualNetworkFunctionDescriptor>();
 System.out.println("NSD VNFs ="+networkServiceDescriptor.getName());
         for (VirtualNetworkFunctionDescriptor vnfd : networkServiceDescriptor.getVnfd()) {
             if (vnfd.getEndpoint().equals("generic")){
-                Set<VirtualDeploymentUnit> virtualDeploymentUnits = new HashSet<>();
+                Set<VirtualDeploymentUnit> virtualDeploymentUnits = new HashSet<VirtualDeploymentUnit>();
                 for (VirtualDeploymentUnit vdu : vnfd.getVdu()){
                     vdu.setScale_in_out(scaleInOut);
                     virtualDeploymentUnits.add(vdu);
                 }
                 vnfd.setVdu(virtualDeploymentUnits);
-                Set<VNFDeploymentFlavour> flavours = new HashSet<>();
+                Set<VNFDeploymentFlavour> flavours = new HashSet<VNFDeploymentFlavour>();
                 VNFDeploymentFlavour newFlavour = new VNFDeploymentFlavour();
                 newFlavour.setFlavour_key(flavour);
                 flavours.add(newFlavour);

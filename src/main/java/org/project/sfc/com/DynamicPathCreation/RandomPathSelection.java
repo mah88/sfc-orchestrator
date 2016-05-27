@@ -60,7 +60,7 @@ public class RandomPathSelection {
         System.out.println("[SFP-Creation] Creating Path (1) started  at time " + new Date().getTime());
 
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
-        List<VNFdict> vnf_test =new ArrayList<>();
+        List<VNFdict> vnf_test =new ArrayList<VNFdict>();
         List<String> chain = new ArrayList<String>();
 
 

@@ -39,7 +39,7 @@ import java.util.*;
 @RequestMapping("/api/v1/sfco")
 public class ServiceFunctionAppManager {
 
-    private static Map<String, OpenBatonCreateServer> deploymentMap = new HashMap<>();
+    private static Map<String, OpenBatonCreateServer> deploymentMap = new HashMap<String, OpenBatonCreateServer>();
     private Logger logger;
     private SecureRandom appIDGenerator;
 

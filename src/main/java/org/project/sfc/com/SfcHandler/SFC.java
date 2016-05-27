@@ -27,8 +27,8 @@ public class SFC {
         return instance;
     }
 
-    HashMap<String,SFC_Data> SFC_MAP=new HashMap<>();
-    public void add(String nsr_id, String rsp_id, String sfcc_name, boolean Symm,HashMap<Integer,VNFdict> VNFs,SfcDict SFC_dict_info,SFCCdict ClassifierDict){
+    HashMap<String,SFC_Data> SFC_MAP=new HashMap<String,SFC_Data>();
+    public void add(String nsr_id, String rsp_id, String sfcc_name, boolean Symm,HashMap<Integer,VNFdict> VNFs,SFCdict SFC_dict_info,SFCCdict ClassifierDict){
         SFC_Data sfc_data=new SFC_Data();
         sfc_data.setRspID(rsp_id);
         sfc_data.setSfccName(sfcc_name);
@@ -45,7 +45,7 @@ public class SFC {
         SFC_MAP.remove(nsr);
     }
 
-    public void update(String nsr_id,String new_rsp_id, String new_sfcc_name, boolean Symm,HashMap<Integer,VNFdict> VNFs,SfcDict SFC_dict_info,SFCCdict ClassifierDict){
+    public void update(String nsr_id,String new_rsp_id, String new_sfcc_name, boolean Symm,HashMap<Integer,VNFdict> VNFs,SFCdict SFC_dict_info,SFCCdict ClassifierDict){
         SFC_MAP.remove(nsr_id);
         SFC_Data sfc_data=new SFC_Data();
         sfc_data.setRspID(new_rsp_id);
@@ -80,7 +80,7 @@ public class SFC {
         String SFCC_name;
         boolean Symm;
         HashMap<Integer,VNFdict> VNFs;
-        SfcDict SFC_dict_info;
+        SFCdict SFC_dict_info;
         SFCCdict ClassifierDict;
 
         public String getRspID() {
@@ -123,11 +123,11 @@ public class SFC {
             return VNFs;
         }
 
-        public void setSFCdictInfo(SfcDict sfc) {
+        public void setSFCdictInfo(SFCdict sfc) {
             this.SFC_dict_info = sfc;
         }
 
-        public SfcDict getSFCdictInfo() {
+        public SFCdict getSFCdictInfo() {
             return SFC_dict_info;
         }
 

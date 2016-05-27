@@ -772,7 +772,7 @@ public class Opendaylight {
     }
 
 
-        public String CreateSFP(SFCdict sfc_dict, HashMap<Integer,VNFdict> vnf_dict){
+        public String CreateSFP(SFCdict sfc_dict, HashMap<Integer,VNFdict> vnf_dict,String added_to_path_name){
         String dp_loc="sf-data-plane-locator";
         ServiceFunctions sfs_json=new ServiceFunctions();
         HashMap<Integer,VNFdict> sf_net_map=new HashMap<Integer, VNFdict>();
@@ -882,7 +882,7 @@ public class Opendaylight {
         }
 */
         //create SFP
-        SFPJSON sfp_json=create_sfp_json(sfc_dict);
+        SFPJSON sfp_json=create_sfp_json(sfc_dict,added_to_path_name);
         ResponseEntity<String> sfp_result=createODLsfp(sfp_json);
         if (!sfp_result.getStatusCode().is2xxSuccessful()){
             logger.error("Unable to create ODL SFP");
@@ -909,15 +909,19 @@ public class Opendaylight {
     public static RSPJSON create_rsp_json(SFPJSON sfp_json){
         RSPJSON rsp_json=new RSPJSON();
         rsp_json.setInput(new Input());
+        System.out.println("[Length of SFPs] SFP size >>> " + sfp_json.getServiceFunctionPaths().getServiceFunctionPath().size());
+
+        System.out.println("[creating RSP JSON] SFP NAME >>> " + sfp_json.getServiceFunctionPaths().getServiceFunctionPath().get(0).getName());
+
         rsp_json.getInput().setName(sfp_json.getServiceFunctionPaths().getServiceFunctionPath().get(0).getName());
         rsp_json.getInput().setParentServiceFunctionPath(sfp_json.getServiceFunctionPaths().getServiceFunctionPath().get(0).getName());
         rsp_json.getInput().setSymmetric(sfp_json.getServiceFunctionPaths().getServiceFunctionPath().get(0).getSymmetric());
         return rsp_json;
     }
-    public static SFPJSON create_sfp_json(SFCdict sfc_dict){
+    public static SFPJSON create_sfp_json(SFCdict sfc_dict,String pathname){
         SFPJSON sfp_json=new SFPJSON();
         ServiceFunctionPath sfp=new ServiceFunctionPath();
-        sfp.setName("Path-"+sfc_dict.getSfcDict().getName());
+        sfp.setName("Path-"+sfc_dict.getSfcDict().getName()+"-"+pathname);
         sfp.setServiceChainName(sfc_dict.getSfcDict().getName());
         sfp.setSymmetric(sfc_dict.getSfcDict().getSymmetrical());
         sfp_json.setServiceFunctionPaths(new ServiceFunctionPaths());
@@ -1515,10 +1519,49 @@ public ResponseEntity<String> DeleteSFC(String instance_id,boolean isSymmetric){
     deleteODLsfp(instance_id);
 
 
-    deleteODLsfc(instance_id.substring(5));
+    deleteODLsfc(instance_id.substring(5,instance_id.length()-4));
 
     return rsp_result;
 }
+
+    public ResponseEntity<String> DeleteSFP(String instance_id,boolean isSymmetric){
+
+
+
+
+        List<String> instance_list=new ArrayList<String>();
+        instance_list.add(0,instance_id);
+        if(isSymmetric==true){
+            String reverse_id = instance_id+"-Reverse";
+            instance_list.add(1,reverse_id);
+
+        }
+        ResponseEntity<String> rsp_result=null;
+        for (int ins=0;ins<instance_list.size();ins++){
+            RSPJSON rsp_dict=new RSPJSON();
+            Input x=new Input();
+            x.setName(instance_list.get(ins));
+            // x.setSymmetric(isSymmetric);
+
+
+            rsp_dict.setInput(x);
+            rsp_result=deleteODLrsp(rsp_dict);
+
+            if(!rsp_result.getStatusCode().is2xxSuccessful()){
+
+                logger.error("Unable to delete RSP ! ");
+            }
+
+
+
+        }
+
+
+
+
+        deleteODLsfp(instance_id);
+        return rsp_result;
+    }
 
     public void DeleteSFs(String instance_id,boolean isSymmetric){
         //--------------- delete SFs and Update SFF

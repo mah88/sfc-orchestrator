@@ -29,7 +29,7 @@ public class ServiceFunctionChainRecord implements Serializable {
 
     private boolean symmetrical;
 
-    private List<String> chain=new ArrayList<>();
+    private List<String> chain=new ArrayList<String>();
 
     public ServiceFunctionChainRecord () {
 

@@ -1,4 +1,4 @@
-package Testing;
+/*package Testing;
 
 import org.openbaton.sdk.api.exception.SDKException;
 import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.NeutronClient;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by mah on 2/8/16.
  */
-public class Main {
+/*public class Main {
     public static void main(String[] args) throws SDKException {
 
         //testing OPENBATON communication and creating NS and VNF
@@ -37,7 +37,7 @@ String callbackurl="http://localhost:8081";
         */
 
         //testing the SFC deployment in ODL
-
+/*
         Opendaylight test = new Opendaylight();
         VNFdict vnf1_test = new VNFdict();
  test.DeleteSFC("Path-SFC-demo", false);
@@ -122,5 +122,5 @@ System.out.println("INSTANCE ID "+ instance_id);
         String nc_port=NC.getNeutronPortID("11.0.0.5");
         System.out.println("The NEUTRON PORT ID IS: "+nc_port);
 */
-    }
-}
+//    }
+//}

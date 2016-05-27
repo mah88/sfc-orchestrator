@@ -69,7 +69,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
         }
 */
         this.requestor = new NFVORequestor(properties.getProperty("nfvo.username"),properties.getProperty("nfvo.password"),properties.getProperty("nfvo.baseURL"),properties.getProperty("nfvo.basePort"),"1");
-        this.eventIds = new ArrayList<>();
+        this.eventIds = new ArrayList<String>();
         // For NSR Create
         EventEndpoint eventEndpointCreation = new EventEndpoint();
         eventEndpointCreation.setType(EndpointType.RABBIT);
@@ -116,7 +116,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
             evt = getOpenbatonEvent(message);
             logger.debug("Received nfvo event with action: " + evt.getAction());
             NetworkServiceRecord nsr = getNsrFromPayload(evt.getPayload());
-            List<VirtualNetworkFunctionRecord> list_vnfrs=new ArrayList<>();
+            List<VirtualNetworkFunctionRecord> list_vnfrs=new ArrayList<VirtualNetworkFunctionRecord>();
             if(nsr.getId().equals(Prev_NSR)){
                 logger.info("[OPENBATON-EVENT-SUBSCRIPTION] event MESSAGE is repeated at " + new Date().getTime());
 
