@@ -36,6 +36,8 @@ public class ConfigurationBeans {
 
     public static final String queueName_eventInstatiateFinish = "nfvo.sfc.nsr.create";
     public static final String queueName_eventResourcesReleaseFinish = "nfvo.sfc.nsr.delete";
+    public static final String queueName_eventHeal = "nfvo.sfc.vnf.heal";
+
     private Logger logger;
 
     @Autowired private Environment env;
@@ -73,6 +75,11 @@ public class ConfigurationBeans {
         logger.debug("Created Queue for NSR Create event");
         return new Queue(queueName_eventInstatiateFinish,false,false,true);
     }
+    @Bean
+    public Queue getVnfHealEventQueue(){
+        logger.debug("Created Queue for VNF Heal events");
+        return new Queue(queueName_eventHeal,false,false,true);
+    }
 
     @Bean
     public Queue getDeletionQueue(){
@@ -85,7 +92,11 @@ public class ConfigurationBeans {
         logger.debug("Created Binding for NSR Creation event");
         return BindingBuilder.bind(queue).to(topicExchange).with("ns-creation");
     }
-
+    @Bean
+    public Binding setVnfHealEventBinding(@Qualifier("getVnfHealEventQueue") Queue queue, TopicExchange topicExchange){
+        logger.debug("Created Binding for VNF Heal event");
+        return BindingBuilder.bind(queue).to(topicExchange).with("vnf-heal-event");
+    }
     @Bean
     public Binding setDeletionBinding(@Qualifier("getDeletionQueue") Queue queue, TopicExchange topicExchange){
         logger.debug("Created Binding for NSR Deletion event");
@@ -96,7 +107,10 @@ public class ConfigurationBeans {
     public MessageListenerAdapter setCreationMessageListenerAdapter(OpenbatonEventSubscription subscription){
         return new MessageListenerAdapter(subscription,"receiveNewNsr");
     }
-
+    @Bean
+    public MessageListenerAdapter setVnfHealEventsMessageListenerAdapter(OpenbatonEventSubscription subscription){
+        return new MessageListenerAdapter(subscription,"receiveVNFHealEvent");
+    }
     @Bean
     public MessageListenerAdapter setDeletionMessageListenerAdapter(OpenbatonEventSubscription subscription){
         return new MessageListenerAdapter(subscription,"deleteNsr");
@@ -105,6 +119,16 @@ public class ConfigurationBeans {
     @Bean
     public SimpleMessageListenerContainer setCreationMessageContainer(ConnectionFactory connectionFactory, @Qualifier("getCreationQueue") Queue queue, @Qualifier("setCreationMessageListenerAdapter") MessageListenerAdapter adapter){
         logger.debug("Created MessageContainer for NSR Creation event");
+        SimpleMessageListenerContainer res = new SimpleMessageListenerContainer();
+        res.setConnectionFactory(connectionFactory);
+        res.setQueues(queue);
+        res.setMessageListener(adapter);
+        return res;
+    }
+
+    @Bean
+    public SimpleMessageListenerContainer setVnfHealEventsMessageContainer(ConnectionFactory connectionFactory, @Qualifier("getVnfHealEventQueue") Queue queue, @Qualifier("setVnfHealEventsMessageListenerAdapter") MessageListenerAdapter adapter){
+        logger.debug("Created MessageContainer for VNF Heal event");
         SimpleMessageListenerContainer res = new SimpleMessageListenerContainer();
         res.setConnectionFactory(connectionFactory);
         res.setQueues(queue);

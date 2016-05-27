@@ -59,6 +59,18 @@ public class SFCAllocator {
         logger.debug("ADD Thread created and scheduled");
     }
 */
+
+    public void ChangeChainPath(VirtualNetworkFunctionRecord vnfr){
+        //  public void addSFtoChain(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsrId){
+
+        logger.info("[SFC-ALLOCATOR-ChangePath] received new set faulted vnfr " + vnfr.getId() + " to change SFP at time " + new Date().getTime());
+        logger.debug("Creating ADD Thread");
+        UpdateSFPExecutor aqe = new UpdateSFPExecutor(vnfr);
+        qtScheduler.schedule(aqe,100, TimeUnit.MILLISECONDS);
+        logger.info("[SFC-ALLOCATOR-ChangePath] scheduled thread to handle the NSR" + vnfr.getParent_ns_id() + " to create a SFC at time " + new Date().getTime());
+        logger.debug("ADD Thread created and scheduled");
+    }
+
     public void removeSFC(String nsrId){
         logger.info("[SFC-ALLOCATOR] received new set of vnfrs for " + nsrId + " to remove a SFC at time " + new Date().getTime());
         logger.debug("Creating REMOVE Thread");

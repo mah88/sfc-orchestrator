@@ -1,4 +1,5 @@
 package org.project.sfc.com.SfcHandler;
+import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
@@ -15,7 +16,7 @@ import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFCCdict.AclMatchCr
 import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFCCdict.SFCCdict;
 import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
 import org.springframework.http.ResponseEntity;
-
+import org.project.sfc.com.SfcHandler.SFC.SFC_Data;
 import java.util.*;
 
 
@@ -33,11 +34,99 @@ public class SFCcreator {
     SFC sfcc_db= org.project.sfc.com.SfcHandler.SFC.getInstance();
 
 
+    public void UpdateChainsPaths(VirtualNetworkFunctionRecord vnfr){
 
+        System.out.println("[SFC-Path-UPDATE] (1) at time " + new Date().getTime());
 
+        HashMap<String, SFC_Data> All_SFCs=sfcc_db.getAllSFCs();
 
-    int counter=1;
+        Iterator it = All_SFCs.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry SFCdata_counter = (Map.Entry)it.next();
+            HashMap<Integer,VNFdict> VNFs=All_SFCs.get(SFCdata_counter.getKey()).getChainSFs();
+            Iterator count=VNFs.entrySet().iterator();
+            while(count.hasNext()){
+                Map.Entry VNFcounter=(Map.Entry)count.next();
+                if(getFaildVNFname(vnfr)!=null){
+                    System.out.println("[Found Failed VNF] -->"+getFaildVNFname(vnfr)+" at time " + new Date().getTime());
 
+                    if(VNFs.get(VNFcounter.getKey()).getName().equals(getFaildVNFname(vnfr))){
+                        int position=(int)VNFcounter.getKey();
+                        System.out.println("[position of Failed VNF] -->"+position);
+                        VNFs.remove(position);
+                        if(getActiveVNF(vnfr)!=null){
+                            VNFdict newVnf=new VNFdict();
+                            newVnf.setName(getActiveVNF(vnfr).getHostname());
+                            newVnf.setType(vnfr.getType());
+                            for ( Ip ip:getActiveVNF(vnfr).getIps()) {
+                                newVnf.setIP(ip.getIp());
+                                newVnf.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
+
+                                break;
+                            }
+                            VNFs.put(position,newVnf);
+                        }
+
+                    }
+                }
+            }
+
+            String new_instance_id=SFC.CreateSFP(sfc_test, VNFs);
+            System.out.println("[NEW Path Updated ] " + new_instance_id );
+
+            String SFCC_name=classifier_test2.Create_SFC_Classifer(sfcc_dict,new_instance_id);
+            System.out.println("[NEW Classifier Updated ] " + new_instance_id );
+
+            sfcc_db.update(new_instance_id.substring(5), new_instance_id, sfcc_dict.getName(),sfc_dict_test.getSymmetrical(),VNFs,sfc_dict_test,sfcc_dict);
+
+        }
+
+        SFC.DeleteSF(getFaildVNFname(vnfr));
+
+    }
+
+    public String getFaildVNFname(VirtualNetworkFunctionRecord vnfr){
+        boolean found=false;
+        String VNF_name="";
+        for(VirtualDeploymentUnit vdu:vnfr.getVdu()){
+            for(VNFCInstance vnf_instance:vdu.getVnfc_instance()){
+
+                if(vnf_instance.getState().equals("failed")){
+
+                    found=true;
+
+                    VNF_name= vnf_instance.getHostname();
+                }
+            }
+        }
+
+        if(found==false){
+            return null;
+        }else {
+            return VNF_name;
+        }
+    }
+    public VNFCInstance getActiveVNF(VirtualNetworkFunctionRecord vnfr){
+        boolean found=false;
+        VNFCInstance VNF_instance=new VNFCInstance();
+        for(VirtualDeploymentUnit vdu:vnfr.getVdu()){
+            for(VNFCInstance vnf_instance:vdu.getVnfc_instance()){
+
+                if(vnf_instance.getState().equals("active")){
+
+                    found=true;
+
+                    VNF_instance= vnf_instance;
+                }
+            }
+        }
+
+        if(found==false){
+            return null;
+        }else {
+            return VNF_instance;
+        }
+    }
     public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr){
 
         System.out.println("[SFC-Creation] (1) at time " + new Date().getTime());
@@ -213,7 +302,7 @@ public class SFCcreator {
             System.out.println(" GET  Instance  ID:  " + sfcc_db.getRspID(nsr.getId()) + " at time " + new Date().getTime());
 
         }else{ */
-        sfcc_db.add(vnffgr.getId(), instance_id, sfcc_dict.getName(),sfc_dict_test.getSymmetrical());
+        sfcc_db.add(vnffgr.getId(), instance_id, sfcc_dict.getName(),sfc_dict_test.getSymmetrical(),vnfdicts,sfc_dict_test,sfcc_dict);
         System.out.println(" GET  Instance  ID:  " + sfcc_db.getRspID(vnffgr.getId()) + " at time " + new Date().getTime());
 
 

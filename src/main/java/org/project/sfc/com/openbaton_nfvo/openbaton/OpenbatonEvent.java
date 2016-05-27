@@ -3,7 +3,9 @@ package org.project.sfc.com.openbaton_nfvo.openbaton;
 /**
  * Created by mah on 3/14/16.
  */
+import com.google.gson.JsonObject;
 import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
+import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.openbaton.catalogue.nfvo.Action;
 
 /**
@@ -12,12 +14,8 @@ import org.openbaton.catalogue.nfvo.Action;
 public class OpenbatonEvent {
 
     private Action action;
-    private NetworkServiceRecord payload;
+    private JsonObject payload;
 
-    public OpenbatonEvent(Action action, NetworkServiceRecord payload) {
-        this.action = action;
-        this.payload = payload;
-    }
 
     public OpenbatonEvent() {
     }
@@ -30,11 +28,13 @@ public class OpenbatonEvent {
         this.action = action;
     }
 
-    public NetworkServiceRecord getPayload() {
+    public JsonObject getPayload() {
         return payload;
     }
 
-    public void setPayload(NetworkServiceRecord payload) {
+    public void setPayload(JsonObject payload) {
         this.payload = payload;
     }
+
+
 }

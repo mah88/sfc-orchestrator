@@ -1567,5 +1567,46 @@ public ResponseEntity<String> DeleteSFC(String instance_id,boolean isSymmetric){
     }
 
 
+    public void DeleteSF(String SF_name){
+        //--------------- delete SFs and Update SFF
+
+
+        // Need to check if the SFs involved in other RSPs !!!
+
+        Gson mapper_sff=new Gson();
+        ResponseEntity<String> sff_response= getODLsff();
+        SFFJSON sffs=mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
+
+
+
+            for(int x=0;x<sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size();x++){
+                System.out.println("SFF SIZE "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size());
+
+                for (int z=0;z<sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().size();z++) {
+                    System.out.println("SF Dictionary SIZE "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().size());
+
+                    if (sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().get(z).getName().equals(SF_name)) {
+                        System.out.println("EQUAL >>>> "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().get(z).getName());
+
+                        sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary().remove(z);
+                    }
+                }
+                updateODLsff(sffs,sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getName());
+
+            }
+            deleteODLsf(SF_name);
+
+
+        System.out.println("SFF NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName());
+        System.out.println("SFF Data plane Locator NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getSffDataPlaneLocator().get(0).getName());
+        System.out.println("SFF Bridge NAME "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionForwarderOvsOvsBridge().getBridgeName());
+        System.out.println("SFF Node ID "+ sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionForwarderOvsOvsNode().getNodeId());
+        if (sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionDictionary().size()!=0) {
+            System.out.println("SF Dictionary SF- Name " + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getServiceFunctionDictionary().get(0).getName());
+        }else{
+            System.out.println("SF Dictionary is empty " );
+        }
+        //-------------------------------
+    }
 
 }
