@@ -10,12 +10,12 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class MatchTranslation {
 
-    @SerializedName("source_ip_prefix")
+    @SerializedName("source-ipv4-network")
     @Expose
-    private String sourceIpPrefix;
-    @SerializedName("dest_ip_prefix")
+    private String sourceIpv4Network;
+    @SerializedName("destination-ipv4-network")
     @Expose
-    private String destIpPrefix;
+    private String destIpv4Network;
     @SerializedName("source_port")
     @Expose
     private SourcePort sourcePort;
@@ -28,8 +28,8 @@ public class MatchTranslation {
      * @return
      * The sourceIpPrefix
      */
-    public String getSourceIpPrefix() {
-        return sourceIpPrefix;
+    public String getSourceIpv4() {
+        return sourceIpv4Network;
     }
 
     /**
@@ -37,8 +37,8 @@ public class MatchTranslation {
      * @param sourceIpPrefix
      * The source_ip_prefix
      */
-    public void setSourceIpPrefix(String sourceIpPrefix) {
-        this.sourceIpPrefix = sourceIpPrefix;
+    public void setSourceIpv4(String sourceIpPrefix) {
+        this.sourceIpv4Network = sourceIpPrefix;
     }
 
     /**
@@ -46,8 +46,8 @@ public class MatchTranslation {
      * @return
      * The destIpPrefix
      */
-    public String getDestIpPrefix() {
-        return destIpPrefix;
+    public String getDestIpv4() {
+        return destIpv4Network;
     }
 
     /**
@@ -55,8 +55,8 @@ public class MatchTranslation {
      * @param destIpPrefix
      * The dest_ip_prefix
      */
-    public void setDestIpPrefix(String destIpPrefix) {
-        this.destIpPrefix = destIpPrefix;
+    public void setDestIpv4(String destIpPrefix) {
+        this.destIpv4Network = destIpPrefix;
     }
 
     /**

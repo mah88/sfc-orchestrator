@@ -51,8 +51,8 @@ public class SFC_Classifier {
         this.Config_netvirtsfc_url=Config_netvirtsfc_url;
 
         this.sff_counter=sff_counter;
-        matching_translate.setDestIpPrefix("source-ipv4-network");
-        matching_translate.setSourceIpPrefix("destination-ipv4-network");
+        matching_translate.setDestIpv4("source-ipv4-network");
+        matching_translate.setSourceIpv4("destination-ipv4-network");
         List<String> l= new ArrayList<String>();
         l.add("lower-port");
         l.add("upper-port");
@@ -250,8 +250,8 @@ public class SFC_Classifier {
 
                 }
                 match_dict.getAce().get(i).getMatches().setProtocol(value.getProtocol());
-             //   match_dict.getAce().get(i).getMatches().setDstIp(value.getDstIP());
-            //    match_dict.getAce().get(i).getMatches().setSrcIp(value.getSrcIP());
+                match_dict.getAce().get(i).getMatches().setDestIpv4(value.getDestIpv4());
+                match_dict.getAce().get(i).getMatches().setSourceIpv4(value.getSourceIpv4());
 
 
             }

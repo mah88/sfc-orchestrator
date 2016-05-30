@@ -7,6 +7,13 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class Matches {
+    @SerializedName("source-ipv4-network")
+    @Expose
+    private String sourceIpv4Network;
+    @SerializedName("destination-ipv4-network")
+    @Expose
+    private String destIpv4Network;
+
     @SerializedName("source-port-range")
     @Expose
     private SourcePortRange sourcePortRange;
@@ -21,15 +28,41 @@ public class Matches {
     @Expose
     private Integer destPort;
 
-  /* Add later
-    @SerializedName("source_ip_prefix")
+    /**
+     *
+     * @return
+     * The sourceIpPrefix
+     */
+    public String getSourceIpv4() {
+        return sourceIpv4Network;
+    }
 
-    @Expose
-    private String srcIp;
+    /**
+     *
+     * @param sourceIpPrefix
+     * The source_ip_prefix
+     */
+    public void setSourceIpv4(String sourceIpPrefix) {
+        this.sourceIpv4Network = sourceIpPrefix;
+    }
 
-    @SerializedName("dest_ip_prefix")
-    @Expose
-    private String dstIp;
+    /**
+     *
+     * @return
+     * The destIpPrefix
+     */
+    public String getDestIpv4() {
+        return destIpv4Network;
+    }
+
+    /**
+     *
+     * @param destIpPrefix
+     * The dest_ip_prefix
+     */
+    public void setDestIpv4(String destIpPrefix) {
+        this.destIpv4Network = destIpPrefix;
+    }
     /**
      * 
      * @return

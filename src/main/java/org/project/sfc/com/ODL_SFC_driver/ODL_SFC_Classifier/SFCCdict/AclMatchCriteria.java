@@ -9,7 +9,12 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class AclMatchCriteria {
-
+    @SerializedName("source-ipv4-network")
+    @Expose
+    private String sourceIpv4Network;
+    @SerializedName("destination-ipv4-network")
+    @Expose
+    private String destIpv4Network;
     @SerializedName("protocol")
     @Expose
     private Integer protocol;
@@ -83,41 +88,41 @@ add later
     }
 
 
-//add later
-    /**
-     *
-     * @return
-     * The source_ip_prefix
-     */
-/*    public String getSrcIP() {
-        return srcIp;
-    }
-
-    /**
-     *
-     * @param srcIP
-     * The ssource_ip_prefix
-     */
-/*    public void setSrcIp(String srcIP) {
-        this.srcIp = srcIP;
-    }
 
     /**
      *
      * @return
-     * The source_ip_prefix
+     * The sourceIpPrefix
      */
-/*    public String getDstIP() {
-        return dstIp;
+    public String getSourceIpv4() {
+        return sourceIpv4Network;
     }
 
     /**
      *
-     * @param srcIP
-     * The ssource_ip_prefix
+     * @param sourceIpPrefix
+     * The source_ip_prefix
      */
-/*    public void setDstIp(String dstIP) {
-        this.dstIp = dstIP;
+    public void setSourceIpv4(String sourceIpPrefix) {
+        this.sourceIpv4Network = sourceIpPrefix;
     }
-*/
+
+    /**
+     *
+     * @return
+     * The destIpPrefix
+     */
+    public String getDestIpv4() {
+        return destIpv4Network;
+    }
+
+    /**
+     *
+     * @param destIpPrefix
+     * The dest_ip_prefix
+     */
+    public void setDestIpv4(String destIpPrefix) {
+        this.destIpv4Network = destIpPrefix;
+    }
+
 }
