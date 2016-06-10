@@ -7,14 +7,14 @@ import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.project.sfc.com.DynamicPathCreation.RandomPathSelection;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.NeutronClient;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.Opendaylight;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.VNFdict;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFCCdict.AclMatchCriteria;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFCCdict.SFCCdict;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
+import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
+import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.Opendaylight;
+import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
+import org.project.sfc.com.SfcModel.SFCCdict.AclMatchCriteria;
+import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
 import org.springframework.http.ResponseEntity;
 import org.project.sfc.com.SfcHandler.SFC.SFC_Data;
 import java.util.*;
@@ -46,7 +46,13 @@ public class SFCcreator {
             HashMap<Integer,VNFdict> VNFs=All_SFCs.get(SFCdata_counter.getKey()).getChainSFs();
             Iterator count=VNFs.entrySet().iterator();
             while(count.hasNext()){
+                System.out.println("[NEW SF Prepared] " );
+
                 Map.Entry VNFcounter=(Map.Entry)count.next();
+                System.out.println("[OK] ");
+
+                System.out.println("[SF counter ] "+VNFcounter.getKey());
+
                 if(getFaildVNFname(vnfr)!=null){
                     System.out.println("[Found Failed SF] -->"+getFaildVNFname(vnfr)+" at time " + new Date().getTime());
 
@@ -71,27 +77,37 @@ public class SFCcreator {
                             }
                             VNFs.put(position,newVnf);
                             System.out.println("[ADDed the NEW SF ] " + getActiveVNF(vnfr).getHostname() );
+                            break;
 
                         }
+
+                    }else{
+                        System.out.println("[Not equal to the name of the failed VNF]");
 
                     }
                 }
             }
+            System.out.println("[---------------------------Finished ALLOCATION OF SFs----------------------------------]" );
+
+
             System.out.println("[Create new Path ] for Chain  " + All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo().getSfcDict().getName());
 
-            ResponseEntity<String> sfc_result=SFC.DeleteSFP(All_SFCs.get(SFCdata_counter.getKey()).getRspID(),All_SFCs.get(SFCdata_counter.getKey()).isSymm());
-            System.out.println("Delete old Path   :  " + sfc_result.getStatusCode().is2xxSuccessful() );
-            SFC.DeleteSF(getFaildVNFname(vnfr));
 
-            String new_instance_id=SFC.CreateSFP(All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo(), VNFs,"New");
+            String new_instance_id=SFC.CreateSFP(All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo(), VNFs);
             System.out.println("[NEW Path Updated ] " + new_instance_id );
-       //   SFCCdict oldclssifierDict=  All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo();
+            System.out.println("[NEW VNF in path ] " + VNFs.get(0).getName() );
+           // ResponseEntity<String> sfc_result=SFC.DeleteSFP(All_SFCs.get(SFCdata_counter.getKey()).getRspID(),All_SFCs.get(SFCdata_counter.getKey()).isSymm());
+           // System.out.println("Delete old Path   :  " + sfc_result.getStatusCode().is2xxSuccessful() );
+
+            //   SFCCdict oldclssifierDict=  All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo();
         //    All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo().setName( All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo().getName()+"-New");
             String SFCC_name=classifier_test2.Create_SFC_Classifer(All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo(),new_instance_id);
       //      ResponseEntity<String> result= classifier_test2.Delete_SFC_Classifier(oldclssifierDict.getName());
       //      System.out.println("Delete SFC Classifier :  " + result.getStatusCode().is2xxSuccessful() );
             System.out.println("[NEW Classifier Updated ] " + SFCC_name );
 
+
+          //  SFC.DeleteSF(getFaildVNFname(vnfr));
 
             sfcc_db.update((String)SFCdata_counter.getKey(), new_instance_id, All_SFCs.get(SFCdata_counter.getKey()).getSfccName(),All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo().getSfcDict().getSymmetrical(),VNFs,All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo(),All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo());
 
@@ -142,6 +158,7 @@ public class SFCcreator {
             return VNF_instance;
         }
     }
+
     public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr){
 
         System.out.println("[SFC-Creation] (1) at time " + new Date().getTime());
@@ -276,7 +293,7 @@ public class SFCcreator {
         sfc_test.setSfcDict(sfc_dict_test);
 
         SFC.CreateSFC(sfc_test, vnfdicts);
-        String instance_id=SFC.CreateSFP(sfc_test, vnfdicts,"");
+        String instance_id=SFC.CreateSFP(sfc_test, vnfdicts);
         System.out.println(" ADD NSR ID as key to SFC DB:  " + nsr.getId() + " at time " + new Date().getTime());
         System.out.println(" ADD to it Instance  ID:  " + instance_id + " at time " + new Date().getTime());
 

@@ -1,13 +1,10 @@
 package org.project.sfc.com.SfcHandler;
 
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.Opendaylight;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.VNFdict;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFCCdict.SFCCdict;
+import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
+import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
+import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by mah on 2/29/16.

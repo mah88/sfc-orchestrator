@@ -32,7 +32,7 @@ public class SfcOrchestratorConfiguration {
     @PostConstruct
     private void init(){
 
-        logger.debug("SFCO BASEURL IS " + baseUrl);
+        logger.debug("SFCO BASE URL IS " + baseUrl);
 
     }
 }

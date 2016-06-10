@@ -7,7 +7,7 @@ package OpenBaton.SFCdb.catalogue;
 
 
         import org.openbaton.catalogue.util.IdGenerator;
-        import org.project.sfc.com.ODL_SFC_driver.JSON.RSPJSON.RSPJSON;
+        import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.RSPJSON.RSPJSON;
 
         import javax.persistence.*;
         import java.io.Serializable;

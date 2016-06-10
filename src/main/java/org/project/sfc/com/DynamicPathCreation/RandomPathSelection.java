@@ -7,8 +7,8 @@ import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.NeutronClient;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.VNFdict;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
+import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 
 
 import java.util.*;

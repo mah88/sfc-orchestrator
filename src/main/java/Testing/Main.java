@@ -1,15 +1,14 @@
-/*package Testing;
+package Testing;
 
 import org.openbaton.sdk.api.exception.SDKException;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.NeutronClient;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.Opendaylight;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.VNFdict;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFCCdict.AclMatchCriteria;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFCCdict.SFCCdict;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
-import org.springframework.http.ResponseEntity;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.Opendaylight;
+import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
+import org.project.sfc.com.SfcModel.SFCCdict.AclMatchCriteria;
+import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
+import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
+import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import java.util.List;
 /**
  * Created by mah on 2/8/16.
  */
-/*public class Main {
+public class Main {
     public static void main(String[] args) throws SDKException {
 
         //testing OPENBATON communication and creating NS and VNF
@@ -37,11 +36,11 @@ String callbackurl="http://localhost:8081";
         */
 
         //testing the SFC deployment in ODL
-/*
+
         Opendaylight test = new Opendaylight();
         VNFdict vnf1_test = new VNFdict();
- test.DeleteSFC("Path-SFC-demo", false);
-      VNFdict vnf2_test = new VNFdict();
+ //test.DeleteSFC("Path-SFC-demo-", false);
+    //  VNFdict vnf2_test = new VNFdict();
        NeutronClient NC=new NeutronClient();
 
      /*   if(test.Check_Configuration_NETVIRT()==false) {
@@ -61,17 +60,17 @@ String callbackurl="http://localhost:8081";
     //    System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
       //  System.out.println("SFC OF Render status code "+ sfcodrender.getStatusCode());
 
-/*
-        vnf1_test.setIP("11.0.0.4");
-        vnf2_test.setIP("11.0.0.3");
-        vnf2_test.setName("http-SF");
+
+        vnf1_test.setIP("12.0.0.44");
+       // vnf2_test.setIP("12.0.0.48");
+        //vnf2_test.setName("http-SF");
        vnf1_test.setName("FW-SF");
         System.out.println("Config. : Neutron Port ID of VNF 1 "+NC.getNeutronPortID(vnf1_test.getIP()));
 
         vnf1_test.setNeutronPortId(NC.getNeutronPortID(vnf1_test.getIP())); //NC.getNeutronPortID(vnf1_test.getIP()));
-       System.out.println("Config. : Neutron Port ID of VNF 2 "+NC.getNeutronPortID(vnf2_test.getIP()));
-        vnf2_test.setNeutronPortId(NC.getNeutronPortID(vnf2_test.getIP()));
-        vnf2_test.setType("http");
+     //  System.out.println("Config. : Neutron Port ID of VNF 2 "+NC.getNeutronPortID(vnf2_test.getIP()));
+    //    vnf2_test.setNeutronPortId(NC.getNeutronPortID(vnf2_test.getIP()));
+    //    vnf2_test.setType("FW");
        vnf1_test.setType("FW");
 
         SFCdict sfc_test = new SFCdict();
@@ -81,7 +80,7 @@ String callbackurl="http://localhost:8081";
         List<String> chain = new ArrayList<String>();
         chain.add("FW-SF");
 
-        chain.add(  "http-SF");
+      //  chain.add(  "http-SF");
 
         sfc_dict_test.setChain(chain);
         sfc_dict_test.setId("SFC-demo:111122141");
@@ -92,7 +91,7 @@ String callbackurl="http://localhost:8081";
         sfc_dict_test.setTenantId(NC.getTenantID());//NC.getTenantID());
         HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
         vnfdicts.put(0, vnf1_test);
-       vnfdicts.put(1, vnf2_test);
+    //   vnfdicts.put(1, vnf2_test);
         sfc_test.setSfcDict(sfc_dict_test);
         test.CreateSFC(sfc_test, vnfdicts);
        String instance_id= test.CreateSFP(sfc_test, vnfdicts);
@@ -107,10 +106,11 @@ System.out.println("INSTANCE ID "+ instance_id);
         sfcc_dict.setChain(sfc_dict_test.getId());
         sfcc_dict.setName("sfc-classifier-demo");
         AclMatchCriteria acl=new AclMatchCriteria();
-        acl.setDestPort(80);
+        acl.setDestPort(0);
         acl.setSrcPort(0);
-
-        acl.setProtocol(6);
+       // acl.setDestMAC("fa:16:3e:3c:5c:d3");
+        acl.setProtocol(1);
+        acl.setDestIpv4("12.0.0.16/32");
         List<AclMatchCriteria> list_acl=new ArrayList<AclMatchCriteria>();
         list_acl.add(acl);
         sfcc_dict.setAclMatchCriteria(list_acl);
@@ -122,5 +122,5 @@ System.out.println("INSTANCE ID "+ instance_id);
         String nc_port=NC.getNeutronPortID("11.0.0.5");
         System.out.println("The NEUTRON PORT ID IS: "+nc_port);
 */
-//    }
-//}
+    }
+}

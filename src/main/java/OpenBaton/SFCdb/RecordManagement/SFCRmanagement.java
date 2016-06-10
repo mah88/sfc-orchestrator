@@ -7,12 +7,12 @@ package OpenBaton.SFCdb.RecordManagement;
 
 
 import org.openbaton.catalogue.util.IdGenerator;
-import org.project.sfc.com.ODL_SFC_driver.ODL_SFC.NeutronClient;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
 import OpenBaton.SFCdb.catalogue.ServiceFunctionChainRecord;
 import OpenBaton.SFCdb.catalogue.Status;
 import OpenBaton.SFCdb.repository.ServiceFunctionChainRecordRepository;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
+import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
+import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
 import org.slf4j.Logger;
         import org.slf4j.LoggerFactory;
         import org.springframework.beans.factory.annotation.Autowired;

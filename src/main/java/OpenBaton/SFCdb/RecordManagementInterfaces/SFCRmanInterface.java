@@ -6,8 +6,8 @@ package OpenBaton.SFCdb.RecordManagementInterfaces;
 
 import OpenBaton.SFCdb.catalogue.ServiceFunctionChainRecord;
 import OpenBaton.SFCdb.catalogue.Status;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SFCdict;
-import org.project.sfc.com.ODL_SFC_driver.JSON.SFCdict.SfcDict;
+import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
+import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
 
 import java.util.Set;
 
