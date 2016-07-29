@@ -3,7 +3,7 @@
 . /lib/lsb/init-functions
 
 #general configuration
-_PROJECT_NAME="sfc-orchestrator"
+_PROJECT_NAME="SFC"
 
 _DEFAULT_PROPERTIES_FILE="${_PROJECT_BASE}/src/main/resources/SFC.properties"
 

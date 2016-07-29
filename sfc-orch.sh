@@ -4,8 +4,8 @@ source ./gradle.properties
 
 _version=${version}
 
-_project_base="/opt/openbaton/sfc-orchestrator"
-_process_name="sfc-orchestrator"
+_project_base="/opt/openbaton/SFC"
+_process_name="SFC"
 _screen_name="sfc-orch"
 _config_file="/etc/openbaton/SFC.properties"
 
