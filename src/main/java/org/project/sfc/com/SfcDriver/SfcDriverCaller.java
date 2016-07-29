@@ -181,7 +181,7 @@ public class SfcDriverCaller  {
 
         for(VNFForwardingGraphRecord vnffgr:nsr.getVnffgr()){
             Set<VirtualNetworkFunctionRecord> vnf_members=new HashSet<VirtualNetworkFunctionRecord>();
-            for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
+            for (NetworkForwardingPath nfp :  vnffgr.getNetwork_forwarding_path()) {
                 for (Map.Entry<String, String> entry : nfp.getConnection().entrySet()) {
 
                     for (VirtualNetworkFunctionRecord vnfr : vnfrs) {
@@ -335,6 +335,9 @@ public class SfcDriverCaller  {
             acl.setDestPort(nsp.getPolicy().getMatchingCriteria().getDestinationPort());
             acl.setSrcPort(nsp.getPolicy().getMatchingCriteria().getSourcePort());
             acl.setProtocol(nsp.getPolicy().getMatchingCriteria().getProtocol());
+            acl.setDestIpv4(nsp.getPolicy().getMatchingCriteria().getDestinationIP());
+            acl.setSourceIpv4(nsp.getPolicy().getMatchingCriteria().getSourceIP());
+
             // break;
         }
         //    }

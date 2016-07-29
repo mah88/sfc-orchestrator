@@ -45,7 +45,7 @@ import java.util.Map;
 @Scope(value = "prototype")
 public class Opendaylight extends SFC{
 
-    //public String ODL_ip="192.168.0.138";
+   //public String ODL_ip="192.168.0.138";
     public String ODL_ip="192.168.145.120";
 
     public String ODL_port="8080";

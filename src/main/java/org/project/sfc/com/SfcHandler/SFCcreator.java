@@ -305,6 +305,7 @@ public class SFCcreator {
         sfcc_dict.setChain(sfc_dict_test.getId());
         AclMatchCriteria acl=new AclMatchCriteria();
 
+
     /*    if(vnffgr==null) {
 
             sfcc_dict.setName("sfc-classifier-"+nsr.getName());
@@ -319,6 +320,8 @@ public class SFCcreator {
             acl.setDestPort(nsp.getPolicy().getMatchingCriteria().getDestinationPort());
             acl.setSrcPort(nsp.getPolicy().getMatchingCriteria().getSourcePort());
             acl.setProtocol(nsp.getPolicy().getMatchingCriteria().getProtocol());
+            acl.setDestIpv4(nsp.getPolicy().getMatchingCriteria().getDestinationIP());
+            acl.setSourceIpv4(nsp.getPolicy().getMatchingCriteria().getSourceIP());
            // break;
         }
         //    }

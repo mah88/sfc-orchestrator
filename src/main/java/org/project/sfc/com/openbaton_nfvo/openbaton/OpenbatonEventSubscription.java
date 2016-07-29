@@ -108,7 +108,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
 
     public void receiveNewNsr(String message) {
 
-        logger.debug("received new event " + message);
+        logger.debug("recieved  new event " + message);
         OpenbatonEvent evt;
 
         try {

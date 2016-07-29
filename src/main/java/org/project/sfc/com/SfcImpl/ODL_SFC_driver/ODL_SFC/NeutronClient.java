@@ -29,7 +29,7 @@ public class NeutronClient {
     public String Networking_port="9696";
 
     public String Openstack_username="admin";
-    public String Openstack_password="openbaton"; //devstack
+    public String Openstack_password="openbaton"; //openbaton
     public String Openstack_tenantname="admin";
 
     public String Config_token_URL="/v2.0/tokens";
