@@ -10,47 +10,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class SfcOfRendererConfig {
 
-    @SerializedName("sfc-of-app-egress-table-offset")
-    @Expose
-    private Integer sfcOfAppEgressTableOffset;
-    @SerializedName("sfc-of-table-offset")
-    @Expose
-    private Integer sfcOfTableOffset;
+  @SerializedName("sfc-of-app-egress-table-offset")
+  @Expose
+  private Integer sfcOfAppEgressTableOffset;
 
-    /**
-     *
-     * @return
-     * The sfcOfAppEgressTableOffset
-     */
-    public Integer getSfcOfAppEgressTableOffset() {
-        return sfcOfAppEgressTableOffset;
-    }
+  @SerializedName("sfc-of-table-offset")
+  @Expose
+  private Integer sfcOfTableOffset;
 
-    /**
-     *
-     * @param sfcOfAppEgressTableOffset
-     * The sfc-of-app-egress-table-offset
-     */
-    public void setSfcOfAppEgressTableOffset(Integer sfcOfAppEgressTableOffset) {
-        this.sfcOfAppEgressTableOffset = sfcOfAppEgressTableOffset;
-    }
+  /**
+   *
+   * @return The sfcOfAppEgressTableOffset
+   */
+  public Integer getSfcOfAppEgressTableOffset() {
+    return sfcOfAppEgressTableOffset;
+  }
 
-    /**
-     *
-     * @return
-     * The sfcOfTableOffset
-     */
-    public Integer getSfcOfTableOffset() {
-        return sfcOfTableOffset;
-    }
+  /**
+   *
+   * @param sfcOfAppEgressTableOffset The sfc-of-app-egress-table-offset
+   */
+  public void setSfcOfAppEgressTableOffset(Integer sfcOfAppEgressTableOffset) {
+    this.sfcOfAppEgressTableOffset = sfcOfAppEgressTableOffset;
+  }
 
-    /**
-     *
-     * @param sfcOfTableOffset
-     * The sfc-of-table-offset
-     */
-    public void setSfcOfTableOffset(Integer sfcOfTableOffset) {
-        this.sfcOfTableOffset = sfcOfTableOffset;
-    }
+  /**
+   *
+   * @return The sfcOfTableOffset
+   */
+  public Integer getSfcOfTableOffset() {
+    return sfcOfTableOffset;
+  }
 
+  /**
+   *
+   * @param sfcOfTableOffset The sfc-of-table-offset
+   */
+  public void setSfcOfTableOffset(Integer sfcOfTableOffset) {
+    this.sfcOfTableOffset = sfcOfTableOffset;
+  }
 }

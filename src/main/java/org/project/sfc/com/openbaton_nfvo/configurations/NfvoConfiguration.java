@@ -6,65 +6,70 @@ package org.project.sfc.com.openbaton_nfvo.configurations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
 @Service
 @ConfigurationProperties(prefix = "nfvo")
+@PropertySource("classpath:/sfco.properties")
 public class NfvoConfiguration {
 
-    private String baseURL;
-    private String basePort;
-    private String username;
-    private String password;
-    private boolean security;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private String ip;
+  private String port;
+  private String username;
+  private String password;
 
-    public String getBaseURL() {
-        return baseURL;
-    }
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public void setBaseURL(String baseURL) {
-        this.baseURL = baseURL;
-    }
+  public String getIP() {
+    return ip;
+  }
 
-    public String getBasePort() {
-        return basePort;
-    }
+  public void setIP(String ip) {
+    this.ip = ip;
+  }
 
-    public void setBasePort(String basePort) {
-        this.basePort = basePort;
-    }
+  public String getPort() {
+    return port;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public void setPort(String basePort) {
+    this.port = basePort;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public boolean isSecurity() {
-        return security;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setSecurity(boolean security) {
-        this.security = security;
-    }
-
-    @PostConstruct
-    private void init(){
-
-        logger.debug("OBBASEURL IS " + baseURL + " OBPORT IS " + basePort + " USERNAME " + username + " PASSWORD " + password);
-
-    }
+  @Override
+  public String toString() {
+    return "NfvoProperties{"
+        + "ip='"
+        + ip
+        + '\''
+        + ", port='"
+        + port
+        + '\''
+        + ", username='"
+        + username
+        + '\''
+        + ", password='"
+        + password
+        + '\''
+        + '}';
+  }
 }

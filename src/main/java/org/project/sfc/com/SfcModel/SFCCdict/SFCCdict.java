@@ -13,215 +13,203 @@ import java.util.List;
 @Generated("org.jsonschema2pojo")
 public class SFCCdict {
 
-    @SerializedName("status")
-    @Expose
-    private String status;
-    @SerializedName("description")
-    @Expose
-    private String description;
-    @SerializedName("chain")
-    @Expose
-    private String chain;
-    @SerializedName("tenant_id")
-    @Expose
-    private String tenantId;
-    @SerializedName("instance_id")
-    @Expose
-    private Object instanceId;
-    @SerializedName("acl_match_criteria")
-    @Expose
-    private List<AclMatchCriteria> aclMatchCriteria=new ArrayList<AclMatchCriteria>();
-    @SerializedName("infra_driver")
-    @Expose
-    private String infraDriver;
-    @SerializedName("attributes")
-    @Expose
-    private Attributes attributes;
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("name")
-    @Expose
-    private String name;
+  @SerializedName("status")
+  @Expose
+  private String status;
 
-    /**
-     *
-     * @return
-     * The status
-     */
-    public String getStatus() {
-        return status;
-    }
+  @SerializedName("description")
+  @Expose
+  private String description;
 
-    /**
-     *
-     * @param status
-     * The status
-     */
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  @SerializedName("chain")
+  @Expose
+  private String chain;
 
-    /**
-     *
-     * @return
-     * The description
-     */
-    public String getDescription() {
-        return description;
-    }
+  @SerializedName("tenant_id")
+  @Expose
+  private String tenantId;
 
-    /**
-     *
-     * @param description
-     * The description
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  @SerializedName("instance_id")
+  @Expose
+  private Object instanceId;
 
-    /**
-     *
-     * @return
-     * The chain
-     */
-    public String getChain() {
-        return chain;
-    }
+  @SerializedName("acl_match_criteria")
+  @Expose
+  private List<AclMatchCriteria> aclMatchCriteria = new ArrayList<AclMatchCriteria>();
 
-    /**
-     *
-     * @param chain
-     * The chain
-     */
-    public void setChain(String chain) {
-        this.chain = chain;
-    }
+  @SerializedName("infra_driver")
+  @Expose
+  private String infraDriver;
 
-    /**
-     *
-     * @return
-     * The tenantId
-     */
-    public String getTenantId() {
-        return tenantId;
-    }
+  @SerializedName("attributes")
+  @Expose
+  private Attributes attributes;
 
-    /**
-     *
-     * @param tenantId
-     * The tenant_id
-     */
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
+  @SerializedName("id")
+  @Expose
+  private String id;
 
-    /**
-     *
-     * @return
-     * The instanceId
-     */
-    public Object getInstanceId() {
-        return instanceId;
-    }
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     *
-     * @param instanceId
-     * The instance_id
-     */
-    public void setInstanceId(Object instanceId) {
-        this.instanceId = instanceId;
-    }
+  /**
+   *
+   * @return The status
+   */
+  public String getStatus() {
+    return status;
+  }
 
-    /**
-     *
-     * @return
-     * The aclMatchCriteria
-     */
-    public List<AclMatchCriteria> getAclMatchCriteria() {
-        return aclMatchCriteria;
-    }
+  /**
+   *
+   * @param status The status
+   */
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    /**
-     *
-     * @param aclMatchCriteria
-     * The acl_match_criteria
-     */
-    public void setAclMatchCriteria(List<AclMatchCriteria> aclMatchCriteria) {
-        this.aclMatchCriteria = aclMatchCriteria;
-    }
+  /**
+   *
+   * @return The description
+   */
+  public String getDescription() {
+    return description;
+  }
 
-    /**
-     *
-     * @return
-     * The infraDriver
-     */
-    public String getInfraDriver() {
-        return infraDriver;
-    }
+  /**
+   *
+   * @param description The description
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    /**
-     *
-     * @param infraDriver
-     * The infra_driver
-     */
-    public void setInfraDriver(String infraDriver) {
-        this.infraDriver = infraDriver;
-    }
+  /**
+   *
+   * @return The chain
+   */
+  public String getChain() {
+    return chain;
+  }
 
-    /**
-     *
-     * @return
-     * The attributes
-     */
-    public Attributes getAttributes() {
-        return attributes;
-    }
+  /**
+   *
+   * @param chain The chain
+   */
+  public void setChain(String chain) {
+    this.chain = chain;
+  }
 
-    /**
-     *
-     * @param attributes
-     * The attributes
-     */
-    public void setAttributes(Attributes attributes) {
-        this.attributes = attributes;
-    }
+  /**
+   *
+   * @return The tenantId
+   */
+  public String getTenantId() {
+    return tenantId;
+  }
 
-    /**
-     *
-     * @return
-     * The id
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   *
+   * @param tenantId The tenant_id
+   */
+  public void setTenantId(String tenantId) {
+    this.tenantId = tenantId;
+  }
 
-    /**
-     *
-     * @param id
-     * The id
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+  /**
+   *
+   * @return The instanceId
+   */
+  public Object getInstanceId() {
+    return instanceId;
+  }
 
-    /**
-     *
-     * @return
-     * The name
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   *
+   * @param instanceId The instance_id
+   */
+  public void setInstanceId(Object instanceId) {
+    this.instanceId = instanceId;
+  }
 
-    /**
-     *
-     * @param name
-     * The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   *
+   * @return The aclMatchCriteria
+   */
+  public List<AclMatchCriteria> getAclMatchCriteria() {
+    return aclMatchCriteria;
+  }
 
+  /**
+   *
+   * @param aclMatchCriteria The acl_match_criteria
+   */
+  public void setAclMatchCriteria(List<AclMatchCriteria> aclMatchCriteria) {
+    this.aclMatchCriteria = aclMatchCriteria;
+  }
+
+  /**
+   *
+   * @return The infraDriver
+   */
+  public String getInfraDriver() {
+    return infraDriver;
+  }
+
+  /**
+   *
+   * @param infraDriver The infra_driver
+   */
+  public void setInfraDriver(String infraDriver) {
+    this.infraDriver = infraDriver;
+  }
+
+  /**
+   *
+   * @return The attributes
+   */
+  public Attributes getAttributes() {
+    return attributes;
+  }
+
+  /**
+   *
+   * @param attributes The attributes
+   */
+  public void setAttributes(Attributes attributes) {
+    this.attributes = attributes;
+  }
+
+  /**
+   *
+   * @return The id
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   *
+   * @param id The id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 }

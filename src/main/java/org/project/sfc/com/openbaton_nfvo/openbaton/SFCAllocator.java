@@ -3,25 +3,17 @@ package org.project.sfc.com.openbaton_nfvo.openbaton;
 /**
  * Created by mah on 3/14/16.
  */
+import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 
+import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import javax.annotation.PostConstruct;
 
-
-        import org.openbaton.catalogue.mano.common.Ip;
-        import org.openbaton.catalogue.mano.descriptor.InternalVirtualLink;
-        import org.openbaton.catalogue.mano.descriptor.VNFDConnectionPoint;
-        import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
-        import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
-        import org.openbaton.catalogue.mano.record.VNFCInstance;
-        import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
-        import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
-        import org.slf4j.Logger;
-        import org.slf4j.LoggerFactory;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.stereotype.Service;
-
-        import javax.annotation.PostConstruct;
-        import java.util.*;
-        import java.util.concurrent.*;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * Created by maa on 02.12.15.
@@ -29,56 +21,82 @@ package org.project.sfc.com.openbaton_nfvo.openbaton;
 @Service
 public class SFCAllocator {
 
-    private final ScheduledExecutorService qtScheduler = Executors.newScheduledThreadPool(1);
-    private Logger logger;
+  private final ScheduledExecutorService qtScheduler = Executors.newScheduledThreadPool(1);
+  private Logger logger;
 
-    @PostConstruct
-    private void init(){
-        this.logger = LoggerFactory.getLogger(this.getClass());
-    }
+  @PostConstruct
+  private void init() {
+    this.logger = LoggerFactory.getLogger(this.getClass());
+  }
 
-    public void addSFtoChain(Set<VirtualNetworkFunctionRecord> vnfrs,NetworkServiceRecord nsrId){
-      //  public void addSFtoChain(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsrId){
+  public void addSFtoChain(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsrId) throws IOException {
 
-            logger.info("[SFC-ALLOCATOR] received new set of vnfrs for " + nsrId + " to create a SFC at time " + new Date().getTime());
-        logger.debug("Creating ADD Thread");
-        AddSFCExecutor aqe = new AddSFCExecutor(vnfrs,nsrId);
-        qtScheduler.schedule(aqe,100, TimeUnit.MILLISECONDS);
-        logger.info("[SFC-ALLOCATOR] scheduled thread to handle the NSR" + nsrId + " to create a SFC at time " + new Date().getTime());
-        logger.debug("ADD Thread created and scheduled");
-    }
-/*
-    public void addSFtoChain(Set<VirtualNetworkFunctionRecord> vnfrs,VNFForwardingGraphRecord vnffgr,NetworkServiceRecord nsrId){
-        //  public void addSFtoChain(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsrId){
+    logger.info(
+        "[SFC-ALLOCATOR] received new set of vnfrs for "
+            + nsrId
+            + " to create a SFC at time "
+            + new Date().getTime());
+    logger.debug("Creating ADD Thread");
+    AddSFCExecutor aqe = new AddSFCExecutor(vnfrs, nsrId);
+    qtScheduler.schedule(aqe, 100, TimeUnit.MILLISECONDS);
+    logger.info(
+        "[SFC-ALLOCATOR] scheduled thread to handle the NSR"
+            + nsrId
+            + " to create a SFC at time "
+            + new Date().getTime());
+    logger.debug("ADD Thread created and scheduled");
+  }
 
-        logger.info("[SFC-ALLOCATOR] received new set of vnfrs for " + nsrId + " to create a SFC at time " + new Date().getTime());
-        logger.debug("Creating ADD Thread");
-        AddSFCExecutor aqe = new AddSFCExecutor(vnfrs,vnffgr,nsrId);
-        qtScheduler.schedule(aqe,100, TimeUnit.MILLISECONDS);
-        logger.info("[SFC-ALLOCATOR] scheduled thread to handle the NSR" + nsrId + " to create a SFC at time " + new Date().getTime());
-        logger.debug("ADD Thread created and scheduled");
-    }
-*/
+  public void ChangeChainPath(VirtualNetworkFunctionRecord vnfr) throws IOException {
 
-    public void ChangeChainPath(VirtualNetworkFunctionRecord vnfr){
-        //  public void addSFtoChain(Set<VNFForwardingGraphRecord> vnfrs, NetworkServiceRecord nsrId){
+    logger.info(
+        "[SFC-ALLOCATOR-ChangePath] received new set faulted vnfr "
+            + vnfr.getId()
+            + " to change SFP at time "
+            + new Date().getTime());
+    logger.debug("Creating Update Thread");
+    UpdateSFPExecutor aqe = new UpdateSFPExecutor(vnfr);
+    qtScheduler.schedule(aqe, 100, TimeUnit.MILLISECONDS);
+    logger.info(
+        "[SFC-ALLOCATOR-ChangePath] scheduled thread to handle the VNFR"
+            + vnfr.getParent_ns_id()
+            + " to create a SFC at time "
+            + new Date().getTime());
+    logger.debug("Update Thread created and scheduled");
+  }
 
-        logger.info("[SFC-ALLOCATOR-ChangePath] received new set faulted vnfr " + vnfr.getId() + " to change SFP at time " + new Date().getTime());
-        logger.debug("Creating ADD Thread");
-        UpdateSFPExecutor aqe = new UpdateSFPExecutor(vnfr);
-        qtScheduler.schedule(aqe,100, TimeUnit.MILLISECONDS);
-        logger.info("[SFC-ALLOCATOR-ChangePath] scheduled thread to handle the NSR" + vnfr.getParent_ns_id() + " to create a SFC at time " + new Date().getTime());
-        logger.debug("ADD Thread created and scheduled");
-    }
+  public void ScalePaths(VirtualNetworkFunctionRecord vnfr) throws IOException {
 
-    public void removeSFC(String nsrId){
-        logger.info("[SFC-ALLOCATOR] received new set of vnfrs for " + nsrId + " to remove a SFC at time " + new Date().getTime());
-        logger.debug("Creating REMOVE Thread");
-        RemoveSFCExecutor rqe = new RemoveSFCExecutor(nsrId);
-        qtScheduler.schedule(rqe,10,TimeUnit.SECONDS);
-        logger.info("[SFC-ALLOCATOR] scheduled thread to handle the NSR" + nsrId + " to remove a SFC at time " + new Date().getTime());
-        logger.debug("REMOVE Thread created and scheduled");
+    logger.info(
+        "[SFC-ALLOCATOR-ScalePaths] received new set Scaled vnfr "
+            + vnfr.getId()
+            + " to change SFP at time "
+            + new Date().getTime());
+    logger.debug("Creating Scale Thread");
+    ScaleSFPExecutor aqe = new ScaleSFPExecutor(vnfr);
+    qtScheduler.schedule(aqe, 100, TimeUnit.MILLISECONDS);
+    logger.info(
+        "[SFC-ALLOCATOR-ScalePaths] scheduled thread to handle the VNFR"
+            + vnfr.getParent_ns_id()
+            + " to create a SFC at time "
+            + new Date().getTime());
+    logger.debug("Scale Thread created and scheduled");
+  }
 
-    }
-
+  public void removeSFC(String nsrId) throws IOException {
+    logger.info(
+        "[SFC-ALLOCATOR] received new set of vnfrs for "
+            + nsrId
+            + " to remove a SFC at time "
+            + new Date().getTime());
+    logger.debug("Creating REMOVE Thread");
+    RemoveSFCExecutor rqe = new RemoveSFCExecutor(nsrId);
+    qtScheduler.schedule(rqe, 10, TimeUnit.SECONDS);
+    logger.info(
+        "[SFC-ALLOCATOR] scheduled thread to handle the NSR"
+            + nsrId
+            + " to remove a SFC at time "
+            + new Date().getTime());
+    logger.debug("REMOVE Thread created and scheduled");
+  }
 }

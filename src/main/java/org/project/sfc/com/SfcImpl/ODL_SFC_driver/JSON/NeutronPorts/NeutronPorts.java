@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NeutronPorts {
 
-    @SerializedName("ports")
-    @Expose
-    private List<Port> ports = new ArrayList<Port>();
+  @SerializedName("ports")
+  @Expose
+  private List<Port> ports = new ArrayList<Port>();
 
-    /**
-     * 
-     * @return
-     *     The ports
-     */
-    public List<Port> getPorts() {
-        return ports;
-    }
+  /**
+   *
+   * @return The ports
+   */
+  public List<Port> getPorts() {
+    return ports;
+  }
 
-    /**
-     * 
-     * @param ports
-     *     The ports
-     */
-    public void setPorts(List<Port> ports) {
-        this.ports = ports;
-    }
-
+  /**
+   *
+   * @param ports The ports
+   */
+  public void setPorts(List<Port> ports) {
+    this.ports = ports;
+  }
 }

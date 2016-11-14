@@ -9,68 +9,63 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class OvsdbManagerEntry {
 
-    @SerializedName("number_of_connections")
-    @Expose
-    private Integer numberOfConnections;
-    @SerializedName("connected")
-    @Expose
-    private Boolean connected;
-    @SerializedName("target")
-    @Expose
-    private String target;
+  @SerializedName("number_of_connections")
+  @Expose
+  private Integer numberOfConnections;
 
-    /**
-     * 
-     * @return
-     *     The numberOfConnections
-     */
-    public Integer getNumberOfConnections() {
-        return numberOfConnections;
-    }
+  @SerializedName("connected")
+  @Expose
+  private Boolean connected;
 
-    /**
-     * 
-     * @param numberOfConnections
-     *     The number_of_connections
-     */
-    public void setNumberOfConnections(Integer numberOfConnections) {
-        this.numberOfConnections = numberOfConnections;
-    }
+  @SerializedName("target")
+  @Expose
+  private String target;
 
-    /**
-     * 
-     * @return
-     *     The connected
-     */
-    public Boolean getConnected() {
-        return connected;
-    }
+  /**
+   *
+   * @return The numberOfConnections
+   */
+  public Integer getNumberOfConnections() {
+    return numberOfConnections;
+  }
 
-    /**
-     * 
-     * @param connected
-     *     The connected
-     */
-    public void setConnected(Boolean connected) {
-        this.connected = connected;
-    }
+  /**
+   *
+   * @param numberOfConnections The number_of_connections
+   */
+  public void setNumberOfConnections(Integer numberOfConnections) {
+    this.numberOfConnections = numberOfConnections;
+  }
 
-    /**
-     * 
-     * @return
-     *     The target
-     */
-    public String getTarget() {
-        return target;
-    }
+  /**
+   *
+   * @return The connected
+   */
+  public Boolean getConnected() {
+    return connected;
+  }
 
-    /**
-     * 
-     * @param target
-     *     The target
-     */
-    public void setTarget(String target) {
-        this.target = target;
-    }
+  /**
+   *
+   * @param connected The connected
+   */
+  public void setConnected(Boolean connected) {
+    this.connected = connected;
+  }
 
+  /**
+   *
+   * @return The target
+   */
+  public String getTarget() {
+    return target;
+  }
+
+  /**
+   *
+   * @param target The target
+   */
+  public void setTarget(String target) {
+    this.target = target;
+  }
 }

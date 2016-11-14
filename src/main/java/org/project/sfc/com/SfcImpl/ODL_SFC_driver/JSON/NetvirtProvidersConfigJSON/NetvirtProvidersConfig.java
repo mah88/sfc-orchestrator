@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NetvirtProvidersConfig {
 
-    @SerializedName("netvirt-providers-config")
-    @Expose
-    private NetvirtProvidersConfig_ netvirtProvidersConfig;
+  @SerializedName("netvirt-providers-config")
+  @Expose
+  private NetvirtProvidersConfig_ netvirtProvidersConfig;
 
-    /**
-     *
-     * @return
-     * The netvirtProvidersConfig
-     */
-    public NetvirtProvidersConfig_ getNetvirtProvidersConfig() {
-        return netvirtProvidersConfig;
-    }
+  /**
+   *
+   * @return The netvirtProvidersConfig
+   */
+  public NetvirtProvidersConfig_ getNetvirtProvidersConfig() {
+    return netvirtProvidersConfig;
+  }
 
-    /**
-     *
-     * @param netvirtProvidersConfig
-     * The netvirt-providers-config
-     */
-    public void setNetvirtProvidersConfig(NetvirtProvidersConfig_ netvirtProvidersConfig) {
-        this.netvirtProvidersConfig = netvirtProvidersConfig;
-    }
-
+  /**
+   *
+   * @param netvirtProvidersConfig The netvirt-providers-config
+   */
+  public void setNetvirtProvidersConfig(NetvirtProvidersConfig_ netvirtProvidersConfig) {
+    this.netvirtProvidersConfig = netvirtProvidersConfig;
+  }
 }

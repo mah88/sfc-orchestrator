@@ -10,89 +10,83 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class MatchTranslation {
 
-    @SerializedName("source-ipv4-network")
-    @Expose
-    private String sourceIpv4Network;
-    @SerializedName("destination-ipv4-network")
-    @Expose
-    private String destIpv4Network;
-    @SerializedName("source_port")
-    @Expose
-    private SourcePort sourcePort;
-    @SerializedName("dest_port")
-    @Expose
-    private DestPort destPort;
+  @SerializedName("source-ipv4-network")
+  @Expose
+  private String sourceIpv4Network;
 
-    /**
-     *
-     * @return
-     * The sourceIpPrefix
-     */
-    public String getSourceIpv4() {
-        return sourceIpv4Network;
-    }
+  @SerializedName("destination-ipv4-network")
+  @Expose
+  private String destIpv4Network;
 
-    /**
-     *
-     * @param sourceIpPrefix
-     * The source_ip_prefix
-     */
-    public void setSourceIpv4(String sourceIpPrefix) {
-        this.sourceIpv4Network = sourceIpPrefix;
-    }
+  @SerializedName("source_port")
+  @Expose
+  private SourcePort sourcePort;
 
-    /**
-     *
-     * @return
-     * The destIpPrefix
-     */
-    public String getDestIpv4() {
-        return destIpv4Network;
-    }
+  @SerializedName("dest_port")
+  @Expose
+  private DestPort destPort;
 
-    /**
-     *
-     * @param destIpPrefix
-     * The dest_ip_prefix
-     */
-    public void setDestIpv4(String destIpPrefix) {
-        this.destIpv4Network = destIpPrefix;
-    }
+  /**
+   *
+   * @return The sourceIpPrefix
+   */
+  public String getSourceIpv4() {
+    return sourceIpv4Network;
+  }
 
-    /**
-     *
-     * @return
-     * The sourcePort
-     */
-    public SourcePort getSourcePort() {
-        return sourcePort;
-    }
+  /**
+   *
+   * @param sourceIpPrefix The source_ip_prefix
+   */
+  public void setSourceIpv4(String sourceIpPrefix) {
+    this.sourceIpv4Network = sourceIpPrefix;
+  }
 
-    /**
-     *
-     * @param sourcePort
-     * The source_port
-     */
-    public void setSourcePort(SourcePort sourcePort) {
-        this.sourcePort = sourcePort;
-    }
+  /**
+   *
+   * @return The destIpPrefix
+   */
+  public String getDestIpv4() {
+    return destIpv4Network;
+  }
 
-    /**
-     *
-     * @return
-     * The destPort
-     */
-    public DestPort getDestPort() {
-        return destPort;
-    }
+  /**
+   *
+   * @param destIpPrefix The dest_ip_prefix
+   */
+  public void setDestIpv4(String destIpPrefix) {
+    this.destIpv4Network = destIpPrefix;
+  }
 
-    /**
-     *
-     * @param destPort
-     * The dest_port
-     */
-    public void setDestPort(DestPort destPort) {
-        this.destPort = destPort;
-    }
+  /**
+   *
+   * @return The sourcePort
+   */
+  public SourcePort getSourcePort() {
+    return sourcePort;
+  }
 
+  /**
+   *
+   * @param sourcePort The source_port
+   */
+  public void setSourcePort(SourcePort sourcePort) {
+    this.sourcePort = sourcePort;
+  }
+
+  /**
+   *
+   * @return The destPort
+   */
+  public DestPort getDestPort() {
+    return destPort;
+  }
+
+  /**
+   *
+   * @param destPort The dest_port
+   */
+  public void setDestPort(DestPort destPort) {
+    this.destPort = destPort;
+  }
 }

@@ -10,110 +10,103 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Token_ {
 
-    @SerializedName("issued_at")
-    @Expose
-    private String issuedAt;
-    @SerializedName("expires")
-    @Expose
-    private String expires;
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("tenant")
-    @Expose
-    private Tenant tenant;
-    @SerializedName("audit_ids")
-    @Expose
-    private List<String> auditIds = new ArrayList<String>();
+  @SerializedName("issued_at")
+  @Expose
+  private String issuedAt;
 
-    /**
-     * 
-     * @return
-     *     The issuedAt
-     */
-    public String getIssuedAt() {
-        return issuedAt;
-    }
+  @SerializedName("expires")
+  @Expose
+  private String expires;
 
-    /**
-     * 
-     * @param issuedAt
-     *     The issued_at
-     */
-    public void setIssuedAt(String issuedAt) {
-        this.issuedAt = issuedAt;
-    }
+  @SerializedName("id")
+  @Expose
+  private String id;
 
-    /**
-     * 
-     * @return
-     *     The expires
-     */
-    public String getExpires() {
-        return expires;
-    }
+  @SerializedName("tenant")
+  @Expose
+  private Tenant tenant;
 
-    /**
-     * 
-     * @param expires
-     *     The expires
-     */
-    public void setExpires(String expires) {
-        this.expires = expires;
-    }
+  @SerializedName("audit_ids")
+  @Expose
+  private List<String> auditIds = new ArrayList<String>();
 
-    /**
-     * 
-     * @return
-     *     The id
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   *
+   * @return The issuedAt
+   */
+  public String getIssuedAt() {
+    return issuedAt;
+  }
 
-    /**
-     * 
-     * @param id
-     *     The id
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+  /**
+   *
+   * @param issuedAt The issued_at
+   */
+  public void setIssuedAt(String issuedAt) {
+    this.issuedAt = issuedAt;
+  }
 
-    /**
-     * 
-     * @return
-     *     The tenant
-     */
-    public Tenant getTenant() {
-        return tenant;
-    }
+  /**
+   *
+   * @return The expires
+   */
+  public String getExpires() {
+    return expires;
+  }
 
-    /**
-     * 
-     * @param tenant
-     *     The tenant
-     */
-    public void setTenant(Tenant tenant) {
-        this.tenant = tenant;
-    }
+  /**
+   *
+   * @param expires The expires
+   */
+  public void setExpires(String expires) {
+    this.expires = expires;
+  }
 
-    /**
-     * 
-     * @return
-     *     The auditIds
-     */
-    public List<String> getAuditIds() {
-        return auditIds;
-    }
+  /**
+   *
+   * @return The id
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * 
-     * @param auditIds
-     *     The audit_ids
-     */
-    public void setAuditIds(List<String> auditIds) {
-        this.auditIds = auditIds;
-    }
+  /**
+   *
+   * @param id The id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
 
+  /**
+   *
+   * @return The tenant
+   */
+  public Tenant getTenant() {
+    return tenant;
+  }
+
+  /**
+   *
+   * @param tenant The tenant
+   */
+  public void setTenant(Tenant tenant) {
+    this.tenant = tenant;
+  }
+
+  /**
+   *
+   * @return The auditIds
+   */
+  public List<String> getAuditIds() {
+    return auditIds;
+  }
+
+  /**
+   *
+   * @param auditIds The audit_ids
+   */
+  public void setAuditIds(List<String> auditIds) {
+    this.auditIds = auditIds;
+  }
 }

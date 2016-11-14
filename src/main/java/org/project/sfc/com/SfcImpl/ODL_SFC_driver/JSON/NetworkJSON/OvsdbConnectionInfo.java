@@ -9,89 +9,83 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class OvsdbConnectionInfo {
 
-    @SerializedName("local-ip")
-    @Expose
-    private String localIp;
-    @SerializedName("remote-ip")
-    @Expose
-    private String remoteIp;
-    @SerializedName("local-port")
-    @Expose
-    private Integer localPort;
-    @SerializedName("remote-port")
-    @Expose
-    private Integer remotePort;
+  @SerializedName("local-ip")
+  @Expose
+  private String localIp;
 
-    /**
-     * 
-     * @return
-     *     The localIp
-     */
-    public String getLocalIp() {
-        return localIp;
-    }
+  @SerializedName("remote-ip")
+  @Expose
+  private String remoteIp;
 
-    /**
-     * 
-     * @param localIp
-     *     The local-ip
-     */
-    public void setLocalIp(String localIp) {
-        this.localIp = localIp;
-    }
+  @SerializedName("local-port")
+  @Expose
+  private Integer localPort;
 
-    /**
-     * 
-     * @return
-     *     The remoteIp
-     */
-    public String getRemoteIp() {
-        return remoteIp;
-    }
+  @SerializedName("remote-port")
+  @Expose
+  private Integer remotePort;
 
-    /**
-     * 
-     * @param remoteIp
-     *     The remote-ip
-     */
-    public void setRemoteIp(String remoteIp) {
-        this.remoteIp = remoteIp;
-    }
+  /**
+   *
+   * @return The localIp
+   */
+  public String getLocalIp() {
+    return localIp;
+  }
 
-    /**
-     * 
-     * @return
-     *     The localPort
-     */
-    public Integer getLocalPort() {
-        return localPort;
-    }
+  /**
+   *
+   * @param localIp The local-ip
+   */
+  public void setLocalIp(String localIp) {
+    this.localIp = localIp;
+  }
 
-    /**
-     * 
-     * @param localPort
-     *     The local-port
-     */
-    public void setLocalPort(Integer localPort) {
-        this.localPort = localPort;
-    }
+  /**
+   *
+   * @return The remoteIp
+   */
+  public String getRemoteIp() {
+    return remoteIp;
+  }
 
-    /**
-     * 
-     * @return
-     *     The remotePort
-     */
-    public Integer getRemotePort() {
-        return remotePort;
-    }
+  /**
+   *
+   * @param remoteIp The remote-ip
+   */
+  public void setRemoteIp(String remoteIp) {
+    this.remoteIp = remoteIp;
+  }
 
-    /**
-     * 
-     * @param remotePort
-     *     The remote-port
-     */
-    public void setRemotePort(Integer remotePort) {
-        this.remotePort = remotePort;
-    }
+  /**
+   *
+   * @return The localPort
+   */
+  public Integer getLocalPort() {
+    return localPort;
+  }
 
+  /**
+   *
+   * @param localPort The local-port
+   */
+  public void setLocalPort(Integer localPort) {
+    this.localPort = localPort;
+  }
+
+  /**
+   *
+   * @return The remotePort
+   */
+  public Integer getRemotePort() {
+    return remotePort;
+  }
+
+  /**
+   *
+   * @param remotePort The remote-port
+   */
+  public void setRemotePort(Integer remotePort) {
+    this.remotePort = remotePort;
+  }
 }

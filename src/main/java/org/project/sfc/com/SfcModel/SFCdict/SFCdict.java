@@ -9,26 +9,23 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class SFCdict {
 
-    @SerializedName("sfc_dict")
-    @Expose
-    private SfcDict sfcDict;
+  @SerializedName("sfc_dict")
+  @Expose
+  private SfcDict sfcDict;
 
-    /**
-     * 
-     * @return
-     *     The sfcDict
-     */
-    public SfcDict getSfcDict() {
-        return sfcDict;
-    }
+  /**
+   *
+   * @return The sfcDict
+   */
+  public SfcDict getSfcDict() {
+    return sfcDict;
+  }
 
-    /**
-     * 
-     * @param sfcDict
-     *     The sfc_dict
-     */
-    public void setSfcDict(SfcDict sfcDict) {
-        this.sfcDict = sfcDict;
-    }
-
+  /**
+   *
+   * @param sfcDict The sfc_dict
+   */
+  public void setSfcDict(SfcDict sfcDict) {
+    this.sfcDict = sfcDict;
+  }
 }

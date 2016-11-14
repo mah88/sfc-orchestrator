@@ -9,47 +9,43 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class OvsdbBridgeOtherConfig {
 
-    @SerializedName("bridge-other-config-key")
-    @Expose
-    private String bridgeOtherConfigKey;
-    @SerializedName("bridge-other-config-value")
-    @Expose
-    private String bridgeOtherConfigValue;
+  @SerializedName("bridge-other-config-key")
+  @Expose
+  private String bridgeOtherConfigKey;
 
-    /**
-     * 
-     * @return
-     *     The bridgeOtherConfigKey
-     */
-    public String getBridgeOtherConfigKey() {
-        return bridgeOtherConfigKey;
-    }
+  @SerializedName("bridge-other-config-value")
+  @Expose
+  private String bridgeOtherConfigValue;
 
-    /**
-     * 
-     * @param bridgeOtherConfigKey
-     *     The bridge-other-config-key
-     */
-    public void setBridgeOtherConfigKey(String bridgeOtherConfigKey) {
-        this.bridgeOtherConfigKey = bridgeOtherConfigKey;
-    }
+  /**
+   *
+   * @return The bridgeOtherConfigKey
+   */
+  public String getBridgeOtherConfigKey() {
+    return bridgeOtherConfigKey;
+  }
 
-    /**
-     * 
-     * @return
-     *     The bridgeOtherConfigValue
-     */
-    public String getBridgeOtherConfigValue() {
-        return bridgeOtherConfigValue;
-    }
+  /**
+   *
+   * @param bridgeOtherConfigKey The bridge-other-config-key
+   */
+  public void setBridgeOtherConfigKey(String bridgeOtherConfigKey) {
+    this.bridgeOtherConfigKey = bridgeOtherConfigKey;
+  }
 
-    /**
-     * 
-     * @param bridgeOtherConfigValue
-     *     The bridge-other-config-value
-     */
-    public void setBridgeOtherConfigValue(String bridgeOtherConfigValue) {
-        this.bridgeOtherConfigValue = bridgeOtherConfigValue;
-    }
+  /**
+   *
+   * @return The bridgeOtherConfigValue
+   */
+  public String getBridgeOtherConfigValue() {
+    return bridgeOtherConfigValue;
+  }
 
+  /**
+   *
+   * @param bridgeOtherConfigValue The bridge-other-config-value
+   */
+  public void setBridgeOtherConfigValue(String bridgeOtherConfigValue) {
+    this.bridgeOtherConfigValue = bridgeOtherConfigValue;
+  }
 }

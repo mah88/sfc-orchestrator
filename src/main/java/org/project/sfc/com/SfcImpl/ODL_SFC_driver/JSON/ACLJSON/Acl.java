@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Acl {
 
-    @SerializedName("acl-name")
-    @Expose
-    private String aclName;
-    @SerializedName("access-list-entries")
-    @Expose
-    private AccessListEntries accessListEntries;
+  @SerializedName("acl-name")
+  @Expose
+  private String aclName;
 
-    /**
-     * 
-     * @return
-     *     The aclName
-     */
-    public String getAclName() {
-        return aclName;
-    }
+  @SerializedName("access-list-entries")
+  @Expose
+  private AccessListEntries accessListEntries;
 
-    /**
-     * 
-     * @param aclName
-     *     The acl-name
-     */
-    public void setAclName(String aclName) {
-        this.aclName = aclName;
-    }
+  /**
+   *
+   * @return The aclName
+   */
+  public String getAclName() {
+    return aclName;
+  }
 
-    /**
-     * 
-     * @return
-     *     The accessListEntries
-     */
-    public AccessListEntries getAccessListEntries() {
-        return accessListEntries;
-    }
+  /**
+   *
+   * @param aclName The acl-name
+   */
+  public void setAclName(String aclName) {
+    this.aclName = aclName;
+  }
 
-    /**
-     * 
-     * @param accessListEntries
-     *     The access-list-entries
-     */
-    public void setAccessListEntries(AccessListEntries accessListEntries) {
-        this.accessListEntries = accessListEntries;
-    }
+  /**
+   *
+   * @return The accessListEntries
+   */
+  public AccessListEntries getAccessListEntries() {
+    return accessListEntries;
+  }
 
+  /**
+   *
+   * @param accessListEntries The access-list-entries
+   */
+  public void setAccessListEntries(AccessListEntries accessListEntries) {
+    this.accessListEntries = accessListEntries;
+  }
 }

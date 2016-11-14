@@ -8,110 +8,103 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Endpoint {
 
-    @SerializedName("adminURL")
-    @Expose
-    private String adminURL;
-    @SerializedName("region")
-    @Expose
-    private String region;
-    @SerializedName("internalURL")
-    @Expose
-    private String internalURL;
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("publicURL")
-    @Expose
-    private String publicURL;
+  @SerializedName("adminURL")
+  @Expose
+  private String adminURL;
 
-    /**
-     * 
-     * @return
-     *     The adminURL
-     */
-    public String getAdminURL() {
-        return adminURL;
-    }
+  @SerializedName("region")
+  @Expose
+  private String region;
 
-    /**
-     * 
-     * @param adminURL
-     *     The adminURL
-     */
-    public void setAdminURL(String adminURL) {
-        this.adminURL = adminURL;
-    }
+  @SerializedName("internalURL")
+  @Expose
+  private String internalURL;
 
-    /**
-     * 
-     * @return
-     *     The region
-     */
-    public String getRegion() {
-        return region;
-    }
+  @SerializedName("id")
+  @Expose
+  private String id;
 
-    /**
-     * 
-     * @param region
-     *     The region
-     */
-    public void setRegion(String region) {
-        this.region = region;
-    }
+  @SerializedName("publicURL")
+  @Expose
+  private String publicURL;
 
-    /**
-     * 
-     * @return
-     *     The internalURL
-     */
-    public String getInternalURL() {
-        return internalURL;
-    }
+  /**
+   *
+   * @return The adminURL
+   */
+  public String getAdminURL() {
+    return adminURL;
+  }
 
-    /**
-     * 
-     * @param internalURL
-     *     The internalURL
-     */
-    public void setInternalURL(String internalURL) {
-        this.internalURL = internalURL;
-    }
+  /**
+   *
+   * @param adminURL The adminURL
+   */
+  public void setAdminURL(String adminURL) {
+    this.adminURL = adminURL;
+  }
 
-    /**
-     * 
-     * @return
-     *     The id
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   *
+   * @return The region
+   */
+  public String getRegion() {
+    return region;
+  }
 
-    /**
-     * 
-     * @param id
-     *     The id
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+  /**
+   *
+   * @param region The region
+   */
+  public void setRegion(String region) {
+    this.region = region;
+  }
 
-    /**
-     * 
-     * @return
-     *     The publicURL
-     */
-    public String getPublicURL() {
-        return publicURL;
-    }
+  /**
+   *
+   * @return The internalURL
+   */
+  public String getInternalURL() {
+    return internalURL;
+  }
 
-    /**
-     * 
-     * @param publicURL
-     *     The publicURL
-     */
-    public void setPublicURL(String publicURL) {
-        this.publicURL = publicURL;
-    }
+  /**
+   *
+   * @param internalURL The internalURL
+   */
+  public void setInternalURL(String internalURL) {
+    this.internalURL = internalURL;
+  }
 
+  /**
+   *
+   * @return The id
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   *
+   * @param id The id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   *
+   * @return The publicURL
+   */
+  public String getPublicURL() {
+    return publicURL;
+  }
+
+  /**
+   *
+   * @param publicURL The publicURL
+   */
+  public void setPublicURL(String publicURL) {
+    this.publicURL = publicURL;
+  }
 }

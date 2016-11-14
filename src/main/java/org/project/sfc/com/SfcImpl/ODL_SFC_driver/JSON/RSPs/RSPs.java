@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class RSPs {
 
-    @SerializedName("rendered-service-paths")
-    @Expose
-    private RenderedServicePaths renderedServicePaths;
+  @SerializedName("rendered-service-paths")
+  @Expose
+  private RenderedServicePaths renderedServicePaths;
 
-    /**
-     *
-     * @return
-     * The renderedServicePaths
-     */
-    public RenderedServicePaths getRenderedServicePaths() {
-        return renderedServicePaths;
-    }
+  /**
+   *
+   * @return The renderedServicePaths
+   */
+  public RenderedServicePaths getRenderedServicePaths() {
+    return renderedServicePaths;
+  }
 
-    /**
-     *
-     * @param renderedServicePaths
-     * The rendered-service-paths
-     */
-    public void setRenderedServicePaths(RenderedServicePaths renderedServicePaths) {
-        this.renderedServicePaths = renderedServicePaths;
-    }
-
+  /**
+   *
+   * @param renderedServicePaths The rendered-service-paths
+   */
+  public void setRenderedServicePaths(RenderedServicePaths renderedServicePaths) {
+    this.renderedServicePaths = renderedServicePaths;
+  }
 }

@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class ServiceFunctionPaths {
 
-    @SerializedName("service-function-path")
-    @Expose
-    private List<ServiceFunctionPath> serviceFunctionPath = new ArrayList<ServiceFunctionPath>();
+  @SerializedName("service-function-path")
+  @Expose
+  private List<ServiceFunctionPath> serviceFunctionPath = new ArrayList<ServiceFunctionPath>();
 
-    /**
-     * 
-     * @return
-     *     The serviceFunctionPath
-     */
-    public List<ServiceFunctionPath> getServiceFunctionPath() {
-        return serviceFunctionPath;
-    }
+  /**
+   *
+   * @return The serviceFunctionPath
+   */
+  public List<ServiceFunctionPath> getServiceFunctionPath() {
+    return serviceFunctionPath;
+  }
 
-    /**
-     * 
-     * @param serviceFunctionPath
-     *     The service-function-path
-     */
-    public void setServiceFunctionPath(List<ServiceFunctionPath> serviceFunctionPath) {
-        this.serviceFunctionPath = serviceFunctionPath;
-    }
-
+  /**
+   *
+   * @param serviceFunctionPath The service-function-path
+   */
+  public void setServiceFunctionPath(List<ServiceFunctionPath> serviceFunctionPath) {
+    this.serviceFunctionPath = serviceFunctionPath;
+  }
 }

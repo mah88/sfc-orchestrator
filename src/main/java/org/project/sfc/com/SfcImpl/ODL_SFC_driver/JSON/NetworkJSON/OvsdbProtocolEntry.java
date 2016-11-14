@@ -9,26 +9,23 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class OvsdbProtocolEntry {
 
-    @SerializedName("protocol")
-    @Expose
-    private String protocol;
+  @SerializedName("protocol")
+  @Expose
+  private String protocol;
 
-    /**
-     * 
-     * @return
-     *     The protocol
-     */
-    public String getProtocol() {
-        return protocol;
-    }
+  /**
+   *
+   * @return The protocol
+   */
+  public String getProtocol() {
+    return protocol;
+  }
 
-    /**
-     * 
-     * @param protocol
-     *     The protocol
-     */
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
-
+  /**
+   *
+   * @param protocol The protocol
+   */
+  public void setProtocol(String protocol) {
+    this.protocol = protocol;
+  }
 }

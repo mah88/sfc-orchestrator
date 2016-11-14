@@ -9,163 +9,143 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class AclMatchCriteria {
-    @SerializedName("source-ipv4-network")
-    @Expose
-    private String sourceIpv4Network;
-    @SerializedName("destination-ipv4-network")
-    @Expose
-    private String destIpv4Network;
+  @SerializedName("source-ipv4-network")
+  @Expose
+  private String sourceIpv4Network;
 
-    @SerializedName("destination-mac-address")
-    @Expose
-    private String destMacAddress;
-    @SerializedName("source-mac-address")
-    @Expose
-    private String srcMacAddress;
+  @SerializedName("destination-ipv4-network")
+  @Expose
+  private String destIpv4Network;
 
-    @SerializedName("protocol")
-    @Expose
-    private Integer protocol;
-    @SerializedName("dest_port")
-    @Expose
-    private Integer destPort;
-    @SerializedName("src_port")
-    @Expose
-    private Integer srcPort;
-/*
-add later
-    @SerializedName("source_ip_prefix")
-    @Expose
-    private String srcIp;
+  @SerializedName("destination-mac-address")
+  @Expose
+  private String destMacAddress;
 
-    @SerializedName("dest_ip_prefix")
-    @Expose
-    private String dstIp;
-    /**
-     *
-     * @return
-     * The protocol
-     */
-    public Integer getProtocol() {
-        return protocol;
-    }
+  @SerializedName("source-mac-address")
+  @Expose
+  private String srcMacAddress;
 
-    /**
-     *
-     * @param protocol
-     * The protocol
-     */
-    public void setProtocol(Integer protocol) {
-        this.protocol = protocol;
-    }
+  @SerializedName("protocol")
+  @Expose
+  private Integer protocol;
 
-    /**
-     *
-     * @return
-     * The destPort
-     */
-    public Integer getDestPort() {
-        return destPort;
-    }
+  @SerializedName("dest_port")
+  @Expose
+  private Integer destPort;
 
-    /**
-     *
-     * @param destPort
-     * The dest_port
-     */
-    public void setDestPort(Integer destPort) {
-        this.destPort = destPort;
-    }
+  @SerializedName("src_port")
+  @Expose
+  private Integer srcPort;
 
-    /**
-     *
-     * @return
-     * The destPort
-     */
-    public Integer getSrcPort() {
-        return srcPort;
-    }
+  /**
+   *
+   * @return The protocol
+   */
+  public Integer getProtocol() {
+    return protocol;
+  }
 
-    /**
-     *
-     * @param destPort
-     * The dest_port
-     */
-    public void setSrcPort(Integer srcPort) {
-        this.srcPort = srcPort;
-    }
+  /**
+   *
+   * @param protocol The protocol
+   */
+  public void setProtocol(Integer protocol) {
+    this.protocol = protocol;
+  }
 
+  /**
+   *
+   * @return The destPort
+   */
+  public Integer getDestPort() {
+    return destPort;
+  }
 
+  /**
+   *
+   * @param destPort The dest_port
+   */
+  public void setDestPort(Integer destPort) {
+    this.destPort = destPort;
+  }
 
-    /**
-     *
-     * @return
-     * The sourceIpPrefix
-     */
-    public String getSourceIpv4() {
-        return sourceIpv4Network;
-    }
+  /**
+   *
+   * @return The destPort
+   */
+  public Integer getSrcPort() {
+    return srcPort;
+  }
 
-    /**
-     *
-     * @param sourceIpPrefix
-     * The source_ip_prefix
-     */
-    public void setSourceIpv4(String sourceIpPrefix) {
-        this.sourceIpv4Network = sourceIpPrefix;
-    }
+  /**
+   *
+   * @param destPort The dest_port
+   */
+  public void setSrcPort(Integer srcPort) {
+    this.srcPort = srcPort;
+  }
 
-    /**
-     *
-     * @return
-     * The destIpPrefix
-     */
-    public String getDestIpv4() {
-        return destIpv4Network;
-    }
+  /**
+   *
+   * @return The sourceIpPrefix
+   */
+  public String getSourceIpv4() {
+    return sourceIpv4Network;
+  }
 
-    /**
-     *
-     * @param destIpPrefix
-     * The dest_ip_prefix
-     */
-    public void setDestIpv4(String destIpPrefix) {
-        this.destIpv4Network = destIpPrefix;
-    }
+  /**
+   *
+   * @param sourceIpPrefix The source_ip_prefix
+   */
+  public void setSourceIpv4(String sourceIpPrefix) {
+    this.sourceIpv4Network = sourceIpPrefix;
+  }
 
-    /**
-     *
-     * @return
-     * The sourceMAC address
-     */
-    public String getSourceMAC() {
-        return srcMacAddress;
-    }
+  /**
+   *
+   * @return The destIpPrefix
+   */
+  public String getDestIpv4() {
+    return destIpv4Network;
+  }
 
-    /**
-     *
-     * @param sourceMACaddress
-     * The source MAC
-     */
-    public void setSourceMAC(String sourceMAC) {
-        this.srcMacAddress = sourceMAC;
-    }
+  /**
+   *
+   * @param destIpPrefix The dest_ip_prefix
+   */
+  public void setDestIpv4(String destIpPrefix) {
+    this.destIpv4Network = destIpPrefix;
+  }
 
-    /**
-     *
-     * @return
-     * The destMac address
-     */
-    public String getDestMAC() {
-        return destMacAddress;
-    }
+  /**
+   *
+   * @return The sourceMAC address
+   */
+  public String getSourceMAC() {
+    return srcMacAddress;
+  }
 
-    /**
-     *
-     * @param dest Mac
-     * The dest Mac address
-     */
-    public void setDestMAC(String destMAC) {
-        this.destMacAddress = destMAC;
-    }
+  /**
+   *
+   * @param sourceMACaddress The source MAC
+   */
+  public void setSourceMAC(String sourceMAC) {
+    this.srcMacAddress = sourceMAC;
+  }
+
+  /**
+   *
+   * @return The destMac address
+   */
+  public String getDestMAC() {
+    return destMacAddress;
+  }
+
+  /**
+   *
+   * @param dest Mac The dest Mac address
+   */
+  public void setDestMAC(String destMAC) {
+    this.destMacAddress = destMAC;
+  }
 }

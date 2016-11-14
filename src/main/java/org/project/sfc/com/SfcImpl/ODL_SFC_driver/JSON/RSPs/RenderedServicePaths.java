@@ -12,26 +12,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class RenderedServicePaths {
 
-    @SerializedName("rendered-service-path")
-    @Expose
-    private List<RenderedServicePath> renderedServicePath = new ArrayList<RenderedServicePath>();
+  @SerializedName("rendered-service-path")
+  @Expose
+  private List<RenderedServicePath> renderedServicePath = new ArrayList<RenderedServicePath>();
 
-    /**
-     *
-     * @return
-     * The renderedServicePath
-     */
-    public List<RenderedServicePath> getRenderedServicePath() {
-        return renderedServicePath;
-    }
+  /**
+   *
+   * @return The renderedServicePath
+   */
+  public List<RenderedServicePath> getRenderedServicePath() {
+    return renderedServicePath;
+  }
 
-    /**
-     *
-     * @param renderedServicePath
-     * The rendered-service-path
-     */
-    public void setRenderedServicePath(List<RenderedServicePath> renderedServicePath) {
-        this.renderedServicePath = renderedServicePath;
-    }
-
+  /**
+   *
+   * @param renderedServicePath The rendered-service-path
+   */
+  public void setRenderedServicePath(List<RenderedServicePath> renderedServicePath) {
+    this.renderedServicePath = renderedServicePath;
+  }
 }

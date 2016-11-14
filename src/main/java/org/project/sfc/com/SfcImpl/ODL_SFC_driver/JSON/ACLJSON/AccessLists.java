@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class AccessLists {
 
-    @SerializedName("acl")
-    @Expose
-    private List<Acl> acl = new ArrayList<Acl>();
+  @SerializedName("acl")
+  @Expose
+  private List<Acl> acl = new ArrayList<Acl>();
 
-    /**
-     * 
-     * @return
-     *     The acl
-     */
-    public List<Acl> getAcl() {
-        return acl;
-    }
+  /**
+   *
+   * @return The acl
+   */
+  public List<Acl> getAcl() {
+    return acl;
+  }
 
-    /**
-     * 
-     * @param acl
-     *     The acl
-     */
-    public void setAcl(List<Acl> acl) {
-        this.acl = acl;
-    }
-
+  /**
+   *
+   * @param acl The acl
+   */
+  public void setAcl(List<Acl> acl) {
+    this.acl = acl;
+  }
 }

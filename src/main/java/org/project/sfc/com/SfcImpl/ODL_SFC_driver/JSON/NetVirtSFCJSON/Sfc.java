@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Sfc {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     * 
-     * @return
-     *     The name
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * 
-     * @param name
-     *     The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 }

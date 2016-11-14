@@ -8,133 +8,123 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class SfDataPlaneLocator {
 
+  @SerializedName("port")
+  @Expose
+  private String port;
 
-    @SerializedName("port")
-    @Expose
-    private String port;
-    @SerializedName("ip")
-    @Expose
-    private String ip;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("transport")
-    @Expose
-    private String transport;
-    @SerializedName("service-function-forwarder")
-    @Expose
-    private String serviceFunctionForwarder;
+  @SerializedName("ip")
+  @Expose
+  private String ip;
 
-    @SerializedName("service-function-ovs:ovs-port")
-    @Expose
-    private ServiceFunctionOvsOvsPort serviceFunctionOvsOvsPort;
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     * 
-     * @return
-     *     The name
-     */
-    public String getName() {
-        return name;
-    }
+  @SerializedName("transport")
+  @Expose
+  private String transport;
 
-    /**
-     * 
-     * @param name
-     *     The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  @SerializedName("service-function-forwarder")
+  @Expose
+  private String serviceFunctionForwarder;
 
-    /**
-     * 
-     * @return
-     *     The port
-     */
-    public String getPort() {
-        return port;
-    }
+  @SerializedName("service-function-ovs:ovs-port")
+  @Expose
+  private ServiceFunctionOvsOvsPort serviceFunctionOvsOvsPort;
 
-    /**
-     * 
-     * @param port
-     *     The port
-     */
-    public void setPort(String port) {
-        this.port = port;
-    }
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * 
-     * @return
-     *     The ip
-     */
-    public String getIp() {
-        return ip;
-    }
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    /**
-     * 
-     * @param ip
-     *     The ip
-     */
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+  /**
+   *
+   * @return The port
+   */
+  public String getPort() {
+    return port;
+  }
 
-    /**
-     * 
-     * @return
-     *     The transport
-     */
-    public String getTransport() {
-        return transport;
-    }
+  /**
+   *
+   * @param port The port
+   */
+  public void setPort(String port) {
+    this.port = port;
+  }
 
-    /**
-     * 
-     * @param transport
-     *     The transport
-     */
-    public void setTransport(String transport) {
-        this.transport = transport;
-    }
+  /**
+   *
+   * @return The ip
+   */
+  public String getIp() {
+    return ip;
+  }
 
-    /**
-     * 
-     * @return
-     *     The serviceFunctionForwarder
-     */
-    public String getServiceFunctionForwarder() {
-        return serviceFunctionForwarder;
-    }
+  /**
+   *
+   * @param ip The ip
+   */
+  public void setIp(String ip) {
+    this.ip = ip;
+  }
 
-    /**
-     * 
-     * @param serviceFunctionForwarder
-     *     The service-function-forwarder
-     */
-    public void setServiceFunctionForwarder(String serviceFunctionForwarder) {
-        this.serviceFunctionForwarder = serviceFunctionForwarder;
-    }
+  /**
+   *
+   * @return The transport
+   */
+  public String getTransport() {
+    return transport;
+  }
 
-    /**
-     *
-     * @return
-     *     The serviceFunctionOvsOvsPort
-     */
-    public ServiceFunctionOvsOvsPort getServiceFunctionOvsOvsPort() {
-        return serviceFunctionOvsOvsPort;
-    }
+  /**
+   *
+   * @param transport The transport
+   */
+  public void setTransport(String transport) {
+    this.transport = transport;
+  }
 
-    /**
-     *
-     * @param servicefunctionOvsOvsPort
-     *     The servicefunctionOvsOvsPort
-     */
-    public void setServiceFunctionOvsOvsPort(ServiceFunctionOvsOvsPort servicefunctionOvsOvsPort) {
-        this.serviceFunctionOvsOvsPort = servicefunctionOvsOvsPort;
-    }
+  /**
+   *
+   * @return The serviceFunctionForwarder
+   */
+  public String getServiceFunctionForwarder() {
+    return serviceFunctionForwarder;
+  }
 
+  /**
+   *
+   * @param serviceFunctionForwarder The service-function-forwarder
+   */
+  public void setServiceFunctionForwarder(String serviceFunctionForwarder) {
+    this.serviceFunctionForwarder = serviceFunctionForwarder;
+  }
+
+  /**
+   *
+   * @return The serviceFunctionOvsOvsPort
+   */
+  public ServiceFunctionOvsOvsPort getServiceFunctionOvsOvsPort() {
+    return serviceFunctionOvsOvsPort;
+  }
+
+  /**
+   *
+   * @param servicefunctionOvsOvsPort The servicefunctionOvsOvsPort
+   */
+  public void setServiceFunctionOvsOvsPort(ServiceFunctionOvsOvsPort servicefunctionOvsOvsPort) {
+    this.serviceFunctionOvsOvsPort = servicefunctionOvsOvsPort;
+  }
 }

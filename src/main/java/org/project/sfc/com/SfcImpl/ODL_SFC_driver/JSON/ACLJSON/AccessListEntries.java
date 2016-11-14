@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class AccessListEntries {
 
-    @SerializedName("ace")
-    @Expose
-    private List<Ace> ace = new ArrayList<Ace>();
+  @SerializedName("ace")
+  @Expose
+  private List<Ace> ace = new ArrayList<Ace>();
 
-    /**
-     * 
-     * @return
-     *     The ace
-     */
-    public List<Ace> getAce() {
-        return ace;
-    }
+  /**
+   *
+   * @return The ace
+   */
+  public List<Ace> getAce() {
+    return ace;
+  }
 
-    /**
-     * 
-     * @param ace
-     *     The ace
-     */
-    public void setAce(List<Ace> ace) {
-        this.ace = ace;
-    }
-
+  /**
+   *
+   * @param ace The ace
+   */
+  public void setAce(List<Ace> ace) {
+    this.ace = ace;
+  }
 }

@@ -13,28 +13,24 @@ import org.openbaton.catalogue.nfvo.Action;
  */
 public class OpenbatonEvent {
 
-    private Action action;
-    private JsonObject payload;
+  private Action action;
+  private JsonObject payload;
 
+  public OpenbatonEvent() {}
 
-    public OpenbatonEvent() {
-    }
+  public Action getAction() {
+    return action;
+  }
 
-    public Action getAction() {
-        return action;
-    }
+  public void setAction(Action action) {
+    this.action = action;
+  }
 
-    public void setAction(Action action) {
-        this.action = action;
-    }
+  public JsonObject getPayload() {
+    return payload;
+  }
 
-    public JsonObject getPayload() {
-        return payload;
-    }
-
-    public void setPayload(JsonObject payload) {
-        this.payload = payload;
-    }
-
-
+  public void setPayload(JsonObject payload) {
+    this.payload = payload;
+  }
 }

@@ -9,111 +9,103 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class ServiceFunction {
-    @SerializedName("sf-data-plane-locator")
-    @Expose
-    private List<SfDataPlaneLocator> sfDataPlaneLocator = new ArrayList<SfDataPlaneLocator>();
-    @SerializedName("nsh-aware")
-    @Expose
-    private String nshAware;
-    @SerializedName("type")
-    @Expose
-    private String type;
+  @SerializedName("sf-data-plane-locator")
+  @Expose
+  private List<SfDataPlaneLocator> sfDataPlaneLocator = new ArrayList<SfDataPlaneLocator>();
 
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("ip-mgmt-address")
-    @Expose
-    private String ipMgmtAddress;
+  @SerializedName("nsh-aware")
+  @Expose
+  private String nshAware;
 
-    /**
-     * 
-     * @return
-     *     The name
-     */
-    public String getName() {
-        return name;
-    }
+  @SerializedName("type")
+  @Expose
+  private String type;
 
-    /**
-     * 
-     * @param name
-     *     The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     * 
-     * @return
-     *     The ipMgmtAddress
-     */
-    public String getIpMgmtAddress() {
-        return ipMgmtAddress;
-    }
+  @SerializedName("ip-mgmt-address")
+  @Expose
+  private String ipMgmtAddress;
 
-    /**
-     * 
-     * @param ipMgmtAddress
-     *     The ip-mgmt-address
-     */
-    public void setIpMgmtAddress(String ipMgmtAddress) {
-        this.ipMgmtAddress = ipMgmtAddress;
-    }
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * 
-     * @return
-     *     The type
-     */
-    public String getType() {
-        return type;
-    }
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    /**
-     * 
-     * @param type
-     *     The type
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
+  /**
+   *
+   * @return The ipMgmtAddress
+   */
+  public String getIpMgmtAddress() {
+    return ipMgmtAddress;
+  }
 
-    /**
-     * 
-     * @return
-     *     The nshAware
-     */
-    public String getNshAware() {
-        return nshAware;
-    }
+  /**
+   *
+   * @param ipMgmtAddress The ip-mgmt-address
+   */
+  public void setIpMgmtAddress(String ipMgmtAddress) {
+    this.ipMgmtAddress = ipMgmtAddress;
+  }
 
-    /**
-     * 
-     * @param nshAware
-     *     The nsh-aware
-     */
-    public void setNshAware(String nshAware) {
-        this.nshAware = nshAware;
-    }
+  /**
+   *
+   * @return The type
+   */
+  public String getType() {
+    return type;
+  }
 
-    /**
-     * 
-     * @return
-     *     The sfDataPlaneLocator
-     */
-    public List<SfDataPlaneLocator> getSfDataPlaneLocator() {
-        return sfDataPlaneLocator;
-    }
+  /**
+   *
+   * @param type The type
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    /**
-     * 
-     * @param sfDataPlaneLocator
-     *     The sf-data-plane-locator
-     */
-    public void setSfDataPlaneLocator(List<SfDataPlaneLocator> sfDataPlaneLocator) {
-        this.sfDataPlaneLocator = sfDataPlaneLocator;
-    }
+  /**
+   *
+   * @return The nshAware
+   */
+  public String getNshAware() {
+    return nshAware;
+  }
 
+  /**
+   *
+   * @param nshAware The nsh-aware
+   */
+  public void setNshAware(String nshAware) {
+    this.nshAware = nshAware;
+  }
+
+  /**
+   *
+   * @return The sfDataPlaneLocator
+   */
+  public List<SfDataPlaneLocator> getSfDataPlaneLocator() {
+    return sfDataPlaneLocator;
+  }
+
+  /**
+   *
+   * @param sfDataPlaneLocator The sf-data-plane-locator
+   */
+  public void setSfDataPlaneLocator(List<SfDataPlaneLocator> sfDataPlaneLocator) {
+    this.sfDataPlaneLocator = sfDataPlaneLocator;
+  }
 }

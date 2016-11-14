@@ -10,110 +10,103 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class User {
 
-    @SerializedName("username")
-    @Expose
-    private String username;
-    @SerializedName("roles_links")
-    @Expose
-    private List<Object> rolesLinks = new ArrayList<Object>();
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("roles")
-    @Expose
-    private List<Role> roles = new ArrayList<Role>();
-    @SerializedName("name")
-    @Expose
-    private String name;
+  @SerializedName("username")
+  @Expose
+  private String username;
 
-    /**
-     * 
-     * @return
-     *     The username
-     */
-    public String getUsername() {
-        return username;
-    }
+  @SerializedName("roles_links")
+  @Expose
+  private List<Object> rolesLinks = new ArrayList<Object>();
 
-    /**
-     * 
-     * @param username
-     *     The username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  @SerializedName("id")
+  @Expose
+  private String id;
 
-    /**
-     * 
-     * @return
-     *     The rolesLinks
-     */
-    public List<Object> getRolesLinks() {
-        return rolesLinks;
-    }
+  @SerializedName("roles")
+  @Expose
+  private List<Role> roles = new ArrayList<Role>();
 
-    /**
-     * 
-     * @param rolesLinks
-     *     The roles_links
-     */
-    public void setRolesLinks(List<Object> rolesLinks) {
-        this.rolesLinks = rolesLinks;
-    }
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     * 
-     * @return
-     *     The id
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   *
+   * @return The username
+   */
+  public String getUsername() {
+    return username;
+  }
 
-    /**
-     * 
-     * @param id
-     *     The id
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+  /**
+   *
+   * @param username The username
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    /**
-     * 
-     * @return
-     *     The roles
-     */
-    public List<Role> getRoles() {
-        return roles;
-    }
+  /**
+   *
+   * @return The rolesLinks
+   */
+  public List<Object> getRolesLinks() {
+    return rolesLinks;
+  }
 
-    /**
-     * 
-     * @param roles
-     *     The roles
-     */
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
+  /**
+   *
+   * @param rolesLinks The roles_links
+   */
+  public void setRolesLinks(List<Object> rolesLinks) {
+    this.rolesLinks = rolesLinks;
+  }
 
-    /**
-     * 
-     * @return
-     *     The name
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   *
+   * @return The id
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * 
-     * @param name
-     *     The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   *
+   * @param id The id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
 
+  /**
+   *
+   * @return The roles
+   */
+  public List<Role> getRoles() {
+    return roles;
+  }
+
+  /**
+   *
+   * @param roles The roles
+   */
+  public void setRoles(List<Role> roles) {
+    this.roles = roles;
+  }
+
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 }

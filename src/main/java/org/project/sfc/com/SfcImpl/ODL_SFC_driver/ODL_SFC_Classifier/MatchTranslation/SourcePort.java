@@ -12,26 +12,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class SourcePort {
 
-    @SerializedName("source-port-range")
-    @Expose
-    private List<String> sourcePortRange = new ArrayList<String>();
+  @SerializedName("source-port-range")
+  @Expose
+  private List<String> sourcePortRange = new ArrayList<String>();
 
-    /**
-     *
-     * @return
-     * The sourcePortRange
-     */
-    public List<String> getSourcePortRange() {
-        return sourcePortRange;
-    }
+  /**
+   *
+   * @return The sourcePortRange
+   */
+  public List<String> getSourcePortRange() {
+    return sourcePortRange;
+  }
 
-    /**
-     *
-     * @param sourcePortRange
-     * The source-port-range
-     */
-    public void setSourcePortRange(List<String> sourcePortRange) {
-        this.sourcePortRange = sourcePortRange;
-    }
-
+  /**
+   *
+   * @param sourcePortRange The source-port-range
+   */
+  public void setSourcePortRange(List<String> sourcePortRange) {
+    this.sourcePortRange = sourcePortRange;
+  }
 }

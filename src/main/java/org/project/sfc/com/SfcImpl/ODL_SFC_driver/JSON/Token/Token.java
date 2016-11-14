@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Token {
 
-    @SerializedName("access")
-    @Expose
-    private Access access;
+  @SerializedName("access")
+  @Expose
+  private Access access;
 
-    /**
-     * 
-     * @return
-     *     The access
-     */
-    public Access getAccess() {
-        return access;
-    }
+  /**
+   *
+   * @return The access
+   */
+  public Access getAccess() {
+    return access;
+  }
 
-    /**
-     * 
-     * @param access
-     *     The access
-     */
-    public void setAccess(Access access) {
-        this.access = access;
-    }
-
+  /**
+   *
+   * @param access The access
+   */
+  public void setAccess(Access access) {
+    this.access = access;
+  }
 }

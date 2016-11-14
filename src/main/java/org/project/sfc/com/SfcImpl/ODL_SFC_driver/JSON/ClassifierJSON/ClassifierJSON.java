@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class ClassifierJSON {
 
-    @SerializedName("classifiers")
-    @Expose
-    private Classifiers classifiers;
+  @SerializedName("classifiers")
+  @Expose
+  private Classifiers classifiers;
 
-    /**
-     * 
-     * @return
-     *     The classifiers
-     */
-    public Classifiers getClassifiers() {
-        return classifiers;
-    }
+  /**
+   *
+   * @return The classifiers
+   */
+  public Classifiers getClassifiers() {
+    return classifiers;
+  }
 
-    /**
-     * 
-     * @param classifiers
-     *     The classifiers
-     */
-    public void setClassifiers(Classifiers classifiers) {
-        this.classifiers = classifiers;
-    }
-
+  /**
+   *
+   * @param classifiers The classifiers
+   */
+  public void setClassifiers(Classifiers classifiers) {
+    this.classifiers = classifiers;
+  }
 }

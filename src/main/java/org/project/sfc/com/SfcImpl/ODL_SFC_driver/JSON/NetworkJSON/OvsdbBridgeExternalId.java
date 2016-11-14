@@ -9,47 +9,43 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class OvsdbBridgeExternalId {
 
-    @SerializedName("bridge-external-id-value")
-    @Expose
-    private String bridgeExternalIdValue;
-    @SerializedName("bridge-external-id-key")
-    @Expose
-    private String bridgeExternalIdKey;
+  @SerializedName("bridge-external-id-value")
+  @Expose
+  private String bridgeExternalIdValue;
 
-    /**
-     * 
-     * @return
-     *     The bridgeExternalIdValue
-     */
-    public String getBridgeExternalIdValue() {
-        return bridgeExternalIdValue;
-    }
+  @SerializedName("bridge-external-id-key")
+  @Expose
+  private String bridgeExternalIdKey;
 
-    /**
-     * 
-     * @param bridgeExternalIdValue
-     *     The bridge-external-id-value
-     */
-    public void setBridgeExternalIdValue(String bridgeExternalIdValue) {
-        this.bridgeExternalIdValue = bridgeExternalIdValue;
-    }
+  /**
+   *
+   * @return The bridgeExternalIdValue
+   */
+  public String getBridgeExternalIdValue() {
+    return bridgeExternalIdValue;
+  }
 
-    /**
-     * 
-     * @return
-     *     The bridgeExternalIdKey
-     */
-    public String getBridgeExternalIdKey() {
-        return bridgeExternalIdKey;
-    }
+  /**
+   *
+   * @param bridgeExternalIdValue The bridge-external-id-value
+   */
+  public void setBridgeExternalIdValue(String bridgeExternalIdValue) {
+    this.bridgeExternalIdValue = bridgeExternalIdValue;
+  }
 
-    /**
-     * 
-     * @param bridgeExternalIdKey
-     *     The bridge-external-id-key
-     */
-    public void setBridgeExternalIdKey(String bridgeExternalIdKey) {
-        this.bridgeExternalIdKey = bridgeExternalIdKey;
-    }
+  /**
+   *
+   * @return The bridgeExternalIdKey
+   */
+  public String getBridgeExternalIdKey() {
+    return bridgeExternalIdKey;
+  }
 
+  /**
+   *
+   * @param bridgeExternalIdKey The bridge-external-id-key
+   */
+  public void setBridgeExternalIdKey(String bridgeExternalIdKey) {
+    this.bridgeExternalIdKey = bridgeExternalIdKey;
+  }
 }

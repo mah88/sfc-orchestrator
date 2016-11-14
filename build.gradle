@@ -1,17 +1,23 @@
 buildscript {
     repositories{
         mavenCentral()
+        maven {
+      url "https://plugins.gradle.org/m2/"
+    }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+        classpath("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.3.2")   
     }
+         
+    
 }
 apply plugin: 'spring-boot'
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
-
+apply plugin: "com.github.sherter.google-java-format"
 /**
  * Project settings
  */
@@ -47,7 +53,12 @@ repositories {
     }
 }
 dependencies {
-    compile 'org.openbaton:sdk:2.9.9'
+    compile 'org.openbaton:sdk:3.9.9'
+    compile 'org.openbaton:catalogue:3.9.9'
+
+    compile 'org.openbaton:plugin:3.0.0'
+    compile 'org.openbaton:vim-drivers:3.0.0'
+    compile 'org.openbaton:monitoring:3.0.0'
     //compile 'commons-dbcp:commons-dbcp:1.4'
     compile 'mysql:mysql-connector-java:5.1.35'
     compile 'org.springframework.boot:spring-boot-starter-test:' + springBootVersion
@@ -59,6 +70,8 @@ dependencies {
     compile 'org.hibernate:hibernate-entitymanager:4.3.10.Final'
     compile 'org.springframework.data:spring-data-jpa:1.8.2.RELEASE'
     compile 'org.hsqldb:hsqldb:2.3.2'
+    
+
 
 }
 

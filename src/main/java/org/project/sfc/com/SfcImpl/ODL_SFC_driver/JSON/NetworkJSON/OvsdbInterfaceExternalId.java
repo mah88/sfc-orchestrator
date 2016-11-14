@@ -1,4 +1,5 @@
 package org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetworkJSON;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 /**
@@ -6,28 +7,27 @@ import com.google.gson.annotations.SerializedName;
  */
 public class OvsdbInterfaceExternalId {
 
-   @SerializedName("external-id-value")
-    @Expose
-    private String externalidvalue;
-    @SerializedName("external-id-key")
-    @Expose
-    private String externalidkey;
+  @SerializedName("external-id-value")
+  @Expose
+  private String externalidvalue;
 
-    public String getExternalIdValue() {
-        return externalidvalue;
-    }
+  @SerializedName("external-id-key")
+  @Expose
+  private String externalidkey;
 
+  public String getExternalIdValue() {
+    return externalidvalue;
+  }
 
-    public void setExternalIdValue(String externalidvalue) {
-        this.externalidvalue= externalidvalue;
-    }
-    public String getExternalIdKey() {
-        return externalidkey;
-    }
+  public void setExternalIdValue(String externalidvalue) {
+    this.externalidvalue = externalidvalue;
+  }
 
+  public String getExternalIdKey() {
+    return externalidkey;
+  }
 
-    public void setExternalIdKey(String externalidkey) {
-        this.externalidkey= externalidkey;
-    }
-
+  public void setExternalIdKey(String externalidkey) {
+    this.externalidkey = externalidkey;
+  }
 }

@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Classifiers {
 
-    @SerializedName("classifier")
-    @Expose
-    private List<Classifier> classifier = new ArrayList<Classifier>();
+  @SerializedName("classifier")
+  @Expose
+  private List<Classifier> classifier = new ArrayList<Classifier>();
 
-    /**
-     * 
-     * @return
-     *     The classifier
-     */
-    public List<Classifier> getClassifier() {
-        return classifier;
-    }
+  /**
+   *
+   * @return The classifier
+   */
+  public List<Classifier> getClassifier() {
+    return classifier;
+  }
 
-    /**
-     * 
-     * @param classifier
-     *     The classifier
-     */
-    public void setClassifier(List<Classifier> classifier) {
-        this.classifier = classifier;
-    }
-
+  /**
+   *
+   * @param classifier The classifier
+   */
+  public void setClassifier(List<Classifier> classifier) {
+    this.classifier = classifier;
+  }
 }

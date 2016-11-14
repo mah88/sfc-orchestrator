@@ -10,47 +10,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Metadata {
 
-    @SerializedName("is_admin")
-    @Expose
-    private Integer isAdmin;
-    @SerializedName("roles")
-    @Expose
-    private List<String> roles = new ArrayList<String>();
+  @SerializedName("is_admin")
+  @Expose
+  private Integer isAdmin;
 
-    /**
-     * 
-     * @return
-     *     The isAdmin
-     */
-    public Integer getIsAdmin() {
-        return isAdmin;
-    }
+  @SerializedName("roles")
+  @Expose
+  private List<String> roles = new ArrayList<String>();
 
-    /**
-     * 
-     * @param isAdmin
-     *     The is_admin
-     */
-    public void setIsAdmin(Integer isAdmin) {
-        this.isAdmin = isAdmin;
-    }
+  /**
+   *
+   * @return The isAdmin
+   */
+  public Integer getIsAdmin() {
+    return isAdmin;
+  }
 
-    /**
-     * 
-     * @return
-     *     The roles
-     */
-    public List<String> getRoles() {
-        return roles;
-    }
+  /**
+   *
+   * @param isAdmin The is_admin
+   */
+  public void setIsAdmin(Integer isAdmin) {
+    this.isAdmin = isAdmin;
+  }
 
-    /**
-     * 
-     * @param roles
-     *     The roles
-     */
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
+  /**
+   *
+   * @return The roles
+   */
+  public List<String> getRoles() {
+    return roles;
+  }
 
+  /**
+   *
+   * @param roles The roles
+   */
+  public void setRoles(List<String> roles) {
+    this.roles = roles;
+  }
 }

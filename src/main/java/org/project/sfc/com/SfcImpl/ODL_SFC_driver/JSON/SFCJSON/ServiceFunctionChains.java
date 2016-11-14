@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class ServiceFunctionChains {
 
-    @SerializedName("service-function-chain")
-    @Expose
-    private List<ServiceFunctionChain> serviceFunctionChain = new ArrayList<ServiceFunctionChain>();
+  @SerializedName("service-function-chain")
+  @Expose
+  private List<ServiceFunctionChain> serviceFunctionChain = new ArrayList<ServiceFunctionChain>();
 
-    /**
-     * 
-     * @return
-     *     The serviceFunctionChain
-     */
-    public List<ServiceFunctionChain> getServiceFunctionChain() {
-        return serviceFunctionChain;
-    }
+  /**
+   *
+   * @return The serviceFunctionChain
+   */
+  public List<ServiceFunctionChain> getServiceFunctionChain() {
+    return serviceFunctionChain;
+  }
 
-    /**
-     * 
-     * @param serviceFunctionChain
-     *     The service-function-chain
-     */
-    public void setServiceFunctionChain(List<ServiceFunctionChain> serviceFunctionChain) {
-        this.serviceFunctionChain = serviceFunctionChain;
-    }
-
+  /**
+   *
+   * @param serviceFunctionChain The service-function-chain
+   */
+  public void setServiceFunctionChain(List<ServiceFunctionChain> serviceFunctionChain) {
+    this.serviceFunctionChain = serviceFunctionChain;
+  }
 }

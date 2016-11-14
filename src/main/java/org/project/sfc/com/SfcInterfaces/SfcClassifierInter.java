@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface SfcClassifierInter {
 
-    String Create_SFC_Classifer(SFCCdict sfcc_dict, String Chain_instance_id);
-    ResponseEntity<String> Delete_SFC_Classifier(String classifier_name);
+  String Create_SFC_Classifer(SFCCdict sfcc_dict, String Chain_instance_id);
+
+  ResponseEntity<String> Delete_SFC_Classifier(String classifier_name);
 }

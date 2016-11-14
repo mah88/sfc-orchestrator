@@ -8,89 +8,83 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Classifier {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("acl")
-    @Expose
-    private String acl;
-    @SerializedName("sffs")
-    @Expose
-    private Sffs sffs;
-    @SerializedName("bridges")
-    @Expose
-    private Bridges bridges;
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     * 
-     * @return
-     *     The name
-     */
-    public String getName() {
-        return name;
-    }
+  @SerializedName("acl")
+  @Expose
+  private String acl;
 
-    /**
-     * 
-     * @param name
-     *     The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  @SerializedName("sffs")
+  @Expose
+  private Sffs sffs;
 
-    /**
-     * 
-     * @return
-     *     The acl
-     */
-    public String getAcl() {
-        return acl;
-    }
+  @SerializedName("bridges")
+  @Expose
+  private Bridges bridges;
 
-    /**
-     * 
-     * @param acl
-     *     The acl
-     */
-    public void setAcl(String acl) {
-        this.acl = acl;
-    }
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * 
-     * @return
-     *     The sffs
-     */
-    public Sffs getSffs() {
-        return sffs;
-    }
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    /**
-     * 
-     * @param sffs
-     *     The sffs
-     */
-    public void setSffs(Sffs sffs) {
-        this.sffs = sffs;
-    }
+  /**
+   *
+   * @return The acl
+   */
+  public String getAcl() {
+    return acl;
+  }
 
-    /**
-     * 
-     * @return
-     *     The bridges
-     */
-    public Bridges getBridges() {
-        return bridges;
-    }
+  /**
+   *
+   * @param acl The acl
+   */
+  public void setAcl(String acl) {
+    this.acl = acl;
+  }
 
-    /**
-     * 
-     * @param bridges
-     *     The bridges
-     */
-    public void setBridges(Bridges bridges) {
-        this.bridges = bridges;
-    }
+  /**
+   *
+   * @return The sffs
+   */
+  public Sffs getSffs() {
+    return sffs;
+  }
 
+  /**
+   *
+   * @param sffs The sffs
+   */
+  public void setSffs(Sffs sffs) {
+    this.sffs = sffs;
+  }
+
+  /**
+   *
+   * @return The bridges
+   */
+  public Bridges getBridges() {
+    return bridges;
+  }
+
+  /**
+   *
+   * @param bridges The bridges
+   */
+  public void setBridges(Bridges bridges) {
+    this.bridges = bridges;
+  }
 }

@@ -10,89 +10,83 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Access {
 
-    @SerializedName("token")
-    @Expose
-    private Token_ token;
-    @SerializedName("serviceCatalog")
-    @Expose
-    private List<ServiceCatalog> serviceCatalog = new ArrayList<ServiceCatalog>();
-    @SerializedName("user")
-    @Expose
-    private User user;
-    @SerializedName("metadata")
-    @Expose
-    private Metadata metadata;
+  @SerializedName("token")
+  @Expose
+  private Token_ token;
 
-    /**
-     * 
-     * @return
-     *     The token
-     */
-    public Token_ getToken() {
-        return token;
-    }
+  @SerializedName("serviceCatalog")
+  @Expose
+  private List<ServiceCatalog> serviceCatalog = new ArrayList<ServiceCatalog>();
 
-    /**
-     * 
-     * @param token
-     *     The token
-     */
-    public void setToken(Token_ token) {
-        this.token = token;
-    }
+  @SerializedName("user")
+  @Expose
+  private User user;
 
-    /**
-     * 
-     * @return
-     *     The serviceCatalog
-     */
-    public List<ServiceCatalog> getServiceCatalog() {
-        return serviceCatalog;
-    }
+  @SerializedName("metadata")
+  @Expose
+  private Metadata metadata;
 
-    /**
-     * 
-     * @param serviceCatalog
-     *     The serviceCatalog
-     */
-    public void setServiceCatalog(List<ServiceCatalog> serviceCatalog) {
-        this.serviceCatalog = serviceCatalog;
-    }
+  /**
+   *
+   * @return The token
+   */
+  public Token_ getToken() {
+    return token;
+  }
 
-    /**
-     * 
-     * @return
-     *     The user
-     */
-    public User getUser() {
-        return user;
-    }
+  /**
+   *
+   * @param token The token
+   */
+  public void setToken(Token_ token) {
+    this.token = token;
+  }
 
-    /**
-     * 
-     * @param user
-     *     The user
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
+  /**
+   *
+   * @return The serviceCatalog
+   */
+  public List<ServiceCatalog> getServiceCatalog() {
+    return serviceCatalog;
+  }
 
-    /**
-     * 
-     * @return
-     *     The metadata
-     */
-    public Metadata getMetadata() {
-        return metadata;
-    }
+  /**
+   *
+   * @param serviceCatalog The serviceCatalog
+   */
+  public void setServiceCatalog(List<ServiceCatalog> serviceCatalog) {
+    this.serviceCatalog = serviceCatalog;
+  }
 
-    /**
-     * 
-     * @param metadata
-     *     The metadata
-     */
-    public void setMetadata(Metadata metadata) {
-        this.metadata = metadata;
-    }
+  /**
+   *
+   * @return The user
+   */
+  public User getUser() {
+    return user;
+  }
 
+  /**
+   *
+   * @param user The user
+   */
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  /**
+   *
+   * @return The metadata
+   */
+  public Metadata getMetadata() {
+    return metadata;
+  }
+
+  /**
+   *
+   * @param metadata The metadata
+   */
+  public void setMetadata(Metadata metadata) {
+    this.metadata = metadata;
+  }
 }

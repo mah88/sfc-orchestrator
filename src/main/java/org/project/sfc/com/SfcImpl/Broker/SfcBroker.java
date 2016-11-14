@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -23,61 +25,55 @@ import java.util.HashMap;
 @ConfigurationProperties
 public class SfcBroker implements org.project.sfc.com.SfcInterfaces.SfcBroker {
 
-    private HashMap<String, SFCinterfaces> sfcinterfaces;
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-    private HashMap<String, SfcClassifierInter> sfcClassifierInterfaces;
+  private HashMap<String, SFCinterfaces> sfcinterfaces;
+  private Logger log = LoggerFactory.getLogger(this.getClass());
+  private HashMap<String, SfcClassifierInter> sfcClassifierInterfaces;
 
-    @PostConstruct
-    private void init() {
-        this.sfcinterfaces = new HashMap<String,SFCinterfaces>();
-        this.sfcClassifierInterfaces = new HashMap<String,SfcClassifierInter>();
+  @PostConstruct
+  private void init() {
+    this.sfcinterfaces = new HashMap<String, SFCinterfaces>();
+    this.sfcClassifierInterfaces = new HashMap<String, SfcClassifierInter>();
+  }
 
+  @Override
+  public void addClient(SFCinterfaces sfc, String type) {
+    log.info("Registered client of type: " + type);
+    this.sfcinterfaces.put(type, sfc);
+  }
+
+  @Override
+  public SFCinterfaces getClient(String type) {
+    return this.sfcinterfaces.get(type);
+  }
+
+  @Override
+  public SFC getSFC(String type) throws IOException {
+    if (type == "opendaylight") {
+
+      return new Opendaylight();
+    } else {
+      return new Opendaylight();
     }
+  }
 
-    @Override
-    public void addClient(SFCinterfaces sfc, String type) {
-        log.info("Registered client of type: " + type);
-        this.sfcinterfaces.put(type, sfc);
+  @Override
+  public void addSfcClassifierClient(SfcClassifierInter classifier, String type) {
+    log.info("Registered client of type: " + type);
+    this.sfcClassifierInterfaces.put(type, classifier);
+  }
+
+  @Override
+  public SfcClassifierInter getSfcClassifierClient(String type) {
+    return this.sfcClassifierInterfaces.get(type);
+  }
+
+  @Override
+  public SFCclassifier getSfcClassifier(String type) throws IOException {
+    if (type == "opendaylight") {
+
+      return new SFC_Classifier();
+    } else {
+      return new SFC_Classifier();
     }
-
-    @Override
-    public SFCinterfaces getClient(String type) {
-        return this.sfcinterfaces.get(type);
-    }
-
-    @Override
-    public SFC getSFC(String type)   {
-        if (type=="opendaylight") {
-
-                return new Opendaylight();
-        }
-
-        else {
-                return new Opendaylight();
-            }
-
-    }
-
-    @Override
-    public void addSfcClassifierClient(SfcClassifierInter classifier, String type){
-        log.info("Registered client of type: " + type);
-        this.sfcClassifierInterfaces.put(type, classifier);
-    }
-    @Override
-    public SfcClassifierInter getSfcClassifierClient(String type) {
-        return this.sfcClassifierInterfaces.get(type);
-    }
-
-    @Override
-    public  SFCclassifier getSfcClassifier(String type) {
-        if (type=="opendaylight") {
-
-            return new SFC_Classifier();
-        }
-
-        else {
-            return new SFC_Classifier();
-        }
-
-    }
+  }
 }

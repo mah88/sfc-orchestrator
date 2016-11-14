@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Bridges {
 
-    @SerializedName("bridge")
-    @Expose
-    private List<Bridge> bridge = new ArrayList<Bridge>();
+  @SerializedName("bridge")
+  @Expose
+  private List<Bridge> bridge = new ArrayList<Bridge>();
 
-    /**
-     * 
-     * @return
-     *     The bridge
-     */
-    public List<Bridge> getBridge() {
-        return bridge;
-    }
+  /**
+   *
+   * @return The bridge
+   */
+  public List<Bridge> getBridge() {
+    return bridge;
+  }
 
-    /**
-     * 
-     * @param bridge
-     *     The bridge
-     */
-    public void setBridge(List<Bridge> bridge) {
-        this.bridge = bridge;
-    }
-
+  /**
+   *
+   * @param bridge The bridge
+   */
+  public void setBridge(List<Bridge> bridge) {
+    this.bridge = bridge;
+  }
 }

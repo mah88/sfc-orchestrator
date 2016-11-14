@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class SFJSON {
 
-    @SerializedName("service-functions")
-    @Expose
-    private ServiceFunctions serviceFunctions;
+  @SerializedName("service-functions")
+  @Expose
+  private ServiceFunctions serviceFunctions;
 
-    /**
-     * 
-     * @return
-     *     The serviceFunctions
-     */
-    public ServiceFunctions getServiceFunctions() {
-        return serviceFunctions;
-    }
+  /**
+   *
+   * @return The serviceFunctions
+   */
+  public ServiceFunctions getServiceFunctions() {
+    return serviceFunctions;
+  }
 
-    /**
-     * 
-     * @param serviceFunctions
-     *     The service-functions
-     */
-    public void setServiceFunctions(ServiceFunctions serviceFunctions) {
-        this.serviceFunctions = serviceFunctions;
-    }
-
+  /**
+   *
+   * @param serviceFunctions The service-functions
+   */
+  public void setServiceFunctions(ServiceFunctions serviceFunctions) {
+    this.serviceFunctions = serviceFunctions;
+  }
 }

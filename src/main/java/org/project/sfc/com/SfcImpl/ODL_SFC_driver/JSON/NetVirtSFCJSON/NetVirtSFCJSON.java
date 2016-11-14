@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NetVirtSFCJSON {
 
-    @SerializedName("org")
-    @Expose
-    private Sfc sfc;
+  @SerializedName("org")
+  @Expose
+  private Sfc sfc;
 
-    /**
-     * 
-     * @return
-     *     The org
-     */
-    public Sfc getSfc() {
-        return sfc;
-    }
+  /**
+   *
+   * @return The org
+   */
+  public Sfc getSfc() {
+    return sfc;
+  }
 
-    /**
-     * 
-     * @param sfc
-     *     The org
-     */
-    public void setSfc(Sfc sfc) {
-        this.sfc = sfc;
-    }
-
+  /**
+   *
+   * @param sfc The org
+   */
+  public void setSfc(Sfc sfc) {
+    this.sfc = sfc;
+  }
 }

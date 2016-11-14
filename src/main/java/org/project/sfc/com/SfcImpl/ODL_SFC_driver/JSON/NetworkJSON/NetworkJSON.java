@@ -9,26 +9,23 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class NetworkJSON {
 
-    @SerializedName("network-topology")
-    @Expose
-    private NetworkTopology networkTopology;
+  @SerializedName("network-topology")
+  @Expose
+  private NetworkTopology networkTopology;
 
-    /**
-     * 
-     * @return
-     *     The networkTopology
-     */
-    public NetworkTopology getNetworkTopology() {
-        return networkTopology;
-    }
+  /**
+   *
+   * @return The networkTopology
+   */
+  public NetworkTopology getNetworkTopology() {
+    return networkTopology;
+  }
 
-    /**
-     * 
-     * @param networkTopology
-     *     The network-topology
-     */
-    public void setNetworkTopology(NetworkTopology networkTopology) {
-        this.networkTopology = networkTopology;
-    }
-
+  /**
+   *
+   * @param networkTopology The network-topology
+   */
+  public void setNetworkTopology(NetworkTopology networkTopology) {
+    this.networkTopology = networkTopology;
+  }
 }

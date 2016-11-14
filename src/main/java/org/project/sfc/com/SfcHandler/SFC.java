@@ -13,129 +13,135 @@ import java.util.HashMap;
 
 public class SFC {
 
-    private static SFC instance;
+  private static SFC instance;
 
-    private SFC() {}
+  private SFC() {}
 
-    public static SFC getInstance() {
-        if (instance == null) {
-            instance = new SFC();
-        }
-        return instance;
+  public static SFC getInstance() {
+    if (instance == null) {
+      instance = new SFC();
+    }
+    return instance;
+  }
+
+  static HashMap<String, SFC_Data> SFC_MAP = new HashMap<String, SFC_Data>();
+
+  public void add(
+      String nsr_id,
+      String rsp_id,
+      String sfcc_name,
+      boolean Symm,
+      HashMap<Integer, VNFdict> VNFs,
+      SFCdict SFC_dict_info,
+      SFCCdict ClassifierDict) {
+    SFC_Data sfc_data = new SFC_Data();
+    sfc_data.setRspID(rsp_id);
+    sfc_data.setSfccName(sfcc_name);
+    sfc_data.setSymm(Symm);
+    sfc_data.setChainSFs(VNFs);
+    sfc_data.setSFCdictInfo(SFC_dict_info);
+    sfc_data.setClassifierInfo(ClassifierDict);
+    SFC_MAP.put(nsr_id, sfc_data);
+  }
+
+  public void remove(String nsr) {
+    SFC_MAP.remove(nsr);
+  }
+
+  public void update(
+      String nsr_id,
+      String new_rsp_id,
+      String new_sfcc_name,
+      boolean Symm,
+      HashMap<Integer, VNFdict> VNFs,
+      SFCdict SFC_dict_info,
+      SFCCdict ClassifierDict) {
+    SFC_MAP.get(nsr_id).setRspID(new_rsp_id);
+    SFC_MAP.get(nsr_id).setSfccName(new_sfcc_name);
+    SFC_MAP.get(nsr_id).setSymm(Symm);
+    SFC_MAP.get(nsr_id).setChainSFs(VNFs);
+    SFC_MAP.get(nsr_id).setSFCdictInfo(SFC_dict_info);
+    SFC_MAP.get(nsr_id).setClassifierInfo(ClassifierDict);
+  }
+
+  public HashMap<String, SFC_Data> getAllSFCs() {
+
+    return SFC_MAP;
+  }
+
+  public String getRspID(String nsr_id) {
+    String chain_id = SFC_MAP.get(nsr_id).getRspID();
+    return chain_id;
+  }
+
+  public String getSfccName(String nsr_id) {
+    String sfcc_name = SFC_MAP.get(nsr_id).getSfccName();
+    return sfcc_name;
+  }
+
+  public boolean isSymmSFC(String nsr_id) {
+    boolean Symm = SFC_MAP.get(nsr_id).isSymm();
+    return Symm;
+  }
+
+  public class SFC_Data {
+    String rsp_id;
+    String SFCC_name;
+    boolean Symm;
+    HashMap<Integer, VNFdict> VNFs;
+    SFCdict SFC_dict_info;
+    SFCCdict ClassifierDict;
+
+    public String getRspID() {
+      return rsp_id;
     }
 
-    HashMap<String,SFC_Data> SFC_MAP=new HashMap<String,SFC_Data>();
-    public void add(String nsr_id, String rsp_id, String sfcc_name, boolean Symm,HashMap<Integer,VNFdict> VNFs,SFCdict SFC_dict_info,SFCCdict ClassifierDict){
-        SFC_Data sfc_data=new SFC_Data();
-        sfc_data.setRspID(rsp_id);
-        sfc_data.setSfccName(sfcc_name);
-        sfc_data.setSymm(Symm);
-        sfc_data.setChainSFs(VNFs);
-        sfc_data.setSFCdictInfo(SFC_dict_info);
-        sfc_data.setClassifierInfo(ClassifierDict);
-        SFC_MAP.put(nsr_id,sfc_data);
-
-
+    /**
+     *
+     * @param rsp The rsp-id
+     */
+    public void setRspID(String rsp) {
+      this.rsp_id = rsp;
     }
 
-    public void remove(String nsr){
-        SFC_MAP.remove(nsr);
+    public String getSfccName() {
+      return SFCC_name;
     }
 
-    public void update(String nsr_id,String new_rsp_id, String new_sfcc_name, boolean Symm,HashMap<Integer,VNFdict> VNFs,SFCdict SFC_dict_info,SFCCdict ClassifierDict){
-        SFC_MAP.remove(nsr_id);
-        SFC_Data sfc_data=new SFC_Data();
-        sfc_data.setRspID(new_rsp_id);
-        sfc_data.setSfccName(new_sfcc_name);
-        sfc_data.setSymm(Symm);
-        sfc_data.setChainSFs(VNFs);
-        sfc_data.setSFCdictInfo(SFC_dict_info);
-        sfc_data.setClassifierInfo(ClassifierDict);
-        SFC_MAP.put(nsr_id,sfc_data);
+    public void setSfccName(String name) {
+      this.SFCC_name = name;
     }
 
-    public HashMap<String,SFC_Data> getAllSFCs() {
-
-        return SFC_MAP;
+    public boolean isSymm() {
+      return Symm;
     }
 
-        public String getRspID(String nsr_id){
-        String chain_id=SFC_MAP.get(nsr_id).getRspID();
-        return chain_id;
-    }
-    public String getSfccName(String nsr_id){
-        String sfcc_name=SFC_MAP.get(nsr_id).getSfccName();
-        return sfcc_name;
+    public void setSymm(boolean Symmx) {
+      this.Symm = Symmx;
     }
 
-    public boolean isSymmSFC(String nsr_id){
-        boolean Symm=SFC_MAP.get(nsr_id).isSymm();
-        return Symm;
+    public void setChainSFs(HashMap<Integer, VNFdict> vnfs) {
+      this.VNFs = vnfs;
     }
-    public class SFC_Data{
-        String rsp_id;
-        String SFCC_name;
-        boolean Symm;
-        HashMap<Integer,VNFdict> VNFs;
-        SFCdict SFC_dict_info;
-        SFCCdict ClassifierDict;
 
-        public String getRspID() {
-            return rsp_id;
-        }
-
-        /**
-         *
-         * @param rsp
-         *     The rsp-id
-         */
-        public void setRspID(String rsp) {
-            this.rsp_id = rsp;
-        }
-
-        public String getSfccName() {
-            return SFCC_name;
-        }
-
-
-        public void setSfccName(String name) {
-            this.SFCC_name = name;
-        }
-
-
-        public boolean isSymm() {
-            return Symm;
-        }
-
-
-        public void setSymm(boolean Symmx) {
-            this.Symm = Symmx;
-        }
-
-        public void setChainSFs(HashMap<Integer,VNFdict> vnfs) {
-            this.VNFs = vnfs;
-        }
-
-        public HashMap<Integer,VNFdict> getChainSFs() {
-            return VNFs;
-        }
-
-        public void setSFCdictInfo(SFCdict sfc) {
-            this.SFC_dict_info = sfc;
-        }
-
-        public SFCdict getSFCdictInfo() {
-            return SFC_dict_info;
-        }
-
-        public void setClassifierInfo(SFCCdict classifier_dict) {
-            this.ClassifierDict = classifier_dict;
-        }
-
-        public SFCCdict getClassifierInfo() {
-            return ClassifierDict;
-        }
-
-
+    public HashMap<Integer, VNFdict> getChainSFs() {
+      return VNFs;
     }
+
+    public void setSFCdictInfo(SFCdict sfc) {
+      this.SFC_dict_info = sfc;
+    }
+
+    public SFCdict getSFCdictInfo() {
+      return SFC_dict_info;
+    }
+
+    public void setClassifierInfo(SFCCdict classifier_dict) {
+      this.ClassifierDict = classifier_dict;
+    }
+
+    public SFCCdict getClassifierInfo() {
+      return ClassifierDict;
+    }
+  }
 }

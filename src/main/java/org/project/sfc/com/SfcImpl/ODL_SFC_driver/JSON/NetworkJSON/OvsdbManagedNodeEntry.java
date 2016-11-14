@@ -9,26 +9,23 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class OvsdbManagedNodeEntry {
 
-    @SerializedName("bridge-ref")
-    @Expose
-    private String bridgeRef;
+  @SerializedName("bridge-ref")
+  @Expose
+  private String bridgeRef;
 
-    /**
-     * 
-     * @return
-     *     The bridgeRef
-     */
-    public String getBridgeRef() {
-        return bridgeRef;
-    }
+  /**
+   *
+   * @return The bridgeRef
+   */
+  public String getBridgeRef() {
+    return bridgeRef;
+  }
 
-    /**
-     * 
-     * @param bridgeRef
-     *     The bridge-ref
-     */
-    public void setBridgeRef(String bridgeRef) {
-        this.bridgeRef = bridgeRef;
-    }
-
+  /**
+   *
+   * @param bridgeRef The bridge-ref
+   */
+  public void setBridgeRef(String bridgeRef) {
+    this.bridgeRef = bridgeRef;
+  }
 }

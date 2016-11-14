@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NetvirtProvidersConfig_ {
 
-    @SerializedName("table-offset")
-    @Expose
-    private Integer tableOffset;
+  @SerializedName("table-offset")
+  @Expose
+  private Integer tableOffset;
 
-    /**
-     *
-     * @return
-     * The tableOffset
-     */
-    public Integer getTableOffset() {
-        return tableOffset;
-    }
+  /**
+   *
+   * @return The tableOffset
+   */
+  public Integer getTableOffset() {
+    return tableOffset;
+  }
 
-    /**
-     *
-     * @param tableOffset
-     * The table-offset
-     */
-    public void setTableOffset(Integer tableOffset) {
-        this.tableOffset = tableOffset;
-    }
-
+  /**
+   *
+   * @param tableOffset The table-offset
+   */
+  public void setTableOffset(Integer tableOffset) {
+    this.tableOffset = tableOffset;
+  }
 }

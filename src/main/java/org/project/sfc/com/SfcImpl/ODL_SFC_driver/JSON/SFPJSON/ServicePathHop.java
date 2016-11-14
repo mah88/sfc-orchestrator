@@ -8,91 +8,83 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ServicePathHop {
 
-    @SerializedName("service-function-name")
-    @Expose
-    private String serviceFunctionName;
-    @SerializedName("hop-number")
-    @Expose
-    private int hopNumber;
-    @SerializedName("service-index")
-    @Expose
-    private int serviceIndex;
-    @SerializedName("service-function-forwarder")
-    @Expose
-    private String serviceFunctionForwarder;
+  @SerializedName("service-function-name")
+  @Expose
+  private String serviceFunctionName;
 
-    /**
-     *
-     * @return
-     *     The SF name
-     */
-    public String getServiceFunctionName() {
-        return serviceFunctionName;
-    }
+  @SerializedName("hop-number")
+  @Expose
+  private int hopNumber;
 
-    /**
-     *
-     * @param SF name
-     *     The SF name
-     */
-    public void setServiceFunctionName(String name) {
-        this.serviceFunctionName = name;
-    }
+  @SerializedName("service-index")
+  @Expose
+  private int serviceIndex;
 
+  @SerializedName("service-function-forwarder")
+  @Expose
+  private String serviceFunctionForwarder;
 
+  /**
+   *
+   * @return The SF name
+   */
+  public String getServiceFunctionName() {
+    return serviceFunctionName;
+  }
 
-    /**
-     *
-     * @return
-     *     The hop-number
-     */
-    public int getHopNumber() {
-        return hopNumber;
-    }
+  /**
+   *
+   * @param SF name The SF name
+   */
+  public void setServiceFunctionName(String name) {
+    this.serviceFunctionName = name;
+  }
 
-    /**
-     *
-     * @param Hop
-     *     The Hop
-     */
-    public void setHopNumber(int HopNumber) {
-        this.hopNumber = HopNumber;
-    }
+  /**
+   *
+   * @return The hop-number
+   */
+  public int getHopNumber() {
+    return hopNumber;
+  }
 
+  /**
+   *
+   * @param Hop The Hop
+   */
+  public void setHopNumber(int HopNumber) {
+    this.hopNumber = HopNumber;
+  }
 
-    /**
-     *
-     * @return
-     *     The SFF
-     */
-    public String getServiceFunctionForwarder() {
-        return serviceFunctionForwarder;
-    }
+  /**
+   *
+   * @return The SFF
+   */
+  public String getServiceFunctionForwarder() {
+    return serviceFunctionForwarder;
+  }
 
-    /**
-     *
-     * @param SFF
-     *     The SFF
-     */
-    public void setServiceFunctionForwarder(String SFF) {
-        this.serviceFunctionForwarder = SFF;
-    }
+  /**
+   *
+   * @param SFF The SFF
+   */
+  public void setServiceFunctionForwarder(String SFF) {
+    this.serviceFunctionForwarder = SFF;
+  }
 
-    /**
-     *
-     * @return
-     *     The hop-number
-     */
-    public int getServiceIndex() {
-        return serviceIndex;
-    }
+  /**
+   *
+   * @return The hop-number
+   */
+  public int getServiceIndex() {
+    return serviceIndex;
+  }
 
-    /**
-     *
-     * @param ServiceIndex
-     *     The ServiceIndex
-     */
-    public void setServiceIndex(int ServiceIndex) {
-        this.serviceIndex = ServiceIndex;
-    }
+  /**
+   *
+   * @param ServiceIndex The ServiceIndex
+   */
+  public void setServiceIndex(int ServiceIndex) {
+    this.serviceIndex = ServiceIndex;
+  }
 }

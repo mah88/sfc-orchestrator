@@ -12,152 +12,144 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class RenderedServicePath {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("service-chain-name")
-    @Expose
-    private String serviceChainName;
-    @SerializedName("transport-type")
-    @Expose
-    private String transportType;
-    @SerializedName("rendered-service-path-hop")
-    @Expose
-    private List<RenderedServicePathHop> renderedServicePathHop = new ArrayList<RenderedServicePathHop>();
-    @SerializedName("parent-service-function-path")
-    @Expose
-    private String parentServiceFunctionPath;
-    @SerializedName("path-id")
-    @Expose
-    private Integer pathId;
-    @SerializedName("starting-index")
-    @Expose
-    private Integer startingIndex;
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     *
-     * @return
-     * The name
-     */
-    public String getName() {
-        return name;
-    }
+  @SerializedName("service-chain-name")
+  @Expose
+  private String serviceChainName;
 
-    /**
-     *
-     * @param name
-     * The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  @SerializedName("transport-type")
+  @Expose
+  private String transportType;
 
-    /**
-     *
-     * @return
-     * The serviceChainName
-     */
-    public String getServiceChainName() {
-        return serviceChainName;
-    }
+  @SerializedName("rendered-service-path-hop")
+  @Expose
+  private List<RenderedServicePathHop> renderedServicePathHop =
+      new ArrayList<RenderedServicePathHop>();
 
-    /**
-     *
-     * @param serviceChainName
-     * The service-chain-name
-     */
-    public void setServiceChainName(String serviceChainName) {
-        this.serviceChainName = serviceChainName;
-    }
+  @SerializedName("parent-service-function-path")
+  @Expose
+  private String parentServiceFunctionPath;
 
-    /**
-     *
-     * @return
-     * The transportType
-     */
-    public String getTransportType() {
-        return transportType;
-    }
+  @SerializedName("path-id")
+  @Expose
+  private Integer pathId;
 
-    /**
-     *
-     * @param transportType
-     * The transport-type
-     */
-    public void setTransportType(String transportType) {
-        this.transportType = transportType;
-    }
+  @SerializedName("starting-index")
+  @Expose
+  private Integer startingIndex;
 
-    /**
-     *
-     * @return
-     * The renderedServicePathHop
-     */
-    public List<RenderedServicePathHop> getRenderedServicePathHop() {
-        return renderedServicePathHop;
-    }
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     *
-     * @param renderedServicePathHop
-     * The rendered-service-path-hop
-     */
-    public void setRenderedServicePathHop(List<RenderedServicePathHop> renderedServicePathHop) {
-        this.renderedServicePathHop = renderedServicePathHop;
-    }
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    /**
-     *
-     * @return
-     * The parentServiceFunctionPath
-     */
-    public String getParentServiceFunctionPath() {
-        return parentServiceFunctionPath;
-    }
+  /**
+   *
+   * @return The serviceChainName
+   */
+  public String getServiceChainName() {
+    return serviceChainName;
+  }
 
-    /**
-     *
-     * @param parentServiceFunctionPath
-     * The parent-service-function-path
-     */
-    public void setParentServiceFunctionPath(String parentServiceFunctionPath) {
-        this.parentServiceFunctionPath = parentServiceFunctionPath;
-    }
+  /**
+   *
+   * @param serviceChainName The service-chain-name
+   */
+  public void setServiceChainName(String serviceChainName) {
+    this.serviceChainName = serviceChainName;
+  }
 
-    /**
-     *
-     * @return
-     * The pathId
-     */
-    public Integer getPathId() {
-        return pathId;
-    }
+  /**
+   *
+   * @return The transportType
+   */
+  public String getTransportType() {
+    return transportType;
+  }
 
-    /**
-     *
-     * @param pathId
-     * The path-id
-     */
-    public void setPathId(Integer pathId) {
-        this.pathId = pathId;
-    }
+  /**
+   *
+   * @param transportType The transport-type
+   */
+  public void setTransportType(String transportType) {
+    this.transportType = transportType;
+  }
 
-    /**
-     *
-     * @return
-     * The startingIndex
-     */
-    public Integer getStartingIndex() {
-        return startingIndex;
-    }
+  /**
+   *
+   * @return The renderedServicePathHop
+   */
+  public List<RenderedServicePathHop> getRenderedServicePathHop() {
+    return renderedServicePathHop;
+  }
 
-    /**
-     *
-     * @param startingIndex
-     * The starting-index
-     */
-    public void setStartingIndex(Integer startingIndex) {
-        this.startingIndex = startingIndex;
-    }
+  /**
+   *
+   * @param renderedServicePathHop The rendered-service-path-hop
+   */
+  public void setRenderedServicePathHop(List<RenderedServicePathHop> renderedServicePathHop) {
+    this.renderedServicePathHop = renderedServicePathHop;
+  }
 
+  /**
+   *
+   * @return The parentServiceFunctionPath
+   */
+  public String getParentServiceFunctionPath() {
+    return parentServiceFunctionPath;
+  }
+
+  /**
+   *
+   * @param parentServiceFunctionPath The parent-service-function-path
+   */
+  public void setParentServiceFunctionPath(String parentServiceFunctionPath) {
+    this.parentServiceFunctionPath = parentServiceFunctionPath;
+  }
+
+  /**
+   *
+   * @return The pathId
+   */
+  public Integer getPathId() {
+    return pathId;
+  }
+
+  /**
+   *
+   * @param pathId The path-id
+   */
+  public void setPathId(Integer pathId) {
+    this.pathId = pathId;
+  }
+
+  /**
+   *
+   * @return The startingIndex
+   */
+  public Integer getStartingIndex() {
+    return startingIndex;
+  }
+
+  /**
+   *
+   * @param startingIndex The starting-index
+   */
+  public void setStartingIndex(Integer startingIndex) {
+    this.startingIndex = startingIndex;
+  }
 }

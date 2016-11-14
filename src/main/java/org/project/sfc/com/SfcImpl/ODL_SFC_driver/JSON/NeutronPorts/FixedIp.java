@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class FixedIp {
 
-    @SerializedName("subnet_id")
-    @Expose
-    private String subnetId;
-    @SerializedName("ip_address")
-    @Expose
-    private String ipAddress;
+  @SerializedName("subnet_id")
+  @Expose
+  private String subnetId;
 
-    /**
-     * 
-     * @return
-     *     The subnetId
-     */
-    public String getSubnetId() {
-        return subnetId;
-    }
+  @SerializedName("ip_address")
+  @Expose
+  private String ipAddress;
 
-    /**
-     * 
-     * @param subnetId
-     *     The subnet_id
-     */
-    public void setSubnetId(String subnetId) {
-        this.subnetId = subnetId;
-    }
+  /**
+   *
+   * @return The subnetId
+   */
+  public String getSubnetId() {
+    return subnetId;
+  }
 
-    /**
-     * 
-     * @return
-     *     The ipAddress
-     */
-    public String getIpAddress() {
-        return ipAddress;
-    }
+  /**
+   *
+   * @param subnetId The subnet_id
+   */
+  public void setSubnetId(String subnetId) {
+    this.subnetId = subnetId;
+  }
 
-    /**
-     * 
-     * @param ipAddress
-     *     The ip_address
-     */
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
+  /**
+   *
+   * @return The ipAddress
+   */
+  public String getIpAddress() {
+    return ipAddress;
+  }
 
+  /**
+   *
+   * @param ipAddress The ip_address
+   */
+  public void setIpAddress(String ipAddress) {
+    this.ipAddress = ipAddress;
+  }
 }

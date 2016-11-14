@@ -7,69 +7,64 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class SffDataPlaneLocator {
-    @SerializedName("service-function-forwarder-ovs:ovs-options")
-    @Expose
-    private ServiceFunctionForwarderOvsOvsOptions serviceFunctionForwarderOvsOvsOptions;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("data-plane-locator")
-    @Expose
-    private DataPlaneLocator dataPlaneLocator;
+  @SerializedName("service-function-forwarder-ovs:ovs-options")
+  @Expose
+  private ServiceFunctionForwarderOvsOvsOptions serviceFunctionForwarderOvsOvsOptions;
 
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     * 
-     * @return
-     *     The name
-     */
-    public String getName() {
-        return name;
-    }
+  @SerializedName("data-plane-locator")
+  @Expose
+  private DataPlaneLocator dataPlaneLocator;
 
-    /**
-     * 
-     * @param name
-     *     The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * 
-     * @return
-     *     The dataPlaneLocator
-     */
-    public DataPlaneLocator getDataPlaneLocator() {
-        return dataPlaneLocator;
-    }
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    /**
-     * 
-     * @param dataPlaneLocator
-     *     The data-plane-locator
-     */
-    public void setDataPlaneLocator(DataPlaneLocator dataPlaneLocator) {
-        this.dataPlaneLocator = dataPlaneLocator;
-    }
+  /**
+   *
+   * @return The dataPlaneLocator
+   */
+  public DataPlaneLocator getDataPlaneLocator() {
+    return dataPlaneLocator;
+  }
 
-    /**
-     * 
-     * @return
-     *     The serviceFunctionForwarderOvsOvsOptions
-     */
-    public ServiceFunctionForwarderOvsOvsOptions getServiceFunctionForwarderOvsOvsOptions() {
-        return serviceFunctionForwarderOvsOvsOptions;
-    }
+  /**
+   *
+   * @param dataPlaneLocator The data-plane-locator
+   */
+  public void setDataPlaneLocator(DataPlaneLocator dataPlaneLocator) {
+    this.dataPlaneLocator = dataPlaneLocator;
+  }
 
-    /**
-     * 
-     * @param serviceFunctionForwarderOvsOvsOptions
-     *     The service-function-forwarder-ovs:ovs-options
-     */
-    public void setServiceFunctionForwarderOvsOvsOptions(ServiceFunctionForwarderOvsOvsOptions serviceFunctionForwarderOvsOvsOptions) {
-        this.serviceFunctionForwarderOvsOvsOptions = serviceFunctionForwarderOvsOvsOptions;
-    }
+  /**
+   *
+   * @return The serviceFunctionForwarderOvsOvsOptions
+   */
+  public ServiceFunctionForwarderOvsOvsOptions getServiceFunctionForwarderOvsOvsOptions() {
+    return serviceFunctionForwarderOvsOvsOptions;
+  }
 
+  /**
+   *
+   * @param serviceFunctionForwarderOvsOvsOptions The service-function-forwarder-ovs:ovs-options
+   */
+  public void setServiceFunctionForwarderOvsOvsOptions(
+      ServiceFunctionForwarderOvsOvsOptions serviceFunctionForwarderOvsOvsOptions) {
+    this.serviceFunctionForwarderOvsOvsOptions = serviceFunctionForwarderOvsOvsOptions;
+  }
 }

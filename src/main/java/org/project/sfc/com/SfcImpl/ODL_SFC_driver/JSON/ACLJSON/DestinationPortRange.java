@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class DestinationPortRange {
 
-    @SerializedName("lower-port")
-    @Expose
-    private Integer lowerPort;
-    @SerializedName("upper-port")
-    @Expose
-    private Integer upperPort;
+  @SerializedName("lower-port")
+  @Expose
+  private Integer lowerPort;
 
-    /**
-     * 
-     * @return
-     *     The lowerPort
-     */
-    public Integer getLowerPort() {
-        return lowerPort;
-    }
+  @SerializedName("upper-port")
+  @Expose
+  private Integer upperPort;
 
-    /**
-     * 
-     * @param lowerPort
-     *     The lower-port
-     */
-    public void setLowerPort(Integer lowerPort) {
-        this.lowerPort = lowerPort;
-    }
+  /**
+   *
+   * @return The lowerPort
+   */
+  public Integer getLowerPort() {
+    return lowerPort;
+  }
 
-    /**
-     * 
-     * @return
-     *     The upperPort
-     */
-    public Integer getUpperPort() {
-        return upperPort;
-    }
+  /**
+   *
+   * @param lowerPort The lower-port
+   */
+  public void setLowerPort(Integer lowerPort) {
+    this.lowerPort = lowerPort;
+  }
 
-    /**
-     * 
-     * @param upperPort
-     *     The upper-port
-     */
-    public void setUpperPort(Integer upperPort) {
-        this.upperPort = upperPort;
-    }
+  /**
+   *
+   * @return The upperPort
+   */
+  public Integer getUpperPort() {
+    return upperPort;
+  }
 
+  /**
+   *
+   * @param upperPort The upper-port
+   */
+  public void setUpperPort(Integer upperPort) {
+    this.upperPort = upperPort;
+  }
 }

@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class SFFJSON {
 
-    @SerializedName("service-function-forwarders")
-    @Expose
-    private ServiceFunctionForwarders serviceFunctionForwarders;
+  @SerializedName("service-function-forwarders")
+  @Expose
+  private ServiceFunctionForwarders serviceFunctionForwarders;
 
-    /**
-     * 
-     * @return
-     *     The serviceFunctionForwarders
-     */
-    public ServiceFunctionForwarders getServiceFunctionForwarders() {
-        return serviceFunctionForwarders;
-    }
+  /**
+   *
+   * @return The serviceFunctionForwarders
+   */
+  public ServiceFunctionForwarders getServiceFunctionForwarders() {
+    return serviceFunctionForwarders;
+  }
 
-    /**
-     * 
-     * @param serviceFunctionForwarders
-     *     The service-function-forwarders
-     */
-    public void setServiceFunctionForwarders(ServiceFunctionForwarders serviceFunctionForwarders) {
-        this.serviceFunctionForwarders = serviceFunctionForwarders;
-    }
-
+  /**
+   *
+   * @param serviceFunctionForwarders The service-function-forwarders
+   */
+  public void setServiceFunctionForwarders(ServiceFunctionForwarders serviceFunctionForwarders) {
+    this.serviceFunctionForwarders = serviceFunctionForwarders;
+  }
 }

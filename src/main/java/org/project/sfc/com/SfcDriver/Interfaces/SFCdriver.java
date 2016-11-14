@@ -14,34 +14,37 @@ import java.util.Properties;
  */
 public abstract class SFCdriver {
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+  private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    protected Properties properties;
+  protected Properties properties;
 
-    protected SFCdriver() {
-        loadProperties();
+  protected SFCdriver() {
+    loadProperties();
+  }
+
+  public void loadProperties() {
+    properties = new Properties();
+
+    log.debug("Loading properties");
+    try {
+      InputStream resourceAsStream =
+          this.getClass()
+              .getResourceAsStream(
+                  "/var/tmp/sfc-controller/src/main/resources/sfc_driver.properties");
+      if (resourceAsStream != null) {
+        properties.load(resourceAsStream);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    public void loadProperties() {
-        properties = new Properties();
+    log.debug("Loaded properties: " + properties);
+  }
 
-        log.debug("Loading properties");
-        try {
-            InputStream resourceAsStream = this.getClass().getResourceAsStream("/var/tmp/sfc-controller/src/main/resources/sfc_driver.properties");
-            if (resourceAsStream != null) {
-                properties.load(resourceAsStream);
+  public Properties getProperties() {
+    return properties;
+  }
 
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        log.debug("Loaded properties: " + properties);
-    }
-
-    public Properties getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
+  public void setProperties(Properties properties) {
+    this.properties = properties;
+  }
 }

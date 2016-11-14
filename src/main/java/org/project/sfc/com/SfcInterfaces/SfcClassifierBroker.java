@@ -5,9 +5,9 @@ package org.project.sfc.com.SfcInterfaces;
  */
 public interface SfcClassifierBroker {
 
-    void addSfcClassifierClient(SfcClassifierInter classifier, String type);
+  void addSfcClassifierClient(SfcClassifierInter classifier, String type);
 
-    SfcClassifierInter getSfcClassifierClient(String type);
+  SfcClassifierInter getSfcClassifierClient(String type);
 
-    SFCclassifier getSfcClassifier(String type);
+  SFCclassifier getSfcClassifier(String type);
 }

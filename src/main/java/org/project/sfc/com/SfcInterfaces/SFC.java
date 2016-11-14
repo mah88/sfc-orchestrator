@@ -11,25 +11,23 @@ import java.io.IOException;
  */
 @Service
 @Scope("prototype")
+public abstract class SFC implements SFCinterfaces {
 
-public abstract class SFC implements SFCinterfaces{
+  protected Logger log = LoggerFactory.getLogger(this.getClass());
+  protected SfcDriverCaller client;
 
+  public SFC() {}
 
-    protected Logger log = LoggerFactory.getLogger(this.getClass());
-    protected SfcDriverCaller client;
-    public SFC(){
+  public SFC(String type) throws IOException{
 
-    }
+    client = new SfcDriverCaller(type);
+  }
 
-    public SFC(String type) {
+  public SfcDriverCaller getClient() {
+    return client;
+  }
 
-            client = new SfcDriverCaller(type);
-    }
-    public SfcDriverCaller getClient() {
-        return client;
-    }
-
-    public void setClient(SfcDriverCaller client) {
-        this.client = client;
-    }
+  public void setClient(SfcDriverCaller client) {
+    this.client = client;
+  }
 }

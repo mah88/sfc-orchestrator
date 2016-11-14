@@ -10,109 +10,102 @@ import java.util.List;
 
 @Generated("org.jsonschema2pojo")
 public class ServiceFunctionPath {
-    @SerializedName("symmetric")
-    @Expose
-    private Boolean symmetric;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("service-chain-name")
-    @Expose
-    private String serviceChainName;
-    @SerializedName("starting-index")
-    @Expose
-    private Integer startingIndex;
-    @SerializedName("service-path-hop")
-    @Expose
-    private List<ServicePathHop> servicePathHop=new ArrayList<ServicePathHop>();
-    /**
-     * 
-     * @return
-     *     The name
-     */
-    public String getName() {
-        return name;
-    }
+  @SerializedName("symmetric")
+  @Expose
+  private Boolean symmetric;
 
-    /**
-     * 
-     * @param name
-     *     The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     * 
-     * @return
-     *     The serviceChainName
-     */
-    public String getServiceChainName() {
-        return serviceChainName;
-    }
+  @SerializedName("service-chain-name")
+  @Expose
+  private String serviceChainName;
 
-    /**
-     * 
-     * @param serviceChainName
-     *     The service-chain-name
-     */
-    public void setServiceChainName(String serviceChainName) {
-        this.serviceChainName = serviceChainName;
-    }
+  @SerializedName("starting-index")
+  @Expose
+  private Integer startingIndex;
 
-    /**
-     *
-     * @return
-     *     The startingIndex
-     */
-    public Integer getStartingIndex() {
-        return startingIndex;
-    }
+  @SerializedName("service-path-hop")
+  @Expose
+  private List<ServicePathHop> servicePathHop = new ArrayList<ServicePathHop>();
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     *
-     * @param startingIndex
-     *     The starting-index
-     */
-    public void setStartingIndex(Integer startingIndex) {
-        this.startingIndex = startingIndex;
-    }
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    /**
-     * 
-     * @return
-     *     The symmetric
-     */
-    public Boolean getSymmetric() {
-        return symmetric;
-    }
+  /**
+   *
+   * @return The serviceChainName
+   */
+  public String getServiceChainName() {
+    return serviceChainName;
+  }
 
-    /**
-     * 
-     * @param symmetric
-     *     The symmetric
-     */
-    public void setSymmetric(Boolean symmetric) {
-        this.symmetric = symmetric;
-    }
+  /**
+   *
+   * @param serviceChainName The service-chain-name
+   */
+  public void setServiceChainName(String serviceChainName) {
+    this.serviceChainName = serviceChainName;
+  }
 
-    /**
-     *
-     * @return
-     *     The symmetric
-     */
-    public List<ServicePathHop> getServicePathHop() {
-        return servicePathHop;
-    }
+  /**
+   *
+   * @return The startingIndex
+   */
+  public Integer getStartingIndex() {
+    return startingIndex;
+  }
 
-    /**
-     *
-     * @param symmetric
-     *     The symmetric
-     */
-    public void setServicePathHop(List<ServicePathHop>  servicepathhop) {
-        this.servicePathHop = servicepathhop;
-    }
+  /**
+   *
+   * @param startingIndex The starting-index
+   */
+  public void setStartingIndex(Integer startingIndex) {
+    this.startingIndex = startingIndex;
+  }
 
+  /**
+   *
+   * @return The symmetric
+   */
+  public Boolean getSymmetric() {
+    return symmetric;
+  }
+
+  /**
+   *
+   * @param symmetric The symmetric
+   */
+  public void setSymmetric(Boolean symmetric) {
+    this.symmetric = symmetric;
+  }
+
+  /**
+   *
+   * @return The symmetric
+   */
+  public List<ServicePathHop> getServicePathHop() {
+    return servicePathHop;
+  }
+
+  /**
+   *
+   * @param symmetric The symmetric
+   */
+  public void setServicePathHop(List<ServicePathHop> servicepathhop) {
+    this.servicePathHop = servicepathhop;
+  }
 }

@@ -9,69 +9,63 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class ServiceFunctionChain {
-    @SerializedName("symmetric")
-    @Expose
-    private Boolean symmetric;
-    @SerializedName("name")
-    @Expose
-    private String name;
+  @SerializedName("symmetric")
+  @Expose
+  private Boolean symmetric;
 
-    @SerializedName("sfc-service-function")
-    @Expose
-    private List<SfcServiceFunction> sfcServiceFunction = new ArrayList<SfcServiceFunction>();
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    /**
-     * 
-     * @return
-     *     The name
-     */
-    public String getName() {
-        return name;
-    }
+  @SerializedName("sfc-service-function")
+  @Expose
+  private List<SfcServiceFunction> sfcServiceFunction = new ArrayList<SfcServiceFunction>();
 
-    /**
-     * 
-     * @param name
-     *     The name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * 
-     * @return
-     *     The symmetric
-     */
-    public Boolean getSymmetric() {
-        return symmetric;
-    }
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    /**
-     * 
-     * @param symmetric
-     *     The symmetric
-     */
-    public void setSymmetric(Boolean symmetric) {
-        this.symmetric = symmetric;
-    }
+  /**
+   *
+   * @return The symmetric
+   */
+  public Boolean getSymmetric() {
+    return symmetric;
+  }
 
-    /**
-     * 
-     * @return
-     *     The sfcServiceFunction
-     */
-    public List<SfcServiceFunction> getSfcServiceFunction() {
-        return sfcServiceFunction;
-    }
+  /**
+   *
+   * @param symmetric The symmetric
+   */
+  public void setSymmetric(Boolean symmetric) {
+    this.symmetric = symmetric;
+  }
 
-    /**
-     * 
-     * @param sfcServiceFunction
-     *     The org-service-function
-     */
-    public void setSfcServiceFunction(List<SfcServiceFunction> sfcServiceFunction) {
-        this.sfcServiceFunction = sfcServiceFunction;
-    }
+  /**
+   *
+   * @return The sfcServiceFunction
+   */
+  public List<SfcServiceFunction> getSfcServiceFunction() {
+    return sfcServiceFunction;
+  }
 
+  /**
+   *
+   * @param sfcServiceFunction The org-service-function
+   */
+  public void setSfcServiceFunction(List<SfcServiceFunction> sfcServiceFunction) {
+    this.sfcServiceFunction = sfcServiceFunction;
+  }
 }

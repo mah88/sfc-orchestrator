@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class SffSfDataPlaneLocator {
 
-    @SerializedName("sff-dpl-name")
-    @Expose
-    private String sffDplName;
-    @SerializedName("sf-dpl-name")
-    @Expose
-    private String sfDplName;
+  @SerializedName("sff-dpl-name")
+  @Expose
+  private String sffDplName;
 
-    /**
-     * 
-     * @return
-     *     The sffDplName
-     */
-    public String getSffDplName() {
-        return sffDplName;
-    }
+  @SerializedName("sf-dpl-name")
+  @Expose
+  private String sfDplName;
 
-    /**
-     * 
-     * @param sffDplName
-     *     The sff-dpl-name
-     */
-    public void setSffDplName(String sffDplName) {
-        this.sffDplName = sffDplName;
-    }
+  /**
+   *
+   * @return The sffDplName
+   */
+  public String getSffDplName() {
+    return sffDplName;
+  }
 
-    /**
-     * 
-     * @return
-     *     The sfDplName
-     */
-    public String getSfDplName() {
-        return sfDplName;
-    }
+  /**
+   *
+   * @param sffDplName The sff-dpl-name
+   */
+  public void setSffDplName(String sffDplName) {
+    this.sffDplName = sffDplName;
+  }
 
-    /**
-     * 
-     * @param sfDplName
-     *     The sf-dpl-name
-     */
-    public void setSfDplName(String sfDplName) {
-        this.sfDplName = sfDplName;
-    }
+  /**
+   *
+   * @return The sfDplName
+   */
+  public String getSfDplName() {
+    return sfDplName;
+  }
 
+  /**
+   *
+   * @param sfDplName The sf-dpl-name
+   */
+  public void setSfDplName(String sfDplName) {
+    this.sfDplName = sfDplName;
+  }
 }

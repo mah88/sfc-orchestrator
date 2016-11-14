@@ -11,26 +11,23 @@ import java.util.List;
 @Generated("org.jsonschema2pojo")
 public class NetworkTopology {
 
-    @SerializedName("topology")
-    @Expose
-    private List<Topology> topology = new ArrayList<Topology>();
+  @SerializedName("topology")
+  @Expose
+  private List<Topology> topology = new ArrayList<Topology>();
 
-    /**
-     * 
-     * @return
-     *     The topology
-     */
-    public List<Topology> getTopology() {
-        return topology;
-    }
+  /**
+   *
+   * @return The topology
+   */
+  public List<Topology> getTopology() {
+    return topology;
+  }
 
-    /**
-     * 
-     * @param topology
-     *     The topology
-     */
-    public void setTopology(List<Topology> topology) {
-        this.topology = topology;
-    }
-
+  /**
+   *
+   * @param topology The topology
+   */
+  public void setTopology(List<Topology> topology) {
+    this.topology = topology;
+  }
 }

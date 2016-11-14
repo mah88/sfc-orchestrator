@@ -9,26 +9,23 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class RSPJSON {
 
-    @SerializedName("input")
-    @Expose
-    private Input input;
+  @SerializedName("input")
+  @Expose
+  private Input input;
 
-    /**
-     * 
-     * @return
-     *     The input
-     */
-    public Input getInput() {
-        return input;
-    }
+  /**
+   *
+   * @return The input
+   */
+  public Input getInput() {
+    return input;
+  }
 
-    /**
-     * 
-     * @param input
-     *     The input
-     */
-    public void setInput(Input input) {
-        this.input = input;
-    }
-
+  /**
+   *
+   * @param input The input
+   */
+  public void setInput(Input input) {
+    this.input = input;
+  }
 }

@@ -8,68 +8,62 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Ace {
 
+  @SerializedName("matches")
+  @Expose
+  private Matches matches;
 
-    @SerializedName("matches")
-    @Expose
-    private Matches matches;
-    @SerializedName("actions")
-    @Expose
-    private Actions actions;
-    @SerializedName("rule-name")
-    @Expose
-    private String ruleName;
-    /**
-     * 
-     * @return
-     *     The ruleName
-     */
-    public String getRuleName() {
-        return ruleName;
-    }
+  @SerializedName("actions")
+  @Expose
+  private Actions actions;
 
-    /**
-     * 
-     * @param ruleName
-     *     The rule-name
-     */
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
-    }
+  @SerializedName("rule-name")
+  @Expose
+  private String ruleName;
+  /**
+   *
+   * @return The ruleName
+   */
+  public String getRuleName() {
+    return ruleName;
+  }
 
-    /**
-     * 
-     * @return
-     *     The matches
-     */
-    public Matches getMatches() {
-        return matches;
-    }
+  /**
+   *
+   * @param ruleName The rule-name
+   */
+  public void setRuleName(String ruleName) {
+    this.ruleName = ruleName;
+  }
 
-    /**
-     * 
-     * @param matches
-     *     The matches
-     */
-    public void setMatches(Matches matches) {
-        this.matches = matches;
-    }
+  /**
+   *
+   * @return The matches
+   */
+  public Matches getMatches() {
+    return matches;
+  }
 
-    /**
-     * 
-     * @return
-     *     The actions
-     */
-    public Actions getActions() {
-        return actions;
-    }
+  /**
+   *
+   * @param matches The matches
+   */
+  public void setMatches(Matches matches) {
+    this.matches = matches;
+  }
 
-    /**
-     * 
-     * @param actions
-     *     The actions
-     */
-    public void setActions(Actions actions) {
-        this.actions = actions;
-    }
+  /**
+   *
+   * @return The actions
+   */
+  public Actions getActions() {
+    return actions;
+  }
 
+  /**
+   *
+   * @param actions The actions
+   */
+  public void setActions(Actions actions) {
+    this.actions = actions;
+  }
 }

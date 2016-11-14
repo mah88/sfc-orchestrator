@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class ServiceFunctionForwarderOvsOvsBridge {
 
-    @SerializedName("bridge-name")
-    @Expose
-    private String bridgeName;
+  @SerializedName("bridge-name")
+  @Expose
+  private String bridgeName;
 
-    /**
-     * 
-     * @return
-     *     The bridgeName
-     */
-    public String getBridgeName() {
-        return bridgeName;
-    }
+  /**
+   *
+   * @return The bridgeName
+   */
+  public String getBridgeName() {
+    return bridgeName;
+  }
 
-    /**
-     * 
-     * @param bridgeName
-     *     The bridge-name
-     */
-    public void setBridgeName(String bridgeName) {
-        this.bridgeName = bridgeName;
-    }
-
+  /**
+   *
+   * @param bridgeName The bridge-name
+   */
+  public void setBridgeName(String bridgeName) {
+    this.bridgeName = bridgeName;
+  }
 }
