@@ -5,47 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b782f797-36e3-4e0b-a889-24fe87d5c329" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/gov_nist_math_jama_gov_nist_math_jama_1_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/ServiceLoadCalculation.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Action.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/ApplyActions.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Dst.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Dst_.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Duration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/EthernetMatch.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/EthernetType.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Extension.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/ExtensionList.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Flow.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/FlowHashIdMap.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/FlowStatistics.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/FlowTableStatistics.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/GoToTable.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Instruction.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Instructions.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/IpMatch.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Match.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/NxRegLoad.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/NxRegMove.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/NxResubmit.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/NxSetNsi.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/NxSetNsp.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/NxmNxNsi.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/NxmNxNsp.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/NxmNxReg.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Src.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Table.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/OpenFlowPluginTable/Table_.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_fasterxml_jackson_core_jackson_annotations_2_5_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_gson_gson_2_5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_mashape_unirest_unirest_java_1_4_5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rabbitmq_amqp_client_3_5_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_codec_commons_codec_1_9.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_json_json_20140107.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_ow2_asm_asm_5_0_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_spring_beans_4_1_7_RELEASE.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_spring_core_4_1_7_RELEASE.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/resources/SFC.properties" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/DynamicPathCreation/RandomPathSelection.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/DynamicPathCreation/RandomPathSelection.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/Main.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcDriver/Interfaces/SFCdriver.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcDriver/Interfaces/SFCdriver.class" />
@@ -172,19 +131,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/utils/ConfigReader.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/utils/ConfigReader.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/utils/ConfigurationBeans.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/utils/ConfigurationBeans.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/testing/Test.class" afterPath="$PROJECT_DIR$/build/classes/main/testing/Test.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/org-controller.iml" afterPath="$PROJECT_DIR$/org-controller.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/DynamicPathCreation/LoadBalancedPathSelection.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/DynamicPathCreation/LoadBalancedPathSelection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringEngine.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringEngine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringManager.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringTask.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/ScaleSFPExecutor.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/ScaleSFPExecutor.java" />
     </list>
     <ignored path="org-controller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -315,7 +262,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringTask.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-0.103286386">
-              <caret line="126" column="4" selection-start-line="126" selection-start-column="4" selection-end-line="126" selection-end-column="4" />
+              <caret line="126" column="0" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1910,7 +1857,13 @@
       <option name="project" value="LOCAL" />
       <updated>1479119694315</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Auto-Scaling Feature is adjusted">
+      <created>1480929949704</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1480929949704</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1980,7 +1933,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Auto-Scaling Feature is Added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Auto-Scaling Feature is Added" />
+    <MESSAGE value="Auto-Scaling Feature is adjusted" />
+    <option name="LAST_COMMIT_MESSAGE" value="Auto-Scaling Feature is adjusted" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2431,7 +2385,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringTask.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.103286386">
-          <caret line="126" column="4" selection-start-line="126" selection-start-column="4" selection-end-line="126" selection-end-column="4" />
+          <caret line="126" column="0" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
           <folding />
         </state>
       </provider>
