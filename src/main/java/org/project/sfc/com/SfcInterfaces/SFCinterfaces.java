@@ -2,6 +2,7 @@ package org.project.sfc.com.SfcInterfaces;
 
 import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
+import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.springframework.http.ResponseEntity;
@@ -24,4 +25,7 @@ public interface SFCinterfaces {
   ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric);
 
   ResponseEntity<String> DeleteSFP(String instance_id, boolean isSymmetric);
-}
+
+  String GetBytesCount(SFCCdict SFCC_dict);
+
+  }

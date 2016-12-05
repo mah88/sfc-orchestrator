@@ -11,6 +11,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -56,8 +57,8 @@ public class MonitoringManager {
     this.taskScheduler.initialize();
   }
 
-  public void start(VirtualNetworkFunctionRecord vnfr, String Metric, int Period)
-      throws NotFoundException {
+  public void start(VirtualNetworkFunctionRecord vnfr, String Metric, int Period, boolean LastVNFR) throws NotFoundException,
+                                                                                         IOException {
 
       System.out.println(
           "Creating new MonitoringTask "
@@ -85,7 +86,7 @@ public class MonitoringManager {
       MonitoringTask monitoringTask =
           new MonitoringTask(
               vnfr,Metric,Period,
-              monitoringEngine
+              monitoringEngine,LastVNFR
              );
 
       ScheduledFuture scheduledFuture =

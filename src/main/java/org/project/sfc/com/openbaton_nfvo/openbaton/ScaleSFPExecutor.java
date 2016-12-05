@@ -49,7 +49,11 @@ public class ScaleSFPExecutor implements Runnable {
             + vnfr
             + " at time "
             + new Date().getTime());
-    sfcCaller.UpdateScaledPaths(vnfr);
+    try {
+      sfcCaller.UpdateScaledPaths(vnfr);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     logger.info(
         "[Scale-SFP-Executor] ended SFC allocation for "
             + vnfr.getParent_ns_id()

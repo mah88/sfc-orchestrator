@@ -3,6 +3,7 @@ package org.project.sfc.com.SfcModel.SFCdict;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,12 +20,16 @@ public class SFPdict {
 
   @SerializedName("paths")
   @Expose
-  private List<VNFdict> path_sfs;
+  private HashMap<Integer, VNFdict> path_sfs;
 
 
   @SerializedName("path traffic Load")
   @Expose
   private double PathtrafficLoad;
+
+  @SerializedName("old-traffic-load")
+  @Expose
+  private double oldTrafficLoad=0;
 
   @SerializedName("QoS")
   @Expose
@@ -65,7 +70,7 @@ public class SFPdict {
    *
    * @return The path
    */
-  public List<VNFdict> getPath_SFs() {
+  public  HashMap<Integer, VNFdict> getPath_SFs() {
     return path_sfs;
   }
 
@@ -73,7 +78,7 @@ public class SFPdict {
    *
    * @param path_sfs The path
    */
-  public void setPath_SFs(List<VNFdict> path_sfs) {
+  public void setPath_SFs(HashMap<Integer, VNFdict> path_sfs) {
     this.path_sfs = path_sfs;
   }
 
@@ -82,6 +87,15 @@ public class SFPdict {
 
   public double getPathTrafficLoad() {
     return PathtrafficLoad;
+  }
+
+
+  public void setOldTrafficLoad(double load) {
+    this.oldTrafficLoad = load;
+  }
+
+  public double getOldTrafficLoad() {
+    return oldTrafficLoad;
   }
 
 

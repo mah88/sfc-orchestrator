@@ -152,15 +152,20 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
       } else {
 
         creator.addSFtoChain(nsr.getVnfr(), nsr);
-
+        boolean lastvnfr=false;
+        int VNFR_counter=0;
         for(VirtualNetworkFunctionRecord vnfr:nsr.getVnfr()){
           try{
-            monitoringManager.start(vnfr,"average.traffic.in[eth0]",30);
+            if(VNFR_counter==nsr.getVnfr().size()-1){
+              lastvnfr=true;
+            }
+            monitoringManager.start(vnfr,"smallaverage.traffic.in[eth0]",10,lastvnfr);
           }
           catch(NotFoundException e){
             logger.error(e.getMessage(), e);
 
           }
+          VNFR_counter++;
         }
 
         Prev_NSR = nsr.getId();
@@ -197,8 +202,9 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
         }
         creator.ChangeChainPath(vnfr);
       }
+      boolean lastvnfr=true;
       monitoringManager.stop(vnfr);
-      monitoringManager.start(vnfr,"average.traffic.in[eth0]",30);
+      monitoringManager.start(vnfr,"smallaverage.traffic.in[eth0]",10,lastvnfr);
 
 
     } catch (Exception e) {
@@ -247,8 +253,9 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
           logger.info("::: It is an Auto-Scaling Event :::");
 
           creator.ScalePaths(vnfr);
+          boolean lastvnfr=true;
           monitoringManager.stop(vnfr);
-          monitoringManager.start(vnfr,"average.traffic.in[eth0]",30);
+          monitoringManager.start(vnfr,"smallaverage.traffic.in[eth0]",10,lastvnfr);
         } else {
           logger.info("::: It is a Fault Management Event :::");
         }

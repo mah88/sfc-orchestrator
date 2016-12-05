@@ -1,15 +1,20 @@
 package org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.*;
 
 import org.apache.commons.codec.binary.Base64;
+import org.openbaton.catalogue.mano.descriptor.ACL_Matching_Criteria;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetvirtProvidersConfigJSON.NetvirtProvidersConfig;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetvirtProvidersConfigJSON.NetvirtProvidersConfig_;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetworkJSON.NetworkJSON;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetworkJSON.NetworkTopology;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.OpenFlowPluginTable.Match;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.OpenFlowPluginTable.Table;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.OpenFlowPluginTable.Table_;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.RSPJSON.Input;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.RSPs.RenderedServicePaths;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFCJSON.SFCJSON;
@@ -21,7 +26,10 @@ import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFJSON.*;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFPJSON.SFPJSON;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFPJSON.ServiceFunctionPath;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFPJSON.ServiceFunctionPaths;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
 import org.project.sfc.com.SfcInterfaces.SFC;
+import org.project.sfc.com.SfcModel.SFCCdict.AclMatchCriteria;
+import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFPJSON.ServicePathHop;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SfcOfRendererConfigJSON.SfcOfRendererConfig;
@@ -40,6 +48,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +78,7 @@ public class Opendaylight extends SFC {
   public String Config_sfc_of_render_URL = "restconf/config/sfc-of-renderer:sfc-of-renderer-config";
   public String Config_netvirt_URL =
       "restconf/config/netvirt-providers-config:netvirt-providers-config";
+
 
   private static Logger logger = LoggerFactory.getLogger(Opendaylight.class);
 
@@ -736,12 +746,52 @@ public Opendaylight() throws IOException{
 
     return request;
   }
+  /// Send request for getting the Network TOPOLOGY
+  public ResponseEntity<String> sendRest_OpenFlowPlugin(
+      Table data, String rest_type, String url) {
 
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCreds.getBytes(Charset.forName("US-ASCII")));
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Accept", "application/json");
+    headers.add("Authorization", "Basic " + base64Creds);
+    Gson mapper = new Gson();
+    Table result = new Table();
+    ResponseEntity<String> request = null;
+    if (rest_type == "GET") {
+      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result =  mapper.fromJson(request.getBody(), Table.class);
+        logger.debug(
+            "Setting of SFC has produced http status:"
+            + request.getStatusCode()
+            + " with body: "
+            + request.getBody());
+      }
+    }
+
+    return request;
+  }
   /// Get Network Topology
   public ResponseEntity<String> getNetworkTopologyList() {
     String url = "restconf/operational/network-topology:network-topology/";
     ResponseEntity<String> network = this.sendRest_NetworkTopology(null, "GET", url);
     return network;
+  }
+
+
+  /// Get Network Topology
+  public ResponseEntity<String> getSfcClassifierTable(String openflow_id) {
+    logger.info(" GET SFC CLASSIFIER TABLE 11: for Openflow ID= "+openflow_id);
+    String url = "restconf/operational/opendaylight-inventory:nodes/node/"+openflow_id+"/table/11/";
+    ResponseEntity<String> table = this.sendRest_OpenFlowPlugin(null, "GET", url);
+    return table;
   }
   //ODL SFF Stuff (Get, Create, Update, Delete)
   public ResponseEntity<String> getODLsff() {
@@ -1785,7 +1835,151 @@ public Opendaylight() throws IOException{
       this.tap_port = name;
     }
   }
+  @Override
+  public String GetBytesCount(SFCCdict SFCC_dict){
+    ResponseEntity<String> response = getNetworkTopologyList();
 
+    if (!response.getStatusCode().is2xxSuccessful()) {
+      logger.error("Unable to get network topology");
+    }
+    String network_s = response.getBody();
+    if (network_s == null) {
+      return null;
+    }
+    Gson mapper = new Gson();
+    NetworkJSON network = new NetworkJSON();
+    logger.debug("Network is " + network_s);
+    network = mapper.fromJson(response.getBody(), NetworkJSON.class);
+    String BytesCount=null;
+
+    NetworkTopology networkmap;
+    networkmap = network.getNetworkTopology();
+    for (int net = 0; net < networkmap.getTopology().size(); net++) {
+      if (networkmap.getTopology().get(net).getNode() != null){
+        logger.info("Counter: " +
+                    net +
+                    " -->  [OpenFlow Node ID]: " +
+                    networkmap.getTopology().get(net).getTopologyId());
+
+      for(int i=0;i<networkmap.getTopology().get(net).getNode().size();i++) {
+
+        if (networkmap.getTopology().get(net).getNode().get(i).getNodeId().contains("openflow")) {
+          logger.info(" OpenFlow NODE is Found");
+
+          ResponseEntity<String> response2 = getSfcClassifierTable(networkmap.getTopology().get(net).getNode().get(i).getNodeId());
+
+          if (!response2.getStatusCode().is2xxSuccessful()) {
+            logger.error("Unable to get OpenFlowPluginTable");
+          }
+
+          String table_s = response2.getBody();
+          logger.debug(" OF plugin Table 11 is  " + table_s);
+
+          Gson mapper2 = new Gson();
+          Table tableJSON = new Table();
+          tableJSON = mapper.fromJson(response2.getBody(), Table.class);
+          Table_ table = tableJSON.getTable().get(0);
+          if (table.getFlow() != null) {
+            for (int x = 0; x < table.getFlow().size(); x++) {
+              if (table.getFlow().get(x).getMatch() != null) {
+
+                Match matching_rules = table.getFlow().get(x).getMatch();
+                if (Check_matching(matching_rules, SFCC_dict.getAclMatchCriteria().get(0))) {
+                  if (table.getFlow().get(x).getFlowStatistics().getByteCount() != null) {
+                    BytesCount= table.getFlow().get(x).getFlowStatistics().getByteCount();
+                    logger.info(" Bytes Count is found ="+ BytesCount);
+                  }
+                }
+              }
+            }
+          }
+        }else {
+          logger.error(" NO Openflow Node EXIST");
+        }
+      }
+
+      }
+    }
+return BytesCount;
+    }
+public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
+  boolean matched=false;
+  String aclProtocol= null;
+  if(acl.getProtocol()!=null){
+
+    aclProtocol=  acl.getProtocol().toString();
+  }
+
+  String Match_protocol=null;
+  if(matching_rules.getIpMatch()!=null){
+    if(matching_rules.getIpMatch().getIpProtocol()!=null){
+      Match_protocol=matching_rules.getIpMatch().getIpProtocol();
+    }
+  }
+
+  String aclDstPort=null;
+  if(acl.getDestPort()!=null){
+    if(acl.getDestPort()!=0){
+      aclDstPort=acl.getDestPort().toString();
+    }
+  }
+  String aclSrcPort=null;
+  if(acl.getSrcPort()!=null){
+    if(acl.getSrcPort()!=0){
+      aclSrcPort=acl.getSrcPort().toString();
+    }
+  }
+
+    if(CheckEquality(acl.getDestIpv4(),matching_rules.getIpv4Destination())==true){
+      if(CheckEquality(acl.getSourceIpv4(),matching_rules.getIpv4Source())==true){
+        if(CheckEquality(aclProtocol,Match_protocol)==true){
+          if(acl.getProtocol()==6){
+            if(CheckEquality(aclDstPort,matching_rules.getTcpDestinationPort())==true){
+              if(CheckEquality(aclSrcPort,matching_rules.getTcpSourcePort())==true){
+                logger.info("[ Matched ]");
+                matched=true;
+
+              }
+            }
+          }else if(acl.getProtocol()==17){
+            if(CheckEquality(aclDstPort,matching_rules.getUdpDestinationPort())==true){
+              if(CheckEquality(aclSrcPort,matching_rules.getUdpSourcePort())==true){
+                logger.info("[ Matched ]");
+
+                matched=true;
+
+              }
+            }
+          }
+        }
+      }
+    }
+
+  return matched;
+}
+  public boolean CheckEquality(String A, String B){
+
+    logger.debug("Compare these two values: Value from ACL of opendaylight: ["+ A + "] , Value from Matching Criteria of SFC Classifier Descriptor: ["+B+"]");
+
+
+    if(A==null && B ==null){
+      return true;
+    }else if (A==null && B !=null){
+
+      return false;
+    }else if (A!=null && B ==null){
+
+      return false;
+    }else {
+      if (A.equals(B)){
+
+        return true;
+      }else {
+
+        return false;
+      }
+    }
+  }
   @Override
   public ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric) {
 

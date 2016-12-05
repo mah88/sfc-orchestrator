@@ -8,6 +8,7 @@ import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.openbaton.exceptions.NotFoundException;
+import org.project.sfc.com.DynamicPathCreation.LoadBalancedPathSelection;
 import org.project.sfc.com.DynamicPathCreation.RandomPathSelection;
 import org.project.sfc.com.MonitoringAgent.MonitoringManager;
 import org.project.sfc.com.SfcHandler.SFC;
@@ -18,6 +19,7 @@ import org.project.sfc.com.SfcInterfaces.SfcClassifierBroker;
 import org.project.sfc.com.SfcModel.SFCCdict.AclMatchCriteria;
 import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
+import org.project.sfc.com.SfcModel.SFCdict.SFPdict;
 import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.slf4j.Logger;
@@ -43,11 +45,13 @@ public class SfcDriverCaller {
   SfcBroker broker = new SfcBroker();
   org.project.sfc.com.SfcInterfaces.SFC SFC_driver;
   org.project.sfc.com.SfcInterfaces.SFCclassifier SFC_Classifier_driver;
+  LoadBalancedPathSelection LBPath;
 
   public SfcDriverCaller(String type) throws IOException{
     SFC_driver = broker.getSFC(type);
     SFC_Classifier_driver = broker.getSfcClassifier(type);
     NC = new NeutronClient();
+    LBPath=new LoadBalancedPathSelection(type);
   }
 
   public void UpdateFailedPaths(VirtualNetworkFunctionRecord vnfr) {
@@ -133,6 +137,19 @@ public class SfcDriverCaller {
           "[Create new Path ] for Chain  "
               + All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().getName());
       System.out.println("[VNF dicts list ]  " + list_vnf_dicts.get(counter));
+      List<SFPdict> newPaths=new ArrayList<>();
+      double PathTrafficLoad=All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
+
+      SFPdict newPath= All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0);
+      newPath.setPath_SFs(list_vnf_dicts.get(counter));
+      newPath.setQoS(All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS());
+      newPaths.add(0,newPath);
+      System.out.println("[OLD Traffic load ]  " + PathTrafficLoad);
+
+      newPath.setOldTrafficLoad(PathTrafficLoad);
+      All_SFCs.get(SFCdata_counter_.getKey()).setChainSFs(list_vnf_dicts.get(counter));
+
+      All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().setPaths(newPaths);
 
       String new_instance_id =
           SFC_driver.CreateSFP(
@@ -236,7 +253,7 @@ public class SfcDriverCaller {
     }
   }
 
-  public void UpdateScaledPaths(VirtualNetworkFunctionRecord vnfr) {
+  public void UpdateScaledPaths(VirtualNetworkFunctionRecord vnfr) throws IOException {
 
     System.out.println("[SFC-Path-Scaling] (1) at time " + new Date().getTime());
 
@@ -311,6 +328,7 @@ public class SfcDriverCaller {
       list_vnf_dicts.add(VNFs);
       scale_counter++;
     }
+    /*
     Iterator it_ = All_SFCs.entrySet().iterator();
     int counter = 0;
     if (All_SFCs != null) {
@@ -324,7 +342,16 @@ public class SfcDriverCaller {
           "[SCALING new Path ] for Chain  "
               + All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().getName());
       System.out.println("[VNF dicts list ]  " + list_vnf_dicts.get(counter));
+      List<SFPdict> newPaths=new ArrayList<>();
+      double PathTrafficLoad=All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
+      SFPdict newPath= All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0);
+      newPath.setPath_SFs(list_vnf_dicts.get(counter));
+      newPath.setOldTrafficLoad(PathTrafficLoad);
+      newPath.setQoS(All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS());
 
+      newPaths.add(0,newPath);
+      All_SFCs.get(SFCdata_counter_.getKey()).setChainSFs(list_vnf_dicts.get(counter));
+      All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo().getSfcDict().setPaths(newPaths);
       String new_instance_id =
           SFC_driver.CreateSFP(
               All_SFCs.get(SFCdata_counter_.getKey()).getSFCdictInfo(),
@@ -351,6 +378,9 @@ public class SfcDriverCaller {
 
       counter++;
     }
+*/
+    LBPath.ReadjustVNFsAllocation(vnfr);
+
   }
 
   public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr) throws IOException {
@@ -458,6 +488,22 @@ public class SfcDriverCaller {
 
     sfc_dict_test.setStatus("Active");
     sfc_dict_test.setTenantId(NC.getTenantID());
+    List<SFPdict> Paths=new ArrayList<SFPdict>();
+    SFPdict Path=new SFPdict();
+
+    Path.setPath_SFs(vnfdicts);
+    Path.setId("Path-"+nsr.getName()+"-"+vnffgr.getId());
+    Path.setParentChainId(vnffgr.getId());
+    if(vnffgr.getVendor().equals("gold")){
+    Path.setQoS(3);
+    } else if(vnffgr.getVendor().equals("silver")){
+      Path.setQoS(2);
+    }else {
+      Path.setQoS(1);
+    }
+
+    Paths.add(0, Path);
+    sfc_dict_test.setPaths(Paths);
     sfc_test.setSfcDict(sfc_dict_test);
 
     SFC_driver.CreateSFC(sfc_test, vnfdicts);

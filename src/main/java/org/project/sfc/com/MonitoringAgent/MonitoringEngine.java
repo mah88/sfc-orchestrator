@@ -201,13 +201,13 @@ public class MonitoringEngine {
       List<Server> VNF_instances=Vim.listServer(Vim_instance);
       for (Server VNF_instance:VNF_instances){
         if(VNF_instance.getName().equals(vnf_instance_name)) {
-          Location=VNF_instance.getHypervisorHostName();
+          if(VNF_instance.getHypervisorHostName()!=null){
+            Location=VNF_instance.getHypervisorHostName();
+          }
         }
       }
     }
-    if(Location==null){
-      Location="noWhere";
-    }
+
     log.info(
         "Got Location for VNF instance "
         + vnf_instance_name
