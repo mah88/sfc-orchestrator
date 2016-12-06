@@ -43,7 +43,8 @@ public class LoadBalancedPathSelection {
   public void ReadjustVNFsAllocation(VirtualNetworkFunctionRecord vnfr)  {
     System.out.println("----------------------------[Readjust VNFs Allocation] Start ----------------------------------");
 
-
+        List<SFC.SFC_Data> Chains_data=new ArrayList<>();
+    List<VNFdict> VNF_instance_dicts=new ArrayList<>();
     HashMap<String,Double> PrevVNFTrafficLoad=new HashMap<String, Double>();
 
     HashMap<String, SFC.SFC_Data> All_SFCs = sfcc_db.getAllSFCs();
@@ -233,9 +234,15 @@ for(int counter1=0;counter1<=Math.floor(total_size_SFCs/total_size_VNF_instances
     }
     System.out.println("[ CreatChain ]  chain RSPID  " +selectedChain.getRspID() + " VSelected VNF instance= "+SelectedVNFdict.getName());
 
-    CreateChain(selectedChain, SelectedVNFdict);
+    Chains_data.add(selectedChain);
+    VNF_instance_dicts.add(SelectedVNFdict);
   }
 }
+
+    for(int x=0;x<Chains_data.size();x++){
+      CreateChain(Chains_data.get(x), VNF_instance_dicts.get(x));
+
+    }
     System.out.println("----------------------------[Readjust VNFs Allocation] END ----------------------------------");
 
   }
