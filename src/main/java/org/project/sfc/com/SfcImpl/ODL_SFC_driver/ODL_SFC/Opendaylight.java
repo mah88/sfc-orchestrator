@@ -2271,4 +2271,46 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     }
     //-------------------------------
   }
+  @Override
+  public String GetConnectedSFF(String SF_name) {
+    //--------------- delete SFs and Update SFF
+
+    // Need to check if the SFs involved in other RSPs !!!
+    String ConnectedSFF=null;
+    Gson mapper_sff = new Gson();
+    ResponseEntity<String> sff_response = getODLsff();
+    SFFJSON sffs = mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
+
+    for (int x = 0; x < sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size(); x++) {
+      System.out.println("SFF SIZE " + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size());
+
+      for (int z = 0;
+           z < sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getServiceFunctionDictionary
+               ().size();
+           z++) {
+        System.out.println("SF Dictionary SIZE " +
+                           sffs.getServiceFunctionForwarders()
+                               .getServiceFunctionForwarder()
+                               .get(x)
+                               .getServiceFunctionDictionary()
+                               .size());
+
+        if (sffs.getServiceFunctionForwarders()
+                .getServiceFunctionForwarder()
+                .get(x)
+                .getServiceFunctionDictionary()
+                .get(z)
+                .getName()
+                .equals(SF_name)) {
+          System.out.println("Connected SFF name >>>> " +
+                             sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getName());
+          ConnectedSFF= sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(x).getName();
+        }
+      }
+    }
+    return ConnectedSFF;
+  }
+
+
+
 }

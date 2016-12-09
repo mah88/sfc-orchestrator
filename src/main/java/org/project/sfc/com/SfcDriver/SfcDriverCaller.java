@@ -121,7 +121,9 @@ public class SfcDriverCaller {
       System.out.println(
           "[---------------------------Finished ALLOCATION OF SFs----------------------------------]");
       SFC_driver.CreateSFs(VNFs);
-
+      for(int a=0;a<VNFs.size();a++){
+        VNFs.get(a).setConnectedSFF(SFC_driver.GetConnectedSFF(VNFs.get(a).getName()));
+      }
       list_vnf_dicts.add(VNFs);
     }
     Iterator it_ = All_SFCs.entrySet().iterator();
@@ -324,6 +326,9 @@ public class SfcDriverCaller {
       System.out.println(
           "[---------------------------Finished ALLOCATION OF SFs----------------------------------]");
       SFC_driver.CreateSFs(VNFs);
+      for(int a=0;a<VNFs.size();a++){
+        VNFs.get(a).setConnectedSFF(SFC_driver.GetConnectedSFF(VNFs.get(a).getName()));
+      }
 
       list_vnf_dicts.add(VNFs);
       scale_counter++;
@@ -442,7 +447,11 @@ public class SfcDriverCaller {
     RandomPathSelection RPS = new RandomPathSelection();
 
     vnfdicts = RPS.CreatePath(vnfrs, vnffgr, nsr);
+
     SFC_driver.CreateSFs(vnfdicts);
+    for(int a=0;a<vnfdicts.size();a++){
+      vnfdicts.get(a).setConnectedSFF(SFC_driver.GetConnectedSFF(vnfdicts.get(a).getName()));
+    }
     System.out.println("[SFs-Creation-Finsihed] " + new Date().getTime());
 
     return vnfdicts;

@@ -28,4 +28,6 @@ public interface SFCinterfaces {
 
   String GetBytesCount(SFCCdict SFCC_dict);
 
+  String GetConnectedSFF(String SF_name) ;
+
   }

@@ -305,9 +305,14 @@ private void CreateChain(SFC.SFC_Data Chain_Data, VNFdict VNF_instance)  {
 
   System.out.println("[NEW Classifier updated ] " + SFCC_name);
   System.out.println("[Update SFCC DB] " + Chain_Data.getRspID().substring(5));
+  String IDx=Chain_Data.getRspID().substring(5);
+  System.out.println("[IDx] ="+ IDx );
+
+  String VNFFGR_ID=IDx.substring(IDx.indexOf('-')+1);
+  System.out.println("[VNFFGR ID] ="+ VNFFGR_ID );
 
   sfcc_db.update(
-      Chain_Data.getRspID().substring(9),
+      VNFFGR_ID,
       new_instance_id,
       Chain_Data.getSfccName(),
       Chain_Data.getSFCdictInfo().getSfcDict().getSymmetrical(),

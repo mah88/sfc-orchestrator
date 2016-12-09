@@ -11,6 +11,7 @@ public class VNFdict {
   private String name;
   private double trafficLoad;
   private String HostNode;
+  private String ConnectedSFF;
 
   public String getName() {
     return name;
@@ -45,12 +46,17 @@ public class VNFdict {
   }
 
   public String getHostNode() {
-    return name;
+    return HostNode;
   }
   public void setHostNode(String Host) {
     this.HostNode = Host;
   }
-
+  public String getConnectedSFF() {
+    return ConnectedSFF;
+  }
+  public void setConnectedSFF(String SFF) {
+    this.ConnectedSFF = SFF;
+  }
   public double getTrafficLoad() {
     return trafficLoad;
   }
