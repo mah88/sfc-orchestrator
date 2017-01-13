@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.openbaton:plugin:3.0.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/gradle/wrapper/dists/gradle-2.3-all/w01pvxy5gty3tegjrai84pm3/gradle-2.3/caches/modules-2/files-2.1/org.openbaton/plugin/3.0.0/b32f2bda777e21d576467419c8e56b38107fdc2f/plugin-3.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/gradle/wrapper/dists/gradle-2.3-all/w01pvxy5gty3tegjrai84pm3/gradle-2.3/caches/modules-2/files-2.1/org.openbaton/plugin/3.0.0/3a10fd88f574088bacb559893ceb677fefe7635/plugin-3.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
