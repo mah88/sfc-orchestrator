@@ -9,7 +9,7 @@ This project is the first version of SFC Orchestrator that provides SFC Control 
 3. [Generic VNFM 2.0.1](https://github.com/openbaton/generic-vnfm/tree/2.0.1) running
 4. [Open Baton Fault Management](https://github.com/openbaton/fm-system) running
 5. [OVS 2.3.90 with NSH Patch](https://github.com/pritesh/ovs/blob/nsh-v8/third-party/start-ovs-deb.sh) running this script should  install ovs with its patch for Ubuntu only.
-6. [Devstack Liberty](https://github.com/openstack-dev/devstack/tree/stable/liberty) running using this local.conf file. This local.conf file includes the plugin and installation of Opendaylight SFC.
+6. [Devstack Liberty](https://github.com/openstack-dev/devstack/tree/stable/liberty) running using this local.conf file. This local.conf file includes the plugin and installation of Opendaylight SFC Beryllium release.
  
 
 ## Getting Started
