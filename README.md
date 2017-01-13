@@ -40,7 +40,7 @@ logging.level.*                              | Log level of the defined modules
 ##Starting the SFC Orchestrator
 Starting the SFC Orchestrator using the provided script with the following command:
 `````
-./sfc-orchestrator.sh start
+./sfc-orch.sh start
 `````
 
 ##How to use it 
