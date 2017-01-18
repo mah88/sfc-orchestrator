@@ -5,27 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b782f797-36e3-4e0b-a889-24fe87d5c329" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC_classifier.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/org-controller.iml" afterPath="$PROJECT_DIR$/org-controller.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/DynamicPathCreation/LoadBalancedPathSelection.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/DynamicPathCreation/LoadBalancedPathSelection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringTask.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcHandler/SFCcreator.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcHandler/SFCcreator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/SFFJSON/ServiceFunctionForwarderOvsOvsOptions.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/JSON/SFFJSON/ServiceFunctionForwarderOvsOvsOptions.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/NeutronClient.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/NeutronClient.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC_Classifier/SFC_Classifier.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC_Classifier/SFC_Classifier.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/AddSFCExecutor.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/AddSFCExecutor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/ScaleSFPExecutor.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/ScaleSFPExecutor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/UpdateSFPExecutor.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/UpdateSFPExecutor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/testing/Test.java" afterPath="$PROJECT_DIR$/src/main/java/testing/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/sfco.properties" afterPath="$PROJECT_DIR$/src/main/resources/sfco.properties" />
     </list>
     <ignored path="org-controller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1818,7 +1798,13 @@
       <option name="project" value="LOCAL" />
       <updated>1481275118831</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Updating the SFC Model for supporting Boron release">
+      <created>1484736939366</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1484736939366</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1889,7 +1875,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Auto-Scaling Feature is Added" />
     <MESSAGE value="Auto-Scaling Feature is adjusted" />
-    <option name="LAST_COMMIT_MESSAGE" value="Auto-Scaling Feature is adjusted" />
+    <MESSAGE value="Updating the SFC Model for supporting Boron release" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating the SFC Model for supporting Boron release" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
