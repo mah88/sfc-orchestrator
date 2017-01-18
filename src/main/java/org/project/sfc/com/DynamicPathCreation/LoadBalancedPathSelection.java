@@ -104,21 +104,21 @@ for(int counter1=0;counter1<=Math.floor(total_size_SFCs/total_size_VNF_instances
 
         if (Involved_SFCs.get(SFCKey.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad() >=
             MaxLoad) {
-          System.out.println("This SFC:  " +Involved_SFCs.get(SFCKey.getKey()).getRspID() + " has Load = "+ Involved_SFCs.get(SFCKey.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad() +" higher than the Max Load < "+ MaxLoad+" >");
+          System.out.println("This Test_SFC:  " +Involved_SFCs.get(SFCKey.getKey()).getRspID() + " has Load = "+ Involved_SFCs.get(SFCKey.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad() +" higher than the Max Load < "+ MaxLoad+" >");
 
           if(RSPID!=null) {
             System.out.println("[LB Path Selection]    RSPID is not empty  " );
 
             if (SelectedSFCs.containsKey(RSPID)) {
               SelectedSFCs.remove(RSPID);
-              System.out.println("[LB Path Selection] Selected SFC is Removed, SFC RSP ID:  " + RSPID);
+              System.out.println("[LB Path Selection] Selected Test_SFC is Removed, Test_SFC RSP ID:  " + RSPID);
 
             }
           }
           SelectedSFCs.put(Involved_SFCs.get(SFCKey.getKey()).getRspID(), Involved_SFCs.get(SFCKey.getKey()));
           MaxLoad = Involved_SFCs.get(SFCKey.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
           RSPID = SFCKey.getKey().toString();
-          System.out.println("[LB Path Selection] Selected SFC at round " + counter1 +"  is  "+Involved_SFCs.get(SFCKey.getKey()) + " with Max Load = "+MaxLoad + " and RSP ID = "+RSPID);
+          System.out.println("[LB Path Selection] Selected Test_SFC at round " + counter1 +"  is  "+Involved_SFCs.get(SFCKey.getKey()) + " with Max Load = "+MaxLoad + " and RSP ID = "+RSPID);
 
         }
       }
@@ -128,7 +128,7 @@ for(int counter1=0;counter1<=Math.floor(total_size_SFCs/total_size_VNF_instances
 
   }
 
-  // Get which SFC should be selected
+  // Get which Test_SFC should be selected
   int size_selected_sfcs = SelectedSFCs.size();
 
   for (int i = 0; i < size_selected_sfcs; i++) {
@@ -148,7 +148,7 @@ for(int counter1=0;counter1<=Math.floor(total_size_SFCs/total_size_VNF_instances
 
       if (SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS
           () > recentQoS) {
-        System.out.println("This SFC:  " +SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID() + " has QoS Priority= "+ SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS
+        System.out.println("This Test_SFC:  " +SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID() + " has QoS Priority= "+ SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS
             () +" HIGHER than the best QoS Priority < "+ recentQoS+" >");
 
         Load = SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
@@ -162,11 +162,11 @@ for(int counter1=0;counter1<=Math.floor(total_size_SFCs/total_size_VNF_instances
 
       } else if (SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0)
                              .getQoS() == recentQoS) {
-        System.out.println("This SFC:  " +SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID() + " has QoS Priority= "+ SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS
+        System.out.println("This Test_SFC:  " +SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID() + " has QoS Priority= "+ SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS
             () +" EQUAL to the best QoS Priority < "+ recentQoS+" >");
         if (SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad() > Load) {
           selectedChain = SelectedSFCs.get(involved_SFC_data_counter.getKey());
-          System.out.println("This SFC:  " +SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID() + " has Load= "+ SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad() +" HIGHER than the MaxLoad < "+ Load+" >");
+          System.out.println("This Test_SFC:  " +SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID() + " has Load= "+ SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad() +" HIGHER than the MaxLoad < "+ Load+" >");
           Load = SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
           recentQoS =
               SelectedSFCs.get(involved_SFC_data_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS();
@@ -181,13 +181,13 @@ for(int counter1=0;counter1<=Math.floor(total_size_SFCs/total_size_VNF_instances
 
       double MinLoad = Double.MAX_VALUE ;
 
-      //Allocate the selected SFC to lowest Load of the VNF instances
+      //Allocate the selected Test_SFC to lowest Load of the VNF instances
       Iterator vnf_TL_counter = PrevVNFTrafficLoad.entrySet().iterator();
       boolean Selected=false;
       while (vnf_TL_counter.hasNext()) {
 
         Map.Entry VNF_key = (Map.Entry) vnf_TL_counter.next();
-        System.out.println("[Allocate the selected SFC to lowest VNF instance Load ]  Load="+ PrevVNFTrafficLoad.get(VNF_key.getKey())+" Min Load= "+MinLoad);
+        System.out.println("[Allocate the selected Test_SFC to lowest VNF instance Load ]  Load="+ PrevVNFTrafficLoad.get(VNF_key.getKey())+" Min Load= "+MinLoad);
 
         if (PrevVNFTrafficLoad.get(VNF_key.getKey()) < MinLoad) {
 
@@ -286,7 +286,7 @@ private void CreateChain(SFC.SFC_Data Chain_Data, VNFdict VNF_instance)  {
   newPath.setOldTrafficLoad(PathTrafficLoad);
 
   newPaths.add(0,newPath);
-  System.out.println("Get SFC DICT and set the Path");
+  System.out.println("Get Test_SFC DICT and set the Path");
 
   Chain_Data.getSFCdictInfo().getSfcDict().setPaths(newPaths);
   System.out.println("Done");

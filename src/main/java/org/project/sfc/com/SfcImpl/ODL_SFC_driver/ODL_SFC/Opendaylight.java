@@ -645,7 +645,7 @@ public Opendaylight() throws IOException{
       HttpEntity<String> postEntity =
           new HttpEntity<String>(mapper.toJson(data, ServiceFunctionChains.class), headers);
       request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
-      logger.debug(
+      logger.info(
           "Setting of SF has produced http status:"
               + request.getStatusCode()
               + " with body: "
@@ -655,7 +655,7 @@ public Opendaylight() throws IOException{
         result = null;
       } else {
         result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
-        logger.debug(
+        logger.info(
             "RESULT IS "
                 + request.getStatusCode()
                 + " with body "
@@ -665,9 +665,13 @@ public Opendaylight() throws IOException{
       data = datax.getServiceFunctionChains();
       HttpEntity<String> putEntity =
           new HttpEntity<String>(mapper.toJson(data, ServiceFunctionChains.class), headers);
+      logger.info(
+          "Doing the Request"
+         );
       request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
-      logger.debug(
-          "Setting of SFC has produced http status:"
+
+      logger.info(
+          "Setting of Test_SFC has produced http status:"
               + request.getStatusCode()
               + " with body: "
               + request.getBody());
@@ -676,7 +680,7 @@ public Opendaylight() throws IOException{
         result = null;
       } else {
         result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
-        logger.debug(
+        logger.info(
             "RESULT IS "
                 + request.getStatusCode()
                 + " with body "
@@ -686,7 +690,7 @@ public Opendaylight() throws IOException{
       HttpEntity<String> delEntity = new HttpEntity<String>(headers);
       request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
       logger.debug(
-          "Setting of SFC has produced http status:"
+          "Setting of Test_SFC has produced http status:"
               + request.getStatusCode()
               + " with body: "
               + request.getBody());
@@ -705,7 +709,7 @@ public Opendaylight() throws IOException{
       } else {
         result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
         logger.debug(
-            "Setting of SFC has produced http status:"
+            "Setting of Test_SFC has produced http status:"
                 + request.getStatusCode()
                 + " with body: "
                 + request.getBody());
@@ -737,7 +741,7 @@ public Opendaylight() throws IOException{
       } else {
         result = mapper.fromJson(request.getBody(), NetworkJSON.class);
         logger.debug(
-            "Setting of SFC has produced http status:"
+            "Setting of Test_SFC has produced http status:"
                 + request.getStatusCode()
                 + " with body: "
                 + request.getBody());
@@ -769,7 +773,7 @@ public Opendaylight() throws IOException{
       } else {
         result =  mapper.fromJson(request.getBody(), Table.class);
         logger.debug(
-            "Setting of SFC has produced http status:"
+            "Setting of Test_SFC has produced http status:"
             + request.getStatusCode()
             + " with body: "
             + request.getBody());
@@ -788,7 +792,7 @@ public Opendaylight() throws IOException{
 
   /// Get Network Topology
   public ResponseEntity<String> getSfcClassifierTable(String openflow_id) {
-    logger.info(" GET SFC CLASSIFIER TABLE 11: for Openflow ID= "+openflow_id);
+    logger.info(" GET Test_SFC CLASSIFIER TABLE 11: for Openflow ID= "+openflow_id);
     String url = "restconf/operational/opendaylight-inventory:nodes/node/"+openflow_id+"/table/11/";
     ResponseEntity<String> table = this.sendRest_OpenFlowPlugin(null, "GET", url);
     return table;
@@ -860,7 +864,7 @@ public Opendaylight() throws IOException{
         this.sendRest_SF(null, "DELETE", MessageFormat.format(this.Config_SF_URL, sf_name));
     return sf_result;
   }
-  //ODL SFC stuff (Create, Update, Delete)
+  //ODL Test_SFC stuff (Create, Update, Delete)
   public ResponseEntity<String> createODLsfc(SFCJSON sfcJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
@@ -871,7 +875,7 @@ public Opendaylight() throws IOException{
         this.sendRest_SFC(sfcJSON, "PUT", MessageFormat.format(this.Config_SFC_URL, sfc_name));
     return sfc_result;
   }
-  //FIXME need to be formated with the name as Create ODL SFC
+  //FIXME need to be formated with the name as Create ODL Test_SFC
 
   public ResponseEntity<String> updateODLsfc(SFCJSON sfcJSON) {
 
@@ -931,11 +935,11 @@ public Opendaylight() throws IOException{
 
   @Override
   public void CreateSFC(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
-    //create SFC
+    //create Test_SFC
     SFCJSON sfc_json = create_sfc_json(sfc_dict, vnf_dict);
     ResponseEntity<String> sfc_result = createODLsfc(sfc_json);
     if (!sfc_result.getStatusCode().is2xxSuccessful()) {
-      logger.error("Unable to create ODL SFC");
+      logger.error("Unable to create ODL Test_SFC");
     }
   }
 
@@ -1391,6 +1395,8 @@ public Opendaylight() throws IOException{
     sffopts.setNsi("flow");
     sffopts.setNsp("flow");
     sffopts.setRemoteIp("flow");
+    sffopts.setExts("gpe");
+
 
     sff_dp_loc.setServiceFunctionForwarderOvsOvsOptions(sffopts);
     sff_dp_loc.setDataPlaneLocator(dp_loc);
@@ -1959,7 +1965,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
 }
   public boolean CheckEquality(String A, String B){
 
-    logger.debug("Compare these two values: Value from ACL of opendaylight: ["+ A + "] , Value from Matching Criteria of SFC Classifier Descriptor: ["+B+"]");
+    logger.debug("Compare these two values: Value from ACL of opendaylight: ["+ A + "] , Value from Matching Criteria of Test_SFC Classifier Descriptor: ["+B+"]");
 
 
     if(A==null && B ==null){
@@ -2044,7 +2050,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
 
     // Need to check if the SFs involved in other RSPs !!!
     Gson mapper = new Gson();
-    System.out.println("SFC NAME " + instance_id.substring(5));
+    System.out.println("Test_SFC NAME " + instance_id.substring(5));
     ResponseEntity<String> rsp_response = getODLrsp(instance_id);
     RenderedServicePaths rsp = mapper.fromJson(rsp_response.getBody(), RenderedServicePaths.class);
     Gson mapper_sff = new Gson();

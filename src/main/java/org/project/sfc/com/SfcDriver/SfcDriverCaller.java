@@ -56,7 +56,7 @@ public class SfcDriverCaller {
 
   public void UpdateFailedPaths(VirtualNetworkFunctionRecord vnfr) {
 
-    System.out.println("[SFC-Path-UPDATE] (1) at time " + new Date().getTime());
+    System.out.println("[Test_SFC-Path-UPDATE] (1) at time " + new Date().getTime());
 
     HashMap<String, SFC.SFC_Data> All_SFCs = sfcc_db.getAllSFCs();
     if (All_SFCs != null) {
@@ -165,7 +165,7 @@ public class SfcDriverCaller {
 
       System.out.println("[NEW Classifier Updated ] " + SFCC_name);
 
-      System.out.println("[Key of the SFC ] =  " + (String) SFCdata_counter_.getKey());
+      System.out.println("[Key of the Test_SFC ] =  " + (String) SFCdata_counter_.getKey());
       System.out.println("[new instance id ] =  " + new_instance_id);
 
       sfcc_db.update(
@@ -257,7 +257,7 @@ public class SfcDriverCaller {
 
   public void UpdateScaledPaths(VirtualNetworkFunctionRecord vnfr) throws IOException {
 
-    System.out.println("[SFC-Path-Scaling] (1) at time " + new Date().getTime());
+    System.out.println("[Test_SFC-Path-Scaling] (1) at time " + new Date().getTime());
 
     HashMap<String, SFC.SFC_Data> All_SFCs = sfcc_db.getAllSFCs();
     if (All_SFCs != null) {
@@ -369,7 +369,7 @@ public class SfcDriverCaller {
 
       System.out.println("[NEW Classifier Updated ] " + SFCC_name);
 
-      System.out.println("[Key of the SFC ] =  " + (String) SFCdata_counter_.getKey());
+      System.out.println("[Key of the Test_SFC ] =  " + (String) SFCdata_counter_.getKey());
       System.out.println("[new instance id ] =  " + new_instance_id);
 
       sfcc_db.update(
@@ -390,7 +390,7 @@ public class SfcDriverCaller {
 
   public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr) throws IOException {
 
-    System.out.println("[SFC-Creation] (1) at time " + new Date().getTime());
+    System.out.println("[Test_SFC-Creation] (1) at time " + new Date().getTime());
 
     List<HashMap<Integer, VNFdict>> list_vnf_dicts = new ArrayList<HashMap<Integer, VNFdict>>();
     for (VNFForwardingGraphRecord vnffgr : nsr.getVnffgr()) {
@@ -416,12 +416,12 @@ public class SfcDriverCaller {
       System.out.println(
           "[Size of VNF MEMBERS for creating CHAIN] "
               + list_vnf_dicts.size()
-              + " for SFC allocation to nsr handler at time "
+              + " for Test_SFC allocation to nsr handler at time "
               + new Date().getTime());
       System.out.println(
           "[ VNFFGR ID for creating CHAIN] "
               + vnffgr.getId()
-              + " for SFC allocation to nsr handler at time "
+              + " for Test_SFC allocation to nsr handler at time "
               + new Date().getTime());
       boolean Response = CreateChain(list_vnf_dicts.get(counter), vnffgr, nsr);
       if (Response == false) {
@@ -467,7 +467,7 @@ public class SfcDriverCaller {
     SfcDict sfc_dict_test = new SfcDict();
     SFCCdict sfcc_dict = new SFCCdict();
 
-    System.out.println("[SFC-Creation] Creating Path Finished  at time " + new Date().getTime());
+    System.out.println("[Test_SFC-Creation] Creating Path Finished  at time " + new Date().getTime());
 
     for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
 
@@ -479,7 +479,7 @@ public class SfcDriverCaller {
 
           if (counter == x) {
 
-            System.out.println("[SFC-Creation] integer vlaue " + counter);
+            System.out.println("[Test_SFC-Creation] integer vlaue " + counter);
 
             chain.add(entry.getValue());
           }
@@ -518,7 +518,7 @@ public class SfcDriverCaller {
     SFC_driver.CreateSFC(sfc_test, vnfdicts);
     String instance_id = SFC_driver.CreateSFP(sfc_test, vnfdicts);
     System.out.println(
-        " ADD VNFFGR ID as key to SFC DB:  " + vnffgr.getId() + " at time " + new Date().getTime());
+        " ADD VNFFGR ID as key to Test_SFC DB:  " + vnffgr.getId() + " at time " + new Date().getTime());
     System.out.println(
         " ADD to it Instance  ID:  " + instance_id + " at time " + new Date().getTime());
 
@@ -559,7 +559,7 @@ public class SfcDriverCaller {
             + " at time "
             + new Date().getTime());
     System.out.println(
-        "[GET SFC NAME : ]  "
+        "[GET Test_SFC NAME : ]  "
             + sfcc_db.getAllSFCs().get(vnffgr.getId()).getSFCdictInfo().getSfcDict().getName());
 
     if (SFCC_name != null && instance_id != null) {
@@ -581,9 +581,9 @@ public class SfcDriverCaller {
     System.out.println("instance id to be deleted:  " + sffc_name);
 
     ResponseEntity<String> result = SFC_Classifier_driver.Delete_SFC_Classifier(sffc_name);
-    System.out.println("Delete SFC Classifier :  " + result.getStatusCode().is2xxSuccessful());
+    System.out.println("Delete Test_SFC Classifier :  " + result.getStatusCode().is2xxSuccessful());
     ResponseEntity<String> sfc_result = SFC_driver.DeleteSFC(rsp_id, sfcc_db.isSymmSFC(nsrID));
-    System.out.println("Delete SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful());
+    System.out.println("Delete Test_SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful());
 
     if (result != null && sfc_result != null) {
 

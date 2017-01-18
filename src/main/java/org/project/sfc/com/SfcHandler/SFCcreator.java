@@ -65,7 +65,7 @@ public class SFCcreator {
 
   public void UpdateChainsPaths(VirtualNetworkFunctionRecord vnfr) {
 
-    logger.info("[SFC-Path-UPDATE] (1) at time " + new Date().getTime());
+    logger.info("[Test_SFC-Path-UPDATE] (1) at time " + new Date().getTime());
 
     HashMap<String, SFC_Data> All_SFCs = sfcc_db.getAllSFCs();
     logger.info("===========================================");
@@ -79,7 +79,7 @@ public class SFCcreator {
       Iterator count = VNFs.entrySet().iterator();
       while (count.hasNext()) {
         System.out.println(
-            "[NEW SF Prepared] the ID in data base for the SFC is " + SFCdata_counter.getKey());
+            "[NEW SF Prepared] the ID in data base for the Test_SFC is " + SFCdata_counter.getKey());
 
         Map.Entry VNFcounter = (Map.Entry) count.next();
         System.out.println("[OK] ");
@@ -206,7 +206,7 @@ public class SFCcreator {
 
   public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr) throws IOException {
 
-    System.out.println("[SFC-Creation] (1) at time " + new Date().getTime());
+    System.out.println("[Test_SFC-Creation] (1) at time " + new Date().getTime());
 
     for (VNFForwardingGraphRecord vnffgr : nsr.getVnffgr()) {
       Set<VirtualNetworkFunctionRecord> vnf_members = new HashSet<VirtualNetworkFunctionRecord>();
@@ -225,12 +225,12 @@ public class SFCcreator {
       System.out.println(
           "[Size of VNF MEMBERS for creating CHAIN] "
               + vnf_members.size()
-              + " for SFC allocation to nsr handler at time "
+              + " for Test_SFC allocation to nsr handler at time "
               + new Date().getTime());
       System.out.println(
           "[ VNFFGR ID for creating CHAIN] "
               + vnffgr.getId()
-              + " for SFC allocation to nsr handler at time "
+              + " for Test_SFC allocation to nsr handler at time "
               + new Date().getTime());
       boolean Response = CreateChain(vnf_members, vnffgr, nsr);
       if (Response == false) {
@@ -251,14 +251,14 @@ public class SFCcreator {
     List<VNFdict> vnf_test = new ArrayList<VNFdict>();
     List<String> chain = new ArrayList<String>();
     HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
-    System.out.println("[SFC-Creation] (2) at time " + new Date().getTime());
+    System.out.println("[Test_SFC-Creation] (2) at time " + new Date().getTime());
 
     RandomPathSelection RPS = new RandomPathSelection();
-    System.out.println("[SFC-Creation] (3) at time " + new Date().getTime());
+    System.out.println("[Test_SFC-Creation] (3) at time " + new Date().getTime());
 
     vnfdicts = RPS.CreatePath(vnfrs, vnffgr, nsr);
 
-    System.out.println("[SFC-Creation] Creating Path Finished  at time " + new Date().getTime());
+    System.out.println("[Test_SFC-Creation] Creating Path Finished  at time " + new Date().getTime());
 
     for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
 
@@ -270,7 +270,7 @@ public class SFCcreator {
 
           if (counter == x) {
 
-            System.out.println("[SFC-Creation] integer vlaue " + counter);
+            System.out.println("[Test_SFC-Creation] integer vlaue " + counter);
 
             chain.add(entry.getValue());
           }
@@ -297,7 +297,7 @@ public class SFCcreator {
 
 
     System.out.println(
-        " ADD NSR ID as key to SFC DB:  " + nsr.getId() + " at time " + new Date().getTime());
+        " ADD NSR ID as key to Test_SFC DB:  " + nsr.getId() + " at time " + new Date().getTime());
     System.out.println(
         " ADD to it Instance  ID:  " + instance_id + " at time " + new Date().getTime());
 
@@ -356,9 +356,9 @@ public class SFCcreator {
     System.out.println("instance id to be deleted:  " + sffc_name);
 
     ResponseEntity<String> result = classifier_test2.Delete_SFC_Classifier(sffc_name);
-    System.out.println("Delete SFC Classifier :  " + result.getStatusCode().is2xxSuccessful());
+    System.out.println("Delete Test_SFC Classifier :  " + result.getStatusCode().is2xxSuccessful());
     ResponseEntity<String> sfc_result = SFC.DeleteSFC(rsp_id, sfcc_db.isSymmSFC(nsrID));
-    System.out.println("Delete SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful());
+    System.out.println("Delete Test_SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful());
 
     if (result != null && sfc_result != null) {
 

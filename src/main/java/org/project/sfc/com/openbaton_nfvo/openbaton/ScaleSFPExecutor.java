@@ -55,7 +55,7 @@ public class ScaleSFPExecutor implements Runnable {
       e.printStackTrace();
     }
     logger.info(
-        "[Scale-SFP-Executor] ended SFC allocation for "
+        "[Scale-SFP-Executor] ended Test_SFC allocation for "
             + vnfr.getParent_ns_id()
             + " at time "
             + new Date().getTime());

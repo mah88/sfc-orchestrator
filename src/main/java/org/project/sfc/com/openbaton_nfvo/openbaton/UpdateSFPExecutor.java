@@ -53,7 +53,7 @@ public class UpdateSFPExecutor implements Runnable {
 
     sfcCaller.UpdateFailedPaths(vnfr);
     logger.info(
-        "[Update-SFP-ECUTOREX] ended SFC allocation for "
+        "[Update-SFP-ECUTOREX] ended Test_SFC allocation for "
             + vnfr.getParent_ns_id()
             + " at time "
             + new Date().getTime());

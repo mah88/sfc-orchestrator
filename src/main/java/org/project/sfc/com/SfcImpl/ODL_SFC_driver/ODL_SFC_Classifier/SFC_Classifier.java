@@ -134,7 +134,7 @@ public class SFC_Classifier extends SFCclassifier {
                 + mapper.toJson(result, Classifiers.class));
       }
     } else if (rest_type == "DELETE") {
-      System.out.println("Deleting of SFC CLASSIFIER ");
+      System.out.println("Deleting of Test_SFC CLASSIFIER ");
 
       HttpEntity<String> delEntity = new HttpEntity<String>(headers);
       request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
@@ -302,7 +302,7 @@ public class SFC_Classifier extends SFCclassifier {
 
   @Override
   public ResponseEntity<String> Delete_SFC_Classifier(String classifier_name) {
-    System.out.println("$$$$ delete Acl - SFC CLASSIFIER $$$$$$");
+    System.out.println("$$$$ delete Acl - Test_SFC CLASSIFIER $$$$$$");
 
     ResponseEntity<String> sfcc_result =
         this.sendRest_Classifier(
@@ -310,7 +310,7 @@ public class SFC_Classifier extends SFCclassifier {
     if (!sfcc_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to delete NetVirt Classifier");
     } else {
-      System.out.println("Success to delete SFC CLassifier ");
+      System.out.println("Success to delete Test_SFC CLassifier ");
     }
     ResponseEntity<String> acl_result =
         this.sendRest_ACL(

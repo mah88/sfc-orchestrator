@@ -108,14 +108,14 @@ private boolean lastVNFR;
     while (it.hasNext()) {
       Map.Entry SFCdata_counter = (Map.Entry) it.next();
       if(All_SFCs.get(SFCdata_counter.getKey())==null){
-        log.error(" NO SFC Found");
+        log.error(" NO Test_SFC Found");
 
       }else if (All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo()==null){
-        log.error(" NO SFC CLASSIFIER INFO EXIST");
+        log.error(" NO Test_SFC CLASSIFIER INFO EXIST");
       }
       String BytesCount=SFC_driver.GetBytesCount(All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo());
 
-      log.info("SFC with RSP ID ( "+All_SFCs.get(SFCdata_counter.getKey()).getRspID()+" ) has traffic Load  = "+BytesCount+ " Bytes");
+      log.info("Test_SFC with RSP ID ( "+All_SFCs.get(SFCdata_counter.getKey()).getRspID()+" ) has traffic Load  = "+BytesCount+ " Bytes");
       double oldtafficLoad=All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getOldTrafficLoad();
       log.info("OLD TRAFFIC LOAD ==>  " + oldtafficLoad);
 

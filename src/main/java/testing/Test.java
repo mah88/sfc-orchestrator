@@ -37,11 +37,11 @@ public class Test {
             }
             */
 
-    //testing the SFC deployment in ODL
+    //testing the Test_SFC deployment in ODL
 
     Opendaylight test = new Opendaylight();
     VNFdict vnf1_test = new VNFdict();
-    //test.DeleteSFC("Path-SFC-demo-", false);
+    //test.DeleteSFC("Path-Test_SFC-demo-", false);
     VNFdict vnf2_test = new VNFdict();
     NeutronClient NC = new NeutronClient();
     SFC sfcc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
@@ -54,25 +54,25 @@ public class Test {
 
     if(test.Check_Configuration_SfcOfRenderer()==false) {
         ResponseEntity<String> sfcodrender = test.Configure_SfcOfRenderer();
-        System.out.println("SFC OF Render status code " + sfcodrender.getStatusCode());
+        System.out.println("Test_SFC OF Render status code " + sfcodrender.getStatusCode());
         //----------------------------------
     }
     */
     //   ResponseEntity<String> netvirt= test.Configure_NETVIRT();
     //   ResponseEntity<String> sfcodrender= test.Configure_SfcOfRenderer();
     //    System.out.println("NETVIRT status code "+ netvirt.getStatusCode());
-    //  System.out.println("SFC OF Render status code "+ sfcodrender.getStatusCode());
+    //  System.out.println("Test_SFC OF Render status code "+ sfcodrender.getStatusCode());
 
     //  vnf1_test.setIP("12.0.0.17");
-    vnf2_test.setIP("12.0.0.4");
+    vnf2_test.setIP("12.0.0.7");
     vnf2_test.setName("FW-SF");
     //    vnf1_test.setName("http-SF");
     // System.out.println("Config. : Neutron Port ID of VNF 1 " + NC.getNeutronPortID(vnf1_test.getIP()));
 
     //   vnf1_test.setNeutronPortId(NC.getNeutronPortID(vnf1_test.getIP())); //NC.getNeutronPortID(vnf1_test.getIP()));
     // System.out.println("Config. : Neutron Port ID of VNF 2 " + NC.getNeutronPortID(vnf2_test.getIP()));
-    vnf2_test.setNeutronPortId(NC.getNeutronPortID(vnf2_test.getIP()));
-    //  vnf2_test.setNeutronPortId("d2107eed-0571-4373-a7b6-89357f1aa25d");
+   // vnf2_test.setNeutronPortId(NC.getNeutronPortID(vnf2_test.getIP()));
+     vnf2_test.setNeutronPortId("dd34837e-4693-4b1a-a42a-b30cc7388c09");
 
     vnf2_test.setType("FW");
     //   vnf1_test.setType("HTTP");
@@ -81,14 +81,14 @@ public class Test {
             SFCdict sfc_test_2 = new SFCdict();
             SfcDict sfc_dict_test_2 = new SfcDict();
 
-            sfc_dict_test_2.setName("SFC-demo_test 2");
+            sfc_dict_test_2.setName("Test_SFC-demo_test 2");
             List<String> chain_2 = new ArrayList<String>();
             chain_2.add("FW-SF");
             chain_2.add("http-SF");
 
 
             sfc_dict_test_2.setChain(chain_2);
-            sfc_dict_test_2.setId("SFC-demo:1111122141");
+            sfc_dict_test_2.setId("Test_SFC-demo:1111122141");
 
             sfc_dict_test_2.setInfraDriver("ODL");
             sfc_dict_test_2.setSymmetrical(false);
@@ -127,14 +127,14 @@ public class Test {
     SFCdict sfc_test = new SFCdict();
     SfcDict sfc_dict_test = new SfcDict();
 
-    sfc_dict_test.setName("SFC-demo_test");
+    sfc_dict_test.setName("Test_SFC-demo_test");
     List<String> chain = new ArrayList<String>();
     chain.add("FW-SF");
 
     //chain.add("http-SF");
 
     sfc_dict_test.setChain(chain);
-    sfc_dict_test.setId("SFC-demo:222122141");
+    sfc_dict_test.setId("Test_SFC-demo:222122141");
 
     sfc_dict_test.setInfraDriver("ODL");
     sfc_dict_test.setSymmetrical(false);
@@ -159,11 +159,11 @@ public class Test {
     sfcc_dict.setChain(sfc_dict_test.getId());
     sfcc_dict.setName("sfc-classifier-demo-x");
     AclMatchCriteria acl = new AclMatchCriteria();
-    acl.setDestPort(0);
-    acl.setSrcPort(0);
+    acl.setDestPort(80);
+    acl.setSrcPort(2000);
     // acl.setDestMAC("fa:16:3e:3c:5c:d3");
-    acl.setProtocol(1);
-    acl.setDestIpv4("12.0.0.7/32");
+    acl.setProtocol(6);
+   // acl.setDestIpv4("12.0.0.7/32");
     List<AclMatchCriteria> list_acl = new ArrayList<AclMatchCriteria>();
     list_acl.add(acl);
     sfcc_dict.setAclMatchCriteria(list_acl);
@@ -182,9 +182,9 @@ public class Test {
     System.out.println("Size of Data base: " + size);
 
     /*   ResponseEntity<String> result= classifier_test2.Delete_SFC_Classifier("sfc-classifier-demo-2");
-            System.out.println("Delete SFC Classifier :  " + result.getStatusCode().is2xxSuccessful() );
-            ResponseEntity<String> sfc_result=test.DeleteSFC("Path-SFC-demo_test",false);
-            System.out.println("Delete SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful() );
+            System.out.println("Delete Test_SFC Classifier :  " + result.getStatusCode().is2xxSuccessful() );
+            ResponseEntity<String> sfc_result=test.DeleteSFC("Path-Test_SFC-demo_test",false);
+            System.out.println("Delete Test_SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful() );
             //testing the neutron port client
         /*    NeutronClient NC=new NeutronClient();
             String nc_port=NC.getNeutronPortID("11.0.0.5");

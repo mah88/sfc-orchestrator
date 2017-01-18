@@ -47,7 +47,7 @@ public class AddSFCExecutor implements Runnable {
   public void run() {
 
     logger.info(
-        "[ADD-SFC-EXECUTOR] allocating slice for "
+        "[ADD-Test_SFC-EXECUTOR] allocating slice for "
             + nsr.getId()
             + " at time "
             + new Date().getTime());
@@ -61,7 +61,7 @@ public class AddSFCExecutor implements Runnable {
     }
     logger.debug("RESPONSE from Handler " + response);
     logger.info(
-        "[ADD-SFC-EXECUTOR] ended SFC allocation for "
+        "[ADD-Test_SFC-EXECUTOR] ended Test_SFC allocation for "
             + nsr.getId()
             + " at time "
             + new Date().getTime());

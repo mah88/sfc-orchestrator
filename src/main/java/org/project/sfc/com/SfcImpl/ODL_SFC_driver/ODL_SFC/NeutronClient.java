@@ -17,7 +17,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
@@ -87,7 +89,12 @@ public  NeutronClient() throws IOException{
 
     HttpEntity<String> postEntity =
         new HttpEntity<String>(mapper.toJson(data, Tokenbody.class), headers);
-    request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
+    try {
+      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
+    }    catch (final HttpClientErrorException e) {
+      System.out.println(e.getStatusCode());
+      System.out.println(e.getResponseBodyAsString());
+    }
     logger.debug(
         "Get the X-Auth-Token has produced http status:"
             + request.getStatusCode()
@@ -109,9 +116,8 @@ public  NeutronClient() throws IOException{
   }
 
   public NeutronPorts getNeutronPorts() {
-    logger.info("OPNESTACK IP 1: "+ Openstack_ip);
 
-    logger.info("OPNESTACK IP 2: "+ this.Openstack_ip);
+    logger.info("OPNESTACK IP: "+ this.Openstack_ip);
     String Full_URL =
         "http://" + Openstack_ip + ":" + Networking_port + Config_neutronport_URL;
     String plainCreds = Openstack_username + ":" + Openstack_password;

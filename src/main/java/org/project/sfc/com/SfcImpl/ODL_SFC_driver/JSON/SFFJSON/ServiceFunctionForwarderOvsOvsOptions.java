@@ -44,6 +44,10 @@ public class ServiceFunctionForwarderOvsOvsOptions {
   @Expose
   private String nsp;
 
+  @SerializedName("exts")
+  @Expose
+  private String exts;
+
   /**
    *
    * @return The remoteIp
@@ -186,5 +190,21 @@ public class ServiceFunctionForwarderOvsOvsOptions {
    */
   public void setNshc4(String nshc4) {
     this.nshc4 = nshc4;
+  }
+
+  /**
+   *
+   * @return The exts
+   */
+  public String getEXTS() {
+    return exts;
+  }
+
+  /**
+   *
+   * @param exts The exts
+   */
+  public void setExts(String exts) {
+    this.exts = exts;
   }
 }

@@ -82,7 +82,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointCreation.setType(EndpointType.RABBIT);
     eventEndpointCreation.setEvent(Action.INSTANTIATE_FINISH);
     eventEndpointCreation.setEndpoint(ConfigurationBeans.queueName_eventInstatiateFinish);
-    eventEndpointCreation.setName("SFC-event-NSR-Created");
+    eventEndpointCreation.setName("Test_SFC-event-NSR-Created");
     eventEndpointCreation = requestor.getEventAgent().create(eventEndpointCreation);
 
     // For NSR Delete
@@ -91,7 +91,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointDeletion.setEvent(Action.RELEASE_RESOURCES_FINISH);
 
     eventEndpointDeletion.setEndpoint(ConfigurationBeans.queueName_eventResourcesReleaseFinish);
-    eventEndpointDeletion.setName("SFC-event-NSR-Relased");
+    eventEndpointDeletion.setName("Test_SFC-event-NSR-Relased");
     eventEndpointDeletion = requestor.getEventAgent().create(eventEndpointDeletion);
 
     // For Fault Management
@@ -99,7 +99,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointHealing.setType(EndpointType.RABBIT);
     eventEndpointHealing.setEvent(Action.HEAL);
     eventEndpointHealing.setEndpoint(ConfigurationBeans.queueName_eventHeal);
-    eventEndpointHealing.setName("SFC-event-VNF-Healed");
+    eventEndpointHealing.setName("Test_SFC-event-VNF-Healed");
     eventEndpointHealing = requestor.getEventAgent().create(eventEndpointHealing);
 
     // For Auto-Scaling
@@ -107,7 +107,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointScaled.setType(EndpointType.RABBIT);
     eventEndpointScaled.setEvent(Action.SCALED);
     eventEndpointScaled.setEndpoint(ConfigurationBeans.queueName_eventScaled);
-    eventEndpointScaled.setName("SFC-event-VNF-Scaled");
+    eventEndpointScaled.setName("Test_SFC-event-VNF-Scaled");
     eventEndpointScaled = requestor.getEventAgent().create(eventEndpointScaled);
 
     this.eventIds.add(eventEndpointCreation.getId());
