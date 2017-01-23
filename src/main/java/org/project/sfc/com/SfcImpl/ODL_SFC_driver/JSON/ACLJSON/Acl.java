@@ -8,9 +8,15 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Acl {
 
+
+
   @SerializedName("acl-name")
   @Expose
   private String aclName;
+
+  @SerializedName("acl-type")
+  @Expose
+  private String acltype;
 
   @SerializedName("access-list-entries")
   @Expose
@@ -30,6 +36,23 @@ public class Acl {
    */
   public void setAclName(String aclName) {
     this.aclName = aclName;
+  }
+
+
+  /**
+   *
+   * @return The acltype
+   */
+  public String getAclType() {
+    return acltype;
+  }
+
+  /**
+   *
+   * @param acltype The acl-type
+   */
+  public void setAclType(String acltype) {
+    this.acltype = acltype;
   }
 
   /**

@@ -3,6 +3,12 @@ package org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC;
 import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Base64;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.project.sfc.com.SfcDriver.SfcDriverCaller;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NeutronPorts.NeutronPorts;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NeutronPorts.Port;
@@ -70,7 +76,7 @@ public  NeutronClient() throws IOException{
     this.Openstack_password = properties.getProperty("openstack.password");
     this.Openstack_tenantname = properties.getProperty("openstack.tenantname");
   }
-
+/*
   public Token getToken(Tokenbody data) {
 
     String Full_URL = "http://" + Openstack_ip + ":" + Identity_port + Config_token_URL;
@@ -105,6 +111,7 @@ public  NeutronClient() throws IOException{
       result = null;
     } else {
       result = mapper.fromJson(request.getBody(), Token.class);
+
       logger.debug(
           "RESULT IS "
               + request.getStatusCode()
@@ -112,6 +119,35 @@ public  NeutronClient() throws IOException{
               + mapper.toJson(result, Token.class));
     }
 
+    return result;
+  }
+  */
+  public Token getToken(Tokenbody data){
+    HttpClient httpClient = HttpClientBuilder.create().build();
+    Token result = new Token();
+    HttpPost request = new HttpPost("http://" + Openstack_ip + ":" + Identity_port + Config_token_URL);
+    Gson mapper = new Gson();
+    String plainCreds = Openstack_username + ":" + Openstack_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    try {
+
+
+      StringEntity params =new StringEntity(mapper.toJson(data, Tokenbody.class));
+      request.addHeader("content-type", "application/json");
+      request.addHeader("Authorization", "Basic " + base64Creds);
+      request.setEntity(params);
+
+      HttpResponse response = httpClient.execute(request);
+      result = mapper.fromJson(new BasicResponseHandler().handleResponse(response), Token.class);
+
+
+    }catch (Exception ex) {
+      System.out.println(ex.toString());
+
+    }
+    System.out.println("Result: "+result.getAccess().getToken().getId());
     return result;
   }
 
@@ -138,6 +174,7 @@ public  NeutronClient() throws IOException{
     authentication.setPasswordCredentials(passcr);
     data.setAuth(authentication);
     Token tokenX = getToken(data);
+
     headers.add("X-Auth-Token", getXauthToken(tokenX));
     Gson mapper = new Gson();
     NeutronPorts result = new NeutronPorts();

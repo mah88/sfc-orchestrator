@@ -1,5 +1,6 @@
 package org.project.sfc.com.SfcDriver;
 
+import org.apache.http.HttpResponse;
 import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
@@ -54,7 +55,7 @@ public class SfcDriverCaller {
     LBPath=new LoadBalancedPathSelection(type);
   }
 
-  public void UpdateFailedPaths(VirtualNetworkFunctionRecord vnfr) {
+  public void UpdateFailedPaths(VirtualNetworkFunctionRecord vnfr) throws IOException {
 
     System.out.println("[Test_SFC-Path-UPDATE] (1) at time " + new Date().getTime());
 
@@ -580,15 +581,15 @@ public class SfcDriverCaller {
     String sffc_name = sfcc_db.getSfccName(nsrID);
     System.out.println("instance id to be deleted:  " + sffc_name);
 
-    ResponseEntity<String> result = SFC_Classifier_driver.Delete_SFC_Classifier(sffc_name);
-    System.out.println("Delete Test_SFC Classifier :  " + result.getStatusCode().is2xxSuccessful());
-    ResponseEntity<String> sfc_result = SFC_driver.DeleteSFC(rsp_id, sfcc_db.isSymmSFC(nsrID));
-    System.out.println("Delete Test_SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful());
+    HttpResponse result = SFC_Classifier_driver.Delete_SFC_Classifier(sffc_name);
+    System.out.println("Delete Test_SFC Classifier :  " + result.getStatusLine().getStatusCode());
+    HttpResponse sfc_result = SFC_driver.DeleteSFC(rsp_id, sfcc_db.isSymmSFC(nsrID));
+    System.out.println("Delete Test_SFC   :  " + sfc_result.getStatusLine().getStatusCode());
 
     if (result != null && sfc_result != null) {
 
-      if (result.getStatusCode().is2xxSuccessful()
-          && sfc_result.getStatusCode().is2xxSuccessful()) {
+      if ((result.getStatusLine().getStatusCode()==200 || result.getStatusLine().getStatusCode()==201)
+                                                         && (sfc_result.getStatusLine().getStatusCode()==200 || sfc_result.getStatusLine().getStatusCode()==201)) {
         sfcc_db.remove(nsrID);
         return true;
       } else {

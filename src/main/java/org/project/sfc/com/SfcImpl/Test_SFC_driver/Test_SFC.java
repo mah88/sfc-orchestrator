@@ -1,5 +1,6 @@
 package org.project.sfc.com.SfcImpl.Test_SFC_driver;
 
+import org.apache.http.HttpResponse;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFCJSON.SFCJSON;
 import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
@@ -37,12 +38,12 @@ public class Test_SFC extends SFC {
   }
 
   @Override
-  public ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric) {
+  public HttpResponse DeleteSFC(String instance_id, boolean isSymmetric) {
   return null;
   }
 
   @Override
-  public ResponseEntity<String> DeleteSFP(String instance_id, boolean isSymmetric) {
+  public HttpResponse DeleteSFP(String instance_id, boolean isSymmetric) {
   return null;
   }
 

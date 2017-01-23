@@ -7,6 +7,16 @@ import java.text.MessageFormat;
 import java.util.*;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.openbaton.catalogue.mano.descriptor.ACL_Matching_Criteria;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetvirtProvidersConfigJSON.NetvirtProvidersConfig;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetvirtProvidersConfigJSON.NetvirtProvidersConfig_;
@@ -26,6 +36,7 @@ import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFJSON.*;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFPJSON.SFPJSON;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFPJSON.ServiceFunctionPath;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFPJSON.ServiceFunctionPaths;
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.Token.Token;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
 import org.project.sfc.com.SfcInterfaces.SFC;
 import org.project.sfc.com.SfcModel.SFCCdict.AclMatchCriteria;
@@ -52,6 +63,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mah on 1/27/16.
@@ -74,7 +86,7 @@ public class Opendaylight extends SFC {
       "restconf/config/service-function-chain:service-function-chains/service-function-chain/{0}/";
   public String Config_SFP_URL =
       "restconf/config/service-function-path:service-function-paths/service-function-path/{0}";
-  public int sff_counter = 1;
+  //public int sff_counter = 1;
   public String Config_sfc_of_render_URL = "restconf/config/sfc-of-renderer:sfc-of-renderer-config";
   public String Config_netvirt_URL =
       "restconf/config/netvirt-providers-config:netvirt-providers-config";
@@ -89,7 +101,7 @@ public class Opendaylight extends SFC {
     this.Config_SFF_URL = Config_SFF_URL;
     this.Config_SFP_URL = Config_SFP_URL;
 
-    this.sff_counter = sff_counter;
+   // this.sff_counter = sff_counter;
   }
 
 public Opendaylight() throws IOException{
@@ -101,6 +113,7 @@ public Opendaylight() throws IOException{
   this.ODL_password = properties.getProperty("sfc.password");
 
 }
+  /*
   public ResponseEntity<String> sendRest_netvirt_conf(
       NetvirtProvidersConfig data, String rest_type, String url) {
 
@@ -281,442 +294,613 @@ public Opendaylight() throws IOException{
 
     return request;
   }
-
-  public ResponseEntity<String> sendRest_SF(SFJSON datax, String rest_type, String url) {
+*/
+  public HttpResponse sendRest_SF(SFJSON datax, String rest_type, String url) {
 
     String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
     String plainCreds = ODL_username + ":" + ODL_password;
     byte[] plainCredsBytes = plainCreds.getBytes();
     byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
     String base64Creds = new String(base64CredsBytes);
-    RestTemplate template = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Accept", "application/json");
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.add("Authorization", "Basic " + base64Creds);
     Gson mapper = new Gson();
     ServiceFunctions result = new ServiceFunctions();
-    ResponseEntity<String> request = null;
     ServiceFunctions data = null;
+    HttpResponse response = null;
+    HttpClient httpClient = HttpClientBuilder.create().build();
+
     if (rest_type == "POST") {
-      HttpEntity<String> postEntity =
-          new HttpEntity<String>(mapper.toJson(data, ServiceFunctions.class), headers);
-      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
-      logger.debug(
-          "Setting of SF has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctions.class);
-        logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, ServiceFunctions.class));
-      }
-    } else if (rest_type == "PUT") {
-      data = datax.getServiceFunctions();
-      HttpEntity<String> putEntity =
-          new HttpEntity<String>(mapper.toJson(data, ServiceFunctions.class), headers);
-      System.out.println("Entry : >> " + putEntity);
-      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
-      logger.debug(
-          "Setting of SF has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+      HttpPost Postrequest = new HttpPost(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, ServiceFunctions.class));
+        Postrequest.addHeader("content-type", "application/json");
+        Postrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Postrequest.setEntity(params);
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctions.class);
-        logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, ServiceFunctions.class));
-      }
-    } else if (rest_type == "DELETE") {
-      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
-      logger.debug(
-          "Setting of SF has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
-
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctions.class);
-        logger.debug("RESULT IS " + request.getStatusCode());
-      }
-    } else if (rest_type == "GET") {
-      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctions.class);
+        response = httpClient.execute(Postrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
             "Setting of SF has produced http status:"
-                + request.getStatusCode()
-                + " with body: "
-                + request.getBody());
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctions.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
+      }
+
+    } else if (rest_type == "PUT") {
+      data = datax.getServiceFunctions();
+
+      HttpPut Putrequest = new HttpPut(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, ServiceFunctions.class));
+        Putrequest.addHeader("content-type", "application/json");
+        Putrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Putrequest.setEntity(params);
+
+         response = httpClient.execute(Putrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of SF has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctions.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
+      }
+    } else if (rest_type == "DELETE") {
+
+      HttpDelete Deleterequest = new HttpDelete(Full_URL);
+      try{
+        Deleterequest.addHeader("content-type", "application/json");
+        Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
+
+         response = httpClient.execute(Deleterequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Deleting of SF has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctions.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
+      }
+    } else if (rest_type == "GET") {
+
+      HttpGet Getrequest = new HttpGet(Full_URL);
+      try{
+        Getrequest.addHeader("content-type", "application/json");
+        Getrequest.addHeader("Authorization", "Basic " + base64Creds);
+
+         response = httpClient.execute(Getrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Deleting of SF has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctions.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     }
 
-    return request;
+    return response;
   }
 
-  public ResponseEntity<String> sendRest_SFF(SFFJSON datax, String rest_type, String url) {
+  public HttpResponse sendRest_SFF(SFFJSON datax, String rest_type, String url) {
 
     String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
     String plainCreds = ODL_username + ":" + ODL_password;
     byte[] plainCredsBytes = plainCreds.getBytes();
     byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
     String base64Creds = new String(base64CredsBytes);
-    RestTemplate template = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Accept", "application/json");
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    headers.add("Authorization", "Basic " + base64Creds);
     Gson mapper = new Gson();
     ServiceFunctionForwarders result = new ServiceFunctionForwarders();
-    ResponseEntity<String> request = null;
     ServiceFunctionForwarders data = new ServiceFunctionForwarders();
+
+    HttpClient httpClient = HttpClientBuilder.create().build();
+    HttpResponse response = null;
     if (datax != null) {
       data = datax.getServiceFunctionForwarders();
     }
 
     if (rest_type == "POST") {
-      HttpEntity<String> postEntity =
-          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionForwarders.class), headers);
-      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
-      logger.debug(
-          "Setting of SFF has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionForwarders.class);
+      HttpPost Postrequest = new HttpPost(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, ServiceFunctionForwarders.class));
+        Postrequest.addHeader("content-type", "application/json");
+        Postrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Postrequest.setEntity(params);
+
+        response = httpClient.execute(Postrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, ServiceFunctionForwarders.class));
+            "Setting of SFF has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionForwarders.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
-    } else if (rest_type == "PUT") {
-      HttpEntity<String> putEntity =
-          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionForwarders.class), headers);
-      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
-      logger.debug(
-          "Setting of SFF has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionForwarders.class);
+    } else if (rest_type == "PUT") {
+
+      HttpPut Putrequest = new HttpPut(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, ServiceFunctionForwarders.class));
+        Putrequest.addHeader("content-type", "application/json");
+        Putrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Putrequest.setEntity(params);
+
+         response = httpClient.execute(Putrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, ServiceFunctionForwarders.class));
+            "Setting of SFF has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionForwarders.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     } else if (rest_type == "DELETE") {
-      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
-      logger.debug(
-          "Setting of SFF has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionForwarders.class);
-        logger.debug("RESULT IS " + request.getStatusCode());
+      HttpDelete Deleterequest = new HttpDelete(Full_URL);
+      try{
+        Deleterequest.addHeader("content-type", "application/json");
+        Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
+
+         response = httpClient.execute(Deleterequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of SFF has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionForwarders.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
-    } else if (rest_type == "GET") {
-      try {
-        HttpEntity<String> getEntity = new HttpEntity<String>(headers);
-        request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
-      } catch (HttpClientErrorException ce) {
-        result = null;
-      }
+    }
+
+    return response;
+  }
+
+  public ResponseEntity<String> sendRest_SFF_GET(SFFJSON datax,String rest_type,String url){
+    String Full_URL="http://" + this.ODL_ip + ":" + this.ODL_port + "/" + url;
+    String plainCreds = this.ODL_username+":"+this.ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template=new RestTemplate();
+    HttpHeaders headers=new HttpHeaders();
+    //   http.createBasicAuthenticationHttpHeaders(username, password);
+    headers.add("Accept","application/json");
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    //  headers.add("content-type","application/json;charset=utf-8");
+    headers.add("Authorization","Basic " + base64Creds);
+    Gson mapper=new Gson();
+    ServiceFunctionForwarders result=new ServiceFunctionForwarders();
+    ResponseEntity<String> request=null;
+    ServiceFunctionForwarders data=new ServiceFunctionForwarders();
+    if(datax!=null){
+      data=datax.getServiceFunctionForwarders();
+    }
+    try {
+      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+    }catch(HttpClientErrorException ce) {
+      result=null;
     }
 
     return request;
   }
 
-  public ResponseEntity<String> sendRest_SFP(SFPJSON datax, String rest_type, String url) {
+  public HttpResponse sendRest_SFP(SFPJSON datax, String rest_type, String url) {
 
     String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
     String plainCreds = ODL_username + ":" + ODL_password;
     byte[] plainCredsBytes = plainCreds.getBytes();
     byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
     String base64Creds = new String(base64CredsBytes);
-    RestTemplate template = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Accept", "application/json");
-    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpResponse response = null;
 
-    headers.add("Authorization", "Basic " + base64Creds);
     Gson mapper = new Gson();
     ServiceFunctionPaths result = new ServiceFunctionPaths();
-    ResponseEntity<String> request = null;
     ServiceFunctionPaths data = null;
-    if (rest_type == "POST") {
-      HttpEntity<String> postEntity =
-          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionPaths.class), headers);
-      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
-      logger.debug(
-          "Setting of SFP has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+    HttpClient httpClient = HttpClientBuilder.create().build();
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionPaths.class);
+    if (rest_type == "POST") {
+
+      HttpPost Postrequest = new HttpPost(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, ServiceFunctionPaths.class));
+        Postrequest.addHeader("content-type", "application/json");
+        Postrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Postrequest.setEntity(params);
+
+        response = httpClient.execute(Postrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, ServiceFunctionPaths.class));
+            "Setting of SFP has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionPaths.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     } else if (rest_type == "PUT") {
       data = datax.getServiceFunctionPaths();
-      HttpEntity<String> putEntity =
-          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionPaths.class), headers);
-      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
-      logger.debug(
-          "Setting of SFP has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionPaths.class);
-        logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, ServiceFunctionPaths.class));
-      }
-    } else if (rest_type == "DELETE") {
-      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
-      logger.debug(
-          "Setting of SFP has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+      HttpPut Putrequest = new HttpPut(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, ServiceFunctionPaths.class));
+        Putrequest.addHeader("content-type", "application/json");
+        Putrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Putrequest.setEntity(params);
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionPaths.class);
-        logger.debug("RESULT IS " + request.getStatusCode());
-      }
-    } else if (rest_type == "GET") {
-      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionPaths.class);
+        response = httpClient.execute(Putrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
             "Setting of SFP has produced http status:"
-                + request.getStatusCode()
-                + " with body: "
-                + request.getBody());
-      }
-    }
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
 
-    return request;
-  }
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionPaths.class);
 
-  public ResponseEntity<String> sendRest_RSP(RSPJSON data, String rest_type, String url) {
+        }
 
-    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
-    String plainCreds = ODL_username + ":" + ODL_password;
-    byte[] plainCredsBytes = plainCreds.getBytes();
-    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-    String base64Creds = new String(base64CredsBytes);
-    RestTemplate template = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Accept", "application/json");
-    headers.setContentType(MediaType.APPLICATION_JSON);
+      }catch(Exception ex){
+        logger.error(ex.toString());
 
-    headers.add("Authorization", "Basic " + base64Creds);
-    Gson mapper = new Gson();
-    RSPJSON result = new RSPJSON();
-    ResponseEntity<String> request = null;
-
-    if (rest_type == "POST") {
-      HttpEntity<String> postEntity =
-          new HttpEntity<String>(mapper.toJson(data, RSPJSON.class), headers);
-      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
-      logger.debug(
-          "Setting of RSP has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
-
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), RSPJSON.class);
-        logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, RSPJSON.class));
       }
     } else if (rest_type == "DELETE") {
-      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
-      logger.debug(
-          "Setting of RSP has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+      HttpDelete Deleterequest = new HttpDelete(Full_URL);
+      try{
+        Deleterequest.addHeader("content-type", "application/json");
+        Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), RSPJSON.class);
-        logger.debug("RESULT IS " + request.getStatusCode());
+        response = httpClient.execute(Deleterequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of SFP has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionPaths.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     } else if (rest_type == "GET") {
-      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
-      logger.debug(
-          "Getting  of all RSPs has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+      HttpGet Getrequest = new HttpGet(Full_URL);
+      try{
+        Getrequest.addHeader("content-type", "application/json");
+        Getrequest.addHeader("Authorization", "Basic " + base64Creds);
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), RSPJSON.class);
-        logger.debug("RESULT IS " + request.getStatusCode());
+        response = httpClient.execute(Getrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of SFP has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionPaths.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     }
 
-    return request;
+    return response;
   }
 
-  public ResponseEntity<String> sendRest_SFC(SFCJSON datax, String rest_type, String url) {
+  public HttpResponse sendRest_RSP(RSPJSON data, String rest_type, String url) {
 
     String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
     String plainCreds = ODL_username + ":" + ODL_password;
     byte[] plainCredsBytes = plainCreds.getBytes();
     byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
     String base64Creds = new String(base64CredsBytes);
-    RestTemplate template = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Accept", "application/json");
-    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpResponse response = null;
+    Gson mapper = new Gson();
+    RSPJSON result = new RSPJSON();
+    HttpClient httpClient = HttpClientBuilder.create().build();
 
-    headers.add("Authorization", "Basic " + base64Creds);
+    if (rest_type == "POST") {
+
+      HttpPost Postrequest = new HttpPost(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, RSPJSON.class));
+        Postrequest.addHeader("content-type", "application/json");
+        Postrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Postrequest.setEntity(params);
+
+        response = httpClient.execute(Postrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of RSP has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, RSPJSON.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
+      }
+    } else if (rest_type == "DELETE") {
+      HttpDelete Deleterequest = new HttpDelete(Full_URL);
+      try{
+        Deleterequest.addHeader("content-type", "application/json");
+        Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
+
+        response = httpClient.execute(Deleterequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of RSP has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, RSPJSON.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
+      }
+    } else if (rest_type == "GET") {
+      HttpGet Getrequest = new HttpGet(Full_URL);
+      try{
+        Getrequest.addHeader("content-type", "application/json");
+        Getrequest.addHeader("Authorization", "Basic " + base64Creds);
+
+        response = httpClient.execute(Getrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of RSP has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, RSPJSON.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
+      }
+    }
+
+    return response;
+  }
+
+  public HttpResponse sendRest_SFC(SFCJSON datax, String rest_type, String url) {
+
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    HttpResponse response = null;
     Gson mapper = new Gson();
     ServiceFunctionChains result = new ServiceFunctionChains();
-    ResponseEntity<String> request = null;
     ServiceFunctionChains data = null;
-    if (rest_type == "POST") {
-      HttpEntity<String> postEntity =
-          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionChains.class), headers);
-      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
-      logger.info(
-          "Setting of SF has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+    HttpClient httpClient = HttpClientBuilder.create().build();
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
-        logger.info(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, ServiceFunctionChains.class));
+    if (rest_type == "POST") {
+
+      HttpPost Postrequest = new HttpPost(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, ServiceFunctionChains.class));
+        Postrequest.addHeader("content-type", "application/json");
+        Postrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Postrequest.setEntity(params);
+
+       response = httpClient.execute(Postrequest);
+        logger.debug(
+            "Setting of SFC has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            +        new BasicResponseHandler().handleResponse(response));
+        if(response.getStatusLine().getStatusCode()==200 && response.getStatusLine().getStatusCode()==201){
+          result = mapper.fromJson(new BasicResponseHandler().handleResponse(response), ServiceFunctionChains.class);
+
+        }else{
+          result=null;
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     } else if (rest_type == "PUT") {
       data = datax.getServiceFunctionChains();
-      HttpEntity<String> putEntity =
-          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionChains.class), headers);
-      logger.info(
-          "Doing the Request"
-         );
-      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
+      HttpPut Putrequest = new HttpPut(Full_URL);
+      try{
+        StringEntity params =new StringEntity(mapper.toJson(data, ServiceFunctionChains.class));
+        Putrequest.addHeader("content-type", "application/json");
+        Putrequest.addHeader("Authorization", "Basic " + base64Creds);
+        Putrequest.setEntity(params);
 
-      logger.info(
-          "Setting of Test_SFC has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+        response = httpClient.execute(Putrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of SFC has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
-        logger.info(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, ServiceFunctionChains.class));
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionChains.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     } else if (rest_type == "DELETE") {
-      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
-      logger.debug(
-          "Setting of Test_SFC has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+      HttpDelete Deleterequest = new HttpDelete(Full_URL);
+      try{
+        Deleterequest.addHeader("content-type", "application/json");
+        Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
 
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
-        logger.debug("RESULT IS " + request.getStatusCode());
+        response = httpClient.execute(Deleterequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
+        logger.debug(
+            "Setting of SFC has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionChains.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     } else if (rest_type == "GET") {
-      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
-      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
+      HttpGet Getrequest = new HttpGet(Full_URL);
+      try{
+        Getrequest.addHeader("content-type", "application/json");
+        Getrequest.addHeader("Authorization", "Basic " + base64Creds);
+
+        response = httpClient.execute(Getrequest);
+        String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
-            "Setting of Test_SFC has produced http status:"
-                + request.getStatusCode()
-                + " with body: "
-                + request.getBody());
+            "Setting of SFC has produced http status:"
+            + response.getStatusLine().getStatusCode()
+            + " with body: "
+            + stringResponse);
+        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+          result=null;
+
+        }else{
+          result = mapper.fromJson(stringResponse, ServiceFunctionChains.class);
+
+        }
+
+      }catch(Exception ex){
+        logger.error(ex.toString());
+
       }
     }
 
-    return request;
+    return response;
   }
   /// Send request for getting the Network TOPOLOGY
   public ResponseEntity<String> sendRest_NetworkTopology(
@@ -798,137 +982,137 @@ public Opendaylight() throws IOException{
     return table;
   }
   //ODL SFF Stuff (Get, Create, Update, Delete)
-  public ResponseEntity<String> getODLsff() {
+  public ResponseEntity<String>  getODLsff() {
     String url = "restconf/config/service-function-forwarder:service-function-forwarders/";
-    ResponseEntity<String> sff_response = this.sendRest_SFF(null, "GET", url);
+    ResponseEntity<String> sff_response = this.sendRest_SFF_GET(null, "GET", url);
     return sff_response;
   }
 
-  public ResponseEntity<String> getODLsfc(String sfc_name) {
-    ResponseEntity<String> sfc_response =
+  public HttpResponse getODLsfc(String sfc_name) {
+    HttpResponse sfc_response =
         this.sendRest_SFC(null, "GET", MessageFormat.format(this.Config_SFC_URL, sfc_name));
     return sfc_response;
   }
 
-  public ResponseEntity<String> createODLsff(SFFJSON sffJSON) {
+  public HttpResponse createODLsff(SFFJSON sffJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
     String json = gson.toJson(sffJSON, SFFJSON.class);
 
     String sff_name =
         sffJSON.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName();
-    ResponseEntity<String> sff_result =
+    HttpResponse sff_result =
         this.sendRest_SFF(sffJSON, "PUT", MessageFormat.format(this.Config_SFF_URL, sff_name));
     return sff_result;
   }
   //FIXME need to be formated with the name as Create ODL SFF
 
-  public ResponseEntity<String> updateODLsff(SFFJSON sffJSON, String sffName) {
+  public HttpResponse updateODLsff(SFFJSON sffJSON, String sffName) {
 
-    ResponseEntity<String> sff_result =
+    HttpResponse sff_result =
         this.sendRest_SFF(sffJSON, "PUT", MessageFormat.format(this.Config_SFF_URL, sffName));
     return sff_result;
   }
 
-  public ResponseEntity<String> deleteODLsff(SFFJSON sffJSON) {
-    ResponseEntity<String> sff_result = this.sendRest_SFF(sffJSON, "DELETE", this.Config_SFF_URL);
+  public HttpResponse deleteODLsff(SFFJSON sffJSON) {
+    HttpResponse sff_result = this.sendRest_SFF(sffJSON, "DELETE", this.Config_SFF_URL);
     return sff_result;
   }
   //ODL SFs Stuff (Create, Update, Delete)
-  public ResponseEntity<String> createODLsf(SFJSON sfJSON) {
+  public HttpResponse createODLsf(SFJSON sfJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
     String json = gson.toJson(sfJSON, SFJSON.class);
 
     String sf_name = sfJSON.getServiceFunctions().getServiceFunction().get(0).getName();
-    ResponseEntity<String> sf_result =
+    HttpResponse sf_result =
         this.sendRest_SF(sfJSON, "PUT", MessageFormat.format(this.Config_SF_URL, sf_name));
     return sf_result;
   }
   //FIXME need to be formated with the name as Create ODL SF
 
-  public ResponseEntity<String> updateODLsf(SFJSON sfJSON) {
+  public HttpResponse updateODLsf(SFJSON sfJSON) {
 
-    ResponseEntity<String> sf_result = this.sendRest_SF(sfJSON, "PUT", this.Config_SF_URL);
+    HttpResponse  sf_result = this.sendRest_SF(sfJSON, "PUT", this.Config_SF_URL);
     return sf_result;
   }
 
-  public ResponseEntity<String> getODLsf() {
+  public HttpResponse getODLsf() {
     String url = "restconf/config/service-function:service-functions";
-    ResponseEntity<String> sf_result = this.sendRest_SF(null, "GET", url);
+    HttpResponse sf_result = this.sendRest_SF(null, "GET", url);
     return sf_result;
   }
 
-  public ResponseEntity<String> deleteODLsf(String sf_name) {
-    ResponseEntity<String> sf_result =
+  public HttpResponse deleteODLsf(String sf_name) {
+    HttpResponse sf_result =
         this.sendRest_SF(null, "DELETE", MessageFormat.format(this.Config_SF_URL, sf_name));
     return sf_result;
   }
   //ODL Test_SFC stuff (Create, Update, Delete)
-  public ResponseEntity<String> createODLsfc(SFCJSON sfcJSON) {
+  public HttpResponse createODLsfc(SFCJSON sfcJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
     String json = gson.toJson(sfcJSON, SFCJSON.class);
 
     String sfc_name = sfcJSON.getServiceFunctionChains().getServiceFunctionChain().get(0).getName();
-    ResponseEntity<String> sfc_result =
+    HttpResponse sfc_result =
         this.sendRest_SFC(sfcJSON, "PUT", MessageFormat.format(this.Config_SFC_URL, sfc_name));
     return sfc_result;
   }
   //FIXME need to be formated with the name as Create ODL Test_SFC
 
-  public ResponseEntity<String> updateODLsfc(SFCJSON sfcJSON) {
+  public HttpResponse updateODLsfc(SFCJSON sfcJSON) {
 
-    ResponseEntity<String> sfc_result = this.sendRest_SFC(sfcJSON, "PUT", this.Config_SFC_URL);
+    HttpResponse sfc_result = this.sendRest_SFC(sfcJSON, "PUT", this.Config_SFC_URL);
     return sfc_result;
   }
 
-  public ResponseEntity<String> deleteODLsfc(String sfc_name) {
-    ResponseEntity<String> sfc_result =
+  public HttpResponse deleteODLsfc(String sfc_name) {
+    HttpResponse sfc_result =
         this.sendRest_SFC(null, "DELETE", MessageFormat.format(this.Config_SFC_URL, sfc_name));
     return sfc_result;
   }
   //ODL SFP stuff (Create, Update, Delete)
-  public ResponseEntity<String> createODLsfp(SFPJSON sfpJSON) {
+  public HttpResponse createODLsfp(SFPJSON sfpJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
     String json = gson.toJson(sfpJSON, SFPJSON.class);
 
     String sfp_name = sfpJSON.getServiceFunctionPaths().getServiceFunctionPath().get(0).getName();
-    ResponseEntity<String> sfp_result =
+    HttpResponse sfp_result =
         this.sendRest_SFP(sfpJSON, "PUT", MessageFormat.format(this.Config_SFP_URL, sfp_name));
     return sfp_result;
   }
   //FIXME need to be formated with the name as Create ODL SFP
-  public ResponseEntity<String> updateODLsfp(SFPJSON sfpJSON) {
+  public HttpResponse updateODLsfp(SFPJSON sfpJSON) {
 
-    ResponseEntity<String> sfp_result = this.sendRest_SFP(sfpJSON, "PUT", this.Config_SFP_URL);
+    HttpResponse sfp_result = this.sendRest_SFP(sfpJSON, "PUT", this.Config_SFP_URL);
     return sfp_result;
   }
 
-  public ResponseEntity<String> deleteODLsfp(String sfp_name) {
-    ResponseEntity<String> sfp_result =
+  public HttpResponse deleteODLsfp(String sfp_name) {
+    HttpResponse  sfp_result =
         this.sendRest_SFP(null, "DELETE", MessageFormat.format(this.Config_SFP_URL, sfp_name));
     return sfp_result;
   }
 
   //ODL RSP stuff (Create, Delete, GET)
-  public ResponseEntity<String> createODLrsp(RSPJSON rspJSON) {
+  public HttpResponse createODLrsp(RSPJSON rspJSON) {
     String url = "restconf/operations/rendered-service-path:create-rendered-path";
-    ResponseEntity<String> rsp_result = this.sendRest_RSP(rspJSON, "POST", url);
+    HttpResponse rsp_result = this.sendRest_RSP(rspJSON, "POST", url);
     return rsp_result;
   }
 
-  public ResponseEntity<String> deleteODLrsp(RSPJSON rspJSON) {
+  public HttpResponse deleteODLrsp(RSPJSON rspJSON) {
     String url = "restconf/operations/rendered-service-path:delete-rendered-path/";
-    ResponseEntity<String> rsp_result = this.sendRest_RSP(rspJSON, "POST", url);
+    HttpResponse rsp_result = this.sendRest_RSP(rspJSON, "POST", url);
     return rsp_result;
   }
 
-  public ResponseEntity<String> getODLrsp(String rsp_name) {
+  public HttpResponse getODLrsp(String rsp_name) {
     String url =
         "restconf/operational/rendered-service-path:rendered-service-paths/rendered-service-path/{0}";
-    ResponseEntity<String> rsp_result =
+    HttpResponse rsp_result =
         this.sendRest_RSP(null, "GET", MessageFormat.format(url, rsp_name));
     return rsp_result;
   }
@@ -937,14 +1121,19 @@ public Opendaylight() throws IOException{
   public void CreateSFC(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
     //create Test_SFC
     SFCJSON sfc_json = create_sfc_json(sfc_dict, vnf_dict);
-    ResponseEntity<String> sfc_result = createODLsfc(sfc_json);
+    HttpResponse sfc_result = createODLsfc(sfc_json);
+    if(sfc_result==null){
+      logger.error("Unable to create ODL Test_SFC");
+
+    }
+    /*
     if (!sfc_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to create ODL Test_SFC");
-    }
+    }*/
   }
 
   @Override
-  public void CreateSFs(HashMap<Integer, VNFdict> vnf_dict) {
+  public void CreateSFs(HashMap<Integer, VNFdict> vnf_dict) throws IOException {
 
     String dp_loc = "sf-data-plane-locator";
     ServiceFunctions sfs_json = new ServiceFunctions();
@@ -984,28 +1173,52 @@ public Opendaylight() throws IOException{
     HashMap<String, BridgeMapping> ovs_mapping = Locate_ovs_to_sf(sf_net_map);
     logger.debug("OVS MAP: " + ovs_mapping.toString());
     Iterator br_map = ovs_mapping.entrySet().iterator();
+    int counter=0;
 
     while (br_map.hasNext()) {
+      int position=1000;
+
       Map.Entry br_map_counter = (Map.Entry) br_map.next();
-      ;
       for (int sf_id_counter = 0;
           sf_id_counter < ovs_mapping.get(br_map_counter.getKey()).sfs.size();
           sf_id_counter++) {
+        System.out.println(" ---> SF NAME: "+ovs_mapping.get(br_map_counter.getKey()).sfs.get(sf_id_counter));
+
+        System.out.println("OVS Port:" + ovs_mapping
+            .get(br_map_counter.getKey())
+            .getSFdict()
+            .get(ovs_mapping.get(br_map_counter.getKey()).getSfs().get(sf_id_counter))
+            .getTap_port());
+
+        for (int sf_counter = 0; sf_counter < vnf_dict.size(); sf_counter++) {
+          if(vnf_dict.get(sf_counter).getName().equals(ovs_mapping.get(br_map_counter.getKey()).sfs.get(sf_id_counter))){
+
+            position=sf_counter;
+            System.out.println(" --->Find the SF: NAME: "+ovs_mapping.get(br_map_counter.getKey()).sfs.get(sf_id_counter)+" Position: "+position);
+
+            logger.info("Found the Position of the Service Function "+ ovs_mapping.get(br_map_counter.getKey()).sfs.get(sf_id_counter));
+          }
+        }
+        if(position==1000){
+          logger.error(" Could not find the position of the Service Function "+ovs_mapping.get(br_map_counter.getKey()).sfs.get(sf_id_counter));
+          break;
+        }
+
         sfs_json
             .getServiceFunction()
-            .get(sf_id_counter)
+            .get(position)
             .getSfDataPlaneLocator()
             .get(0)
             .setServiceFunctionForwarder(ovs_mapping.get(br_map_counter.getKey()).getSFFname());
         sfs_json
             .getServiceFunction()
-            .get(sf_id_counter)
+            .get(position)
             .getSfDataPlaneLocator()
             .get(0)
             .setServiceFunctionOvsOvsPort(new ServiceFunctionOvsOvsPort());
         sfs_json
             .getServiceFunction()
-            .get(sf_id_counter)
+            .get(position)
             .getSfDataPlaneLocator()
             .get(0)
             .getServiceFunctionOvsOvsPort()
@@ -1015,11 +1228,16 @@ public Opendaylight() throws IOException{
                     .getSFdict()
                     .get(ovs_mapping.get(br_map_counter.getKey()).getSfs().get(sf_id_counter))
                     .getTap_port());
-        logger.debug(
+        logger.info(
             "SF updated with SFF:" + ovs_mapping.get(br_map_counter.getKey()).getSFFname());
+
       }
+      System.out.println(" LATER ---> SF NAME: " +sfs_json.getServiceFunction().get(position).getName());
+
+      System.out.println(" LATER ---> SFF NAME: " +sfs_json.getServiceFunction().get(position).getSfDataPlaneLocator().get(0).getServiceFunctionForwarder());
 
       System.out.println("OVS_MAPPING >> " + ovs_mapping);
+      counter++;
     }
 
     for (int sf_j = 0; sf_j < sfs_json.getServiceFunction().size(); sf_j++) {
@@ -1030,11 +1248,11 @@ public Opendaylight() throws IOException{
       list_service_function.add(sfs_json.getServiceFunction().get(sf_j));
       service_functions.setServiceFunction(list_service_function);
       FullSFjson.setServiceFunctions(service_functions);
-      ResponseEntity<String> sf_result = createODLsf(FullSFjson);
+      HttpResponse sf_result = createODLsf(FullSFjson);
       logger.debug(
           "create ODL SF with name >> "
               + FullSFjson.getServiceFunctions().getServiceFunction().get(0).getName());
-      if (!sf_result.getStatusCode().is2xxSuccessful()) {
+      if (sf_result.getStatusLine().getStatusCode()!=200 && sf_result.getStatusLine().getStatusCode()!=201) {
         logger.error("Unable to create ODL SF " + FullSFjson.toString());
       }
     }
@@ -1065,10 +1283,11 @@ public Opendaylight() throws IOException{
           .getServiceFunctionForwarder()
           .add(sff_list.get(sff_index));
       Gson mapper = new Gson();
+
       logger.debug("json request formatted sff json: " + sff_json.toString());
-      ResponseEntity<String> sff_result = createODLsff(sff_json);
-      if (!sff_result.getStatusCode().is2xxSuccessful()) {
-        logger.error("Unable to create SFFs");
+      HttpResponse sff_result = createODLsff(sff_json);
+      if (sff_result.getStatusLine().getStatusCode()!=200 && sff_result.getStatusLine().getStatusCode()!=201) {
+        logger.error("Unable to create ODL SFF " );
       }
     }
   }
@@ -1077,17 +1296,15 @@ public Opendaylight() throws IOException{
   public String CreateSFP(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
 
     SFPJSON sfp_json = create_sfp_json(sfc_dict, vnf_dict);
-    ResponseEntity<String> sfp_result = createODLsfp(sfp_json);
-    if (!sfp_result.getStatusCode().is2xxSuccessful()) {
-      logger.error("Unable to create ODL SFP");
-      System.out.println("Unable to create ODL SFP");
+    HttpResponse sfp_result = createODLsfp(sfp_json);
+    if (sfp_result.getStatusLine().getStatusCode()!=200 && sfp_result.getStatusLine().getStatusCode()!=201) {
+      logger.error("Unable to create ODL SFP ");
     }
 
     RSPJSON rsp_json = create_rsp_json(sfp_json);
-    ResponseEntity<String> rsp_result = createODLrsp(rsp_json);
-    if (!rsp_result.getStatusCode().is2xxSuccessful()) {
-      logger.error("Unable to create ODL RSP");
-      System.out.println("Unable to create ODL RSP");
+    HttpResponse rsp_result = createODLrsp(rsp_json);
+    if (rsp_result.getStatusLine().getStatusCode()!=200 && rsp_result.getStatusLine().getStatusCode()!=201) {
+      logger.error("Unable to create ODL RSP " );
     }
 
     String RSP_created = rsp_json.getInput().getName();
@@ -1173,7 +1390,8 @@ public Opendaylight() throws IOException{
 
   //param sfs_dict: dictionary of SFs by id to network id (neutron port id)
   //return: dictionary mapping sfs to bridge name
-  public HashMap<String, BridgeMapping> Locate_ovs_to_sf(HashMap<Integer, VNFdict> sfs_dict) {
+  public HashMap<String, BridgeMapping> Locate_ovs_to_sf(HashMap<Integer, VNFdict> sfs_dict) throws
+                                                                                             IOException {
     System.out.println("LOCATE OVS TO SF >>> ");
 
     ResponseEntity<String> response = getNetworkTopologyList();
@@ -1216,6 +1434,7 @@ public Opendaylight() throws IOException{
           System.out.println(
               "NAME OF the Added SF to br mapping : >>"
                   + br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()));
+          System.out.println("br dict OVS IP    >>> " + br_dict.getOVSIp());
 
           br_mapping
               .get(br_uuid)
@@ -1238,6 +1457,7 @@ public Opendaylight() throws IOException{
           System.out.println(
               "brmapping_dict name >>> "
                   + br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()));
+          System.out.println("br dict OVS IP    >>> " + br_dict.getOVSIp());
 
           br_mapping
               .get(br_uuid)
@@ -1246,19 +1466,18 @@ public Opendaylight() throws IOException{
               .setTap_port(br_dict.getTap_port());
 
           ServiceFunctionForwarder prev_SFF = find_existing_sff(br_mapping);
+          System.out.println("SF Name >>> " + sfs_dict.get(i).getName());
+
 
           if (prev_SFF != null
-              && prev_SFF
-                  .getServiceFunctionForwarderOvsOvsBridge()
-                  .getBridgeName()
-                  .equals(br_mapping.get(br_uuid).getBr_name())) {
+              && prev_SFF.getServiceFunctionForwarderOvsOvsNode().getNodeId().equals(br_mapping.get(br_uuid).getNode_ID())) {
             br_mapping.get(br_uuid).setSFFname(prev_SFF.getName());
             System.out.println("<<<< PREV SFF not Null >>> ");
             System.out.println("PREV SFF Found >>> " + prev_SFF.getName());
 
           } else {
-            br_mapping.get(br_uuid).setSFFname("SFF" + sff_counter);
-            sff_counter++;
+            br_mapping.get(br_uuid).setSFFname("SFF-" +br_mapping.get(br_uuid).getOVSip());
+          //  sff_counter++;
           }
         }
       } else {
@@ -1326,7 +1545,7 @@ public Opendaylight() throws IOException{
     }
   }
 
-  public ServiceFunctionForwarder find_existing_sff(HashMap<String, BridgeMapping> BridgeMapping) {
+  public ServiceFunctionForwarder find_existing_sff(HashMap<String, BridgeMapping> BridgeMapping) throws IOException {
 
     ResponseEntity<String> response = getODLsff();
 
@@ -1348,7 +1567,7 @@ public Opendaylight() throws IOException{
 
     while (br.hasNext()) {
       Map.Entry Bridge_name = (Map.Entry) br.next();
-      ;
+
       for (int sff = 0; sff < odl_sff_list.size(); sff++) {
 
         System.out.println(
@@ -1378,12 +1597,8 @@ public Opendaylight() throws IOException{
       HashMap<String, BridgeMapping> bridgemapping,
       SFJSON sfs_json,
       ServiceFunctionForwarder prev_sff_dict) {
-    SffDataPlaneLocator temp_sff_dp_loc = new SffDataPlaneLocator();
     SffDataPlaneLocator sff_dp_loc = new SffDataPlaneLocator();
-    DataPlaneLocator dp_loc = new DataPlaneLocator();
-    dp_loc.setTransport("service-locator:vxlan-gpe");
-    dp_loc.setIp("");
-    dp_loc.setPort(null);
+
     sff_dp_loc.setName("");
     ServiceFunctionForwarderOvsOvsOptions sffopts = new ServiceFunctionForwarderOvsOvsOptions();
     sffopts.setDstPort("6633");
@@ -1399,7 +1614,6 @@ public Opendaylight() throws IOException{
 
 
     sff_dp_loc.setServiceFunctionForwarderOvsOvsOptions(sffopts);
-    sff_dp_loc.setDataPlaneLocator(dp_loc);
     Iterator br = bridgemapping.entrySet().iterator();
     ServiceFunctionDictionary sf_dict = new ServiceFunctionDictionary();
     ServiceFunctionDictionary temp_sf_dict = null;
@@ -1408,20 +1622,35 @@ public Opendaylight() throws IOException{
     sf_dict.setName("");
     SffSfDataPlaneLocator sff_sf_dp_loc = null;
     SffSfDataPlaneLocator temp_sff_sf_dp_loc = new SffSfDataPlaneLocator();
-    List<ServiceFunctionDictionary> sf_dicts_list = new ArrayList<ServiceFunctionDictionary>();
     List<ServiceFunctionForwarder> sff_list = new ArrayList<ServiceFunctionForwarder>();
 
     // build dict for each bridge
+    int counter_x=0;
 
     while (br.hasNext()) {
-
+      List<ServiceFunctionDictionary> sf_dicts_list = new ArrayList<ServiceFunctionDictionary>();
+      DataPlaneLocator dp_loc = new DataPlaneLocator();
+      dp_loc.setTransport("service-locator:vxlan-gpe");
+      dp_loc.setIp("");
+      dp_loc.setPort(null);
+      sff_dp_loc.setDataPlaneLocator(dp_loc);
       Map.Entry Bridge_name = (Map.Entry) br.next();
-      temp_sff_dp_loc = sff_dp_loc;
+      SffDataPlaneLocator temp_sff_dp_loc = new SffDataPlaneLocator();
+
+      temp_sff_dp_loc.setDataPlaneLocator(dp_loc);
+      temp_sff_dp_loc.setServiceFunctionForwarderOvsOvsOptions(sff_dp_loc.getServiceFunctionForwarderOvsOvsOptions());
       temp_sff_dp_loc.setName("vxgpe");
       temp_sff_dp_loc.getDataPlaneLocator().setPort("6633");
       temp_sff_dp_loc
           .getDataPlaneLocator()
           .setIp(bridgemapping.get(Bridge_name.getKey()).getOVSip());
+      System.out.println(" Bridge NAME: "+ bridgemapping.get(Bridge_name.getKey()).getBr_name());
+      System.out.println(" Bridge ID: "+ bridgemapping.get(Bridge_name.getKey()).getNode_ID());
+      System.out.println(" Bridge OVS IP: "+ bridgemapping.get(Bridge_name.getKey()).getOVSip());
+
+      System.out.println(" Bridge SFs size: "+ bridgemapping.get(Bridge_name.getKey()).getSfs().size());
+      System.out.println(" Bridge SF dict size: "+ bridgemapping.get(Bridge_name.getKey()).getSFdict().size());
+
       String bridge_name = Bridge_name.getKey().toString();
       temp_sffNode.setNodeId(bridgemapping.get(Bridge_name.getKey()).getNode_ID());
       logger.debug("bridge  Name >> " + bridgemapping.get(Bridge_name.getKey()).getBr_name());
@@ -1523,10 +1752,13 @@ public Opendaylight() throws IOException{
         }
 
       } else {
+
         temp_sff.setName(bridgemapping.get(Bridge_name.getKey()).getSFFname());
+        temp_sff.setSffDataPlaneLocator(new ArrayList<SffDataPlaneLocator>());
         temp_sff.getSffDataPlaneLocator().add(temp_sff_dp_loc);
         temp_sff.setServiceFunctionForwarderOvsOvsNode(new ServiceFunctionForwarderOvsOvsNode());
         temp_sff.getServiceFunctionForwarderOvsOvsNode().setNodeId(temp_sffNode.getNodeId());
+
 
         temp_sff.setServiceFunctionDictionary(sf_dicts_list);
         // temp_sff.setIpMgmtAddress(bridgemapping.get(Bridge_name.getKey()).getOVSip());
@@ -1536,12 +1768,22 @@ public Opendaylight() throws IOException{
         temp_sff
             .getServiceFunctionForwarderOvsOvsBridge()
             .setBridgeName(bridgemapping.get(Bridge_name.getKey()).getBr_name());
+        System.out.println(counter_x+") -Check one- SFF List IPs: "+ temp_sff.getSffDataPlaneLocator().get(0).getDataPlaneLocator().getIp());
+
       }
+
       for (int y = 0; y < temp_sff.getServiceFunctionDictionary().size(); y++) {
         System.out.println(
-            "new SFF list has SF:  " + temp_sff.getServiceFunctionDictionary().get(y).getName());
+            "new SFF list has SF:  " + temp_sff.getServiceFunctionDictionary().get(y).getName()+ "  :: IP:  " + temp_sff.getSffDataPlaneLocator().get(0).getDataPlaneLocator().getIp());
       }
       sff_list.add(temp_sff);
+      System.out.println(counter_x+") -Check two- SFF List IP for SFF 1 "+ sff_list.get(0).getSffDataPlaneLocator().get(0).getDataPlaneLocator().getIp() +" SFF NAME: "+ sff_list.get(0).getName() + " :: "+ sff_list.get(0).getSffDataPlaneLocator().get(0).getDataPlaneLocator().getPort());
+      if(sff_list.size()>1) {
+        System.out.println(counter_x +
+                           ") -Check two- SFF List IP for SFF 2 " +
+                           sff_list.get(1).getSffDataPlaneLocator().get(0).getDataPlaneLocator().getIp() + " SFF NAME: "+ sff_list.get(1).getName() + " :: "+ sff_list.get(1).getSffDataPlaneLocator().get(0).getDataPlaneLocator().getPort());
+      }
+      counter_x++;
     }
 
     logger.debug("SFF List output is " + sff_list);
@@ -1987,7 +2229,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     }
   }
   @Override
-  public ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric) {
+  public HttpResponse DeleteSFC(String instance_id, boolean isSymmetric) {
 
     List<String> instance_list = new ArrayList<String>();
     instance_list.add(0, instance_id);
@@ -1995,7 +2237,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       String reverse_id = instance_id + "-Reverse";
       instance_list.add(1, reverse_id);
     }
-    ResponseEntity<String> rsp_result = null;
+    HttpResponse rsp_result = null;
     for (int ins = 0; ins < instance_list.size(); ins++) {
       RSPJSON rsp_dict = new RSPJSON();
       Input x = new Input();
@@ -2004,7 +2246,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       rsp_dict.setInput(x);
       rsp_result = deleteODLrsp(rsp_dict);
 
-      if (!rsp_result.getStatusCode().is2xxSuccessful()) {
+      if (rsp_result.getStatusLine().getStatusCode()!=200 && rsp_result.getStatusLine().getStatusCode()!=201) {
 
         logger.error("Unable to delete RSP ! ");
       }
@@ -2018,7 +2260,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
   }
 
   @Override
-  public ResponseEntity<String> DeleteSFP(String instance_id, boolean isSymmetric) {
+  public HttpResponse DeleteSFP(String instance_id, boolean isSymmetric) {
 
     List<String> instance_list = new ArrayList<String>();
     instance_list.add(0, instance_id);
@@ -2026,7 +2268,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       String reverse_id = instance_id + "-Reverse";
       instance_list.add(1, reverse_id);
     }
-    ResponseEntity<String> rsp_result = null;
+    HttpResponse rsp_result = null;
     for (int ins = 0; ins < instance_list.size(); ins++) {
       RSPJSON rsp_dict = new RSPJSON();
       Input x = new Input();
@@ -2035,7 +2277,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       rsp_dict.setInput(x);
       rsp_result = deleteODLrsp(rsp_dict);
 
-      if (!rsp_result.getStatusCode().is2xxSuccessful()) {
+      if (rsp_result.getStatusLine().getStatusCode()!=200 && rsp_result.getStatusLine().getStatusCode()!=201) {
 
         logger.error("Unable to delete RSP ! ");
       }
@@ -2045,16 +2287,19 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     return rsp_result;
   }
 
-  public void DeleteSFs(String instance_id, boolean isSymmetric) {
+  public void DeleteSFs(String instance_id, boolean isSymmetric) throws IOException {
     //--------------- delete SFs and Update SFF
 
     // Need to check if the SFs involved in other RSPs !!!
     Gson mapper = new Gson();
     System.out.println("Test_SFC NAME " + instance_id.substring(5));
-    ResponseEntity<String> rsp_response = getODLrsp(instance_id);
-    RenderedServicePaths rsp = mapper.fromJson(rsp_response.getBody(), RenderedServicePaths.class);
+    HttpResponse rsp_response = getODLrsp(instance_id);
+    String stringResponse1=new BasicResponseHandler().handleResponse(rsp_response);
+
+    RenderedServicePaths rsp = mapper.fromJson(stringResponse1, RenderedServicePaths.class);
     Gson mapper_sff = new Gson();
     ResponseEntity<String> sff_response = getODLsff();
+
     SFFJSON sffs = mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
 
     for (int y = 0;
@@ -2174,13 +2419,14 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     //-------------------------------
   }
 
-  public void DeleteSF(String SF_name) {
+  public void DeleteSF(String SF_name) throws IOException {
     //--------------- delete SFs and Update SFF
 
     // Need to check if the SFs involved in other RSPs !!!
 
     Gson mapper_sff = new Gson();
     ResponseEntity<String> sff_response = getODLsff();
+
     SFFJSON sffs = mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
 
     for (int x = 0;
@@ -2278,13 +2524,14 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     //-------------------------------
   }
   @Override
-  public String GetConnectedSFF(String SF_name) {
+  public String GetConnectedSFF(String SF_name) throws IOException {
     //--------------- delete SFs and Update SFF
 
     // Need to check if the SFs involved in other RSPs !!!
     String ConnectedSFF=null;
     Gson mapper_sff = new Gson();
     ResponseEntity<String> sff_response = getODLsff();
+
     SFFJSON sffs = mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
 
     for (int x = 0; x < sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size(); x++) {
