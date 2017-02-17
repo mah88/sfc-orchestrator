@@ -57,13 +57,13 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
   @Autowired private SFCAllocator creator;
   @Autowired private Gson mapper;
   private List<String> eventIds;
- // private Properties properties;
+  private Properties properties;
   private String Prev_NSR;
   private String projectId;
   private void init() throws SDKException, IOException, ClassNotFoundException {
 
     this.logger = LoggerFactory.getLogger(this.getClass());
-   // this.properties = ConfigReader.readProperties();
+    this.properties = ConfigReader.readProperties();
 
     this.requestor =
         new NFVORequestor(
@@ -82,7 +82,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointCreation.setType(EndpointType.RABBIT);
     eventEndpointCreation.setEvent(Action.INSTANTIATE_FINISH);
     eventEndpointCreation.setEndpoint(ConfigurationBeans.queueName_eventInstatiateFinish);
-    eventEndpointCreation.setName("Test_SFC-event-NSR-Created");
+    eventEndpointCreation.setName("SFC-event-NSR-Created");
     eventEndpointCreation = requestor.getEventAgent().create(eventEndpointCreation);
 
     // For NSR Delete
@@ -91,7 +91,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointDeletion.setEvent(Action.RELEASE_RESOURCES_FINISH);
 
     eventEndpointDeletion.setEndpoint(ConfigurationBeans.queueName_eventResourcesReleaseFinish);
-    eventEndpointDeletion.setName("Test_SFC-event-NSR-Relased");
+    eventEndpointDeletion.setName("SFC-event-NSR-Relased");
     eventEndpointDeletion = requestor.getEventAgent().create(eventEndpointDeletion);
 
     // For Fault Management
@@ -99,7 +99,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointHealing.setType(EndpointType.RABBIT);
     eventEndpointHealing.setEvent(Action.HEAL);
     eventEndpointHealing.setEndpoint(ConfigurationBeans.queueName_eventHeal);
-    eventEndpointHealing.setName("Test_SFC-event-VNF-Healed");
+    eventEndpointHealing.setName("SFC-event-VNF-Healed");
     eventEndpointHealing = requestor.getEventAgent().create(eventEndpointHealing);
 
     // For Auto-Scaling
@@ -107,7 +107,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointScaled.setType(EndpointType.RABBIT);
     eventEndpointScaled.setEvent(Action.SCALED);
     eventEndpointScaled.setEndpoint(ConfigurationBeans.queueName_eventScaled);
-    eventEndpointScaled.setName("Test_SFC-event-VNF-Scaled");
+    eventEndpointScaled.setName("SFC-event-VNF-Scaled");
     eventEndpointScaled = requestor.getEventAgent().create(eventEndpointScaled);
 
     this.eventIds.add(eventEndpointCreation.getId());
@@ -159,7 +159,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
             if(VNFR_counter==nsr.getVnfr().size()-1){
               lastvnfr=true;
             }
-            monitoringManager.start(vnfr,"smallaverage.traffic.in[eth0]",10,lastvnfr);
+            monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 20, lastvnfr);
           }
           catch(NotFoundException e){
             logger.error(e.getMessage(), e);
@@ -204,7 +204,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
       }
       boolean lastvnfr=true;
       monitoringManager.stop(vnfr);
-      monitoringManager.start(vnfr,"smallaverage.traffic.in[eth0]",10,lastvnfr);
+     monitoringManager.start(vnfr,properties.getProperty("sf.monitoring.item"),20,lastvnfr);
 
 
     } catch (Exception e) {
@@ -218,11 +218,13 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     logger.info("[Received New Event ]" + message);
     OpenbatonEvent evt;
     setProjectId();
+    boolean flag=false;
     try {
       logger.debug("Trying to deserialize it");
       evt = getOpenbatonEvent(message);
       logger.debug("[Received VNF event with action]: " + evt.getAction());
       VirtualNetworkFunctionRecord vnfr = getVnfrFromPayload(evt.getPayload());
+
       if (evt.getAction().ordinal() == Action.SCALED.ordinal()) {
         boolean NotAS = false;
         for (VirtualDeploymentUnit vdu : vnfr.getVdu()) {
@@ -235,8 +237,10 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
                     + vnfc_instance.getHostname());
 
             try {
-              if (vnfc_instance.getState().equals("standby")) {
+              if (!vnfc_instance.getState().equals("ACTIVE")) {
                 NotAS = true;
+                logger.info(
+                    "::: It is not AutoScaling");
                 break;
               }
             } catch (NullPointerException e) {
@@ -255,7 +259,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
           creator.ScalePaths(vnfr);
           boolean lastvnfr=true;
           monitoringManager.stop(vnfr);
-          monitoringManager.start(vnfr,"smallaverage.traffic.in[eth0]",10,lastvnfr);
+          monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"),20,lastvnfr);
         } else {
           logger.info("::: It is a Fault Management Event :::");
         }

@@ -76,7 +76,7 @@ public  NeutronClient() throws IOException{
     this.Openstack_password = properties.getProperty("openstack.password");
     this.Openstack_tenantname = properties.getProperty("openstack.tenantname");
   }
-/*
+
   public Token getToken(Tokenbody data) {
 
     String Full_URL = "http://" + Openstack_ip + ":" + Identity_port + Config_token_URL;
@@ -121,7 +121,7 @@ public  NeutronClient() throws IOException{
 
     return result;
   }
-  */
+  /*
   public Token getToken(Tokenbody data){
     HttpClient httpClient = HttpClientBuilder.create().build();
     Token result = new Token();
@@ -150,7 +150,7 @@ public  NeutronClient() throws IOException{
     System.out.println("Result: "+result.getAccess().getToken().getId());
     return result;
   }
-
+*/
   public NeutronPorts getNeutronPorts() {
 
     logger.info("OPNESTACK IP: "+ this.Openstack_ip);

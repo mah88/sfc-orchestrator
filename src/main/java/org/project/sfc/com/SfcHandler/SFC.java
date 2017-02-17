@@ -4,7 +4,9 @@ import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by mah on 2/29/16.
@@ -25,6 +27,50 @@ public class SFC {
   }
 
   static HashMap<String, SFC_Data> SFC_MAP = new HashMap<String, SFC_Data>();
+  static List<VNFdict> SFs_MAP = new ArrayList<>();
+
+  public void addVNFs(List<VNFdict> vnf){
+
+    for(int i=0;i<vnf.size();i++){
+
+      SFs_MAP.add(vnf.get(i));
+
+    }
+
+  }
+
+  public void removeVNF(VNFdict vnf){
+
+    for(int i=0;i<SFs_MAP.size();i++){
+      if(SFs_MAP.get(i).getName().equals(vnf.getName())){
+        SFs_MAP.remove(i);
+      }
+    }
+  }
+
+  public boolean existVNF(VNFdict vnf){
+    boolean Exist=false;
+
+    for(int i=0;i<SFs_MAP.size();i++){
+      if(SFs_MAP.get(i).getName().equals(vnf.getName())){
+        Exist= true;
+        break;
+      }
+    }
+    return Exist;
+  }
+
+  public List<VNFdict> getVNFs(String type){
+    List<VNFdict> vnfs_type=new ArrayList<>();
+
+    for(int i=0;i<SFs_MAP.size();i++){
+      if(SFs_MAP.get(i).getType().equals(type)){
+        vnfs_type.add(SFs_MAP.get(i));
+      }
+    }
+
+    return vnfs_type;
+  }
 
   public void add(
       String nsr_id,

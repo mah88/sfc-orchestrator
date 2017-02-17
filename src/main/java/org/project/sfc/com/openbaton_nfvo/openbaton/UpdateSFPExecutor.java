@@ -52,7 +52,7 @@ public class UpdateSFPExecutor implements Runnable {
             + new Date().getTime());
 
     try {
-      sfcCaller.UpdateFailedPaths(vnfr);
+      sfcCaller.UpdateFailedPaths(vnfr,properties.getProperty("sfc.sf.runtime.schedulingType"));
     } catch (IOException e) {
       e.printStackTrace();
     }

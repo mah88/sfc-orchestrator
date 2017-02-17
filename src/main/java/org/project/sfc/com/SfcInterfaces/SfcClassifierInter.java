@@ -11,5 +11,5 @@ public interface SfcClassifierInter {
 
   String Create_SFC_Classifer(SFCCdict sfcc_dict, String Chain_instance_id);
 
-  HttpResponse Delete_SFC_Classifier(String classifier_name);
+  ResponseEntity<String> Delete_SFC_Classifier(String classifier_name);
 }

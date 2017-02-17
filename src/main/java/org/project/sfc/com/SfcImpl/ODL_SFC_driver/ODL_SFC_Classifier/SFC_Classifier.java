@@ -102,6 +102,132 @@ public class SFC_Classifier extends SFCclassifier {
     return "netvirtsfc";
   }
 
+  public ResponseEntity<String> sendRest_Classifier(
+      ClassifierJSON datax, String rest_type, String url) {
+
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Accept", "application/json");
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    headers.add("Authorization", "Basic " + base64Creds);
+    Gson mapper = new Gson();
+    Classifiers result = new Classifiers();
+
+    ResponseEntity<String> request = null;
+    if (rest_type == "PUT") {
+      Classifiers data = datax.getClassifiers();
+
+      HttpEntity<String> putEntity =
+          new HttpEntity<String>(mapper.toJson(data, Classifiers.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
+      logger.debug(
+          "Setting of Classifier has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), Classifiers.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, Classifiers.class));
+      }
+    } else if (rest_type == "DELETE") {
+      System.out.println("Deleting of SFC CLASSIFIER ");
+
+      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
+      logger.debug(
+          "Deleting Classifier produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), Classifiers.class);
+        logger.debug("RESULT IS " + request.getStatusCode());
+      }
+    } else {
+      logger.debug("The REST Request is not exist");
+    }
+
+    return request;
+  }
+
+  public ResponseEntity<String> sendRest_ACL(ACLJSON datax, String rest_type, String url) {
+
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Accept", "application/json");
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    headers.add("Authorization", "Basic " + base64Creds);
+    Gson mapper = new Gson();
+    AccessLists result = new AccessLists();
+    ResponseEntity<String> request = null;
+    if (rest_type == "PUT") {
+      AccessLists data = datax.getAccessLists();
+
+      HttpEntity<String> putEntity =
+          new HttpEntity<String>(mapper.toJson(data, AccessLists.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
+      logger.debug(
+          "Setting of ACL has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), AccessLists.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, AccessLists.class));
+      }
+    } else if (rest_type == "DELETE") {
+      System.out.println("Deleting of ACL ");
+      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
+      logger.debug(
+          "Deleting of ACL has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), AccessLists.class);
+        logger.debug("RESULT IS " + request.getStatusCode());
+      }
+    } else {
+      logger.debug("The REST Request is not exist");
+    }
+
+    return request;
+  }
+
+  /*
   public HttpResponse sendRest_Classifier(
       ClassifierJSON datax, String rest_type, String url) {
 
@@ -143,7 +269,7 @@ public class SFC_Classifier extends SFCclassifier {
                 + " with body "
                 + mapper.toJson(result, Classifiers.class));
       }*/
-      HttpPut Putrequest = new HttpPut(Full_URL);
+   /*   HttpPut Putrequest = new HttpPut(Full_URL);
       try{
         StringEntity params =new StringEntity(mapper.toJson(data, Classifiers.class));
         Putrequest.addHeader("content-type", "application/json");
@@ -277,7 +403,7 @@ public class SFC_Classifier extends SFCclassifier {
 
     return response;
   }
-
+*/
   public ClassifierJSON build_classifier_json(String sfcc_name) {
     ClassifierJSON sfcc_json = new ClassifierJSON();
     sfcc_json.setClassifiers(new Classifiers());
@@ -343,17 +469,17 @@ public class SFC_Classifier extends SFCclassifier {
     ACLJSON acl_json = build_acl_json(sfcc_dict, Chain_instance_id);
     String sfcc_name = sfcc_dict.getName();
 
-    HttpResponse acl_result =
+    ResponseEntity<String> acl_result =
         this.sendRest_ACL(acl_json, "PUT", MessageFormat.format(this.Config_acl_url, sfcc_name));
 
-    if (acl_result.getStatusLine().getStatusCode()!=200 && acl_result.getStatusLine().getStatusCode()!=201) {
+    if (!acl_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to create NetVirt ACL");
     }
     ClassifierJSON sfcc_json = build_classifier_json(sfcc_name);
-    HttpResponse sfcc_result =
+    ResponseEntity<String> sfcc_result =
         this.sendRest_Classifier(
             sfcc_json, "PUT", MessageFormat.format(this.Config_netvirtsfc_url, sfcc_name));
-    if (sfcc_result.getStatusLine().getStatusCode()!=200 && sfcc_result.getStatusLine().getStatusCode()!=201) {
+    if (!sfcc_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to create NetVirt Classifier");
     }
     //FIXME right now there is no check in netvirtsfc to ensure classifier was created with id
@@ -361,21 +487,21 @@ public class SFC_Classifier extends SFCclassifier {
   }
 
   @Override
-  public HttpResponse Delete_SFC_Classifier(String classifier_name) {
+  public ResponseEntity<String> Delete_SFC_Classifier(String classifier_name) {
     System.out.println("$$$$ delete Acl - Test_SFC CLASSIFIER $$$$$$");
 
-    HttpResponse sfcc_result =
+    ResponseEntity<String> sfcc_result =
         this.sendRest_Classifier(
             null, "DELETE", MessageFormat.format(this.Config_netvirtsfc_url, classifier_name));
-    if (sfcc_result.getStatusLine().getStatusCode()!=200 && sfcc_result.getStatusLine().getStatusCode()!=201) {
+    if (!sfcc_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to delete NetVirt Classifier");
     } else {
       System.out.println("Success to delete Test_SFC CLassifier ");
     }
-    HttpResponse acl_result =
+    ResponseEntity<String> acl_result =
         this.sendRest_ACL(
             null, "DELETE", MessageFormat.format(this.Config_acl_url, classifier_name));
-    if (acl_result.getStatusLine().getStatusCode()!=200 && acl_result.getStatusLine().getStatusCode()!=201) {
+    if (!acl_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to delete Acl ");
     } else {
       System.out.println("Success to delete Acl ");

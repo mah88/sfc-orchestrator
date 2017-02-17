@@ -8,9 +8,7 @@ import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
-import org.openbaton.exceptions.NotFoundException;
-import org.project.sfc.com.DynamicPathCreation.RandomPathSelection;
-import org.project.sfc.com.MonitoringAgent.MonitoringManager;
+import org.project.sfc.com.PathCreation.DeploymentPathCreation.RandomPathSelection;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
@@ -19,13 +17,11 @@ import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.project.sfc.com.SfcModel.SFCCdict.AclMatchCriteria;
 import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC_Classifier.SFC_Classifier;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.project.sfc.com.SfcHandler.SFC.SFC_Data;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Created by mah on 3/14/16.
@@ -356,15 +352,15 @@ public class SFCcreator {
     String sffc_name = sfcc_db.getSfccName(nsrID);
     System.out.println("instance id to be deleted:  " + sffc_name);
 
-    HttpResponse result = classifier_test2.Delete_SFC_Classifier(sffc_name);
-    System.out.println("Delete Test_SFC Classifier :  " + result.getStatusLine().getStatusCode());
-    HttpResponse sfc_result = SFC.DeleteSFC(rsp_id, sfcc_db.isSymmSFC(nsrID));
-    System.out.println("Delete Test_SFC   :  " + sfc_result.getStatusLine().getStatusCode());
+    ResponseEntity<String> result = classifier_test2.Delete_SFC_Classifier(sffc_name);
+    System.out.println("Delete Test_SFC Classifier :  " + result.getStatusCode().is2xxSuccessful());
+    ResponseEntity<String> sfc_result = SFC.DeleteSFC(rsp_id, sfcc_db.isSymmSFC(nsrID));
+    System.out.println("Delete Test_SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful());
 
     if (result != null && sfc_result != null) {
 
-      if ((result.getStatusLine().getStatusCode()==200 || result.getStatusLine().getStatusCode()==201)
-          && (sfc_result.getStatusLine().getStatusCode()==200 || sfc_result.getStatusLine().getStatusCode()==201)) {
+      if (result.getStatusCode().is2xxSuccessful()
+          && sfc_result.getStatusCode().is2xxSuccessful()) {
         sfcc_db.remove(nsrID);
         return true;
       } else {

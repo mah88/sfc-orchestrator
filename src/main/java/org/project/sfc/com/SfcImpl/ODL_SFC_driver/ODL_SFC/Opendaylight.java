@@ -1,3 +1,4 @@
+
 package org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC;
 
 import java.io.IOException;
@@ -17,9 +18,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.openbaton.catalogue.mano.descriptor.ACL_Matching_Criteria;
-import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetvirtProvidersConfigJSON.NetvirtProvidersConfig;
-import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetvirtProvidersConfigJSON.NetvirtProvidersConfig_;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetworkJSON.NetworkJSON;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.NetworkJSON.NetworkTopology;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.OpenFlowPluginTable.Match;
@@ -46,7 +44,6 @@ import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SFPJSON.ServicePathHop;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SfcOfRendererConfigJSON.SfcOfRendererConfig;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.SfcOfRendererConfigJSON.SfcOfRendererConfigJSON;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
-//import org.project.sfc.com.openbaton_nfvo.configurations.SfcConfiguration;
 import org.project.sfc.com.openbaton_nfvo.utils.ConfigReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +56,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -101,132 +97,17 @@ public class Opendaylight extends SFC {
     this.Config_SFF_URL = Config_SFF_URL;
     this.Config_SFP_URL = Config_SFP_URL;
 
-   // this.sff_counter = sff_counter;
+    // this.sff_counter = sff_counter;
   }
 
-public Opendaylight() throws IOException{
-  this.properties = ConfigReader.readProperties();
+  public Opendaylight() throws IOException{
+    this.properties = ConfigReader.readProperties();
 
-  this.ODL_ip = properties.getProperty("sfc.ip");
-  this.ODL_port =  properties.getProperty("sfc.port");
-  this.ODL_username = properties.getProperty("sfc.username");
-  this.ODL_password = properties.getProperty("sfc.password");
+    this.ODL_ip = properties.getProperty("sfc.ip");
+    this.ODL_port =  properties.getProperty("sfc.port");
+    this.ODL_username = properties.getProperty("sfc.username");
+    this.ODL_password = properties.getProperty("sfc.password");
 
-}
-  /*
-  public ResponseEntity<String> sendRest_netvirt_conf(
-      NetvirtProvidersConfig data, String rest_type, String url) {
-
-    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
-    String plainCreds = ODL_username + ":" + ODL_password;
-    byte[] plainCredsBytes = plainCreds.getBytes();
-    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-    String base64Creds = new String(base64CredsBytes);
-    RestTemplate template = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Accept", "application/json");
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.add("Authorization", "Basic " + base64Creds);
-    Gson mapper = new Gson();
-    NetvirtProvidersConfig result = new NetvirtProvidersConfig();
-    ResponseEntity<String> request = null;
-
-    if (rest_type == "PUT") {
-      HttpEntity<String> putEntity =
-          new HttpEntity<String>(mapper.toJson(data, NetvirtProvidersConfig.class), headers);
-      System.out.println("Entry : >> " + putEntity);
-      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
-      logger.debug(
-          "configuration of netvirt status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
-
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), NetvirtProvidersConfig.class);
-        logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, NetvirtProvidersConfig.class));
-      }
-    } else if (rest_type == "GET") {
-      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
-      System.out.println("Entry : >> " + getEntity);
-      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
-      logger.debug(
-          "Getting of netvirt status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
-
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), NetvirtProvidersConfig.class);
-        logger.debug(
-            "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, NetvirtProvidersConfig.class));
-      }
-    }
-
-    return request;
-  }
-
-  public ResponseEntity<String> Configure_NETVIRT() {
-    NetvirtProvidersConfig dataJSON = new NetvirtProvidersConfig();
-    dataJSON.setNetvirtProvidersConfig(new NetvirtProvidersConfig_());
-    dataJSON.getNetvirtProvidersConfig().setTableOffset(10);
-
-    ResponseEntity<String> netvirt_result =
-        this.sendRest_netvirt_conf(dataJSON, "PUT", this.Config_netvirt_URL);
-    return netvirt_result;
-  }
-
-  public boolean Check_Configuration_NETVIRT() {
-    NetvirtProvidersConfig dataJSON = new NetvirtProvidersConfig();
-    Gson mapper = new Gson();
-    boolean check_result = false;
-
-    ResponseEntity<String> netvirt_result =
-        this.sendRest_netvirt_conf(null, "GET", this.Config_netvirt_URL);
-    dataJSON = mapper.fromJson(netvirt_result.getBody(), NetvirtProvidersConfig.class);
-    if (dataJSON.getNetvirtProvidersConfig().getTableOffset() == 10) {
-      check_result = true;
-    }
-    return check_result;
-  }
-
-  public ResponseEntity<String> Configure_SfcOfRenderer() {
-    SfcOfRendererConfigJSON dataJSON = new SfcOfRendererConfigJSON();
-    dataJSON.setSfcOfRendererConfig(new SfcOfRendererConfig());
-    dataJSON.getSfcOfRendererConfig().setSfcOfAppEgressTableOffset(20);
-    dataJSON.getSfcOfRendererConfig().setSfcOfTableOffset(150);
-    ResponseEntity<String> sfc_OF_result =
-        this.sendRest_SfcOFrender_conf(dataJSON, "PUT", this.Config_sfc_of_render_URL);
-    return sfc_OF_result;
-  }
-
-  public boolean Check_Configuration_SfcOfRenderer() {
-    SfcOfRendererConfigJSON dataJSON = new SfcOfRendererConfigJSON();
-    Gson mapper = new Gson();
-    boolean check_result = false;
-
-    ResponseEntity<String> sfc_OF_result =
-        this.sendRest_SfcOFrender_conf(null, "GET", this.Config_sfc_of_render_URL);
-
-    if (sfc_OF_result != null) {
-      dataJSON = mapper.fromJson(sfc_OF_result.getBody(), SfcOfRendererConfigJSON.class);
-      if (dataJSON.getSfcOfRendererConfig().getSfcOfAppEgressTableOffset() == 20
-          && dataJSON.getSfcOfRendererConfig().getSfcOfTableOffset() == 150) {
-        check_result = true;
-      }
-    }
-    return check_result;
   }
 
   public ResponseEntity<String> sendRest_SfcOFrender_conf(
@@ -255,9 +136,9 @@ public Opendaylight() throws IOException{
       request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
       logger.debug(
           "configuration of netvirt status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
 
       if (!request.getStatusCode().is2xxSuccessful()) {
         result = null;
@@ -265,9 +146,9 @@ public Opendaylight() throws IOException{
         result = mapper.fromJson(request.getBody(), SfcOfRendererConfigJSON.class);
         logger.debug(
             "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, SfcOfRendererConfigJSON.class));
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, SfcOfRendererConfigJSON.class));
       }
     } else if (rest_type == "GET") {
       HttpEntity<String> getEntity = new HttpEntity<String>(headers);
@@ -275,9 +156,9 @@ public Opendaylight() throws IOException{
       request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
       logger.debug(
           "Getting of netvirt status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
 
       if (!request.getStatusCode().is2xxSuccessful()) {
         result = null;
@@ -286,15 +167,448 @@ public Opendaylight() throws IOException{
         result = mapper.fromJson(request.getBody(), SfcOfRendererConfigJSON.class);
         logger.debug(
             "RESULT IS "
-                + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, SfcOfRendererConfigJSON.class));
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, SfcOfRendererConfigJSON.class));
       }
     }
 
     return request;
   }
-*/
+
+  public ResponseEntity<String> sendRest_SF(SFJSON datax, String rest_type, String url) {
+
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Accept", "application/json");
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.add("Authorization", "Basic " + base64Creds);
+    Gson mapper = new Gson();
+    ServiceFunctions result = new ServiceFunctions();
+    ResponseEntity<String> request = null;
+    ServiceFunctions data = null;
+    if (rest_type == "POST") {
+      HttpEntity<String> postEntity =
+          new HttpEntity<String>(mapper.toJson(data, ServiceFunctions.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
+      logger.debug(
+          "Setting of SF has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctions.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, ServiceFunctions.class));
+      }
+    } else if (rest_type == "PUT") {
+      data = datax.getServiceFunctions();
+      HttpEntity<String> putEntity =
+          new HttpEntity<String>(mapper.toJson(data, ServiceFunctions.class), headers);
+      System.out.println("Entry : >> " + putEntity);
+      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
+      logger.debug(
+          "Setting of SF has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctions.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, ServiceFunctions.class));
+      }
+    } else if (rest_type == "DELETE") {
+      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
+      logger.debug(
+          "Setting of SF has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctions.class);
+        logger.debug("RESULT IS " + request.getStatusCode());
+      }
+    } else if (rest_type == "GET") {
+      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctions.class);
+        logger.debug(
+            "Setting of SF has produced http status:"
+            + request.getStatusCode()
+            + " with body: "
+            + request.getBody());
+      }
+    }
+
+    return request;
+  }
+
+  public ResponseEntity<String> sendRest_SFF(SFFJSON datax, String rest_type, String url) {
+
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Accept", "application/json");
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    headers.add("Authorization", "Basic " + base64Creds);
+    Gson mapper = new Gson();
+    ServiceFunctionForwarders result = new ServiceFunctionForwarders();
+    ResponseEntity<String> request = null;
+    ServiceFunctionForwarders data = new ServiceFunctionForwarders();
+    if (datax != null) {
+      data = datax.getServiceFunctionForwarders();
+    }
+
+    if (rest_type == "POST") {
+      HttpEntity<String> postEntity =
+          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionForwarders.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
+      logger.debug(
+          "Setting of SFF has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionForwarders.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, ServiceFunctionForwarders.class));
+      }
+    } else if (rest_type == "PUT") {
+      HttpEntity<String> putEntity =
+          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionForwarders.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
+      logger.debug(
+          "Setting of SFF has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionForwarders.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, ServiceFunctionForwarders.class));
+      }
+    } else if (rest_type == "DELETE") {
+      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
+      logger.debug(
+          "Setting of SFF has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionForwarders.class);
+        logger.debug("RESULT IS " + request.getStatusCode());
+      }
+    } else if (rest_type == "GET") {
+      try {
+        HttpEntity<String> getEntity = new HttpEntity<String>(headers);
+        request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+      } catch (HttpClientErrorException ce) {
+        result = null;
+      }
+    }
+
+    return request;
+  }
+
+  public ResponseEntity<String> sendRest_SFP(SFPJSON datax, String rest_type, String url) {
+
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Accept", "application/json");
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    headers.add("Authorization", "Basic " + base64Creds);
+    Gson mapper = new Gson();
+    ServiceFunctionPaths result = new ServiceFunctionPaths();
+    ResponseEntity<String> request = null;
+    ServiceFunctionPaths data = null;
+    if (rest_type == "POST") {
+      HttpEntity<String> postEntity =
+          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionPaths.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
+      logger.debug(
+          "Setting of SFP has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionPaths.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, ServiceFunctionPaths.class));
+      }
+    } else if (rest_type == "PUT") {
+      data = datax.getServiceFunctionPaths();
+      HttpEntity<String> putEntity =
+          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionPaths.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
+      logger.debug(
+          "Setting of SFP has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionPaths.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, ServiceFunctionPaths.class));
+      }
+    } else if (rest_type == "DELETE") {
+      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
+      logger.debug(
+          "Setting of SFP has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionPaths.class);
+        logger.debug("RESULT IS " + request.getStatusCode());
+      }
+    } else if (rest_type == "GET") {
+      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionPaths.class);
+        logger.debug(
+            "Setting of SFP has produced http status:"
+            + request.getStatusCode()
+            + " with body: "
+            + request.getBody());
+      }
+    }
+
+    return request;
+  }
+
+  public ResponseEntity<String> sendRest_RSP(RSPJSON data, String rest_type, String url) {
+
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Accept", "application/json");
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    headers.add("Authorization", "Basic " + base64Creds);
+    Gson mapper = new Gson();
+    RSPJSON result = new RSPJSON();
+    ResponseEntity<String> request = null;
+
+    if (rest_type == "POST") {
+      HttpEntity<String> postEntity =
+          new HttpEntity<String>(mapper.toJson(data, RSPJSON.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
+      logger.debug(
+          "Setting of RSP has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), RSPJSON.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, RSPJSON.class));
+      }
+    } else if (rest_type == "DELETE") {
+      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
+      logger.debug(
+          "Setting of RSP has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), RSPJSON.class);
+        logger.debug("RESULT IS " + request.getStatusCode());
+      }
+    } else if (rest_type == "GET") {
+      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+      logger.debug(
+          "Getting  of all RSPs has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), RSPJSON.class);
+        logger.debug("RESULT IS " + request.getStatusCode());
+      }
+    }
+
+    return request;
+  }
+
+  public ResponseEntity<String> sendRest_SFC(SFCJSON datax, String rest_type, String url) {
+
+    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+    String plainCreds = ODL_username + ":" + ODL_password;
+    byte[] plainCredsBytes = plainCreds.getBytes();
+    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+    String base64Creds = new String(base64CredsBytes);
+    RestTemplate template = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Accept", "application/json");
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    headers.add("Authorization", "Basic " + base64Creds);
+    Gson mapper = new Gson();
+    ServiceFunctionChains result = new ServiceFunctionChains();
+    ResponseEntity<String> request = null;
+    ServiceFunctionChains data = null;
+    if (rest_type == "POST") {
+      HttpEntity<String> postEntity =
+          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionChains.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
+      logger.debug(
+          "Setting of SF has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, ServiceFunctionChains.class));
+      }
+    } else if (rest_type == "PUT") {
+      data = datax.getServiceFunctionChains();
+      HttpEntity<String> putEntity =
+          new HttpEntity<String>(mapper.toJson(data, ServiceFunctionChains.class), headers);
+      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
+      logger.debug(
+          "Setting of SFC has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
+        logger.debug(
+            "RESULT IS "
+            + request.getStatusCode()
+            + " with body "
+            + mapper.toJson(result, ServiceFunctionChains.class));
+      }
+    } else if (rest_type == "DELETE") {
+      HttpEntity<String> delEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
+      logger.debug(
+          "Setting of SFC has produced http status:"
+          + request.getStatusCode()
+          + " with body: "
+          + request.getBody());
+
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
+        logger.debug("RESULT IS " + request.getStatusCode());
+      }
+    } else if (rest_type == "GET") {
+      HttpEntity<String> getEntity = new HttpEntity<String>(headers);
+      request = template.exchange(Full_URL, HttpMethod.GET, getEntity, String.class);
+      if (!request.getStatusCode().is2xxSuccessful()) {
+        result = null;
+      } else {
+        result = mapper.fromJson(request.getBody(), ServiceFunctionChains.class);
+        logger.debug(
+            "Setting of SFC has produced http status:"
+            + request.getStatusCode()
+            + " with body: "
+            + request.getBody());
+      }
+    }
+
+    return request;
+  }
+/*
   public HttpResponse sendRest_SF(SFJSON datax, String rest_type, String url) {
 
     String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
@@ -347,7 +661,7 @@ public Opendaylight() throws IOException{
         Putrequest.addHeader("Authorization", "Basic " + base64Creds);
         Putrequest.setEntity(params);
 
-         response = httpClient.execute(Putrequest);
+        response = httpClient.execute(Putrequest);
         String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
             "Setting of SF has produced http status:"
@@ -373,7 +687,7 @@ public Opendaylight() throws IOException{
         Deleterequest.addHeader("content-type", "application/json");
         Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
 
-         response = httpClient.execute(Deleterequest);
+        response = httpClient.execute(Deleterequest);
         String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
             "Deleting of SF has produced http status:"
@@ -399,7 +713,7 @@ public Opendaylight() throws IOException{
         Getrequest.addHeader("content-type", "application/json");
         Getrequest.addHeader("Authorization", "Basic " + base64Creds);
 
-         response = httpClient.execute(Getrequest);
+        response = httpClient.execute(Getrequest);
         String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
             "Deleting of SF has produced http status:"
@@ -478,7 +792,7 @@ public Opendaylight() throws IOException{
         Putrequest.addHeader("Authorization", "Basic " + base64Creds);
         Putrequest.setEntity(params);
 
-         response = httpClient.execute(Putrequest);
+        response = httpClient.execute(Putrequest);
         String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
             "Setting of SFF has produced http status:"
@@ -504,7 +818,7 @@ public Opendaylight() throws IOException{
         Deleterequest.addHeader("content-type", "application/json");
         Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
 
-         response = httpClient.execute(Deleterequest);
+        response = httpClient.execute(Deleterequest);
         String stringResponse=new BasicResponseHandler().handleResponse(response);
         logger.debug(
             "Setting of SFF has produced http status:"
@@ -802,7 +1116,7 @@ public Opendaylight() throws IOException{
         Postrequest.addHeader("Authorization", "Basic " + base64Creds);
         Postrequest.setEntity(params);
 
-       response = httpClient.execute(Postrequest);
+        response = httpClient.execute(Postrequest);
         logger.debug(
             "Setting of SFC has produced http status:"
             + response.getStatusLine().getStatusCode()
@@ -902,6 +1216,7 @@ public Opendaylight() throws IOException{
 
     return response;
   }
+  */
   /// Send request for getting the Network TOPOLOGY
   public ResponseEntity<String> sendRest_NetworkTopology(
       NetworkJSON data, String rest_type, String url) {
@@ -926,9 +1241,9 @@ public Opendaylight() throws IOException{
         result = mapper.fromJson(request.getBody(), NetworkJSON.class);
         logger.debug(
             "Setting of Test_SFC has produced http status:"
-                + request.getStatusCode()
-                + " with body: "
-                + request.getBody());
+            + request.getStatusCode()
+            + " with body: "
+            + request.getBody());
       }
     }
 
@@ -984,135 +1299,136 @@ public Opendaylight() throws IOException{
   //ODL SFF Stuff (Get, Create, Update, Delete)
   public ResponseEntity<String>  getODLsff() {
     String url = "restconf/config/service-function-forwarder:service-function-forwarders/";
-    ResponseEntity<String> sff_response = this.sendRest_SFF_GET(null, "GET", url);
+    ResponseEntity<String> sff_response = this.sendRest_SFF(null, "GET", url);
     return sff_response;
   }
 
-  public HttpResponse getODLsfc(String sfc_name) {
-    HttpResponse sfc_response =
+  public ResponseEntity<String> getODLsfc(String sfc_name) {
+    ResponseEntity<String> sfc_response =
         this.sendRest_SFC(null, "GET", MessageFormat.format(this.Config_SFC_URL, sfc_name));
     return sfc_response;
   }
 
-  public HttpResponse createODLsff(SFFJSON sffJSON) {
+  public ResponseEntity<String> createODLsff(SFFJSON sffJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
     String json = gson.toJson(sffJSON, SFFJSON.class);
 
     String sff_name =
         sffJSON.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName();
-    HttpResponse sff_result =
+
+    ResponseEntity<String> sff_result =
         this.sendRest_SFF(sffJSON, "PUT", MessageFormat.format(this.Config_SFF_URL, sff_name));
     return sff_result;
   }
   //FIXME need to be formated with the name as Create ODL SFF
 
-  public HttpResponse updateODLsff(SFFJSON sffJSON, String sffName) {
+  public ResponseEntity<String> updateODLsff(SFFJSON sffJSON, String sffName) {
 
-    HttpResponse sff_result =
+    ResponseEntity<String> sff_result =
         this.sendRest_SFF(sffJSON, "PUT", MessageFormat.format(this.Config_SFF_URL, sffName));
     return sff_result;
   }
 
-  public HttpResponse deleteODLsff(SFFJSON sffJSON) {
-    HttpResponse sff_result = this.sendRest_SFF(sffJSON, "DELETE", this.Config_SFF_URL);
+  public ResponseEntity<String> deleteODLsff(SFFJSON sffJSON) {
+    ResponseEntity<String> sff_result = this.sendRest_SFF(sffJSON, "DELETE", this.Config_SFF_URL);
     return sff_result;
   }
   //ODL SFs Stuff (Create, Update, Delete)
-  public HttpResponse createODLsf(SFJSON sfJSON) {
+  public ResponseEntity<String> createODLsf(SFJSON sfJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
     String json = gson.toJson(sfJSON, SFJSON.class);
 
     String sf_name = sfJSON.getServiceFunctions().getServiceFunction().get(0).getName();
-    HttpResponse sf_result =
+    ResponseEntity<String> sf_result =
         this.sendRest_SF(sfJSON, "PUT", MessageFormat.format(this.Config_SF_URL, sf_name));
     return sf_result;
   }
   //FIXME need to be formated with the name as Create ODL SF
 
-  public HttpResponse updateODLsf(SFJSON sfJSON) {
+  public ResponseEntity<String> updateODLsf(SFJSON sfJSON) {
 
-    HttpResponse  sf_result = this.sendRest_SF(sfJSON, "PUT", this.Config_SF_URL);
+    ResponseEntity<String>  sf_result = this.sendRest_SF(sfJSON, "PUT", this.Config_SF_URL);
     return sf_result;
   }
 
-  public HttpResponse getODLsf() {
+  public ResponseEntity<String> getODLsf() {
     String url = "restconf/config/service-function:service-functions";
-    HttpResponse sf_result = this.sendRest_SF(null, "GET", url);
+    ResponseEntity<String> sf_result = this.sendRest_SF(null, "GET", url);
     return sf_result;
   }
 
-  public HttpResponse deleteODLsf(String sf_name) {
-    HttpResponse sf_result =
+  public ResponseEntity<String> deleteODLsf(String sf_name) {
+    ResponseEntity<String> sf_result =
         this.sendRest_SF(null, "DELETE", MessageFormat.format(this.Config_SF_URL, sf_name));
     return sf_result;
   }
   //ODL Test_SFC stuff (Create, Update, Delete)
-  public HttpResponse createODLsfc(SFCJSON sfcJSON) {
+  public ResponseEntity<String> createODLsfc(SFCJSON sfcJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
     String json = gson.toJson(sfcJSON, SFCJSON.class);
 
     String sfc_name = sfcJSON.getServiceFunctionChains().getServiceFunctionChain().get(0).getName();
-    HttpResponse sfc_result =
+    ResponseEntity<String> sfc_result =
         this.sendRest_SFC(sfcJSON, "PUT", MessageFormat.format(this.Config_SFC_URL, sfc_name));
     return sfc_result;
   }
   //FIXME need to be formated with the name as Create ODL Test_SFC
 
-  public HttpResponse updateODLsfc(SFCJSON sfcJSON) {
+  public ResponseEntity<String> updateODLsfc(SFCJSON sfcJSON) {
 
-    HttpResponse sfc_result = this.sendRest_SFC(sfcJSON, "PUT", this.Config_SFC_URL);
+    ResponseEntity<String> sfc_result = this.sendRest_SFC(sfcJSON, "PUT", this.Config_SFC_URL);
     return sfc_result;
   }
 
-  public HttpResponse deleteODLsfc(String sfc_name) {
-    HttpResponse sfc_result =
+  public ResponseEntity<String> deleteODLsfc(String sfc_name) {
+    ResponseEntity<String> sfc_result =
         this.sendRest_SFC(null, "DELETE", MessageFormat.format(this.Config_SFC_URL, sfc_name));
     return sfc_result;
   }
   //ODL SFP stuff (Create, Update, Delete)
-  public HttpResponse createODLsfp(SFPJSON sfpJSON) {
+  public ResponseEntity<String> createODLsfp(SFPJSON sfpJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
 
     String json = gson.toJson(sfpJSON, SFPJSON.class);
 
     String sfp_name = sfpJSON.getServiceFunctionPaths().getServiceFunctionPath().get(0).getName();
-    HttpResponse sfp_result =
+    ResponseEntity<String> sfp_result =
         this.sendRest_SFP(sfpJSON, "PUT", MessageFormat.format(this.Config_SFP_URL, sfp_name));
     return sfp_result;
   }
   //FIXME need to be formated with the name as Create ODL SFP
-  public HttpResponse updateODLsfp(SFPJSON sfpJSON) {
+  public ResponseEntity<String> updateODLsfp(SFPJSON sfpJSON) {
 
-    HttpResponse sfp_result = this.sendRest_SFP(sfpJSON, "PUT", this.Config_SFP_URL);
+    ResponseEntity<String> sfp_result = this.sendRest_SFP(sfpJSON, "PUT", this.Config_SFP_URL);
     return sfp_result;
   }
 
-  public HttpResponse deleteODLsfp(String sfp_name) {
-    HttpResponse  sfp_result =
+  public ResponseEntity<String> deleteODLsfp(String sfp_name) {
+    ResponseEntity<String>  sfp_result =
         this.sendRest_SFP(null, "DELETE", MessageFormat.format(this.Config_SFP_URL, sfp_name));
     return sfp_result;
   }
 
   //ODL RSP stuff (Create, Delete, GET)
-  public HttpResponse createODLrsp(RSPJSON rspJSON) {
+  public ResponseEntity<String> createODLrsp(RSPJSON rspJSON) {
     String url = "restconf/operations/rendered-service-path:create-rendered-path";
-    HttpResponse rsp_result = this.sendRest_RSP(rspJSON, "POST", url);
+    ResponseEntity<String> rsp_result = this.sendRest_RSP(rspJSON, "POST", url);
     return rsp_result;
   }
 
-  public HttpResponse deleteODLrsp(RSPJSON rspJSON) {
+  public ResponseEntity<String> deleteODLrsp(RSPJSON rspJSON) {
     String url = "restconf/operations/rendered-service-path:delete-rendered-path/";
-    HttpResponse rsp_result = this.sendRest_RSP(rspJSON, "POST", url);
+    ResponseEntity<String> rsp_result = this.sendRest_RSP(rspJSON, "POST", url);
     return rsp_result;
   }
 
-  public HttpResponse getODLrsp(String rsp_name) {
+  public ResponseEntity<String> getODLrsp(String rsp_name) {
     String url =
         "restconf/operational/rendered-service-path:rendered-service-paths/rendered-service-path/{0}";
-    HttpResponse rsp_result =
+    ResponseEntity<String> rsp_result =
         this.sendRest_RSP(null, "GET", MessageFormat.format(url, rsp_name));
     return rsp_result;
   }
@@ -1121,7 +1437,7 @@ public Opendaylight() throws IOException{
   public void CreateSFC(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
     //create Test_SFC
     SFCJSON sfc_json = create_sfc_json(sfc_dict, vnf_dict);
-    HttpResponse sfc_result = createODLsfc(sfc_json);
+    ResponseEntity<String> sfc_result = createODLsfc(sfc_json);
     if(sfc_result==null){
       logger.error("Unable to create ODL Test_SFC");
 
@@ -1176,12 +1492,12 @@ public Opendaylight() throws IOException{
     int counter=0;
 
     while (br_map.hasNext()) {
-      int position=1000;
+      int position=Integer.MAX_VALUE;
 
       Map.Entry br_map_counter = (Map.Entry) br_map.next();
       for (int sf_id_counter = 0;
-          sf_id_counter < ovs_mapping.get(br_map_counter.getKey()).sfs.size();
-          sf_id_counter++) {
+           sf_id_counter < ovs_mapping.get(br_map_counter.getKey()).sfs.size();
+           sf_id_counter++) {
         System.out.println(" ---> SF NAME: "+ovs_mapping.get(br_map_counter.getKey()).sfs.get(sf_id_counter));
 
         System.out.println("OVS Port:" + ovs_mapping
@@ -1199,7 +1515,7 @@ public Opendaylight() throws IOException{
             logger.info("Found the Position of the Service Function "+ ovs_mapping.get(br_map_counter.getKey()).sfs.get(sf_id_counter));
           }
         }
-        if(position==1000){
+        if(position==Integer.MAX_VALUE){
           logger.error(" Could not find the position of the Service Function "+ovs_mapping.get(br_map_counter.getKey()).sfs.get(sf_id_counter));
           break;
         }
@@ -1248,11 +1564,11 @@ public Opendaylight() throws IOException{
       list_service_function.add(sfs_json.getServiceFunction().get(sf_j));
       service_functions.setServiceFunction(list_service_function);
       FullSFjson.setServiceFunctions(service_functions);
-      HttpResponse sf_result = createODLsf(FullSFjson);
+      ResponseEntity<String> sf_result = createODLsf(FullSFjson);
       logger.debug(
           "create ODL SF with name >> "
-              + FullSFjson.getServiceFunctions().getServiceFunction().get(0).getName());
-      if (sf_result.getStatusLine().getStatusCode()!=200 && sf_result.getStatusLine().getStatusCode()!=201) {
+          + FullSFjson.getServiceFunctions().getServiceFunction().get(0).getName());
+      if (!sf_result.getStatusCode().is2xxSuccessful()) {
         logger.error("Unable to create ODL SF " + FullSFjson.toString());
       }
     }
@@ -1261,7 +1577,7 @@ public Opendaylight() throws IOException{
     All_SFs_JSON.setServiceFunctions(sfs_json);
     List<ServiceFunctionForwarder> sff_list = new ArrayList<ServiceFunctionForwarder>();
     //building SFF
-    ServiceFunctionForwarder prev_sff_dict = find_existing_sff(ovs_mapping);
+    ServiceFunctionForwarders prev_sff_dict = find_existing_sff(ovs_mapping);
     logger.debug("PREVIOUS sff_dict >> " + prev_sff_dict);
 
     if (prev_sff_dict != null) {
@@ -1270,6 +1586,11 @@ public Opendaylight() throws IOException{
 
     } else {
       sff_list = create_sff_json(ovs_mapping, All_SFs_JSON, null);
+    }
+    for(int i=0;i<sff_list.size();i++) {
+      for(int x=0;x<sff_list.get(i).getServiceFunctionDictionary().size();x++) {
+        logger.info(i+")"+x+") SFF LIST includes SF: " + sff_list.get(i).getServiceFunctionDictionary().get(x).getName());
+      }
     }
 
     for (int sff_index = 0; sff_index < sff_list.size(); sff_index++) {
@@ -1283,10 +1604,18 @@ public Opendaylight() throws IOException{
           .getServiceFunctionForwarder()
           .add(sff_list.get(sff_index));
       Gson mapper = new Gson();
+      for(int x=0;x<sff_list.get(sff_index).getServiceFunctionDictionary().size();x++) {
 
-      logger.debug("json request formatted sff json: " + sff_json.toString());
-      HttpResponse sff_result = createODLsff(sff_json);
-      if (sff_result.getStatusLine().getStatusCode()!=200 && sff_result.getStatusLine().getStatusCode()!=201) {
+        logger.info("json request formatted sff json: SF NAME  " +
+                    sff_json.getServiceFunctionForwarders()
+                            .getServiceFunctionForwarder()
+                            .get(0)
+                            .getServiceFunctionDictionary()
+                            .get(x)
+                            .getName());
+      }
+      ResponseEntity<String> sff_result = createODLsff(sff_json);
+      if (!sff_result.getStatusCode().is2xxSuccessful()) {
         logger.error("Unable to create ODL SFF " );
       }
     }
@@ -1296,14 +1625,14 @@ public Opendaylight() throws IOException{
   public String CreateSFP(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
 
     SFPJSON sfp_json = create_sfp_json(sfc_dict, vnf_dict);
-    HttpResponse sfp_result = createODLsfp(sfp_json);
-    if (sfp_result.getStatusLine().getStatusCode()!=200 && sfp_result.getStatusLine().getStatusCode()!=201) {
+    ResponseEntity<String> sfp_result = createODLsfp(sfp_json);
+    if (!sfp_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to create ODL SFP ");
     }
 
     RSPJSON rsp_json = create_rsp_json(sfp_json);
-    HttpResponse rsp_result = createODLrsp(rsp_json);
-    if (rsp_result.getStatusLine().getStatusCode()!=200 && rsp_result.getStatusLine().getStatusCode()!=201) {
+    ResponseEntity<String> rsp_result = createODLrsp(rsp_json);
+    if (!rsp_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to create ODL RSP " );
     }
 
@@ -1317,11 +1646,11 @@ public Opendaylight() throws IOException{
     rsp_json.setInput(new Input());
     System.out.println(
         "[Length of SFPs] SFP size >>> "
-            + sfp_json.getServiceFunctionPaths().getServiceFunctionPath().size());
+        + sfp_json.getServiceFunctionPaths().getServiceFunctionPath().size());
 
     System.out.println(
         "[creating RSP JSON] SFP NAME >>> "
-            + sfp_json.getServiceFunctionPaths().getServiceFunctionPath().get(0).getName());
+        + sfp_json.getServiceFunctionPaths().getServiceFunctionPath().get(0).getName());
 
     rsp_json
         .getInput()
@@ -1370,8 +1699,8 @@ public Opendaylight() throws IOException{
       SfcServiceFunction sfc_sf = new SfcServiceFunction();
       sfc.getSfcServiceFunction().add(sfc_sf);
       sfc.getSfcServiceFunction()
-          .get(sf)
-          .setName(sfc_dict.getSfcDict().getChain().get(sf)); //vnf_dict.get(sf).getName());
+         .get(sf)
+         .setName(sfc_dict.getSfcDict().getChain().get(sf)); //vnf_dict.get(sf).getName());
       sfc.getSfcServiceFunction().get(sf).setType(vnf_dict.get(sf).getType());
       sfc_json.getServiceFunctionChains().getServiceFunctionChain().add(sfc);
     }
@@ -1433,7 +1762,7 @@ public Opendaylight() throws IOException{
           System.out.println("br dict TAP Port  >>> " + br_dict.getTap_port());
           System.out.println(
               "NAME OF the Added SF to br mapping : >>"
-                  + br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()));
+              + br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()));
           System.out.println("br dict OVS IP    >>> " + br_dict.getOVSIp());
 
           br_mapping
@@ -1456,7 +1785,7 @@ public Opendaylight() throws IOException{
 
           System.out.println(
               "brmapping_dict name >>> "
-                  + br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()));
+              + br_mapping.get(br_uuid).getSFdict().get(sfs_dict.get(i).getName()));
           System.out.println("br dict OVS IP    >>> " + br_dict.getOVSIp());
 
           br_mapping
@@ -1465,19 +1794,27 @@ public Opendaylight() throws IOException{
               .get(sfs_dict.get(i).getName())
               .setTap_port(br_dict.getTap_port());
 
-          ServiceFunctionForwarder prev_SFF = find_existing_sff(br_mapping);
+          ServiceFunctionForwarders prev_SFFs = find_existing_sff(br_mapping);
           System.out.println("SF Name >>> " + sfs_dict.get(i).getName());
+          boolean SFFexist=false;
 
 
-          if (prev_SFF != null
-              && prev_SFF.getServiceFunctionForwarderOvsOvsNode().getNodeId().equals(br_mapping.get(br_uuid).getNode_ID())) {
-            br_mapping.get(br_uuid).setSFFname(prev_SFF.getName());
+          if (prev_SFFs != null){
+            for(int sff_counter=0;sff_counter<prev_SFFs.getServiceFunctionForwarder().size();sff_counter++){
+
+              if(prev_SFFs.getServiceFunctionForwarder().get(sff_counter).getServiceFunctionForwarderOvsOvsNode().getNodeId().equals(br_mapping.get(br_uuid).getNode_ID())) {
+            br_mapping.get(br_uuid).setSFFname(prev_SFFs.getServiceFunctionForwarder().get(sff_counter).getName());
             System.out.println("<<<< PREV SFF not Null >>> ");
-            System.out.println("PREV SFF Found >>> " + prev_SFF.getName());
-
-          } else {
+            System.out.println("PREV SFF Found >>> " + prev_SFFs.getServiceFunctionForwarder().get(sff_counter).getName());
+                SFFexist=true;
+              }
+            }
+          }
+          if(SFFexist==false ) {
             br_mapping.get(br_uuid).setSFFname("SFF-" +br_mapping.get(br_uuid).getOVSip());
-          //  sff_counter++;
+            System.out.println("Set new SFF  with name  >>> " +"SFF-" +br_mapping.get(br_uuid).getOVSip());
+
+            //  sff_counter++;
           }
         }
       } else {
@@ -1545,7 +1882,7 @@ public Opendaylight() throws IOException{
     }
   }
 
-  public ServiceFunctionForwarder find_existing_sff(HashMap<String, BridgeMapping> BridgeMapping) throws IOException {
+  public ServiceFunctionForwarders find_existing_sff(HashMap<String, BridgeMapping> BridgeMapping) throws IOException {
 
     ResponseEntity<String> response = getODLsff();
 
@@ -1562,6 +1899,8 @@ public Opendaylight() throws IOException{
     SFFJSON sff_json_response = mapper.fromJson(response.getBody(), SFFJSON.class);
     List<ServiceFunctionForwarder> odl_sff_list =
         sff_json_response.getServiceFunctionForwarders().getServiceFunctionForwarder();
+    ServiceFunctionForwarders SFFs=new ServiceFunctionForwarders();
+    List<ServiceFunctionForwarder> sffs_list=new ArrayList<>();
     ServiceFunctionForwarder sff_br_dict = null;
     Iterator br = BridgeMapping.entrySet().iterator();
 
@@ -1579,16 +1918,19 @@ public Opendaylight() throws IOException{
             .getNodeId()
             .equals(BridgeMapping.get(Bridge_name.getKey()).getNode_ID())) {
           sff_br_dict = odl_sff_list.get(sff);
+          sffs_list.add(sff_br_dict);
+
           System.out.println("BridgeMapping>> " + BridgeMapping);
 
           continue;
         }
       }
     }
-    if (sff_br_dict != null) {
-      return sff_br_dict;
+    if (sffs_list != null) {
+      SFFs.setServiceFunctionForwarder(sffs_list);
+      return SFFs;
     } else {
-      logger.debug("SFF is null -- sff_br_dict");
+      logger.error("SFFs List is null");
       return null;
     }
   }
@@ -1596,7 +1938,7 @@ public Opendaylight() throws IOException{
   public static List<ServiceFunctionForwarder> create_sff_json(
       HashMap<String, BridgeMapping> bridgemapping,
       SFJSON sfs_json,
-      ServiceFunctionForwarder prev_sff_dict) {
+      ServiceFunctionForwarders prev_sff_dict) {
     SffDataPlaneLocator sff_dp_loc = new SffDataPlaneLocator();
 
     sff_dp_loc.setName("");
@@ -1657,12 +1999,12 @@ public Opendaylight() throws IOException{
 
       for (int sf = 0; sf < bridgemapping.get(Bridge_name.getKey()).getSfs().size(); sf++) {
         temp_sf_dict = new ServiceFunctionDictionary();
-        int SF_counter = 100;
+        int SF_counter = Integer.MAX_VALUE;
 
         //for loop to search in sfs_json for this SF in bridge mapping
         for (int sf_counter = 0;
-            sf_counter < sfs_json.getServiceFunctions().getServiceFunction().size();
-            sf_counter++) {
+             sf_counter < sfs_json.getServiceFunctions().getServiceFunction().size();
+             sf_counter++) {
 
           if (sfs_json
               .getServiceFunctions()
@@ -1676,7 +2018,7 @@ public Opendaylight() throws IOException{
           }
         }
 
-        if (SF_counter == 100) {
+        if (SF_counter == Integer.MAX_VALUE) {
           logger.error("Can not find the SF in bridgemapping");
         }
         temp_sf_dict.setName(
@@ -1698,13 +2040,13 @@ public Opendaylight() throws IOException{
         temp_sf_dict.setSffSfDataPlaneLocator(temp_sff_sf_dp_loc);
         System.out.println(
             "SF DPL  : "
-                + sfs_json
-                    .getServiceFunctions()
-                    .getServiceFunction()
-                    .get(SF_counter)
-                    .getSfDataPlaneLocator()
-                    .get(0)
-                    .getName());
+            + sfs_json
+                .getServiceFunctions()
+                .getServiceFunction()
+                .get(SF_counter)
+                .getSfDataPlaneLocator()
+                .get(0)
+                .getName());
 
         sf_dicts_list.add(temp_sf_dict);
 
@@ -1713,9 +2055,9 @@ public Opendaylight() throws IOException{
       for (int ix = 0; ix < sf_dicts_list.size(); ix++) {
         System.out.println(
             "1) Dictionary SFs List "
-                + ix
-                + " : "
-                + sf_dicts_list.get(ix).getSffSfDataPlaneLocator().getSfDplName());
+            + ix
+            + " : "
+            + sf_dicts_list.get(ix).getSffSfDataPlaneLocator().getSfDplName());
       }
       ServiceFunctionForwarder temp_sff = new ServiceFunctionForwarder();
       temp_sff.setServiceFunctionDictionary(new ArrayList<ServiceFunctionDictionary>());
@@ -1723,12 +2065,21 @@ public Opendaylight() throws IOException{
         System.out.println(
             "2 ) Dictionary SFs List " + ix + " : " + sf_dicts_list.get(ix).getName());
       }
+      boolean SFFexist=false;
 
       // if exists, use current sff, and only update sfs
-      if (prev_sff_dict != null
-          && bridgemapping.get(Bridge_name.getKey()).getSFFname().equals(prev_sff_dict.getName())) {
-
-        temp_sff = prev_sff_dict;
+      if (prev_sff_dict != null){
+        System.out.println(
+            "***) Previous SFF size : " +prev_sff_dict.getServiceFunctionForwarder().size());
+        for(int sff_counter=0;sff_counter<prev_sff_dict.getServiceFunctionForwarder().size();sff_counter++){
+          System.out.println(
+              "***) SFF NAME  : " +prev_sff_dict.getServiceFunctionForwarder().get(sff_counter).getName());
+          System.out.println(
+              "***) bridge SFF NAME  : " + bridgemapping.get(Bridge_name.getKey()).getSFFname());
+          if( bridgemapping.get(Bridge_name.getKey()).getSFFname().equals(prev_sff_dict.getServiceFunctionForwarder().get(sff_counter).getName())) {
+        System.out.println(
+            "***) Previous SFF exists " +prev_sff_dict.getServiceFunctionForwarder().get(sff_counter).getName());
+        temp_sff = prev_sff_dict.getServiceFunctionForwarder().get(sff_counter);
         List<ServiceFunctionDictionary> prev_sff_sf_list = temp_sff.getServiceFunctionDictionary();
         for (int new_sf = 0; new_sf < sf_dicts_list.size(); new_sf++) {
           boolean new_sf_update = false;
@@ -1750,8 +2101,14 @@ public Opendaylight() throws IOException{
             temp_sff.getServiceFunctionDictionary().add(sf_dicts_list.get(new_sf));
           }
         }
-
-      } else {
+            SFFexist=true;
+        break;
+      }
+        }
+    }
+      if(SFFexist==false ){
+        System.out.println("SFF Exist ? " + SFFexist);
+        System.out.println("Prev SFF dict is NULL ? " + prev_sff_dict);
 
         temp_sff.setName(bridgemapping.get(Bridge_name.getKey()).getSFFname());
         temp_sff.setSffDataPlaneLocator(new ArrayList<SffDataPlaneLocator>());
@@ -1786,7 +2143,7 @@ public Opendaylight() throws IOException{
       counter_x++;
     }
 
-    logger.debug("SFF List output is " + sff_list);
+    logger.info("SFF List output is " + sff_list);
 
     return sff_list;
   }
@@ -1797,59 +2154,59 @@ public Opendaylight() throws IOException{
     String Node_id = "";
     for (int net = 0; net < network_map.getTopology().size(); net++) {
       if (network_map.getTopology().get(net).getNode() != null) {
-        System.out.println("NODE is here ***** > ");
+      //  System.out.println("NODE is here ***** > ");
 
         for (int node_entry = 0;
-            node_entry < network_map.getTopology().get(net).getNode().size();
-            node_entry++) {
+             node_entry < network_map.getTopology().get(net).getNode().size();
+             node_entry++) {
           if (network_map.getTopology().get(net).getNode().get(node_entry).getTerminationPoint()
               != null) {
-            System.out.println(
+           /* System.out.println(
                 "Termination Point is here ***** size > "
-                    + network_map
-                        .getTopology()
-                        .get(net)
-                        .getNode()
-                        .get(node_entry)
-                        .getTerminationPoint()
-                        .size());
-
+                + network_map
+                    .getTopology()
+                    .get(net)
+                    .getNode()
+                    .get(node_entry)
+                    .getTerminationPoint()
+                    .size());
+           */
             for (int endpoint = 0;
-                endpoint
-                    < network_map
-                        .getTopology()
-                        .get(net)
-                        .getNode()
-                        .get(node_entry)
-                        .getTerminationPoint()
-                        .size();
-                endpoint++) {
+                 endpoint
+                 < network_map
+                     .getTopology()
+                     .get(net)
+                     .getNode()
+                     .get(node_entry)
+                     .getTerminationPoint()
+                     .size();
+                 endpoint++) {
               if (bridge_dict.getBr_name() != null) {
                 System.out.println("bridge dict is not null ***** > " + bridge_dict);
 
                 break;
               } else if (network_map
-                      .getTopology()
-                      .get(net)
-                      .getNode()
-                      .get(node_entry)
-                      .getTerminationPoint()
-                      .get(endpoint)
-                      .getOvsdbInterfaceExternalIds()
-                  != null) {
+                             .getTopology()
+                             .get(net)
+                             .getNode()
+                             .get(node_entry)
+                             .getTerminationPoint()
+                             .get(endpoint)
+                             .getOvsdbInterfaceExternalIds()
+                         != null) {
 
                 for (int external_id = 0;
-                    external_id
-                        < network_map
-                            .getTopology()
-                            .get(net)
-                            .getNode()
-                            .get(node_entry)
-                            .getTerminationPoint()
-                            .get(endpoint)
-                            .getOvsdbInterfaceExternalIds()
-                            .size();
-                    external_id++) {
+                     external_id
+                     < network_map
+                         .getTopology()
+                         .get(net)
+                         .getNode()
+                         .get(node_entry)
+                         .getTerminationPoint()
+                         .get(endpoint)
+                         .getOvsdbInterfaceExternalIds()
+                         .size();
+                     external_id++) {
                   if (network_map
                           .getTopology()
                           .get(net)
@@ -1861,20 +2218,20 @@ public Opendaylight() throws IOException{
                           .get(external_id)
                           .getExternalIdValue()
                       != null) {
-                    System.out.println("SF VNF- Neutron Port ID: " + sf_id.getNeutronPortId());
+                  /*  System.out.println("SF VNF- Neutron Port ID: " + sf_id.getNeutronPortId());
                     System.out.println(
                         "Network Topology - Ovsdb Interface External Ids - External Id Value: "
-                            + network_map
-                                .getTopology()
-                                .get(net)
-                                .getNode()
-                                .get(node_entry)
-                                .getTerminationPoint()
-                                .get(endpoint)
-                                .getOvsdbInterfaceExternalIds()
-                                .get(external_id)
-                                .getExternalIdValue());
-
+                        + network_map
+                            .getTopology()
+                            .get(net)
+                            .getNode()
+                            .get(node_entry)
+                            .getTerminationPoint()
+                            .get(endpoint)
+                            .getOvsdbInterfaceExternalIds()
+                            .get(external_id)
+                            .getExternalIdValue());
+                    */
                     if (network_map
                         .getTopology()
                         .get(net)
@@ -1886,24 +2243,24 @@ public Opendaylight() throws IOException{
                         .get(external_id)
                         .getExternalIdValue()
                         .equals(sf_id.getNeutronPortId())) {
-
+                    /*
                       System.out.println("Found");
                       System.out.println(
                           "OVSDB Bridge Name: "
-                              + network_map
-                                  .getTopology()
-                                  .get(net)
-                                  .getNode()
-                                  .get(node_entry)
-                                  .getOvsdbBridgeName());
+                          + network_map
+                              .getTopology()
+                              .get(net)
+                              .getNode()
+                              .get(node_entry)
+                              .getOvsdbBridgeName());
                       System.out.println(
                           "OVSDB Bridge UUID: "
-                              + network_map
-                                  .getTopology()
-                                  .get(net)
-                                  .getNode()
-                                  .get(node_entry)
-                                  .getOvsdbBridgeUuid());
+                          + network_map
+                              .getTopology()
+                              .get(net)
+                              .getNode()
+                              .get(node_entry)
+                              .getOvsdbBridgeUuid());*/
                       bridge_dict.setBr_uuid(
                           network_map
                               .getTopology()
@@ -1918,6 +2275,7 @@ public Opendaylight() throws IOException{
                               .getNode()
                               .get(node_entry)
                               .getOvsdbBridgeName());
+
                       String full_node_id =
                           network_map.getTopology().get(net).getNode().get(node_entry).getNodeId();
                       String remove_it = "/bridge/" + bridge_dict.getBr_name();
@@ -1946,7 +2304,7 @@ public Opendaylight() throws IOException{
                       break;
 
                     } else {
-                      System.out.println("NOT Found");
+                    //  System.out.println("NOT Found");
                     }
                   }
                 }
@@ -1956,8 +2314,8 @@ public Opendaylight() throws IOException{
         }
         if (bridge_dict.getBr_name() != null) {
           for (int node_entry = 0;
-              node_entry < network_map.getTopology().get(net).getNode().size();
-              node_entry++) {
+               node_entry < network_map.getTopology().get(net).getNode().size();
+               node_entry++) {
 
             if (network_map
                     .getTopology()
@@ -1967,13 +2325,13 @@ public Opendaylight() throws IOException{
                     .getNodeId()
                     .equals(Node_id)
                 && network_map
-                        .getTopology()
-                        .get(net)
-                        .getNode()
-                        .get(node_entry)
-                        .getOvsdbConnectionInfo()
-                    != null) {
-              System.out.println("bridge dict name ***** > " + bridge_dict.getBr_name());
+                       .getTopology()
+                       .get(net)
+                       .getNode()
+                       .get(node_entry)
+                       .getOvsdbConnectionInfo()
+                   != null) {
+             // System.out.println("bridge dict name ***** > " + bridge_dict.getBr_name());
 
               bridge_dict.setOVS_port(
                   network_map
@@ -2004,7 +2362,7 @@ public Opendaylight() throws IOException{
         && bridge_dict.getOVSIp() != null
         && bridge_dict.getTap_port() != null
         && bridge_dict.getNodeID() != null) {
-      logger.debug("bridge dictionary is  created successfully!!");
+      logger.info("bridge dictionary is  created successfully!! NAME: "+ bridge_dict.getBr_name()+"  UUID: "+bridge_dict.getBr_uuid());
 
       return bridge_dict;
     } else {
@@ -2109,74 +2467,91 @@ public Opendaylight() throws IOException{
                     " -->  [OpenFlow Node ID]: " +
                     networkmap.getTopology().get(net).getTopologyId());
 
-      for(int i=0;i<networkmap.getTopology().get(net).getNode().size();i++) {
+        for(int i=0;i<networkmap.getTopology().get(net).getNode().size();i++) {
 
-        if (networkmap.getTopology().get(net).getNode().get(i).getNodeId().contains("openflow")) {
-          logger.info(" OpenFlow NODE is Found");
+          if (networkmap.getTopology().get(net).getNode().get(i).getNodeId().contains("openflow")) {
+            logger.info(" OpenFlow NODE is Found");
 
-          ResponseEntity<String> response2 = getSfcClassifierTable(networkmap.getTopology().get(net).getNode().get(i).getNodeId());
+            ResponseEntity<String> response2 = getSfcClassifierTable(networkmap.getTopology().get(net).getNode().get(i).getNodeId());
 
-          if (!response2.getStatusCode().is2xxSuccessful()) {
-            logger.error("Unable to get OpenFlowPluginTable");
-          }
+            if (!response2.getStatusCode().is2xxSuccessful()) {
+              logger.error("Unable to get OpenFlowPluginTable");
+            }
 
-          String table_s = response2.getBody();
-          logger.debug(" OF plugin Table 11 is  " + table_s);
+            String table_s = response2.getBody();
+            logger.debug(" OF plugin Table 11 is  " + table_s);
 
-          Gson mapper2 = new Gson();
-          Table tableJSON = new Table();
-          tableJSON = mapper.fromJson(response2.getBody(), Table.class);
-          Table_ table = tableJSON.getTable().get(0);
-          if (table.getFlow() != null) {
-            for (int x = 0; x < table.getFlow().size(); x++) {
-              if (table.getFlow().get(x).getMatch() != null) {
+            Gson mapper2 = new Gson();
+            Table tableJSON = new Table();
+            tableJSON = mapper.fromJson(response2.getBody(), Table.class);
+            Table_ table = tableJSON.getTable().get(0);
+            if (table.getFlow() != null) {
+              logger.info(" Table has Flows");
 
-                Match matching_rules = table.getFlow().get(x).getMatch();
-                if (Check_matching(matching_rules, SFCC_dict.getAclMatchCriteria().get(0))) {
-                  if (table.getFlow().get(x).getFlowStatistics().getByteCount() != null) {
-                    BytesCount= table.getFlow().get(x).getFlowStatistics().getByteCount();
-                    logger.info(" Bytes Count is found ="+ BytesCount);
+              for (int x = 0; x < table.getFlow().size(); x++) {
+                if (table.getFlow().get(x).getMatch() != null) {
+                  logger.info(" Match is not null");
+
+                  Match matching_rules = table.getFlow().get(x).getMatch();
+                  if (Check_matching(matching_rules, SFCC_dict.getAclMatchCriteria().get(0))) {
+                    logger.info("Check Matching is correct");
+
+                    if (table.getFlow().get(x).getFlowStatistics().getByteCount() != null) {
+                      BytesCount= table.getFlow().get(x).getFlowStatistics().getByteCount();
+                      logger.info(" Bytes Count is found ="+ BytesCount);
+                    }
                   }
                 }
               }
             }
+          }else {
+            logger.error(" NO Openflow Node EXIST");
           }
-        }else {
-          logger.error(" NO Openflow Node EXIST");
         }
-      }
 
       }
     }
-return BytesCount;
-    }
-public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
-  boolean matched=false;
-  String aclProtocol= null;
-  if(acl.getProtocol()!=null){
+    return BytesCount;
+  }
+  public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
+    boolean matched=false;
+    String aclProtocol= null;
+    if(acl.getProtocol()!=null){
+      logger.info("ACL has Protocol");
 
-    aclProtocol=  acl.getProtocol().toString();
-  }
+      aclProtocol=  acl.getProtocol().toString();
+      logger.info("euqla to = "+aclProtocol);
 
-  String Match_protocol=null;
-  if(matching_rules.getIpMatch()!=null){
-    if(matching_rules.getIpMatch().getIpProtocol()!=null){
-      Match_protocol=matching_rules.getIpMatch().getIpProtocol();
     }
-  }
 
-  String aclDstPort=null;
-  if(acl.getDestPort()!=null){
-    if(acl.getDestPort()!=0){
-      aclDstPort=acl.getDestPort().toString();
+    String Match_protocol=null;
+    if(matching_rules.getIpMatch()!=null){
+      logger.info("ACL has IP");
+
+      if(matching_rules.getIpMatch().getIpProtocol()!=null){
+
+        Match_protocol=matching_rules.getIpMatch().getIpProtocol();
+        logger.info("euqla to = "+Match_protocol);
+
+      }
     }
-  }
-  String aclSrcPort=null;
-  if(acl.getSrcPort()!=null){
-    if(acl.getSrcPort()!=0){
-      aclSrcPort=acl.getSrcPort().toString();
+
+    String aclDstPort=null;
+    if(acl.getDestPort()!=null){
+      logger.info("ACL has dest port");
+
+      if(acl.getDestPort()!=0){
+        aclDstPort=acl.getDestPort().toString();
+      }
     }
-  }
+    String aclSrcPort=null;
+    if(acl.getSrcPort()!=null){
+      logger.info("ACL has src port");
+
+      if(acl.getSrcPort()!=0){
+        aclSrcPort=acl.getSrcPort().toString();
+      }
+    }
 
     if(CheckEquality(acl.getDestIpv4(),matching_rules.getIpv4Destination())==true){
       if(CheckEquality(acl.getSourceIpv4(),matching_rules.getIpv4Source())==true){
@@ -2202,9 +2577,10 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
         }
       }
     }
+    logger.info("[ Matched or not ??  "+matched);
 
-  return matched;
-}
+    return matched;
+  }
   public boolean CheckEquality(String A, String B){
 
     logger.debug("Compare these two values: Value from ACL of opendaylight: ["+ A + "] , Value from Matching Criteria of Test_SFC Classifier Descriptor: ["+B+"]");
@@ -2229,7 +2605,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     }
   }
   @Override
-  public HttpResponse DeleteSFC(String instance_id, boolean isSymmetric) {
+  public ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric) {
 
     List<String> instance_list = new ArrayList<String>();
     instance_list.add(0, instance_id);
@@ -2237,7 +2613,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       String reverse_id = instance_id + "-Reverse";
       instance_list.add(1, reverse_id);
     }
-    HttpResponse rsp_result = null;
+    ResponseEntity<String> rsp_result = null;
     for (int ins = 0; ins < instance_list.size(); ins++) {
       RSPJSON rsp_dict = new RSPJSON();
       Input x = new Input();
@@ -2246,7 +2622,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       rsp_dict.setInput(x);
       rsp_result = deleteODLrsp(rsp_dict);
 
-      if (rsp_result.getStatusLine().getStatusCode()!=200 && rsp_result.getStatusLine().getStatusCode()!=201) {
+      if (!rsp_result.getStatusCode().is2xxSuccessful()) {
 
         logger.error("Unable to delete RSP ! ");
       }
@@ -2260,7 +2636,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
   }
 
   @Override
-  public HttpResponse DeleteSFP(String instance_id, boolean isSymmetric) {
+  public ResponseEntity<String> DeleteSFP(String instance_id, boolean isSymmetric) {
 
     List<String> instance_list = new ArrayList<String>();
     instance_list.add(0, instance_id);
@@ -2268,7 +2644,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       String reverse_id = instance_id + "-Reverse";
       instance_list.add(1, reverse_id);
     }
-    HttpResponse rsp_result = null;
+    ResponseEntity<String> rsp_result = null;
     for (int ins = 0; ins < instance_list.size(); ins++) {
       RSPJSON rsp_dict = new RSPJSON();
       Input x = new Input();
@@ -2277,7 +2653,7 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       rsp_dict.setInput(x);
       rsp_result = deleteODLrsp(rsp_dict);
 
-      if (rsp_result.getStatusLine().getStatusCode()!=200 && rsp_result.getStatusLine().getStatusCode()!=201) {
+      if (!rsp_result.getStatusCode().is2xxSuccessful()) {
 
         logger.error("Unable to delete RSP ! ");
       }
@@ -2293,8 +2669,8 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     // Need to check if the SFs involved in other RSPs !!!
     Gson mapper = new Gson();
     System.out.println("Test_SFC NAME " + instance_id.substring(5));
-    HttpResponse rsp_response = getODLrsp(instance_id);
-    String stringResponse1=new BasicResponseHandler().handleResponse(rsp_response);
+    ResponseEntity<String> rsp_response = getODLrsp(instance_id);
+    String stringResponse1=rsp_response.getBody();
 
     RenderedServicePaths rsp = mapper.fromJson(stringResponse1, RenderedServicePaths.class);
     Gson mapper_sff = new Gson();
@@ -2303,57 +2679,57 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     SFFJSON sffs = mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
 
     for (int y = 0;
-        y < rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().size();
-        y++) {
+         y < rsp.getRenderedServicePath().get(0).getRenderedServicePathHop().size();
+         y++) {
       System.out.println(
           "Deleted SF  NAME "
-              + rsp.getRenderedServicePath()
-                  .get(0)
-                  .getRenderedServicePathHop()
-                  .get(y)
-                  .getServiceFunctionName());
+          + rsp.getRenderedServicePath()
+               .get(0)
+               .getRenderedServicePathHop()
+               .get(y)
+               .getServiceFunctionName());
       for (int x = 0;
-          x < sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size();
-          x++) {
+           x < sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size();
+           x++) {
         System.out.println(
             "SFF SIZE " + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size());
 
         for (int z = 0;
-            z
-                < sffs.getServiceFunctionForwarders()
+             z
+             < sffs.getServiceFunctionForwarders()
+                   .getServiceFunctionForwarder()
+                   .get(x)
+                   .getServiceFunctionDictionary()
+                   .size();
+             z++) {
+          System.out.println(
+              "SF Dictionary SIZE "
+              + sffs.getServiceFunctionForwarders()
                     .getServiceFunctionForwarder()
                     .get(x)
                     .getServiceFunctionDictionary()
-                    .size();
-            z++) {
-          System.out.println(
-              "SF Dictionary SIZE "
-                  + sffs.getServiceFunctionForwarders()
+                    .size());
+
+          if (sffs.getServiceFunctionForwarders()
+                  .getServiceFunctionForwarder()
+                  .get(x)
+                  .getServiceFunctionDictionary()
+                  .get(z)
+                  .getName()
+                  .equals(
+                      rsp.getRenderedServicePath()
+                         .get(0)
+                         .getRenderedServicePathHop()
+                         .get(y)
+                         .getServiceFunctionName())) {
+            System.out.println(
+                "EQUAL >>>> "
+                + sffs.getServiceFunctionForwarders()
                       .getServiceFunctionForwarder()
                       .get(x)
                       .getServiceFunctionDictionary()
-                      .size());
-
-          if (sffs.getServiceFunctionForwarders()
-              .getServiceFunctionForwarder()
-              .get(x)
-              .getServiceFunctionDictionary()
-              .get(z)
-              .getName()
-              .equals(
-                  rsp.getRenderedServicePath()
-                      .get(0)
-                      .getRenderedServicePathHop()
-                      .get(y)
-                      .getServiceFunctionName())) {
-            System.out.println(
-                "EQUAL >>>> "
-                    + sffs.getServiceFunctionForwarders()
-                        .getServiceFunctionForwarder()
-                        .get(x)
-                        .getServiceFunctionDictionary()
-                        .get(z)
-                        .getName());
+                      .get(z)
+                      .getName());
 
             sffs.getServiceFunctionForwarders()
                 .getServiceFunctionForwarder()
@@ -2368,37 +2744,37 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
       }
       deleteODLsf(
           rsp.getRenderedServicePath()
-              .get(0)
-              .getRenderedServicePathHop()
-              .get(y)
-              .getServiceFunctionName());
+             .get(0)
+             .getRenderedServicePathHop()
+             .get(y)
+             .getServiceFunctionName());
     }
 
     System.out.println(
         "SFF NAME "
-            + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName());
+        + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName());
     System.out.println(
         "SFF Data plane Locator NAME "
-            + sffs.getServiceFunctionForwarders()
-                .getServiceFunctionForwarder()
-                .get(0)
-                .getSffDataPlaneLocator()
-                .get(0)
-                .getName());
+        + sffs.getServiceFunctionForwarders()
+              .getServiceFunctionForwarder()
+              .get(0)
+              .getSffDataPlaneLocator()
+              .get(0)
+              .getName());
     System.out.println(
         "SFF Bridge NAME "
-            + sffs.getServiceFunctionForwarders()
-                .getServiceFunctionForwarder()
-                .get(0)
-                .getServiceFunctionForwarderOvsOvsBridge()
-                .getBridgeName());
+        + sffs.getServiceFunctionForwarders()
+              .getServiceFunctionForwarder()
+              .get(0)
+              .getServiceFunctionForwarderOvsOvsBridge()
+              .getBridgeName());
     System.out.println(
         "SFF Node ID "
-            + sffs.getServiceFunctionForwarders()
-                .getServiceFunctionForwarder()
-                .get(0)
-                .getServiceFunctionForwarderOvsOvsNode()
-                .getNodeId());
+        + sffs.getServiceFunctionForwarders()
+              .getServiceFunctionForwarder()
+              .get(0)
+              .getServiceFunctionForwarderOvsOvsNode()
+              .getNodeId());
     if (sffs.getServiceFunctionForwarders()
             .getServiceFunctionForwarder()
             .get(0)
@@ -2407,12 +2783,12 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
         != 0) {
       System.out.println(
           "SF Dictionary SF- Name "
-              + sffs.getServiceFunctionForwarders()
-                  .getServiceFunctionForwarder()
-                  .get(0)
-                  .getServiceFunctionDictionary()
-                  .get(0)
-                  .getName());
+          + sffs.getServiceFunctionForwarders()
+                .getServiceFunctionForwarder()
+                .get(0)
+                .getServiceFunctionDictionary()
+                .get(0)
+                .getName());
     } else {
       System.out.println("SF Dictionary is empty ");
     }
@@ -2430,42 +2806,42 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     SFFJSON sffs = mapper_sff.fromJson(sff_response.getBody(), SFFJSON.class);
 
     for (int x = 0;
-        x < sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size();
-        x++) {
+         x < sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size();
+         x++) {
       System.out.println(
           "SFF SIZE " + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().size());
 
       for (int z = 0;
-          z
-              < sffs.getServiceFunctionForwarders()
+           z
+           < sffs.getServiceFunctionForwarders()
+                 .getServiceFunctionForwarder()
+                 .get(x)
+                 .getServiceFunctionDictionary()
+                 .size();
+           z++) {
+        System.out.println(
+            "SF Dictionary SIZE "
+            + sffs.getServiceFunctionForwarders()
                   .getServiceFunctionForwarder()
                   .get(x)
                   .getServiceFunctionDictionary()
-                  .size();
-          z++) {
-        System.out.println(
-            "SF Dictionary SIZE "
-                + sffs.getServiceFunctionForwarders()
+                  .size());
+
+        if (sffs.getServiceFunctionForwarders()
+                .getServiceFunctionForwarder()
+                .get(x)
+                .getServiceFunctionDictionary()
+                .get(z)
+                .getName()
+                .equals(SF_name)) {
+          System.out.println(
+              "EQUAL >>>> "
+              + sffs.getServiceFunctionForwarders()
                     .getServiceFunctionForwarder()
                     .get(x)
                     .getServiceFunctionDictionary()
-                    .size());
-
-        if (sffs.getServiceFunctionForwarders()
-            .getServiceFunctionForwarder()
-            .get(x)
-            .getServiceFunctionDictionary()
-            .get(z)
-            .getName()
-            .equals(SF_name)) {
-          System.out.println(
-              "EQUAL >>>> "
-                  + sffs.getServiceFunctionForwarders()
-                      .getServiceFunctionForwarder()
-                      .get(x)
-                      .getServiceFunctionDictionary()
-                      .get(z)
-                      .getName());
+                    .get(z)
+                    .getName());
 
           sffs.getServiceFunctionForwarders()
               .getServiceFunctionForwarder()
@@ -2481,29 +2857,29 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
 
     System.out.println(
         "SFF NAME "
-            + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName());
+        + sffs.getServiceFunctionForwarders().getServiceFunctionForwarder().get(0).getName());
     System.out.println(
         "SFF Data plane Locator NAME "
-            + sffs.getServiceFunctionForwarders()
-                .getServiceFunctionForwarder()
-                .get(0)
-                .getSffDataPlaneLocator()
-                .get(0)
-                .getName());
+        + sffs.getServiceFunctionForwarders()
+              .getServiceFunctionForwarder()
+              .get(0)
+              .getSffDataPlaneLocator()
+              .get(0)
+              .getName());
     System.out.println(
         "SFF Bridge NAME "
-            + sffs.getServiceFunctionForwarders()
-                .getServiceFunctionForwarder()
-                .get(0)
-                .getServiceFunctionForwarderOvsOvsBridge()
-                .getBridgeName());
+        + sffs.getServiceFunctionForwarders()
+              .getServiceFunctionForwarder()
+              .get(0)
+              .getServiceFunctionForwarderOvsOvsBridge()
+              .getBridgeName());
     System.out.println(
         "SFF Node ID "
-            + sffs.getServiceFunctionForwarders()
-                .getServiceFunctionForwarder()
-                .get(0)
-                .getServiceFunctionForwarderOvsOvsNode()
-                .getNodeId());
+        + sffs.getServiceFunctionForwarders()
+              .getServiceFunctionForwarder()
+              .get(0)
+              .getServiceFunctionForwarderOvsOvsNode()
+              .getNodeId());
     if (sffs.getServiceFunctionForwarders()
             .getServiceFunctionForwarder()
             .get(0)
@@ -2512,12 +2888,12 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
         != 0) {
       System.out.println(
           "SF Dictionary SF- Name "
-              + sffs.getServiceFunctionForwarders()
-                  .getServiceFunctionForwarder()
-                  .get(0)
-                  .getServiceFunctionDictionary()
-                  .get(0)
-                  .getName());
+          + sffs.getServiceFunctionForwarders()
+                .getServiceFunctionForwarder()
+                .get(0)
+                .getServiceFunctionDictionary()
+                .get(0)
+                .getName());
     } else {
       System.out.println("SF Dictionary is empty ");
     }
@@ -2525,6 +2901,8 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
   }
   @Override
   public String GetConnectedSFF(String SF_name) throws IOException {
+
+
     //--------------- delete SFs and Update SFF
 
     // Need to check if the SFs involved in other RSPs !!!
@@ -2564,6 +2942,119 @@ public boolean Check_matching(Match matching_rules, AclMatchCriteria acl){
     return ConnectedSFF;
   }
 
+  //return the UUID of the OVS bridge
+  @Override
+  public String GetHostID(String SF_Neutron_port_id){
+   // System.out.println("LOCATE OVS TO SF >>> ");
+
+    ResponseEntity<String> response = getNetworkTopologyList();
+
+    if (!response.getStatusCode().is2xxSuccessful()) {
+      logger.error("Unable to get network topology");
+    }
+    String network_s = response.getBody();
+    if (network_s == null) {
+      return null;
+    }
+    String HostNodeID=null;
+    Gson mapper = new Gson();
+    NetworkJSON network = new NetworkJSON();
+    logger.debug("Network is " + network_s);
+    network = mapper.fromJson(response.getBody(), NetworkJSON.class);
+
+    HashMap<String, BridgeMapping> br_mapping = new HashMap<String, BridgeMapping>();
+    NetworkTopology networkmap;
+    networkmap = network.getNetworkTopology();
+
+    for (int net = 0; net < networkmap.getTopology().size(); net++) {
+      if (networkmap.getTopology().get(net).getNode() != null) {
+      //  System.out.println("NODE is here ***** > ");
+
+        for (int node_entry = 0; node_entry < networkmap.getTopology().get(net).getNode().size(); node_entry++) {
+          if (networkmap.getTopology().get(net).getNode().get(node_entry).getTerminationPoint() != null) {
+           /* System.out.println("Termination Point is here ***** size > " +
+                               networkmap.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().size
+                                   ());
+                                   */
+
+            for (int endpoint = 0;
+                 endpoint < networkmap.getTopology().get(net).getNode().get(node_entry).getTerminationPoint().size();
+                 endpoint++) {
+              if (networkmap.getTopology()
+                            .get(net)
+                            .getNode()
+                            .get(node_entry)
+                            .getTerminationPoint()
+                            .get(endpoint)
+                            .getOvsdbInterfaceExternalIds() != null) {
+
+                for (int external_id = 0;
+                     external_id <
+                     networkmap.getTopology()
+                               .get(net)
+                               .getNode()
+                               .get(node_entry)
+                               .getTerminationPoint()
+                               .get(endpoint)
+                               .getOvsdbInterfaceExternalIds()
+                               .size();
+                     external_id++) {
+                  if (networkmap.getTopology()
+                                .get(net)
+                                .getNode()
+                                .get(node_entry)
+                                .getTerminationPoint()
+                                .get(endpoint)
+                                .getOvsdbInterfaceExternalIds()
+                                .get(external_id)
+                                .getExternalIdValue() != null) {
+                    //System.out.println("SF VNF- Neutron Port ID: " + SF_Neutron_port_id);
+                 /*   System.out.println("Network Topology - Ovsdb Interface External Ids - External Id Value: " +
+                                       networkmap.getTopology()
+                                                 .get(net)
+                                                 .getNode()
+                                                 .get(node_entry)
+                                                 .getTerminationPoint()
+                                                 .get(endpoint)
+                                                 .getOvsdbInterfaceExternalIds()
+                                                 .get(external_id)
+                                                 .getExternalIdValue());
+                                                 */
+
+                    if (networkmap.getTopology()
+                                  .get(net)
+                                  .getNode()
+                                  .get(node_entry)
+                                  .getTerminationPoint()
+                                  .get(endpoint)
+                                  .getOvsdbInterfaceExternalIds()
+                                  .get(external_id)
+                                  .getExternalIdValue()
+                                  .equals(SF_Neutron_port_id)) {
+
+                      System.out.println("Found");
+                      System.out.println("OVSDB Bridge Name: " +
+                                         networkmap.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeName());
+                      System.out.println("OVSDB Bridge UUID: " +
+                                         networkmap.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeUuid());
+                      HostNodeID=networkmap.getTopology().get(net).getNode().get(node_entry).getOvsdbBridgeUuid();
+
+
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return HostNodeID;
+  }
+
 
 
 }
+
+
+

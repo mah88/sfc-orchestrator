@@ -47,7 +47,7 @@ public class AddSFCExecutor implements Runnable {
   public void run() {
 
     logger.info(
-        "[ADD-Test_SFC-EXECUTOR] allocating slice for "
+        "[ADD-SFC-EXECUTOR] allocating slice for "
             + nsr.getId()
             + " at time "
             + new Date().getTime());
@@ -55,13 +55,13 @@ public class AddSFCExecutor implements Runnable {
 
     boolean response = false;
     try {
-      response = sfcCaller.Create(vnfrs, nsr);
+      response = sfcCaller.Create(vnfrs, nsr,properties.getProperty("sfc.sf.deployment.schedulingType"));
     } catch (IOException e) {
       e.printStackTrace();
     }
     logger.debug("RESPONSE from Handler " + response);
     logger.info(
-        "[ADD-Test_SFC-EXECUTOR] ended Test_SFC allocation for "
+        "[ADD-SFC-EXECUTOR] ended Test_SFC allocation for "
             + nsr.getId()
             + " at time "
             + new Date().getTime());

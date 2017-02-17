@@ -1,11 +1,7 @@
-package org.project.sfc.com.DynamicPathCreation;
+package org.project.sfc.com.PathCreation.ReadjustmentAtRuntime;
 
-import org.openbaton.catalogue.mano.common.Ip;
-import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
-import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
-import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
@@ -15,13 +11,10 @@ import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 /**
  * Created by mah on 11/14/16.
@@ -43,7 +36,7 @@ public class LoadBalancedPathSelection {
   public void ReadjustVNFsAllocation(VirtualNetworkFunctionRecord vnfr)  {
     System.out.println("----------------------------[Readjust VNFs Allocation] Start ----------------------------------");
 
-        List<SFC.SFC_Data> Chains_data=new ArrayList<>();
+    List<SFC.SFC_Data> Chains_data=new ArrayList<>();
     List<VNFdict> VNF_instance_dicts=new ArrayList<>();
     HashMap<String,Double> PrevVNFTrafficLoad=new HashMap<String, Double>();
 
@@ -240,14 +233,14 @@ for(int counter1=0;counter1<=Math.floor(total_size_SFCs/total_size_VNF_instances
 }
 
     for(int x=0;x<Chains_data.size();x++){
-      CreateChain(Chains_data.get(x), VNF_instance_dicts.get(x));
+      UpdateChain(Chains_data.get(x), VNF_instance_dicts.get(x));
 
     }
     System.out.println("----------------------------[Readjust VNFs Allocation] END ----------------------------------");
 
   }
 
-private void CreateChain(SFC.SFC_Data Chain_Data, VNFdict VNF_instance)  {
+private void UpdateChain(SFC.SFC_Data Chain_Data, VNFdict VNF_instance)  {
 
   System.out.println("[ LB Path Selection < Create Chain > ]  ");
 

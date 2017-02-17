@@ -38,18 +38,21 @@ public class Test_SFC extends SFC {
   }
 
   @Override
-  public HttpResponse DeleteSFC(String instance_id, boolean isSymmetric) {
+  public ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric) {
   return null;
   }
 
   @Override
-  public HttpResponse DeleteSFP(String instance_id, boolean isSymmetric) {
+  public ResponseEntity<String> DeleteSFP(String instance_id, boolean isSymmetric) {
   return null;
   }
 
   @Override
   public String GetConnectedSFF(String SF_name) {
-    return "x";
+    return "SFF-x";
   }
 
-  }
+  @Override
+  public String GetHostID(String neutron_port_id){ return "OVS-181881182";}
+
+}

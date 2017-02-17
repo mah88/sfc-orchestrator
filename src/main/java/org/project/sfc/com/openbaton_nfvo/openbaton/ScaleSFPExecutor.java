@@ -50,7 +50,7 @@ public class ScaleSFPExecutor implements Runnable {
             + " at time "
             + new Date().getTime());
     try {
-      sfcCaller.UpdateScaledPaths(vnfr);
+      sfcCaller.UpdateScaledPaths(vnfr,properties.getProperty("sfc.sf.runtime.schedulingType"));
     } catch (IOException e) {
       e.printStackTrace();
     }

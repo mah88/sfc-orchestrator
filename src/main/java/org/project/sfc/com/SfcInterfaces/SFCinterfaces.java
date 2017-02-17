@@ -24,12 +24,14 @@ public interface SFCinterfaces {
 
   String CreateSFP(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict);
 
-  HttpResponse DeleteSFC(String instance_id, boolean isSymmetric);
+  ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric);
 
-  HttpResponse DeleteSFP(String instance_id, boolean isSymmetric);
+  ResponseEntity<String> DeleteSFP(String instance_id, boolean isSymmetric);
 
   String GetBytesCount(SFCCdict SFCC_dict);
 
   String GetConnectedSFF(String SF_name) throws IOException;
+
+  String GetHostID(String SF_Neutron_port_id);
 
   }

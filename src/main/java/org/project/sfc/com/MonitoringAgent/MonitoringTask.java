@@ -64,9 +64,26 @@ private boolean lastVNFR;
 
     SFC sfc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
     HashMap<String, SFC.SFC_Data> All_SFCs=sfc_db.getAllSFCs();
+    List<VNFdict> vnfs=sfc_db.getVNFs(vnfr.getType());
+    List<String> Assigned=new ArrayList<String>();
+
+    for(int i=0;i<vnfs.size();i++) {
+      for (Item Measurment : measurementResults) {
+        if (vnfs.get(i).getName().equals(Measurment.getHostname()) && !Assigned.contains(vnfs.get(i).getName())) {
+          vnfs.get(i).setTrafficLoad(Double.parseDouble(Measurment.getValue()));
+          vnfs.get(i).setHostNode(monitoringEngine.getLocation(vnfs.get(i).getName()));
+          log.info("[Register Measurments is done to the VNFs] VNF instance - " +
+                   vnfs.get(i).getName() +
+                   " -, Traffic Load= " +
+                   vnfs.get(i).getTrafficLoad() +
+                   " -, Host Node= " +
+                   vnfs.get(i).getHostNode());
+          Assigned.add(vnfs.get(i).getName());
+        }
+      }
+    }
     boolean flag=false;
     Iterator it = All_SFCs.entrySet().iterator();
-    List<String> Registered=new ArrayList<String>();
     while (it.hasNext()) {
       Map.Entry SFCdata_counter = (Map.Entry) it.next();
       HashMap<Integer, VNFdict> VNFs = All_SFCs.get(SFCdata_counter.getKey()).getChainSFs();
@@ -74,14 +91,12 @@ private boolean lastVNFR;
       while (count.hasNext()) {
 
         Map.Entry VNFcounter = (Map.Entry) count.next();
-        System.out.println("[OK] ");
         for(Item Measurment:measurementResults){
-          if(VNFs.get(VNFcounter.getKey()).getName().equals(Measurment.getHostname()) && !Registered.contains(VNFs.get(VNFcounter.getKey()).getName())){
+          if(VNFs.get(VNFcounter.getKey()).getName().equals(Measurment.getHostname()) ){
 
             VNFs.get(VNFcounter.getKey()).setTrafficLoad(Double.parseDouble(Measurment.getValue()));
             VNFs.get(VNFcounter.getKey()).setHostNode(monitoringEngine.getLocation(VNFs.get(VNFcounter.getKey()).getName()));
             log.info("[Register Measurments is done] VNF instance - " + VNFs.get(VNFcounter.getKey()).getName()+" -, Traffic Load= "+VNFs.get(VNFcounter.getKey()).getTrafficLoad()+" -, Host Node= "+VNFs.get(VNFcounter.getKey()).getHostNode());
-            Registered.add(VNFs.get(VNFcounter.getKey()).getName());
             flag=true;
             break;
 
@@ -95,7 +110,7 @@ private boolean lastVNFR;
     }
   }
 
-  public void GetSfcTrafficLoad(String SDN_controller_type) throws IOException {
+  public void SetSfcTrafficLoad(String SDN_controller_type) throws IOException {
     SfcBroker broker = new SfcBroker();
     org.project.sfc.com.SfcInterfaces.SFC SFC_driver;
     SFC_driver = broker.getSFC(SDN_controller_type);
@@ -113,7 +128,7 @@ private boolean lastVNFR;
       }else if (All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo()==null){
         log.error(" NO Test_SFC CLASSIFIER INFO EXIST");
       }
-      String BytesCount=SFC_driver.GetBytesCount(All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo());
+      /*String BytesCount=SFC_driver.GetBytesCount(All_SFCs.get(SFCdata_counter.getKey()).getClassifierInfo());
 
       log.info("Test_SFC with RSP ID ( "+All_SFCs.get(SFCdata_counter.getKey()).getRspID()+" ) has traffic Load  = "+BytesCount+ " Bytes");
       double oldtafficLoad=All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getOldTrafficLoad();
@@ -122,7 +137,7 @@ private boolean lastVNFR;
 
       All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).setPathTrafficLoad(Double.parseDouble(BytesCount)+oldtafficLoad);
       log.info("Updated Path TRAFFIC LOAD ==>  " + All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad());
-
+*/
     }
 
 
@@ -144,7 +159,7 @@ private boolean lastVNFR;
               monitoringEngine.getRawMeasurementResults(vnfr, Metric, Integer.toString(Period)); //get results every 30 sec
           RegisterMonitoringData(vnfr,measurementResults);
           if(lastVNFR==true) {
-            GetSfcTrafficLoad(properties.getProperty("sfc.driver"));
+            SetSfcTrafficLoad(properties.getProperty("sfc.driver"));
           }
           log.info("[DETECTOR] GOT_MEASUREMENT_RESULTS " + new Date().getTime());
 

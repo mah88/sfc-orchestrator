@@ -42,13 +42,13 @@ public class RemoveSFCExecutor implements Runnable {
   @Override
   public void run() {
     logger.info(
-        "[REMOVE-Test_SFC-EXECUTOR] deleting Test_SFC for " + nsrID + " at time " + new Date().getTime());
+        "[REMOVE-SFC-EXECUTOR] deleting Test_SFC for " + nsrID + " at time " + new Date().getTime());
     logger.debug("remmoving Test_SFC for nsr " + nsrID + " with vnfrs: " + vnfrs);
     // boolean response = sfchandler.Delete(nsrID);
     boolean response = sfcCaller.Delete(nsrID);
     logger.debug("Response from handler " + response);
     logger.info(
-        "[REMOVE-Test_SFC-EXECUTOR] ended Test_SFC removal for "
+        "[REMOVE-SFC-EXECUTOR] ended Test_SFC removal for "
             + nsrID
             + " at time "
             + new Date().getTime());
