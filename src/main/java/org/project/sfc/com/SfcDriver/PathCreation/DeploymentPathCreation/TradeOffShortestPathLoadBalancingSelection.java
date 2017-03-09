@@ -1,4 +1,4 @@
-package org.project.sfc.com.PathCreation.DeploymentPathCreation;
+package org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation;
 
 import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -223,8 +222,10 @@ public class TradeOffShortestPathLoadBalancingSelection {
       for (VNFCInstance vnfc : vdu.getVnfc_instance()) {
         String currentVNFName = vnfc.getHostname();
         String CurrentVNF_NeutronPortID = null;
+        String CurrentVNF_IP = null;
+
         for (Ip ip : vnfc.getIps()) {
-          new_vnf.setIP(ip.getIp());
+          CurrentVNF_IP=ip.getIp();
           System.out.println("[SF-Selections] Get Neutron Pro " + new Date().getTime());
           CurrentVNF_NeutronPortID = NC.getNeutronPortID(ip.getIp());
           break;
@@ -268,6 +269,7 @@ public class TradeOffShortestPathLoadBalancingSelection {
           new_vnf.setName(currentVNFName);
           new_vnf.setType(vnfr.getType());
           new_vnf.setNeutronPortId(CurrentVNF_NeutronPortID);
+          new_vnf.setIP(CurrentVNF_IP);
           System.out.println("** Index Value less than the Min Index ** ");
         }
       }

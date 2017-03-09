@@ -1,18 +1,61 @@
 package org.project.sfc.com.SfcModel.SFCdict;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import org.openbaton.catalogue.util.IdGenerator;
+
+import java.io.Serializable;
+
+import javax.persistence.*;
+
 /**
  * Created by mah on 2/8/16.
  */
-public class VNFdict {
+//@Entity
+public class VNFdict implements Serializable {
 
+  @SerializedName("id")
+  @Expose
+  @Id
+  private String id;
+
+  @SerializedName("neutron port id")
   private String neutronPortId;
+
+  @SerializedName("ip")
   private String ip;
+
+  @SerializedName("type")
   private String type;
+
+  @SerializedName("name")
   private String name;
+
+  @SerializedName("load")
   private double trafficLoad;
+
+  @SerializedName("host node")
   private String HostNode;
+
+  @SerializedName("connected sff")
   private String ConnectedSFF;
 
+  @SerializedName("status")
+  @Expose
+  @Enumerated(EnumType.STRING)
+  private Status status;
+  /**
+   *
+   * @return The id
+   */
+  public String getId() {
+    return id;
+  }
+
+  public void setIdId(String ID){
+    this.id= ID;
+  }
   public String getName() {
     return name;
   }
@@ -62,5 +105,29 @@ public class VNFdict {
   }
   public void setTrafficLoad(double trafficLoad) {
     this.trafficLoad = trafficLoad;
+  }
+
+
+  public Status getStatus() {
+    return status;
+  }
+
+
+  public void setStatus(Status status) {
+    this.status = status;
+  }
+
+  @Override
+  public String toString() {
+    return "VNFDict{" +
+           "id='" + id + '\'' +
+           ", status='" + status + '\'' +
+           ", name=" + name +
+           ", neutronPortId=" + neutronPortId +
+           ", ip=" + ip +
+           ", type=" + type +
+           ", trafficLoad='" + trafficLoad  +
+           ", ConnectedSFF='" + ConnectedSFF+ '\''+
+           '}';
   }
 }

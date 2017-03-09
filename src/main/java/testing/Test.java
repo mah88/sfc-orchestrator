@@ -96,7 +96,7 @@ public class Test {
 
     sfc_dict_test.setInfraDriver("ODL");
     sfc_dict_test.setSymmetrical(false);
-    sfc_dict_test.setStatus("create");
+    //sfc_dict_test.setStatus("create");
     // sfc_dict_test.setTenantId(NC.getTenantID());//NC.getTenantID());
     HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
     vnfdicts.put(0, vnf1_test);
@@ -109,7 +109,7 @@ public class Test {
     System.out.println("INSTANCE ID " + instance_id);
     SFC_Classifier classifier_test = new SFC_Classifier();
     SFCCdict sfcc_dict = new SFCCdict();
-    sfcc_dict.setStatus("create");
+    //sfcc_dict.setStatus("create");
     //sfcc_dict.setTenantId(NC.getTenantID());
     // sfcc_dict.setTenantId("11010100101");
     sfcc_dict.setInfraDriver("netvirtsfc");
@@ -143,7 +143,7 @@ public class Test {
 
             sfc_dict_test_2.setInfraDriver("ODL");
             sfc_dict_test_2.setSymmetrical(false);
-            sfc_dict_test_2.setStatus("create");
+            //sfc_dict_test_2.setStatus("create");
             sfc_dict_test_2.setTenantId(NC.getTenantID());//NC.getTenantID());
             HashMap<Integer, VNFdict> vnfdicts_2 = new HashMap<Integer, VNFdict>();
             vnfdicts_2.put(0, vnf1_test);
@@ -158,7 +158,7 @@ public class Test {
             System.out.println("INSTANCE ID 2: " + instance_id_2);
             SFC_Classifier classifier_test_2 = new SFC_Classifier();
             SFCCdict sfcc_dict_2 = new SFCCdict();
-            sfcc_dict_2.setStatus("create");
+            //sfcc_dict_2.setStatus(CREATE);
             sfcc_dict_2.setTenantId(NC.getTenantID());
             sfcc_dict_2.setInfraDriver("netvirtsfc");
             sfcc_dict_2.setId("sfcc-demo-test:22222");

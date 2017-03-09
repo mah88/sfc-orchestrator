@@ -1,4 +1,4 @@
-package org.project.sfc.com.PathCreation.DeploymentPathCreation;
+package org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation;
 
 import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;

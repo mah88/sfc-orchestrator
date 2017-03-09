@@ -3,6 +3,7 @@ package org.project.sfc.com.SfcHandler;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
+import org.project.sfc.com.SfcRepository.VNFdictRep;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,6 +138,9 @@ public class SFC {
     HashMap<Integer, VNFdict> VNFs;
     SFCdict SFC_dict_info;
     SFCCdict ClassifierDict;
+
+
+
 
     public String getRspID() {
       return rsp_id;

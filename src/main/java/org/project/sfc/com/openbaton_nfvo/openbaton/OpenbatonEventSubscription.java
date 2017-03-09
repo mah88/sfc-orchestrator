@@ -94,7 +94,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointDeletion.setName("SFC-event-NSR-Relased");
     eventEndpointDeletion = requestor.getEventAgent().create(eventEndpointDeletion);
 
-    // For Fault Management
+    // For Fault SfcManagement
     EventEndpoint eventEndpointHealing = new EventEndpoint();
     eventEndpointHealing.setType(EndpointType.RABBIT);
     eventEndpointHealing.setEvent(Action.HEAL);
@@ -261,7 +261,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
           monitoringManager.stop(vnfr);
           monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"),20,lastvnfr);
         } else {
-          logger.info("::: It is a Fault Management Event :::");
+          logger.info("::: It is a Fault SfcManagement Event :::");
         }
       }
 
@@ -281,9 +281,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
       evt = getOpenbatonEvent(message);
       logger.debug("Received nfvo event with action: " + evt.getAction());
       NetworkServiceRecord nsr = getNsrFromPayload(evt.getPayload());
-      for (VNFForwardingGraphRecord vnffgr : nsr.getVnffgr()) {
-        creator.removeSFC(vnffgr.getId());
-      }
+
       for(VirtualNetworkFunctionRecord vnfr:nsr.getVnfr()){
         try{
           monitoringManager.stop(vnfr);
@@ -292,6 +290,9 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
           logger.error(e.getMessage(), e);
 
         }
+      }
+      for (VNFForwardingGraphRecord vnffgr : nsr.getVnffgr()) {
+        creator.removeSFC(vnffgr.getId());
       }
     } catch (Exception e) {
       logger.warn(e.getMessage(), e);

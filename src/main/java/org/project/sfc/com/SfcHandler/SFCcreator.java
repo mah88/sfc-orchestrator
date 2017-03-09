@@ -1,6 +1,5 @@
 package org.project.sfc.com.SfcHandler;
 
-import org.apache.http.HttpResponse;
 import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
@@ -8,7 +7,7 @@ import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
-import org.project.sfc.com.PathCreation.DeploymentPathCreation.RandomPathSelection;
+import org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation.RandomPathSelection;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
@@ -283,7 +282,7 @@ public class SFCcreator {
     sfc_dict_test.setChain(chain);
     sfc_dict_test.setInfraDriver("ODL");
 
-    sfc_dict_test.setStatus("create");
+    //sfc_dict_test.setStatus("create");
     sfc_dict_test.setTenantId(NC.getTenantID());
     sfc_test.setSfcDict(sfc_dict_test);
 
@@ -298,7 +297,7 @@ public class SFCcreator {
     System.out.println(
         " ADD to it Instance  ID:  " + instance_id + " at time " + new Date().getTime());
 
-    sfcc_dict.setStatus("create");
+    //sfcc_dict.setStatus("create");
     sfcc_dict.setTenantId(NC.getTenantID());
     sfcc_dict.setInfraDriver("netvirtsfc");
     sfcc_dict.setId("sfcc-" + vnffgr.getId());

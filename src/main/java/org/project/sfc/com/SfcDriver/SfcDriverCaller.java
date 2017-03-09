@@ -1,6 +1,5 @@
 package org.project.sfc.com.SfcDriver;
 
-import org.apache.http.HttpResponse;
 import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
@@ -8,13 +7,13 @@ import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
-import org.project.sfc.com.PathCreation.DeploymentPathCreation.RoundRobinSelection;
-import org.project.sfc.com.PathCreation.DeploymentPathCreation.ShortestPathSelection;
-import org.project.sfc.com.PathCreation.DeploymentPathCreation.TradeOffShortestPathLoadBalancingSelection;
-import org.project.sfc.com.PathCreation.ReadjustmentAtRuntime.LoadBalancedPathSelection;
-import org.project.sfc.com.PathCreation.DeploymentPathCreation.RandomPathSelection;
-import org.project.sfc.com.PathCreation.ReadjustmentAtRuntime.ShortestPathSelectionAtRuntime;
-import org.project.sfc.com.PathCreation.ReadjustmentAtRuntime.TradeOffSpLbSelection;
+import org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation.RoundRobinSelection;
+import org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation.ShortestPathSelection;
+import org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation.TradeOffShortestPathLoadBalancingSelection;
+import org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime.LoadBalancedPathSelection;
+import org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation.RandomPathSelection;
+import org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime.ShortestPathSelectionAtRuntime;
+import org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime.TradeOffSpLbSelection;
 import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
@@ -337,9 +336,14 @@ public class SfcDriverCaller {
         System.out.println("[OK] ");
 
         System.out.println("[SF counter ] " + VNFcounter.getKey());
+        System.out.println("[NEW SF will be added  ] " +  getVNFInstanceName(vnfr, scale_counter).getHostname());
+        System.out.println("[type of VNF  ] " +  VNFs.get(VNFcounter.getKey()).getType() + " VNF type: "+vnfr.getType());
+        System.out.println("[IP of the SF instance ] " + VNFs.get(VNFcounter.getKey()).getIP());
+        System.out.println("[NAME of the SF instance ] " + VNFs.get(VNFcounter.getKey()).getName());
 
         if (VNFs.get(VNFcounter.getKey()).getType().equals(vnfr.getType())
             && getVNFInstanceName(vnfr, scale_counter) != null) {
+          System.out.println("[NEW SF will be added  ] " +  getVNFInstanceName(vnfr, scale_counter).getHostname());
 
           if (!VNFs.get(VNFcounter.getKey())
               .getName()
@@ -624,7 +628,7 @@ public class SfcDriverCaller {
     sfc_dict_test.setChain(chain);
     sfc_dict_test.setInfraDriver("ODL");
 
-    sfc_dict_test.setStatus("Active");
+    //sfc_dict_test.setStatus("Active");
     sfc_dict_test.setTenantId(NC.getTenantID());
     List<SFPdict> Paths=new ArrayList<SFPdict>();
     SFPdict Path=new SFPdict();
@@ -651,7 +655,7 @@ public class SfcDriverCaller {
     System.out.println(
         " ADD to it Instance  ID:  " + instance_id + " at time " + new Date().getTime());
 
-    sfcc_dict.setStatus("create");
+    //sfcc_dict.setStatus("create");
     sfcc_dict.setTenantId(NC.getTenantID());
     sfcc_dict.setInfraDriver("netvirtsfc");
     sfcc_dict.setId("sfcc-" + vnffgr.getId());

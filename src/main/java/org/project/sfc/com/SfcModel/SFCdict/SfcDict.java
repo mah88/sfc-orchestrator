@@ -4,16 +4,25 @@ package org.project.sfc.com.SfcModel.SFCdict;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.openbaton.catalogue.util.IdGenerator;
+
 import javax.annotation.Generated;
+import javax.persistence.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Generated("org.jsonschema2pojo")
-public class SfcDict {
+//@Entity
+public class SfcDict implements Serializable {
+
+
 
   @SerializedName("status")
   @Expose
-  private String status;
+  @Enumerated(EnumType.STRING)
+  private Status status;
 
   @SerializedName("description")
   @Expose
@@ -45,6 +54,7 @@ public class SfcDict {
 
   @SerializedName("id")
   @Expose
+  @Id
   private String id;
 
   @SerializedName("name")
@@ -53,6 +63,7 @@ public class SfcDict {
 
   @SerializedName("paths")
   @Expose
+  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private List<SFPdict> paths;
 
 
@@ -60,7 +71,7 @@ public class SfcDict {
    *
    * @return The status
    */
-  public String getStatus() {
+  public Status getStatus() {
     return status;
   }
 
@@ -68,7 +79,7 @@ public class SfcDict {
    *
    * @param status The status
    */
-  public void setStatus(String status) {
+  public void setStatus(Status status) {
     this.status = status;
   }
 
@@ -192,13 +203,10 @@ public class SfcDict {
     return id;
   }
 
-  /**
-   *
-   * @param id The id
-   */
-  public void setId(String id) {
-    this.id = id;
+  public void setId(String ID){
+    this.id= ID;
   }
+
 
   /**
    *
@@ -230,5 +238,20 @@ public class SfcDict {
    */
   public void setPaths(List<SFPdict> paths_) {
     this.paths = paths_;
+  }
+
+  @Override
+  public String toString() {
+    return "SfcDict{" +
+           "id='" + id + '\'' +
+           ", name=" + name +
+           ", description=" + description +
+           ", infraDriver=" + infraDriver +
+           ", symmetrical=" + symmetrical +
+           ", CHAIN='" + chain + '\'' +
+           ", Paths='" + paths + '\'' +
+           ", TenantId='" + tenantId + '\'' +
+           ", status='" + status + '\'' +
+           '}';
   }
 }

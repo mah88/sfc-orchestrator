@@ -1,4 +1,4 @@
-package org.project.sfc.com.PathCreation.DeploymentPathCreation;
+package org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation;
 
 import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.NetworkForwardingPath;
@@ -11,29 +11,21 @@ import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Created by mah on 1/24/17.
+ * Created by mah on 4/22/16.
  */
-public class RoundRobinSelection {
+public class RandomPathSelection  {
 
-  //mapCountRoundRobin works for the Type of Service Function
-  private static Map<String, Integer> mapCountRoundRobin = new HashMap<>();
-  NeutronClient NC;
+    NeutronClient NC;
 
-  public RoundRobinSelection() throws IOException {
+  public RandomPathSelection() throws IOException {
     NC = new NeutronClient();
   }
+
   public VNFdict SelectVNF(VirtualNetworkFunctionRecord vnfr) {
     List<String> VNF_instances = new ArrayList<String>();
-    int countRoundRobin = 0;
-    System.out.println("**** SELECT VNF using Round Robin ******  ");
 
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
       for (VNFCInstance vnfc_instance : vdu_x.getVnfc_instance()) {
@@ -42,24 +34,9 @@ public class RoundRobinSelection {
     }
 
     VNFdict new_vnf = new VNFdict();
-    if (mapCountRoundRobin.size() != 0) {
-      for (String sfType : mapCountRoundRobin.keySet()) {
-        if (sfType.equals(vnfr.getType())) {
-          System.out.println("**** SF TYPE: "+ sfType);
 
-          countRoundRobin = mapCountRoundRobin.get(sfType);
-          System.out.println("**** countRoundRobin: "+ countRoundRobin);
-          break;
-        }
-      }
-    }
-    String VNF_instance_selected = VNF_instances.get(countRoundRobin);
-    System.out.println("**** Selected VNF instance: "+ VNF_instance_selected +" and its count round robin = "+countRoundRobin);
-
-    countRoundRobin = (countRoundRobin + 1) % VNF_instances.size();
-    mapCountRoundRobin.put(vnfr.getType(), countRoundRobin);
-    System.out.println("**** CountRoundRobin becomes: "+ countRoundRobin + " for the SF Type: "+ vnfr.getType());
-
+    Random randomizer = new Random();
+    String VNF_instance_selected = VNF_instances.get(randomizer.nextInt(VNF_instances.size()));
     new_vnf.setName(VNF_instance_selected);
     new_vnf.setType(vnfr.getType());
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
@@ -79,6 +56,7 @@ public class RoundRobinSelection {
 
     return new_vnf;
   }
+
   public HashMap<Integer, VNFdict> CreatePath(
       Set<VirtualNetworkFunctionRecord> vnfrs,
       VNFForwardingGraphRecord vnffgr,
@@ -133,4 +111,3 @@ public class RoundRobinSelection {
     return vnfdicts;
   }
 }
-

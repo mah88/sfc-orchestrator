@@ -4,11 +4,16 @@ package org.project.sfc.com.SfcModel.SFCCdict;
  * Created by mah on 2/8/16.
  */
 import javax.annotation.Generated;
+import javax.persistence.Entity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @Generated("org.jsonschema2pojo")
-public class AclMatchCriteria {
+
+public class AclMatchCriteria implements Serializable{
   @SerializedName("source-ipv4-network")
   @Expose
   private String sourceIpv4Network;
@@ -148,4 +153,6 @@ public class AclMatchCriteria {
   public void setDestMAC(String destMAC) {
     this.destMacAddress = destMAC;
   }
+
+
 }

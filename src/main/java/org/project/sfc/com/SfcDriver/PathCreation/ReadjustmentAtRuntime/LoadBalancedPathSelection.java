@@ -1,4 +1,4 @@
-package org.project.sfc.com.PathCreation.ReadjustmentAtRuntime;
+package org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime;
 
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.VNFCInstance;

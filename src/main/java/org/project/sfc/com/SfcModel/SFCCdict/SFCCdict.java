@@ -4,18 +4,26 @@ package org.project.sfc.com.SfcModel.SFCCdict;
  * Created by mah on 2/8/16.
  */
 import javax.annotation.Generated;
+import javax.persistence.*;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.project.sfc.com.SfcImpl.ODL_SFC_driver.JSON.ACLJSON.Acl;
+import org.project.sfc.com.SfcModel.SFCdict.Status;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Generated("org.jsonschema2pojo")
-public class SFCCdict {
+//@Entity
+public class SFCCdict implements Serializable {
 
   @SerializedName("status")
   @Expose
-  private String status;
+  @Enumerated(EnumType.STRING)
+  private Status status;
 
   @SerializedName("description")
   @Expose
@@ -31,10 +39,11 @@ public class SFCCdict {
 
   @SerializedName("instance_id")
   @Expose
-  private Object instanceId;
+  private String instanceId;
 
   @SerializedName("acl_match_criteria")
   @Expose
+  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private List<AclMatchCriteria> aclMatchCriteria = new ArrayList<AclMatchCriteria>();
 
   @SerializedName("infra_driver")
@@ -57,7 +66,7 @@ public class SFCCdict {
    *
    * @return The status
    */
-  public String getStatus() {
+  public Status getStatus() {
     return status;
   }
 
@@ -65,7 +74,7 @@ public class SFCCdict {
    *
    * @param status The status
    */
-  public void setStatus(String status) {
+  public void setStatus(Status status) {
     this.status = status;
   }
 
@@ -121,7 +130,7 @@ public class SFCCdict {
    *
    * @return The instanceId
    */
-  public Object getInstanceId() {
+  public String getInstanceId() {
     return instanceId;
   }
 
@@ -129,7 +138,7 @@ public class SFCCdict {
    *
    * @param instanceId The instance_id
    */
-  public void setInstanceId(Object instanceId) {
+  public void setInstanceId(String instanceId) {
     this.instanceId = instanceId;
   }
 
@@ -211,5 +220,21 @@ public class SFCCdict {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+
+  @Override
+  public String toString() {
+    return "SFCCdict" +
+           "id='" + id + '\'' +
+           ", name=" + name +
+           ", description=" + description +
+           ", Path instance id=" + instanceId +
+           ", tenant id=" + tenantId +
+           ", infra driver=" + infraDriver +
+           ", ACL MATCH Criteria=" + aclMatchCriteria +
+           ", chain ='" + chain +
+           ", status='" + status + '\'' +
+           '}';
   }
 }

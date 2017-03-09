@@ -1,4 +1,4 @@
-package org.project.sfc.com.PathCreation.ReadjustmentAtRuntime;
+package org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime;
 
 import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
@@ -17,33 +17,37 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by mah on 1/26/17.
  */
-public class ShortestPathSelectionAtRuntime {
+public class TradeOffSpLbSelection {
+
   NeutronClient NC;
   SFC sfcc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
   org.project.sfc.com.SfcInterfaces.SFC SFC_driver;
   org.project.sfc.com.SfcInterfaces.SFCclassifier SFC_Classifier_driver;
   SfcBroker broker = new SfcBroker();
+  private static Map<String, Map<String,Integer>> mapCountLoad = new HashMap<>();
 
-  public ShortestPathSelectionAtRuntime(String type) throws IOException {
+  public TradeOffSpLbSelection(String type) throws IOException {
 
     this.SFC_driver = broker.getSFC(type);
     this.SFC_Classifier_driver = broker.getSfcClassifier(type);
     this.NC=    new NeutronClient();
 
   }
-
   public void ReadjustVNFsAllocation(VirtualNetworkFunctionRecord vnfr) throws IOException {
+    System.out.println("[Read Just VNFs Allocation] using tradeoff Selection Algorithm ");
 
     HashMap<String, SFC.SFC_Data> All_SFCs = sfcc_db.getAllSFCs();
     HashMap<String, SFC.SFC_Data> Involved_SFCs =new HashMap<String, SFC.SFC_Data>();
     int total_size_SFCs;
-    System.out.println("[Read Just VNFs Allocation] using Shortest Path Selection Algorithm ");
+    Map<String,Double> alpha=new HashMap<>(); //Alpha value per  VNF instance
 
+    double MaxSfcPriority=3;
+    int MaxDistance=Integer.MIN_VALUE;
+    double MaxLoad=Double.MIN_VALUE;
 
     if (All_SFCs != null) {
       System.out.println("[ ALL SFCs number ] =  " + All_SFCs.size());
@@ -65,7 +69,7 @@ public class ShortestPathSelectionAtRuntime {
         Map.Entry VNFcounter = (Map.Entry) vnfs_count.next();
         if (VNFs.get(VNFcounter.getKey()).getType().equals(vnfr.getType())){
           Involved_SFCs.put(All_SFCs.get(SFCdata_counter.getKey()).getRspID(),All_SFCs.get(SFCdata_counter.getKey()));
-          System.out.println("[Shortest Path Selection] Involved SFCs :  " + All_SFCs.get(SFCdata_counter.getKey()).getRspID());
+          System.out.println("[Tradeoff Path Selection] Involved SFCs :  " + All_SFCs.get(SFCdata_counter.getKey()).getRspID());
 
         }
 
@@ -84,33 +88,129 @@ public class ShortestPathSelectionAtRuntime {
         Iterator vnfs_count = ChainSFs.entrySet().iterator();
         VNFdict Previous_vnf=new VNFdict();
         boolean foundVNF=false;
+        double SfcPriority=Involved_SFCs.get(SFCKey.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getQoS();
 
         for (int position : ChainSFs.keySet()) {
+          double LoadSum=0; // Summation of the Load per SF type
+
+          // Calculating the Maximum Distance
+         // List<VNFdict> SF_instances=getSFs(ChainSFs.get(position).getType());
+          List<VNFdict> SF_instances=sfcc_db.getVNFs(ChainSFs.get(position).getType());
+          System.out.println("(*<**>*) VNFs size is :" + SF_instances.size() +" with type= "+ChainSFs.get(position).getType());
+
+          //Summation of Load
+
+          for(int x=0;x<SF_instances.size();x++) {
+            LoadSum=LoadSum+SF_instances.get(x).getTrafficLoad();
+
+          }
+          System.out.println("**** Load Sum :" + LoadSum);
+          if(Previous_vnf.getName()==null && position>0){
+            Previous_vnf=ChainSFs.get(position-1);
+            System.out.println("(*<**>*) Previous VNF is still NULL and the Position >0 : Get the Old Prev. VNF in the chain " +ChainSFs.get(position-1).getName() +" with type= "+ChainSFs.get(position).getType());
+
+          }
+
+          for(int i=0;i<SF_instances.size();i++) {
+
+          if(Previous_vnf.getName()!=null) {
+            int distance = getDistance(Previous_vnf.getName(), SF_instances.get(i).getName());
+            System.out.println("**** distance is :" + distance);
+            System.out.println("**** Max Distance is :" + MaxDistance);
+
+            if (distance > MaxDistance) {
+              MaxDistance = distance;
+              System.out.println("(*<**>*) Max Distance is :" + MaxDistance);
+            }
+          }
+        }
+          double countLoad = 0; //Counter for the Load per SF instance
+
+          //Calculating alpha
+          for(int i=0;i<SF_instances.size();i++) {
+
+
+
+            double alpha_value;
+            countLoad = SF_instances.get(i).getTrafficLoad();
+            System.out.println("****  SF Instance: " +
+                               SF_instances.get(i).getName() +
+                               " = " +
+                               countLoad +
+                               " and its load = " +
+                               countLoad);
+                     if (MaxLoad < countLoad) {
+
+                        MaxLoad = countLoad;
+                        System.out.println("**** MAximum Load is SF Instance: " +
+                                           SF_instances.get(i).getName() +
+                                           " and it Load = " +
+                                           MaxLoad);
+                      }
+            if(LoadSum>0) {
+              alpha_value = ((LoadSum - countLoad) / (2 * LoadSum)) + (SfcPriority / (2 * (MaxSfcPriority + 1)));
+            }else{
+              alpha_value = SfcPriority / (2 * (MaxSfcPriority + 1));
+            }
+
+                      alpha.put(SF_instances.get(i).getName(), alpha_value);
+                      System.out.println("**** Load of SF Instance: " +
+                                         SF_instances.get(i).getName() +
+                                         " = " +
+                                         countLoad +
+                                         " and its alpha value = " +
+                                         alpha_value);
+
+          }
+
           //Continue building the chain path
           if(foundVNF==true){
             VNFdict SelectedVNFdict=new VNFdict();
-          //  List<VNFdict> SFs=getSFs(ChainSFs.get(position).getType());
+            //List<VNFdict> SFs=getSFs(ChainSFs.get(position).getType());
             List<VNFdict> SFs=sfcc_db.getVNFs(ChainSFs.get(position).getType());
-            System.out.println("[Read Just VNFs Allocation] Continue the Chain building");
-
+            double minIndex = Double.MAX_VALUE;
+            int Pathlength;
+            double Index;
 
             System.out.println("[Read Just VNFs Allocation] The Position of the SF in the Chain = "+ position);
-            int minDistance = Integer.MAX_VALUE;
-            int Distance;
+
             for(int i=0; i<SFs.size();i++) {
 
               String currentVNFName = SFs.get(i).getName();
               System.out.println("[Select VNF] Current VNF NAME = "+ currentVNFName);
               System.out.println("[Select VNF] Prev VNF NAME = "+ Previous_vnf.getName());
-
               VNFdict prev_vnf = Previous_vnf;
-              Distance = getDistance(prev_vnf.getName(), currentVNFName);
-              System.out.println("[Select VNF] Distance between them = "+ Distance);
+              Pathlength = getDistance(prev_vnf.getName(), currentVNFName);
+              double Load=SFs.get(i).getTrafficLoad();
 
-              if (Distance < minDistance) {
-                System.out.println("[Select VNF] Distance is minimum than the Min distance = "+ minDistance);
+              double alpha_value=alpha.get(currentVNFName);
+              System.out.println("==> Load is  " +Load +" and alpha is "+alpha_value );
 
-                minDistance = Distance;
+              if (MaxDistance > 0 && MaxLoad >0) {
+                System.out.println("==> Max Disance > 0 and Max Load > 0 " );
+                Index = ((double)((1 - alpha_value) * Load) / MaxLoad) + ((double)(alpha_value * Pathlength) / MaxDistance);
+                System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+              } else if(MaxLoad > 0){
+                System.out.println("==> Max Load > 0 " );
+                Index = ((double)((1 - alpha_value) * Load) / MaxLoad);
+                System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+              }else if(MaxDistance > 0){
+                System.out.println("==> Max Disance > 0  " );
+                Index = ((double)(alpha_value * Pathlength) / MaxDistance);
+                System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+              }else {
+                System.out.println("==> Max Disance = 0 and Max Load = 0 " );
+
+                Index = 1-alpha_value;
+                System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+
+              }
+              System.out.println("[Select VNF] Index between them = "+ Index);
+
+              if (Index < minIndex) {
+                System.out.println("[Select VNF] Index is minimum than the Min Index = "+ minIndex);
+
+                minIndex = Index;
                 SelectedVNFdict=SFs.get(i);
 
               }
@@ -118,21 +218,22 @@ public class ShortestPathSelectionAtRuntime {
             VNF_instances.add(SelectedVNFdict);
 
             Previous_vnf = SelectedVNFdict;
-
-
             System.out.println("[Selected VNF] NAME = "+ SelectedVNFdict.getName());
 
 
-
           }
+
           // Searching for the updated VNF
+
           if (ChainSFs.get(position).getType().equals(vnfr.getType())) {
             VNFdict SelectedVNFdict=new VNFdict();
 
             System.out.println("[Read Just VNFs Allocation] Found the Position of the SF in the Chain = "+ position);
             SFposition=position;
-            int minDistance = Integer.MAX_VALUE;
-            int Distance;
+            double minIndex = Double.MAX_VALUE;
+            int Pathlength;
+            double Index;
+
             if(SFposition>0) {
               for(VirtualDeploymentUnit vdu:vnfr.getVdu()){
                 for(VNFCInstance vnfc: vdu.getVnfc_instance()){
@@ -141,12 +242,49 @@ public class ShortestPathSelectionAtRuntime {
 
                   VNFdict prev_vnf = ChainSFs.get(SFposition - 1);
                   System.out.println("[Previous VNF] Name: " + prev_vnf.getName());
+                  double Load=0;
 
-                  Distance = getDistance(prev_vnf.getName(), currentVNFName);
-                  System.out.println("[Distance between Previous VNF and Current VNF ] = " + Distance);
+                  Pathlength = getDistance(prev_vnf.getName(), currentVNFName);
+                  if(ChainSFs.get(SFposition).getName().equals(currentVNFName)){
+                    System.out.println("[CURRENT VNF] Name is found in the Chains : " + currentVNFName);
+                    Load=ChainSFs.get(SFposition).getTrafficLoad();
+                  }
 
-                  if(Distance<minDistance){
-                    minDistance=Distance;
+                  System.out.println("[CURRENT VNF] LOAD = : " + Load);
+
+                  double alpha_value;
+                  if(alpha.containsKey(currentVNFName)){
+                    alpha_value=alpha.get(currentVNFName);
+                    System.out.println(" The VNF instance  aplha value= "+ alpha_value+" for SF Instance : "+currentVNFName);
+
+                  }else{
+                    alpha_value=0.5 + (SfcPriority / (2 * (MaxSfcPriority + 1)));
+                    System.out.println(" The New VNF instance  aplha value= "+ alpha_value+" for SF Instance : "+currentVNFName);
+
+                  }
+
+
+                  if (MaxDistance > 0 && MaxLoad >0) {
+                    System.out.println("==> Max Disance > 0 and Max Load > 0 " );
+                    Index = ((double)((1 - alpha_value) * Load) / MaxLoad) + ((double)(alpha_value * Pathlength) / MaxDistance);
+                    System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+                  } else if(MaxLoad > 0){
+                    System.out.println("==> Max Load > 0 " );
+                    Index = ((double)((1 - alpha_value) * Load) / MaxLoad);
+                    System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+                  }else if(MaxDistance > 0){
+                    System.out.println("==> Max Disance > 0  " );
+                    Index = ((double)(alpha_value * Pathlength) / MaxDistance);
+                    System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+                  }else {
+                    System.out.println("==> Max Disance = 0 and Max Load = 0 " );
+
+                    Index = 1-alpha_value;
+                    System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+
+                  }
+                  if(Index<minIndex){
+                    minIndex=Index;
                     SelectedVNFdict.setName(currentVNFName);
                     SelectedVNFdict.setType(vnfr.getType());
                     for (Ip ip : vnfc.getIps()) {
@@ -154,30 +292,30 @@ public class ShortestPathSelectionAtRuntime {
                       System.out.println("[SF-Selections] Get Neutron Pro " + new Date().getTime());
 
                       SelectedVNFdict.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
-
                       break;
                     }
                   }
                 }
 
               }
+
               VNF_instances.add(SelectedVNFdict);
 
               foundVNF=true;
               Previous_vnf=SelectedVNFdict;
+              System.out.println("[SF-Selections] Selected VNF : " + SelectedVNFdict.getName());
 
             }else{
               System.out.println("[Read Just VNFs Allocation] Select first HOP ]");
+              System.out.println("[SF-Selections]  SFposition: " +SFposition+"  VNF instance : "+ SelectedVNFdict.getName());
 
               SelectedVNFdict=SelectFirstHop(vnfr);
               VNF_instances.add(SelectedVNFdict);
               Previous_vnf=SelectedVNFdict;
               foundVNF=true;
             }
-
           }
           System.out.println("[Read Just VNFs Allocation] FOUND is true? ]"+foundVNF);
-
 
         }
         UpdateChain(Involved_SFCs.get(SFCKey.getKey()), VNF_instances);
@@ -197,12 +335,9 @@ public class ShortestPathSelectionAtRuntime {
       while (vnfs_count.hasNext()) {
         Map.Entry VNFcounter = (Map.Entry) vnfs_count.next();
         if (VNFs.get(VNFcounter.getKey()).getType().equals(SF_TYPE)){
-          System.out.println("[Shortest Path Selection] Added VNF instance to the list :  " + VNFs.get(VNFcounter.getKey()).getName());
-          System.out.println("[Shortest Path Selection] SFs List contains it ? :  " + SFsList.contains(VNFs.get(VNFcounter.getKey())));
-
           if(!SFsList.contains(VNFs.get(VNFcounter.getKey()))){
             SFsList.add(VNFs.get(VNFcounter.getKey()));
-            System.out.println("[Shortest Path Selection] Added VNF instance to the list :  " + VNFs.get(VNFcounter.getKey()).getName());
+            System.out.println("[trade off Path Selection] Added VNF instance to the list :  " + VNFs.get(VNFcounter.getKey()).getName());
 
           }
 
@@ -215,22 +350,45 @@ public class ShortestPathSelectionAtRuntime {
     return SFsList;
   }
   private VNFdict SelectFirstHop(VirtualNetworkFunctionRecord vnfr){
-    System.out.println("[Shortest Path Selection] SELECT first HOP  " );
+    List<VNFdict> SFs=sfcc_db.getVNFs(vnfr.getType());
+    double minLoad= Double.MAX_VALUE;
+    double Load=0;
+    VNFdict FirstHop=new VNFdict();
 
+    for(int i=0; i<SFs.size();i++) {
+      System.out.println("[tradeoff Path Selection] VNF instance Name:  " + SFs.get(i).getName());
+
+      Load = SFs.get(i).getTrafficLoad();
+      System.out.println("[tradeoff Path Selection] VNF Load :  " + Load);
+
+      if(Load<minLoad){
+
+        minLoad=Load;
+        FirstHop=SFs.get(i);
+      }
+
+    }
+
+    System.out.println("[tradeoff Path Selection] Selected VNF  for the First Hop :  " +  FirstHop.getName());
+
+    return FirstHop;
+
+
+
+/*
     List<String> VNF_instances = new ArrayList<String>();
+    System.out.println("[Tradeoff Path Selection] SELECT first HOP  " );
 
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
       for (VNFCInstance vnfc_instance : vdu_x.getVnfc_instance()) {
         VNF_instances.add(vnfc_instance.getHostname());
-        System.out.println("[Shortest Path Selection] added VNF instance   " + vnfc_instance.getHostname()+" to the list of VNF instances with type "+vnfr.getType());
+        System.out.println("[Tradeoff Path Selection] added VNF instance   " + vnfc_instance.getHostname()+" to the list of VNF instances with type "+vnfr.getType());
 
       }
     }
-    Random randomizer = new Random();
     VNFdict firstHopVNF=new VNFdict();
+    Random randomizer=new Random();
     String VNF_instance_selected = VNF_instances.get(randomizer.nextInt(VNF_instances.size()));
-    System.out.println("[Shortest Path Selection] RANDOM Selection of First HOP is  " + VNF_instance_selected);
-
     firstHopVNF.setName(VNF_instance_selected);
     firstHopVNF.setType(vnfr.getType());
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
@@ -248,22 +406,25 @@ public class ShortestPathSelectionAtRuntime {
       }
     }
     return firstHopVNF;
+    */
   }
   //Calculate the distance between two VNFs instances
   private int getDistance(String prev_VNF,String currentVNF) throws IOException {
+    System.out.println("**** Get Distance between ["+prev_VNF+ "] and ["+ currentVNF+"]");
+
     int distance;
     String currentVNFLocation=SFC_driver.GetConnectedSFF(currentVNF);
-    String prevVNFLocation=SFC_driver.GetConnectedSFF(prev_VNF);
-    if(currentVNFLocation==null || prevVNFLocation==null){
-      System.out.println("ERROR [ Could not get the connected SFF to one of the VNFs ]  ");
-      return 1000;
+    System.out.println("**** Location for "+currentVNF+" = "+currentVNFLocation);
 
-    }
-    else if(currentVNFLocation.equals(prevVNFLocation)){
+    String prevVNFLocation=SFC_driver.GetConnectedSFF(prev_VNF);
+    System.out.println("**** Location for "+prev_VNF+" = "+prevVNFLocation);
+
+    if(currentVNFLocation.equals(prevVNFLocation)){
       distance=0;
     }else {
       distance=1;
     }
+    System.out.println("**** DISTANCE = "+distance);
 
     return distance;
   }
@@ -273,28 +434,18 @@ public class ShortestPathSelectionAtRuntime {
 
     HashMap<Integer, VNFdict> VNFs = Chain_Data.getChainSFs();
     Iterator count = VNFs.entrySet().iterator();
-    System.out.println("[ Shortest Path Selection < Create Chain > ] SIZE of VNFs in the original Chain:  " + VNFs.size());
-    System.out.println("[ Shortest Path Selection < Create Chain > ] SIZE of VNF instances  : " + VNF_instances.size());
+    System.out.println("[ LB Path Selection < Create Chain > ] SIZE of VNFs  " + VNFs.size());
 
     while (count.hasNext()) {
-      System.out.println("[ Shortest Path Selection ] NEXT ");
 
       Map.Entry VNFcounter = (Map.Entry) count.next();
       for(int i=0;i<VNF_instances.size();i++) {
-        System.out.println("[ Shortest Path Selection < Create Chain > ] VNF counter --> "+VNFcounter.getKey());
-        System.out.println("[ Shortest Path Selection < Create Chain > ] VNF --> "+VNFs.get(i).getName());
-
-        System.out.println("[ Shortest Path Selection < Create Chain > ] VNF NAME "+VNFs.get(VNFcounter.getKey()).getName());
-
-        System.out.println("[ Shortest Path Selection < Create Chain > ] chain data VNF type= "+VNFs.get(VNFcounter.getKey()).getType());
-        System.out.println("VNF instance TYPE= "+VNF_instances.get(i).getType());
+        System.out.println("[ Shortest Path Selection < Create Chain > ] chain data VNF type= "+VNFs.get(VNFcounter.getKey()).getType()+"VNF instance TYPE= "+VNF_instances.get(i).getType());
 
         if (VNFs.get(VNFcounter.getKey()).getType().equals(VNF_instances.get(i).getType())) {
           System.out.println("[ Shortest Path Selection < Create Chain > Found the same TYPE  ");
 
           int position = Integer.valueOf(VNFcounter.getKey().toString()).intValue();
-
-          //VNFs.remove(position);
 
           VNFs.put(position, VNF_instances.get(i));
           System.out.println("[ Shortest Path Selection < Create Chain > ] DONE  ");
@@ -302,8 +453,6 @@ public class ShortestPathSelectionAtRuntime {
           break;
         }
       }
-      System.out.println("NEXT CHAIN -->");
-
     }
     System.out.println("Set Chain VNFs");
 

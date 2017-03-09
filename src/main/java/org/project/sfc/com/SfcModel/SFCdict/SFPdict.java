@@ -3,25 +3,38 @@ package org.project.sfc.com.SfcModel.SFCdict;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.openbaton.catalogue.util.IdGenerator;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.persistence.*;
 
 /**
  * Created by mah on 6/6/16.
  */
-public class SFPdict {
+//@Entity
+public class SFPdict implements Serializable {
+
   @SerializedName("id")
   @Expose
+  @Id
   private String id;
 
   @SerializedName("parent chain id")
   @Expose
   private String ParentChainID;
 
-  @SerializedName("paths")
+  @SerializedName("path sfs")
   @Expose
+  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
   private HashMap<Integer, VNFdict> path_sfs;
 
+
+  @SerializedName("name")
+  @Expose
+  private String name;
 
   @SerializedName("path traffic Load")
   @Expose
@@ -34,6 +47,11 @@ public class SFPdict {
   @SerializedName("QoS")
   @Expose
   private int QoS;
+
+
+  @SerializedName("rsp instance id")
+  @Expose
+  private String rsp_instance_id;
   /**
    *
    * @return The id
@@ -42,14 +60,18 @@ public class SFPdict {
     return id;
   }
 
-  /**
-   *
-   * @param id The id
-   */
-  public void setId(String id) {
-    this.id = id;
+  public void setId(String ID){
+    this.id= ID;
   }
 
+
+  public String getInstanceId() {
+    return rsp_instance_id;
+  }
+
+  public void setInstanceID(String rspID){
+    this.rsp_instance_id= rspID;
+  }
   /**
    *
    * @return The parentchainid
@@ -81,7 +103,21 @@ public class SFPdict {
   public void setPath_SFs(HashMap<Integer, VNFdict> path_sfs) {
     this.path_sfs = path_sfs;
   }
+  /**
+   *
+   * @return The name
+   */
+  public String getName() {
+    return name;
+  }
 
+  /**
+   *
+   * @param name The name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
 
 
@@ -111,5 +147,19 @@ public class SFPdict {
 
   public void setQoS(int QoS) {
     this.QoS = QoS;
+  }
+
+  @Override
+  public String toString() {
+    return "SFPdict{" +
+           "id='" + id + '\'' +
+           ", ParentChainID=" + ParentChainID +
+           ", path sfs=" + path_sfs +
+           ", instance id=" + rsp_instance_id +
+           ", name=" + name +
+           ", Path traffic Load='" + PathtrafficLoad + '\'' +
+           ", old Traffic Load='" + oldTrafficLoad + '\'' +
+           ", QoS=" + QoS + '\'' +
+           '}';
   }
 }
