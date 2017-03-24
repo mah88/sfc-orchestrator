@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class IpMatch {
 
-    @SerializedName("ip-protocol")
-    @Expose
-    private String ipProtocol;
+  @SerializedName("ip-protocol")
+  @Expose
+  private String ipProtocol;
 
-    /**
-     * 
-     * @return
-     *     The ipProtocol
-     */
-    public String getIpProtocol() {
-        return ipProtocol;
-    }
+  /**
+   *
+   * @return The ipProtocol
+   */
+  public String getIpProtocol() {
+    return ipProtocol;
+  }
 
-    /**
-     * 
-     * @param ipProtocol
-     *     The ip-protocol
-     */
-    public void setIpProtocol(String ipProtocol) {
-        this.ipProtocol = ipProtocol;
-    }
-
+  /**
+   *
+   * @param ipProtocol The ip-protocol
+   */
+  public void setIpProtocol(String ipProtocol) {
+    this.ipProtocol = ipProtocol;
+  }
 }

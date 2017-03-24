@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NxResubmit {
 
-    @SerializedName("in-port")
-    @Expose
-    private String inPort;
-    @SerializedName("table")
-    @Expose
-    private String table;
+  @SerializedName("in-port")
+  @Expose
+  private String inPort;
 
-    /**
-     * 
-     * @return
-     *     The inPort
-     */
-    public String getInPort() {
-        return inPort;
-    }
+  @SerializedName("table")
+  @Expose
+  private String table;
 
-    /**
-     * 
-     * @param inPort
-     *     The in-port
-     */
-    public void setInPort(String inPort) {
-        this.inPort = inPort;
-    }
+  /**
+   *
+   * @return The inPort
+   */
+  public String getInPort() {
+    return inPort;
+  }
 
-    /**
-     * 
-     * @return
-     *     The table
-     */
-    public String getTable() {
-        return table;
-    }
+  /**
+   *
+   * @param inPort The in-port
+   */
+  public void setInPort(String inPort) {
+    this.inPort = inPort;
+  }
 
-    /**
-     * 
-     * @param table
-     *     The table
-     */
-    public void setTable(String table) {
-        this.table = table;
-    }
+  /**
+   *
+   * @return The table
+   */
+  public String getTable() {
+    return table;
+  }
 
+  /**
+   *
+   * @param table The table
+   */
+  public void setTable(String table) {
+    this.table = table;
+  }
 }

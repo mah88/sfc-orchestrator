@@ -8,68 +8,63 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NxRegLoad {
 
-    @SerializedName("value")
-    @Expose
-    private String value;
-    @SerializedName("dst")
-    @Expose
-    private Dst dst;
-    @SerializedName("nx-reg-move")
-    @Expose
-    private NxRegMove nxRegMove;
+  @SerializedName("value")
+  @Expose
+  private String value;
 
-    /**
-     * 
-     * @return
-     *     The value
-     */
-    public String getValue() {
-        return value;
-    }
+  @SerializedName("dst")
+  @Expose
+  private Dst dst;
 
-    /**
-     * 
-     * @param value
-     *     The value
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  @SerializedName("nx-reg-move")
+  @Expose
+  private NxRegMove nxRegMove;
 
-    /**
-     * 
-     * @return
-     *     The dst
-     */
-    public Dst getDst() {
-        return dst;
-    }
+  /**
+   *
+   * @return The value
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * 
-     * @param dst
-     *     The dst
-     */
-    public void setDst(Dst dst) {
-        this.dst = dst;
-    }
+  /**
+   *
+   * @param value The value
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * 
-     * @return
-     *     The nxRegMove
-     */
-    public NxRegMove getNxRegMove() {
-        return nxRegMove;
-    }
+  /**
+   *
+   * @return The dst
+   */
+  public Dst getDst() {
+    return dst;
+  }
 
-    /**
-     * 
-     * @param nxRegMove
-     *     The nx-reg-move
-     */
-    public void setNxRegMove(NxRegMove nxRegMove) {
-        this.nxRegMove = nxRegMove;
-    }
+  /**
+   *
+   * @param dst The dst
+   */
+  public void setDst(Dst dst) {
+    this.dst = dst;
+  }
 
+  /**
+   *
+   * @return The nxRegMove
+   */
+  public NxRegMove getNxRegMove() {
+    return nxRegMove;
+  }
+
+  /**
+   *
+   * @param nxRegMove The nx-reg-move
+   */
+  public void setNxRegMove(NxRegMove nxRegMove) {
+    this.nxRegMove = nxRegMove;
+  }
 }

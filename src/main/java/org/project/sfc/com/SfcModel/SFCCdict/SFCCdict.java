@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Generated("org.jsonschema2pojo")
-//@Entity
+@Entity
 public class SFCCdict implements Serializable {
 
   @SerializedName("status")
@@ -43,19 +43,20 @@ public class SFCCdict implements Serializable {
 
   @SerializedName("acl_match_criteria")
   @Expose
-  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+  @OneToMany(
+    cascade = {CascadeType.ALL},
+    fetch = FetchType.EAGER
+  )
   private List<AclMatchCriteria> aclMatchCriteria = new ArrayList<AclMatchCriteria>();
 
   @SerializedName("infra_driver")
   @Expose
   private String infraDriver;
 
-  @SerializedName("attributes")
-  @Expose
-  private Attributes attributes;
 
   @SerializedName("id")
   @Expose
+  @Id
   private String id;
 
   @SerializedName("name")
@@ -174,21 +175,6 @@ public class SFCCdict implements Serializable {
     this.infraDriver = infraDriver;
   }
 
-  /**
-   *
-   * @return The attributes
-   */
-  public Attributes getAttributes() {
-    return attributes;
-  }
-
-  /**
-   *
-   * @param attributes The attributes
-   */
-  public void setAttributes(Attributes attributes) {
-    this.attributes = attributes;
-  }
 
   /**
    *
@@ -222,19 +208,29 @@ public class SFCCdict implements Serializable {
     this.name = name;
   }
 
-
   @Override
   public String toString() {
-    return "SFCCdict" +
-           "id='" + id + '\'' +
-           ", name=" + name +
-           ", description=" + description +
-           ", Path instance id=" + instanceId +
-           ", tenant id=" + tenantId +
-           ", infra driver=" + infraDriver +
-           ", ACL MATCH Criteria=" + aclMatchCriteria +
-           ", chain ='" + chain +
-           ", status='" + status + '\'' +
-           '}';
+    return "SFCCdict"
+        + "id='"
+        + id
+        + '\''
+        + ", name="
+        + name
+        + ", description="
+        + description
+        + ", Path instance id="
+        + instanceId
+        + ", tenant id="
+        + tenantId
+        + ", infra driver="
+        + infraDriver
+        + ", ACL MATCH Criteria="
+        + aclMatchCriteria
+        + ", chain ='"
+        + chain
+        + ", status='"
+        + status
+        + '\''
+        + '}';
   }
 }

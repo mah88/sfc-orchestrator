@@ -38,8 +38,8 @@ public class MonitoringManager {
 
   @PostConstruct
   public void init() {
-    System.out.println(
-        "[ Initialize Monitoring Manager ] ");
+    log.debug(
+    "[ Initialize Monitoring Manager ] ");
     this.monitoringTasks = new HashMap<String, Map<String, ScheduledFuture>>();
     this.taskScheduler = new ThreadPoolTaskScheduler();
     this.taskScheduler.setPoolSize(10);
@@ -57,85 +57,71 @@ public class MonitoringManager {
     this.taskScheduler.initialize();
   }
 
-  public void start(VirtualNetworkFunctionRecord vnfr, String Metric, int Period, boolean LastVNFR) throws NotFoundException,
-                                                                                         IOException {
+  public void start(VirtualNetworkFunctionRecord vnfr, String Metric, int Period, boolean LastVNFR)
+      throws NotFoundException, IOException {
 
-      System.out.println(
-          "Creating new MonitoringTask "
-          + vnfr.getName()
-          + " with id: "
-          + vnfr.getId());
-      log.info(
-          "Creating new MonitoringTask "
-          + vnfr.getName()
-          + " with id: "
-          + vnfr.getId()
-          );
+    log.debug(
+        "Creating new MonitoringTask "
+        + vnfr.getName()
+        + " with id: "
+        + vnfr.getId());
+    log.debug(
+        "Creating new MonitoringTask "
+        + vnfr.getName()
+        + " with id: "
+        + vnfr.getId()
+        );
     if (!monitoringTasks.containsKey(vnfr.getParent_ns_id())) {
-      monitoringTasks.put(vnfr.getParent_ns_id(), new HashMap<String,ScheduledFuture>());
+      monitoringTasks.put(vnfr.getParent_ns_id(), new HashMap<String, ScheduledFuture>());
     }
 
     if (monitoringTasks.get(vnfr.getParent_ns_id()).containsKey(vnfr.getId())) {
-      log.warn(
-          "Got new request for starting MonitoringTask for VNFR "
-          + vnfr.getId()
-          + " but it was already running. So do nothing");
+      /*  log.warn(
+      "Got new request for starting MonitoringTask for VNFR "
+      + vnfr.getId()
+      + " but it was already running. So do nothing");*/
       return;
     }
 
-      MonitoringTask monitoringTask =
-          new MonitoringTask(
-              vnfr,Metric,Period,
-              monitoringEngine,LastVNFR
-             );
+    MonitoringTask monitoringTask =
+        new MonitoringTask(vnfr, Metric, Period, monitoringEngine, LastVNFR);
 
-      ScheduledFuture scheduledFuture =
-          taskScheduler.scheduleAtFixedRate(monitoringTask,  Period*1000);
+    ScheduledFuture scheduledFuture =
+        taskScheduler.scheduleAtFixedRate(monitoringTask, Period * 1000);
     monitoringTasks.get(vnfr.getParent_ns_id()).put(vnfr.getId(), scheduledFuture);
-    System.out.println(
+    log.debug(
+      "Activated Monitoring of VNFR with ID: "
+      + vnfr.getId()
+      + " and Name "
+      + vnfr.getName());
+    log.debug(
         "Activated Monitoring of VNFR with ID: "
         + vnfr.getId()
         + " and Name "
         + vnfr.getName());
-      log.info(
-          "Activated Monitoring of VNFR with ID: "
-          + vnfr.getId()
-          + " and Name "
-          + vnfr.getName());
 
   }
 
-
-
-  public  void stop(
-      VirtualNetworkFunctionRecord vnfr) throws NotFoundException {
-    log.info(
-        "Deactivating Monitoring for VNFR with id: "
-        + vnfr.getId()
-        );
+  public void stop(VirtualNetworkFunctionRecord vnfr) throws NotFoundException {
+      log.debug(
+    "Deactivating Monitoring for VNFR with id: "
+    + vnfr.getId()
+    );
     if (monitoringTasks.containsKey(vnfr.getParent_ns_id())) {
       if (monitoringTasks.get(vnfr.getParent_ns_id()).containsKey(vnfr.getId())) {
 
-          monitoringTasks.get(vnfr.getParent_ns_id()).get(vnfr.getId()).cancel(false);
+        monitoringTasks.get(vnfr.getParent_ns_id()).get(vnfr.getId()).cancel(false);
 
-          monitoringTasks.get(vnfr.getParent_ns_id()).remove(vnfr.getId());
-          log.info(
-              "Deactivated Monitoring for VNFR with id: "
-              + vnfr.getId()
-            );
-        } else {
-          log.info(
-              "Not Found MonitoringTask for VNFR with id: "
-              + vnfr.getId());
-        }
+        monitoringTasks.get(vnfr.getParent_ns_id()).remove(vnfr.getId());
+        log.debug(
+          "Deactivated Monitoring for VNFR with id: "
+          + vnfr.getId()
+        );
       } else {
-        log.info(
-            "Not Found any MonitoringTasks for NSR with id: "
-            + vnfr.getParent_ns_id()
-           );
+        log.warn("Not Found MonitoringTask for VNFR with id: " + vnfr.getId());
       }
+    } else {
+      log.warn("Not Found any MonitoringTasks for NSR with id: " + vnfr.getParent_ns_id());
     }
-
-
-
+  }
 }

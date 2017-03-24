@@ -1,6 +1,5 @@
 package org.project.sfc.com.MonitoringAgent;
 
-
 import org.openbaton.catalogue.mano.common.AutoScalePolicy;
 import org.openbaton.catalogue.mano.common.ScalingAlarm;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
@@ -54,13 +53,9 @@ public class MonitoringEngine {
 
   private MonitoringManager monitoringManager;
 
- /* @PostConstruct
-  public void init() {
-    this.monitoringManager = context.getBean(MonitoringManager.class);
-  }*/
 
-  public void initializeMonitor() throws NotFoundException{
-    System.out.print("[Initialize Monitoring Engine]");
+  public void initializeMonitor() throws NotFoundException {
+    log.debug("[Initialize Monitoring Engine]");
     try {
       this.monitor = new MonitoringPluginCaller("zabbix", "zabbix-plugin");
     } catch (TimeoutException e) {
@@ -68,37 +63,37 @@ public class MonitoringEngine {
     } catch (NotFoundException e) {
       log.error(e.getMessage(), e);
       throw e;
-    }catch( IOException e){
+    } catch (IOException e) {
       log.error(e.getMessage(), e);
     }
-    log.debug("MonitoringPluginCaller obtained");
+    //log.debug("MonitoringPluginCaller obtained");
 
-      /*  (MonitoringPluginCaller)
-            ((RabbitPluginBroker) context.getBean(RabbitPluginBroker.class))
-                .getMonitoringPluginCaller(
-                    env.getProperty("spring.rabbitmq.host"),
-                    env.getProperty("spring.rabbitmq.username"),
-                    env.getProperty("spring.rabbitmq.password"),
-                    Integer.parseInt(env.getProperty("spring.rabbitmq.port")),
-                    "zabbix-plugin",
-                    "zabbix",
-                    env.getProperty("SFCO.rabbitmq.management.port"));*/
+    /*  (MonitoringPluginCaller)
+    ((RabbitPluginBroker) context.getBean(RabbitPluginBroker.class))
+        .getMonitoringPluginCaller(
+            env.getProperty("spring.rabbitmq.host"),
+            env.getProperty("spring.rabbitmq.username"),
+            env.getProperty("spring.rabbitmq.password"),
+            Integer.parseInt(env.getProperty("spring.rabbitmq.port")),
+            "zabbix-plugin",
+            "zabbix",
+            env.getProperty("SFCO.rabbitmq.management.port"));*/
 
     if (monitor == null) {
       log.warn("MonitoringTask: Monitor was not found. Cannot start Monitoring...");
     }
-
   }
+
   public void initializeVimDriver() throws NotFoundException, SDKException, ClassNotFoundException {
     System.out.print("[Initialize VimDriver]");
     try {
-      this.Vim=new VimDriverCaller("openstack");
+      this.Vim = new VimDriverCaller("openstack");
     } catch (TimeoutException e) {
       log.error(e.getMessage(), e);
     } catch (NotFoundException e) {
       log.error(e.getMessage(), e);
       throw e;
-    }catch( IOException e){
+    } catch (IOException e) {
       log.error(e.getMessage(), e);
     }
     log.debug("VimDriverCaller obtained");
@@ -111,24 +106,23 @@ public class MonitoringEngine {
             configuration.getIP(),
             configuration.getPort(),
             "1");
-      /*  (MonitoringPluginCaller)
-            ((RabbitPluginBroker) context.getBean(RabbitPluginBroker.class))
-                .getMonitoringPluginCaller(
-                    env.getProperty("spring.rabbitmq.host"),
-                    env.getProperty("spring.rabbitmq.username"),
-                    env.getProperty("spring.rabbitmq.password"),
-                    Integer.parseInt(env.getProperty("spring.rabbitmq.port")),
-                    "zabbix-plugin",
-                    "zabbix",
-                    env.getProperty("SFCO.rabbitmq.management.port"));*/
+    /*  (MonitoringPluginCaller)
+    ((RabbitPluginBroker) context.getBean(RabbitPluginBroker.class))
+        .getMonitoringPluginCaller(
+            env.getProperty("spring.rabbitmq.host"),
+            env.getProperty("spring.rabbitmq.username"),
+            env.getProperty("spring.rabbitmq.password"),
+            Integer.parseInt(env.getProperty("spring.rabbitmq.port")),
+            "zabbix-plugin",
+            "zabbix",
+            env.getProperty("SFCO.rabbitmq.management.port"));*/
     setProjectId();
 
-
-    if( Vim == null){
+    if (Vim == null) {
       log.warn("VimDriverTask: Vim was not found. Cannot get Info about VNF instances Location...");
-
     }
   }
+
   private void setProjectId() throws ClassNotFoundException, SDKException {
     if (projectId == null || projectId.isEmpty()) {
       log.debug("Trying to connect to the NFVO...");
@@ -146,9 +140,10 @@ public class MonitoringEngine {
   }
 
   public List<Item> getRawMeasurementResults(
-      VirtualNetworkFunctionRecord vnfr, String metric, String period) throws MonitoringException, NotFoundException {
+      VirtualNetworkFunctionRecord vnfr, String metric, String period)
+      throws MonitoringException, NotFoundException {
     if (monitor == null) {
-      System.out.print("Monitor is null then Initialize Monitoring Engine");
+      log.warn("Monitor is null then Initialize Monitoring Engine");
 
       initializeMonitor();
     }
@@ -166,56 +161,52 @@ public class MonitoringEngine {
         }
       }
     }
-    log.trace(
+    log.debug(
         "Getting all measurement results for hostnames "
-        + hostnames
-        + " on metric "
-        + metric
-        + ".");
+            + hostnames
+            + " on metric "
+            + metric
+            + ".");
     measurementResults.addAll(monitor.queryPMJob(hostnames, metrics, period));
-    log.info(
-        "Got all measurement results for vnfr "
-        + vnfr.getId()
-        + " on metric "
-        + metric
-        + " -> "
-        + measurementResults
-        + ".");
+     log.debug(
+    "Got all measurement results for vnfr "
+    + vnfr.getId()
+    + " on metric "
+    + metric
+    + " -> "
+    + measurementResults
+    + ".");
     return measurementResults;
   }
 
-  public String getLocation(String vnf_instance_name) throws
-                                                                      NotFoundException,
-                                                                      ClassNotFoundException,
-                                                                      SDKException, VimDriverException {
+  public String getLocation(String vnf_instance_name)
+      throws NotFoundException, ClassNotFoundException, SDKException, VimDriverException {
     if (Vim == null) {
-      System.out.print("VimDriver is null then Initialize Monitoring Engine");
+      log.warn("VimDriver is null then Initialize Monitoring Engine");
 
       initializeVimDriver();
     }
-    String Location="";
-    System.out.print("PROJECT ID is"+  requestor.getProjectId());
+    String Location = "";
+    //  System.out.print("PROJECT ID is"+  requestor.getProjectId());
 
-    List<VimInstance> VimInstances=requestor.getVimInstanceAgent().findAll();
-    for (VimInstance Vim_instance:VimInstances){
-      List<Server> VNF_instances=Vim.listServer(Vim_instance);
-      for (Server VNF_instance:VNF_instances){
-        if(VNF_instance.getName().equals(vnf_instance_name)) {
-          if(VNF_instance.getHypervisorHostName()!=null){
-            Location=VNF_instance.getHypervisorHostName();
+    List<VimInstance> VimInstances = requestor.getVimInstanceAgent().findAll();
+    for (VimInstance Vim_instance : VimInstances) {
+      List<Server> VNF_instances = Vim.listServer(Vim_instance);
+      for (Server VNF_instance : VNF_instances) {
+        if (VNF_instance.getName().equals(vnf_instance_name)) {
+          if (VNF_instance.getHypervisorHostName() != null) {
+            Location = VNF_instance.getHypervisorHostName();
           }
         }
       }
     }
 
-    log.info(
-        "Got Location for VNF instance "
-        + vnf_instance_name
-        + " -> "
-        + Location
-        + ".");
+    log.debug(
+    "Got Location for VNF instance "
+    + vnf_instance_name
+    + " -> "
+    + Location
+    + ".");
     return Location;
-
-
   }
 }

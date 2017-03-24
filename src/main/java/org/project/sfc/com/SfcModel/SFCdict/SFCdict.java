@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Generated;
 import javax.persistence.Entity;
 
-//@Entity
 @Generated("org.jsonschema2pojo")
 public class SFCdict {
 

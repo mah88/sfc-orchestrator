@@ -10,89 +10,83 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Table_ {
 
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("flow-hash-id-map")
-    @Expose
-    private List<FlowHashIdMap> flowHashIdMap = new ArrayList<FlowHashIdMap>();
-    @SerializedName("flow")
-    @Expose
-    private List<Flow> flow = new ArrayList<Flow>();
-    @SerializedName("opendaylight-flow-table-statistics:flow-table-statistics")
-    @Expose
-    private FlowTableStatistics flowTableStatistics;
+  @SerializedName("id")
+  @Expose
+  private String id;
 
-    /**
-     * 
-     * @return
-     *     The id
-     */
-    public String getId() {
-        return id;
-    }
+  @SerializedName("flow-hash-id-map")
+  @Expose
+  private List<FlowHashIdMap> flowHashIdMap = new ArrayList<FlowHashIdMap>();
 
-    /**
-     * 
-     * @param id
-     *     The id
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+  @SerializedName("flow")
+  @Expose
+  private List<Flow> flow = new ArrayList<Flow>();
 
-    /**
-     * 
-     * @return
-     *     The flowHashIdMap
-     */
-    public List<FlowHashIdMap> getFlowHashIdMap() {
-        return flowHashIdMap;
-    }
+  @SerializedName("opendaylight-flow-table-statistics:flow-table-statistics")
+  @Expose
+  private FlowTableStatistics flowTableStatistics;
 
-    /**
-     * 
-     * @param flowHashIdMap
-     *     The flow-hash-id-map
-     */
-    public void setFlowHashIdMap(List<FlowHashIdMap> flowHashIdMap) {
-        this.flowHashIdMap = flowHashIdMap;
-    }
+  /**
+   *
+   * @return The id
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * 
-     * @return
-     *     The flow
-     */
-    public List<Flow> getFlow() {
-        return flow;
-    }
+  /**
+   *
+   * @param id The id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    /**
-     * 
-     * @param flow
-     *     The flow
-     */
-    public void setFlow(List<Flow> flow) {
-        this.flow = flow;
-    }
+  /**
+   *
+   * @return The flowHashIdMap
+   */
+  public List<FlowHashIdMap> getFlowHashIdMap() {
+    return flowHashIdMap;
+  }
 
-    /**
-     * 
-     * @return
-     *     The flowTableStatistics
-     */
-    public FlowTableStatistics getFlowTableStatistics() {
-        return flowTableStatistics;
-    }
+  /**
+   *
+   * @param flowHashIdMap The flow-hash-id-map
+   */
+  public void setFlowHashIdMap(List<FlowHashIdMap> flowHashIdMap) {
+    this.flowHashIdMap = flowHashIdMap;
+  }
 
-    /**
-     * 
-     * @param flowTableStatistics
-     *     The flow-table-statistics
-     */
-    public void setFlowTableStatistics(FlowTableStatistics flowTableStatistics) {
-        this.flowTableStatistics = flowTableStatistics;
-    }
+  /**
+   *
+   * @return The flow
+   */
+  public List<Flow> getFlow() {
+    return flow;
+  }
 
+  /**
+   *
+   * @param flow The flow
+   */
+  public void setFlow(List<Flow> flow) {
+    this.flow = flow;
+  }
+
+  /**
+   *
+   * @return The flowTableStatistics
+   */
+  public FlowTableStatistics getFlowTableStatistics() {
+    return flowTableStatistics;
+  }
+
+  /**
+   *
+   * @param flowTableStatistics The flow-table-statistics
+   */
+  public void setFlowTableStatistics(FlowTableStatistics flowTableStatistics) {
+    this.flowTableStatistics = flowTableStatistics;
+  }
 }

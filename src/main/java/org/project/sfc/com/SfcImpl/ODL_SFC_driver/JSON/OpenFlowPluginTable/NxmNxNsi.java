@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NxmNxNsi {
 
-    @SerializedName("nsi")
-    @Expose
-    private String nsi;
+  @SerializedName("nsi")
+  @Expose
+  private String nsi;
 
-    /**
-     * 
-     * @return
-     *     The nsi
-     */
-    public String getNsi() {
-        return nsi;
-    }
+  /**
+   *
+   * @return The nsi
+   */
+  public String getNsi() {
+    return nsi;
+  }
 
-    /**
-     * 
-     * @param nsi
-     *     The nsi
-     */
-    public void setNsi(String nsi) {
-        this.nsi = nsi;
-    }
-
+  /**
+   *
+   * @param nsi The nsi
+   */
+  public void setNsi(String nsi) {
+    this.nsi = nsi;
+  }
 }

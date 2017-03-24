@@ -15,7 +15,7 @@ public abstract class SFCclassifier implements SfcClassifierInter {
 
   public SFCclassifier() {}
 
-  public SFCclassifier(String type) throws IOException{
+  public SFCclassifier(String type) throws IOException {
 
     client = new SfcDriverCaller(type);
   }

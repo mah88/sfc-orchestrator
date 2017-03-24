@@ -14,7 +14,7 @@ import javax.persistence.*;
 /**
  * Created by mah on 6/6/16.
  */
-//@Entity
+@Entity
 public class SFPdict implements Serializable {
 
   @SerializedName("id")
@@ -28,9 +28,11 @@ public class SFPdict implements Serializable {
 
   @SerializedName("path sfs")
   @Expose
-  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+ /* @OneToMany(
+    cascade = {CascadeType.ALL},
+    fetch = FetchType.EAGER
+  )*/
   private HashMap<Integer, VNFdict> path_sfs;
-
 
   @SerializedName("name")
   @Expose
@@ -42,12 +44,11 @@ public class SFPdict implements Serializable {
 
   @SerializedName("old-traffic-load")
   @Expose
-  private double oldTrafficLoad=0;
+  private double oldTrafficLoad = 0;
 
   @SerializedName("QoS")
   @Expose
   private int QoS;
-
 
   @SerializedName("rsp instance id")
   @Expose
@@ -60,17 +61,16 @@ public class SFPdict implements Serializable {
     return id;
   }
 
-  public void setId(String ID){
-    this.id= ID;
+  public void setId(String ID) {
+    this.id = ID;
   }
-
 
   public String getInstanceId() {
     return rsp_instance_id;
   }
 
-  public void setInstanceID(String rspID){
-    this.rsp_instance_id= rspID;
+  public void setInstanceID(String rspID) {
+    this.rsp_instance_id = rspID;
   }
   /**
    *
@@ -92,7 +92,7 @@ public class SFPdict implements Serializable {
    *
    * @return The path
    */
-  public  HashMap<Integer, VNFdict> getPath_SFs() {
+  public HashMap<Integer, VNFdict> getPath_SFs() {
     return path_sfs;
   }
 
@@ -119,12 +119,9 @@ public class SFPdict implements Serializable {
     this.name = name;
   }
 
-
-
   public double getPathTrafficLoad() {
     return PathtrafficLoad;
   }
-
 
   public void setOldTrafficLoad(double load) {
     this.oldTrafficLoad = load;
@@ -134,16 +131,13 @@ public class SFPdict implements Serializable {
     return oldTrafficLoad;
   }
 
-
   public void setPathTrafficLoad(double load) {
     this.PathtrafficLoad = load;
   }
 
-
   public int getQoS() {
     return QoS;
   }
-
 
   public void setQoS(int QoS) {
     this.QoS = QoS;
@@ -151,15 +145,27 @@ public class SFPdict implements Serializable {
 
   @Override
   public String toString() {
-    return "SFPdict{" +
-           "id='" + id + '\'' +
-           ", ParentChainID=" + ParentChainID +
-           ", path sfs=" + path_sfs +
-           ", instance id=" + rsp_instance_id +
-           ", name=" + name +
-           ", Path traffic Load='" + PathtrafficLoad + '\'' +
-           ", old Traffic Load='" + oldTrafficLoad + '\'' +
-           ", QoS=" + QoS + '\'' +
-           '}';
+    return "SFPdict{"
+        + "id='"
+        + id
+        + '\''
+        + ", ParentChainID="
+        + ParentChainID
+        + ", path sfs="
+        + path_sfs
+        + ", instance id="
+        + rsp_instance_id
+        + ", name="
+        + name
+        + ", Path traffic Load='"
+        + PathtrafficLoad
+        + '\''
+        + ", old Traffic Load='"
+        + oldTrafficLoad
+        + '\''
+        + ", QoS="
+        + QoS
+        + '\''
+        + '}';
   }
 }

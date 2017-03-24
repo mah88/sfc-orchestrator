@@ -11,212 +11,199 @@ import java.util.List;
 @Generated("org.jsonschema2pojo")
 public class Match {
 
-    @SerializedName("in-port")
-    @Expose
-    private String inPort;
-    @SerializedName("openflowplugin-extension-general:extension-list")
-    @Expose
-    private List<ExtensionList> extensionList=new ArrayList<>();
-    @SerializedName("tcp-source-port")
-    @Expose
-    private String tcpSourcePort;
-    @SerializedName("tcp-destination-port")
-    @Expose
-    private String tcpDestinationPort;
-    @SerializedName("udp-source-port")
-    @Expose
-    private String udpSourcePort;
-    @SerializedName("udp-destination-port")
-    @Expose
-    private String udpDestinationPort;
-    @SerializedName("ethernet-match")
-    @Expose
-    private EthernetMatch ethernetMatch;
-    @SerializedName("ip-match")
-    @Expose
-    private IpMatch ipMatch;
-    @SerializedName("ipv4-destination")
-    @Expose
-    private String ipv4Destination;
-    @SerializedName("ipv4-source")
-    @Expose
-    private String ipv4Source;
+  @SerializedName("in-port")
+  @Expose
+  private String inPort;
 
-    /**
-     * 
-     * @return
-     *     The inPort
-     */
-    public String getInPort() {
-        return inPort;
-    }
+  @SerializedName("openflowplugin-extension-general:extension-list")
+  @Expose
+  private List<ExtensionList> extensionList = new ArrayList<>();
 
-    /**
-     * 
-     * @param inPort
-     *     The in-port
-     */
-    public void setInPort(String inPort) {
-        this.inPort = inPort;
-    }
+  @SerializedName("tcp-source-port")
+  @Expose
+  private String tcpSourcePort;
 
-    /**
-     * 
-     * @return
-     *     The extensionList
-     */
-    public List<ExtensionList> getExtensionList() {
-        return extensionList;
-    }
+  @SerializedName("tcp-destination-port")
+  @Expose
+  private String tcpDestinationPort;
 
-    /**
-     * 
-     * @param extensionList
-     *     The extension-list
-     */
-    public void setExtensionList(List<ExtensionList> extensionList) {
-        this.extensionList = extensionList;
-    }
+  @SerializedName("udp-source-port")
+  @Expose
+  private String udpSourcePort;
 
-    /**
-     * 
-     * @return
-     *     The tcpSourcePort
-     */
-    public String getTcpSourcePort() {
-        return tcpSourcePort;
-    }
+  @SerializedName("udp-destination-port")
+  @Expose
+  private String udpDestinationPort;
 
-    /**
-     * 
-     * @param tcpSourcePort
-     *     The tcp-source-port
-     */
-    public void setTcpSourcePort(String tcpSourcePort) {
-        this.tcpSourcePort = tcpSourcePort;
-    }
+  @SerializedName("ethernet-match")
+  @Expose
+  private EthernetMatch ethernetMatch;
 
-    /**
-     * 
-     * @return
-     *     The tcpDestinationPort
-     */
-    public String getTcpDestinationPort() {
-        return tcpDestinationPort;
-    }
+  @SerializedName("ip-match")
+  @Expose
+  private IpMatch ipMatch;
 
-    /**
-     * 
-     * @param tcpDestinationPort
-     *     The tcp-destination-port
-     */
-    public void setTcpDestinationPort(String tcpDestinationPort) {
-        this.tcpDestinationPort = tcpDestinationPort;
-    }
+  @SerializedName("ipv4-destination")
+  @Expose
+  private String ipv4Destination;
 
+  @SerializedName("ipv4-source")
+  @Expose
+  private String ipv4Source;
 
+  /**
+   *
+   * @return The inPort
+   */
+  public String getInPort() {
+    return inPort;
+  }
 
-    public String getUdpSourcePort() {
-        return udpSourcePort;
-    }
+  /**
+   *
+   * @param inPort The in-port
+   */
+  public void setInPort(String inPort) {
+    this.inPort = inPort;
+  }
 
-    /**
-     *
-     * @param udpSourcePort
-     *     The udp-source-port
-     */
-    public void setUdpSourcePort(String udpSourcePort) {
-        this.udpSourcePort = udpSourcePort;
-    }
+  /**
+   *
+   * @return The extensionList
+   */
+  public List<ExtensionList> getExtensionList() {
+    return extensionList;
+  }
 
-    /**
-     *
-     * @return
-     *     The udpDestinationPort
-     */
-    public String getUdpDestinationPort() {
-        return udpDestinationPort;
-    }
+  /**
+   *
+   * @param extensionList The extension-list
+   */
+  public void setExtensionList(List<ExtensionList> extensionList) {
+    this.extensionList = extensionList;
+  }
 
-    /**
-     *
-     * @param udpDestinationPort
-     *     The udp-destination-port
-     */
-    public void setUdpDestinationPort(String udpDestinationPort) {
-        this.udpDestinationPort = udpDestinationPort;
-    }
+  /**
+   *
+   * @return The tcpSourcePort
+   */
+  public String getTcpSourcePort() {
+    return tcpSourcePort;
+  }
 
-    /**
-     * 
-     * @return
-     *     The ethernetMatch
-     */
-    public EthernetMatch getEthernetMatch() {
-        return ethernetMatch;
-    }
+  /**
+   *
+   * @param tcpSourcePort The tcp-source-port
+   */
+  public void setTcpSourcePort(String tcpSourcePort) {
+    this.tcpSourcePort = tcpSourcePort;
+  }
 
-    /**
-     * 
-     * @param ethernetMatch
-     *     The ethernet-match
-     */
-    public void setEthernetMatch(EthernetMatch ethernetMatch) {
-        this.ethernetMatch = ethernetMatch;
-    }
+  /**
+   *
+   * @return The tcpDestinationPort
+   */
+  public String getTcpDestinationPort() {
+    return tcpDestinationPort;
+  }
 
-    /**
-     * 
-     * @return
-     *     The ipMatch
-     */
-    public IpMatch getIpMatch() {
-        return ipMatch;
-    }
+  /**
+   *
+   * @param tcpDestinationPort The tcp-destination-port
+   */
+  public void setTcpDestinationPort(String tcpDestinationPort) {
+    this.tcpDestinationPort = tcpDestinationPort;
+  }
 
-    /**
-     * 
-     * @param ipMatch
-     *     The ip-match
-     */
-    public void setIpMatch(IpMatch ipMatch) {
-        this.ipMatch = ipMatch;
-    }
+  public String getUdpSourcePort() {
+    return udpSourcePort;
+  }
 
-    /**
-     * 
-     * @return
-     *     The ipv4Destination
-     */
-    public String getIpv4Destination() {
-        return ipv4Destination;
-    }
+  /**
+   *
+   * @param udpSourcePort The udp-source-port
+   */
+  public void setUdpSourcePort(String udpSourcePort) {
+    this.udpSourcePort = udpSourcePort;
+  }
 
-    /**
-     * 
-     * @param ipv4Destination
-     *     The ipv4-destination
-     */
-    public void setIpv4Destination(String ipv4Destination) {
-        this.ipv4Destination = ipv4Destination;
-    }
+  /**
+   *
+   * @return The udpDestinationPort
+   */
+  public String getUdpDestinationPort() {
+    return udpDestinationPort;
+  }
 
-    /**
-     * 
-     * @return
-     *     The ipv4Source
-     */
-    public String getIpv4Source() {
-        return ipv4Source;
-    }
+  /**
+   *
+   * @param udpDestinationPort The udp-destination-port
+   */
+  public void setUdpDestinationPort(String udpDestinationPort) {
+    this.udpDestinationPort = udpDestinationPort;
+  }
 
-    /**
-     * 
-     * @param ipv4Source
-     *     The ipv4-source
-     */
-    public void setIpv4Source(String ipv4Source) {
-        this.ipv4Source = ipv4Source;
-    }
+  /**
+   *
+   * @return The ethernetMatch
+   */
+  public EthernetMatch getEthernetMatch() {
+    return ethernetMatch;
+  }
 
+  /**
+   *
+   * @param ethernetMatch The ethernet-match
+   */
+  public void setEthernetMatch(EthernetMatch ethernetMatch) {
+    this.ethernetMatch = ethernetMatch;
+  }
+
+  /**
+   *
+   * @return The ipMatch
+   */
+  public IpMatch getIpMatch() {
+    return ipMatch;
+  }
+
+  /**
+   *
+   * @param ipMatch The ip-match
+   */
+  public void setIpMatch(IpMatch ipMatch) {
+    this.ipMatch = ipMatch;
+  }
+
+  /**
+   *
+   * @return The ipv4Destination
+   */
+  public String getIpv4Destination() {
+    return ipv4Destination;
+  }
+
+  /**
+   *
+   * @param ipv4Destination The ipv4-destination
+   */
+  public void setIpv4Destination(String ipv4Destination) {
+    this.ipv4Destination = ipv4Destination;
+  }
+
+  /**
+   *
+   * @return The ipv4Source
+   */
+  public String getIpv4Source() {
+    return ipv4Source;
+  }
+
+  /**
+   *
+   * @param ipv4Source The ipv4-source
+   */
+  public void setIpv4Source(String ipv4Source) {
+    this.ipv4Source = ipv4Source;
+  }
 }

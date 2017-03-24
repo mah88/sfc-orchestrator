@@ -11,26 +11,23 @@ import java.util.List;
 @Generated("org.jsonschema2pojo")
 public class Instructions {
 
-    @SerializedName("instruction")
-    @Expose
-    private List<Instruction > instruction=new ArrayList<>();
+  @SerializedName("instruction")
+  @Expose
+  private List<Instruction> instruction = new ArrayList<>();
 
-    /**
-     * 
-     * @return
-     *     The instruction
-     */
-    public List<Instruction> getInstruction() {
-        return instruction;
-    }
+  /**
+   *
+   * @return The instruction
+   */
+  public List<Instruction> getInstruction() {
+    return instruction;
+  }
 
-    /**
-     * 
-     * @param instruction
-     *     The instruction
-     */
-    public void setInstruction(List<Instruction> instruction) {
-        this.instruction = instruction;
-    }
-
+  /**
+   *
+   * @param instruction The instruction
+   */
+  public void setInstruction(List<Instruction> instruction) {
+    this.instruction = instruction;
+  }
 }

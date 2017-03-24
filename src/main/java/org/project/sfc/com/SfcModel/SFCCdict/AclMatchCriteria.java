@@ -5,15 +5,20 @@ package org.project.sfc.com.SfcModel.SFCCdict;
  */
 import javax.annotation.Generated;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-
+@Entity
 @Generated("org.jsonschema2pojo")
+public class AclMatchCriteria implements Serializable {
+  @SerializedName("id")
+  @Expose
+  @Id
+  private String id;
 
-public class AclMatchCriteria implements Serializable{
   @SerializedName("source-ipv4-network")
   @Expose
   private String sourceIpv4Network;
@@ -41,6 +46,15 @@ public class AclMatchCriteria implements Serializable{
   @SerializedName("src_port")
   @Expose
   private Integer srcPort;
+
+  public String getId() {
+    return id;
+  }
+  public void setIdId(String ID) {
+    this.id = ID;
+  }
+
+
 
   /**
    *
@@ -153,6 +167,4 @@ public class AclMatchCriteria implements Serializable{
   public void setDestMAC(String destMAC) {
     this.destMacAddress = destMAC;
   }
-
-
 }

@@ -11,26 +11,23 @@ import java.util.List;
 @Generated("org.jsonschema2pojo")
 public class Table {
 
-    @SerializedName("flow-node-inventory:table")
-    @Expose
-    private List<Table_> table=new ArrayList<>();
+  @SerializedName("flow-node-inventory:table")
+  @Expose
+  private List<Table_> table = new ArrayList<>();
 
-    /**
-     * 
-     * @return
-     *     The table
-     */
-    public List<Table_> getTable() {
-        return table;
-    }
+  /**
+   *
+   * @return The table
+   */
+  public List<Table_> getTable() {
+    return table;
+  }
 
-    /**
-     * 
-     * @param table
-     *     The table
-     */
-    public void setTable(List<Table_> table) {
-        this.table = table;
-    }
-
+  /**
+   *
+   * @param table The table
+   */
+  public void setTable(List<Table_> table) {
+    this.table = table;
+  }
 }

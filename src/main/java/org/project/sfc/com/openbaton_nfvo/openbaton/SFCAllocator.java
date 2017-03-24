@@ -29,7 +29,8 @@ public class SFCAllocator {
     this.logger = LoggerFactory.getLogger(this.getClass());
   }
 
-  public void addSFtoChain(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsrId) throws IOException {
+  public void addSFtoChain(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsrId)
+      throws IOException {
 
     logger.info(
         "[Test_SFC-ALLOCATOR] received new set of vnfrs for "

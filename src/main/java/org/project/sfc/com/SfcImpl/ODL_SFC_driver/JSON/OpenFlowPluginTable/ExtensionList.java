@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class ExtensionList {
 
-    @SerializedName("extension-key")
-    @Expose
-    private String extensionKey;
-    @SerializedName("extension")
-    @Expose
-    private Extension extension;
+  @SerializedName("extension-key")
+  @Expose
+  private String extensionKey;
 
-    /**
-     * 
-     * @return
-     *     The extensionKey
-     */
-    public String getExtensionKey() {
-        return extensionKey;
-    }
+  @SerializedName("extension")
+  @Expose
+  private Extension extension;
 
-    /**
-     * 
-     * @param extensionKey
-     *     The extension-key
-     */
-    public void setExtensionKey(String extensionKey) {
-        this.extensionKey = extensionKey;
-    }
+  /**
+   *
+   * @return The extensionKey
+   */
+  public String getExtensionKey() {
+    return extensionKey;
+  }
 
-    /**
-     * 
-     * @return
-     *     The extension
-     */
-    public Extension getExtension() {
-        return extension;
-    }
+  /**
+   *
+   * @param extensionKey The extension-key
+   */
+  public void setExtensionKey(String extensionKey) {
+    this.extensionKey = extensionKey;
+  }
 
-    /**
-     * 
-     * @param extension
-     *     The extension
-     */
-    public void setExtension(Extension extension) {
-        this.extension = extension;
-    }
+  /**
+   *
+   * @return The extension
+   */
+  public Extension getExtension() {
+    return extension;
+  }
 
+  /**
+   *
+   * @param extension The extension
+   */
+  public void setExtension(Extension extension) {
+    this.extension = extension;
+  }
 }

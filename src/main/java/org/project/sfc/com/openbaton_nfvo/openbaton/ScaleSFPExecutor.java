@@ -18,17 +18,15 @@ import java.util.Properties;
 /**
  * Created by mah on 8/29/16.
  */
-
 public class ScaleSFPExecutor implements Runnable {
 
   private SfcDriverCaller sfcCaller;
   private Logger logger;
   private VirtualNetworkFunctionRecord vnfr;
 
-
   private Properties properties;
 
-  public ScaleSFPExecutor(VirtualNetworkFunctionRecord vnfr) throws IOException{
+  public ScaleSFPExecutor(VirtualNetworkFunctionRecord vnfr) throws IOException {
 
     this.properties = ConfigReader.readProperties();
 
@@ -50,7 +48,7 @@ public class ScaleSFPExecutor implements Runnable {
             + " at time "
             + new Date().getTime());
     try {
-      sfcCaller.UpdateScaledPaths(vnfr,properties.getProperty("sfc.sf.runtime.schedulingType"));
+      sfcCaller.UpdateScaledPaths(vnfr, properties.getProperty("sfc.sf.runtime.schedulingType"));
     } catch (IOException e) {
       e.printStackTrace();
     }

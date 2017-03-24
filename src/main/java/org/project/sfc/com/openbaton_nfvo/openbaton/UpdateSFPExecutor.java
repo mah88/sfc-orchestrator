@@ -20,7 +20,6 @@ import java.util.Properties;
 /**
  * Created by maa on 18.01.16.
  */
-
 public class UpdateSFPExecutor implements Runnable {
 
   private SfcDriverCaller sfcCaller;
@@ -28,8 +27,7 @@ public class UpdateSFPExecutor implements Runnable {
   private VirtualNetworkFunctionRecord vnfr;
   private Properties properties;
 
-  public UpdateSFPExecutor(VirtualNetworkFunctionRecord vnfr) throws IOException{
-
+  public UpdateSFPExecutor(VirtualNetworkFunctionRecord vnfr) throws IOException {
 
     this.properties = ConfigReader.readProperties();
 
@@ -52,7 +50,7 @@ public class UpdateSFPExecutor implements Runnable {
             + new Date().getTime());
 
     try {
-      sfcCaller.UpdateFailedPaths(vnfr,properties.getProperty("sfc.sf.runtime.schedulingType"));
+      sfcCaller.UpdateFailedPaths(vnfr, properties.getProperty("sfc.sf.runtime.schedulingType"));
     } catch (IOException e) {
       e.printStackTrace();
     }

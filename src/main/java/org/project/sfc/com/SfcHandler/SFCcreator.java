@@ -26,21 +26,7 @@ import java.util.*;
  * Created by mah on 3/14/16.
  */
 
-
-
-
-
-
-
-
-
-
-
 // This class is not used
-
-
-
-
 
 public class SFCcreator {
   Opendaylight SFC;
@@ -51,7 +37,6 @@ public class SFCcreator {
   SFCCdict sfcc_dict = new SFCCdict();
   SFC sfcc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
   private org.slf4j.Logger logger;
-
 
   public SFCcreator() throws IOException {
     SFC = new Opendaylight();
@@ -75,7 +60,8 @@ public class SFCcreator {
       Iterator count = VNFs.entrySet().iterator();
       while (count.hasNext()) {
         System.out.println(
-            "[NEW SF Prepared] the ID in data base for the Test_SFC is " + SFCdata_counter.getKey());
+            "[NEW SF Prepared] the ID in data base for the Test_SFC is "
+                + SFCdata_counter.getKey());
 
         Map.Entry VNFcounter = (Map.Entry) count.next();
         System.out.println("[OK] ");
@@ -122,10 +108,6 @@ public class SFCcreator {
                   SFC.CreateSFP(All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo(), VNFs);
               logger.info("[NEW Path Updated ] " + new_instance_id);
               logger.info("[NEW VNF in path ] " + VNFs.get(0).getName());
-
-
-
-
 
               String SFCC_name =
                   classifier_test2.Create_SFC_Classifer(
@@ -200,7 +182,8 @@ public class SFCcreator {
     }
   }
 
-  public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr) throws IOException {
+  public boolean Create(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr)
+      throws IOException {
 
     System.out.println("[Test_SFC-Creation] (1) at time " + new Date().getTime());
 
@@ -242,7 +225,8 @@ public class SFCcreator {
   public boolean CreateChain(
       Set<VirtualNetworkFunctionRecord> vnfrs,
       VNFForwardingGraphRecord vnffgr,
-      NetworkServiceRecord nsr) throws IOException {
+      NetworkServiceRecord nsr)
+      throws IOException {
 
     List<VNFdict> vnf_test = new ArrayList<VNFdict>();
     List<String> chain = new ArrayList<String>();
@@ -254,7 +238,8 @@ public class SFCcreator {
 
     vnfdicts = RPS.CreatePath(vnfrs, vnffgr, nsr);
 
-    System.out.println("[Test_SFC-Creation] Creating Path Finished  at time " + new Date().getTime());
+    System.out.println(
+        "[Test_SFC-Creation] Creating Path Finished  at time " + new Date().getTime());
 
     for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
 
@@ -289,8 +274,6 @@ public class SFCcreator {
     SFC.CreateSFC(sfc_test, vnfdicts);
 
     String instance_id = SFC.CreateSFP(sfc_test, vnfdicts);
-
-
 
     System.out.println(
         " ADD NSR ID as key to Test_SFC DB:  " + nsr.getId() + " at time " + new Date().getTime());

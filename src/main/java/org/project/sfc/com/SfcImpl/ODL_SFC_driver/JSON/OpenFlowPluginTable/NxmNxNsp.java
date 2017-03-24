@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NxmNxNsp {
 
-    @SerializedName("value")
-    @Expose
-    private String value;
+  @SerializedName("value")
+  @Expose
+  private String value;
 
-    /**
-     * 
-     * @return
-     *     The value
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   *
+   * @return The value
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * 
-     * @param value
-     *     The value
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
-
+  /**
+   *
+   * @param value The value
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 }

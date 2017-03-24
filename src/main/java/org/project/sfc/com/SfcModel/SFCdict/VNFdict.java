@@ -12,7 +12,7 @@ import javax.persistence.*;
 /**
  * Created by mah on 2/8/16.
  */
-//@Entity
+@Entity
 public class VNFdict implements Serializable {
 
   @SerializedName("id")
@@ -53,9 +53,10 @@ public class VNFdict implements Serializable {
     return id;
   }
 
-  public void setIdId(String ID){
-    this.id= ID;
+  public void setId(String ID) {
+    this.id = ID;
   }
+
   public String getName() {
     return name;
   }
@@ -91,27 +92,30 @@ public class VNFdict implements Serializable {
   public String getHostNode() {
     return HostNode;
   }
+
   public void setHostNode(String Host) {
     this.HostNode = Host;
   }
+
   public String getConnectedSFF() {
     return ConnectedSFF;
   }
+
   public void setConnectedSFF(String SFF) {
     this.ConnectedSFF = SFF;
   }
+
   public double getTrafficLoad() {
     return trafficLoad;
   }
+
   public void setTrafficLoad(double trafficLoad) {
     this.trafficLoad = trafficLoad;
   }
 
-
   public Status getStatus() {
     return status;
   }
-
 
   public void setStatus(Status status) {
     this.status = status;
@@ -119,15 +123,26 @@ public class VNFdict implements Serializable {
 
   @Override
   public String toString() {
-    return "VNFDict{" +
-           "id='" + id + '\'' +
-           ", status='" + status + '\'' +
-           ", name=" + name +
-           ", neutronPortId=" + neutronPortId +
-           ", ip=" + ip +
-           ", type=" + type +
-           ", trafficLoad='" + trafficLoad  +
-           ", ConnectedSFF='" + ConnectedSFF+ '\''+
-           '}';
+    return "VNFDict{"
+        + "id='"
+        + id
+        + '\''
+        + ", status='"
+        + status
+        + '\''
+        + ", name="
+        + name
+        + ", neutronPortId="
+        + neutronPortId
+        + ", ip="
+        + ip
+        + ", type="
+        + type
+        + ", trafficLoad='"
+        + trafficLoad
+        + ", ConnectedSFF='"
+        + ConnectedSFF
+        + '\''
+        + '}';
   }
 }

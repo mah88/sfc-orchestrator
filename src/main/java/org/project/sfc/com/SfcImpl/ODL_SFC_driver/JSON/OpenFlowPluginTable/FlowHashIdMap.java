@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class FlowHashIdMap {
 
-    @SerializedName("hash")
-    @Expose
-    private String hash;
-    @SerializedName("flow-id")
-    @Expose
-    private String flowId;
+  @SerializedName("hash")
+  @Expose
+  private String hash;
 
-    /**
-     * 
-     * @return
-     *     The hash
-     */
-    public String getHash() {
-        return hash;
-    }
+  @SerializedName("flow-id")
+  @Expose
+  private String flowId;
 
-    /**
-     * 
-     * @param hash
-     *     The hash
-     */
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
+  /**
+   *
+   * @return The hash
+   */
+  public String getHash() {
+    return hash;
+  }
 
-    /**
-     * 
-     * @return
-     *     The flowId
-     */
-    public String getFlowId() {
-        return flowId;
-    }
+  /**
+   *
+   * @param hash The hash
+   */
+  public void setHash(String hash) {
+    this.hash = hash;
+  }
 
-    /**
-     * 
-     * @param flowId
-     *     The flow-id
-     */
-    public void setFlowId(String flowId) {
-        this.flowId = flowId;
-    }
+  /**
+   *
+   * @return The flowId
+   */
+  public String getFlowId() {
+    return flowId;
+  }
 
+  /**
+   *
+   * @param flowId The flow-id
+   */
+  public void setFlowId(String flowId) {
+    this.flowId = flowId;
+  }
 }

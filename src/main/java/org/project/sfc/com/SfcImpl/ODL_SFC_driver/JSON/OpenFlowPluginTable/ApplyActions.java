@@ -10,26 +10,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class ApplyActions {
 
-    @SerializedName("action")
-    @Expose
-    private List<Action> action = new ArrayList<Action>();
+  @SerializedName("action")
+  @Expose
+  private List<Action> action = new ArrayList<Action>();
 
-    /**
-     * 
-     * @return
-     *     The action
-     */
-    public List<Action> getAction() {
-        return action;
-    }
+  /**
+   *
+   * @return The action
+   */
+  public List<Action> getAction() {
+    return action;
+  }
 
-    /**
-     * 
-     * @param action
-     *     The action
-     */
-    public void setAction(List<Action> action) {
-        this.action = action;
-    }
-
+  /**
+   *
+   * @param action The action
+   */
+  public void setAction(List<Action> action) {
+    this.action = action;
+  }
 }

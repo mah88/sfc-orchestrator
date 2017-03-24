@@ -40,8 +40,7 @@ import java.util.Properties;
  */
 @Service
 @Scope(value = "prototype")
-public class NeutronClient  {
-
+public class NeutronClient {
 
   public String Openstack_ip;
   private Properties properties;
@@ -49,29 +48,26 @@ public class NeutronClient  {
   public String Identity_port = "5000";
   public String Networking_port = "9696";
 
-  public String Openstack_username ;
-  public String Openstack_password ;
-  public String Openstack_tenantname ;
+  public String Openstack_username;
+  public String Openstack_password;
+  public String Openstack_tenantname;
 
   public String Config_token_URL = "/v2.0/tokens";
   public String Config_neutronport_URL = "/v2.0/ports";
   private static Logger logger = LoggerFactory.getLogger(Opendaylight.class);
 
-  private void init()  throws IOException{
-
+  private void init() throws IOException {
 
     this.Identity_port = Identity_port;
     this.Networking_port = Networking_port;
-
-
 
     this.Config_token_URL = Config_token_URL;
     this.Config_neutronport_URL = Config_neutronport_URL;
   }
 
-public  NeutronClient() throws IOException{
+  public NeutronClient() throws IOException {
     this.properties = ConfigReader.readProperties();
-    this.Openstack_ip  = properties.getProperty("openstack.ip");
+    this.Openstack_ip = properties.getProperty("openstack.ip");
     this.Openstack_username = properties.getProperty("openstack.username");
     this.Openstack_password = properties.getProperty("openstack.password");
     this.Openstack_tenantname = properties.getProperty("openstack.tenantname");
@@ -97,7 +93,7 @@ public  NeutronClient() throws IOException{
         new HttpEntity<String>(mapper.toJson(data, Tokenbody.class), headers);
     try {
       request = template.exchange(Full_URL, HttpMethod.POST, postEntity, String.class);
-    }    catch (final HttpClientErrorException e) {
+    } catch (final HttpClientErrorException e) {
       System.out.println(e.getStatusCode());
       System.out.println(e.getResponseBodyAsString());
     }
@@ -122,40 +118,39 @@ public  NeutronClient() throws IOException{
     return result;
   }
   /*
-  public Token getToken(Tokenbody data){
-    HttpClient httpClient = HttpClientBuilder.create().build();
-    Token result = new Token();
-    HttpPost request = new HttpPost("http://" + Openstack_ip + ":" + Identity_port + Config_token_URL);
-    Gson mapper = new Gson();
-    String plainCreds = Openstack_username + ":" + Openstack_password;
-    byte[] plainCredsBytes = plainCreds.getBytes();
-    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-    String base64Creds = new String(base64CredsBytes);
-    try {
+    public Token getToken(Tokenbody data){
+      HttpClient httpClient = HttpClientBuilder.create().build();
+      Token result = new Token();
+      HttpPost request = new HttpPost("http://" + Openstack_ip + ":" + Identity_port + Config_token_URL);
+      Gson mapper = new Gson();
+      String plainCreds = Openstack_username + ":" + Openstack_password;
+      byte[] plainCredsBytes = plainCreds.getBytes();
+      byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+      String base64Creds = new String(base64CredsBytes);
+      try {
 
 
-      StringEntity params =new StringEntity(mapper.toJson(data, Tokenbody.class));
-      request.addHeader("content-type", "application/json");
-      request.addHeader("Authorization", "Basic " + base64Creds);
-      request.setEntity(params);
+        StringEntity params =new StringEntity(mapper.toJson(data, Tokenbody.class));
+        request.addHeader("content-type", "application/json");
+        request.addHeader("Authorization", "Basic " + base64Creds);
+        request.setEntity(params);
 
-      HttpResponse response = httpClient.execute(request);
-      result = mapper.fromJson(new BasicResponseHandler().handleResponse(response), Token.class);
+        HttpResponse response = httpClient.execute(request);
+        result = mapper.fromJson(new BasicResponseHandler().handleResponse(response), Token.class);
 
 
-    }catch (Exception ex) {
-      System.out.println(ex.toString());
+      }catch (Exception ex) {
+        System.out.println(ex.toString());
 
+      }
+      System.out.println("Result: "+result.getAccess().getToken().getId());
+      return result;
     }
-    System.out.println("Result: "+result.getAccess().getToken().getId());
-    return result;
-  }
-*/
+  */
   public NeutronPorts getNeutronPorts() {
 
-    logger.info("OPNESTACK IP: "+ this.Openstack_ip);
-    String Full_URL =
-        "http://" + Openstack_ip + ":" + Networking_port + Config_neutronport_URL;
+    logger.info("OPNESTACK IP: " + this.Openstack_ip);
+    String Full_URL = "http://" + Openstack_ip + ":" + Networking_port + Config_neutronport_URL;
     String plainCreds = Openstack_username + ":" + Openstack_password;
     byte[] plainCredsBytes = plainCreds.getBytes();
     byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
@@ -345,7 +340,4 @@ public  NeutronClient() throws IOException{
       this.auth = auth;
     }
   }
-
-
-
 }

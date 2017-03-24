@@ -23,15 +23,18 @@ public class Test_SFC extends SFC {
   public void CreateSFC(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
     //create Test_SFC
 
-    }
+  }
+
   @Override
   public void CreateSFs(HashMap<Integer, VNFdict> vnf_dict) {
     //create SFs
   }
+
   @Override
   public String CreateSFP(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
     return "created_new_sfp";
   }
+
   @Override
   public String GetBytesCount(SFCCdict SFCC_dict) {
     return "Bytes_count";
@@ -39,12 +42,12 @@ public class Test_SFC extends SFC {
 
   @Override
   public ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric) {
-  return null;
+    return null;
   }
 
   @Override
   public ResponseEntity<String> DeleteSFP(String instance_id, boolean isSymmetric) {
-  return null;
+    return null;
   }
 
   @Override
@@ -53,6 +56,7 @@ public class Test_SFC extends SFC {
   }
 
   @Override
-  public String GetHostID(String neutron_port_id){ return "OVS-181881182";}
-
+  public String GetHostID(String neutron_port_id) {
+    return "OVS-181881182";
+  }
 }

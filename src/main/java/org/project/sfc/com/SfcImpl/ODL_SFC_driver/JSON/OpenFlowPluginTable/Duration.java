@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Duration {
 
-    @SerializedName("second")
-    @Expose
-    private String second;
-    @SerializedName("nanosecond")
-    @Expose
-    private String nanosecond;
+  @SerializedName("second")
+  @Expose
+  private String second;
 
-    /**
-     * 
-     * @return
-     *     The second
-     */
-    public String getSecond() {
-        return second;
-    }
+  @SerializedName("nanosecond")
+  @Expose
+  private String nanosecond;
 
-    /**
-     * 
-     * @param second
-     *     The second
-     */
-    public void setSecond(String second) {
-        this.second = second;
-    }
+  /**
+   *
+   * @return The second
+   */
+  public String getSecond() {
+    return second;
+  }
 
-    /**
-     * 
-     * @return
-     *     The nanosecond
-     */
-    public String getNanosecond() {
-        return nanosecond;
-    }
+  /**
+   *
+   * @param second The second
+   */
+  public void setSecond(String second) {
+    this.second = second;
+  }
 
-    /**
-     * 
-     * @param nanosecond
-     *     The nanosecond
-     */
-    public void setNanosecond(String nanosecond) {
-        this.nanosecond = nanosecond;
-    }
+  /**
+   *
+   * @return The nanosecond
+   */
+  public String getNanosecond() {
+    return nanosecond;
+  }
 
+  /**
+   *
+   * @param nanosecond The nanosecond
+   */
+  public void setNanosecond(String nanosecond) {
+    this.nanosecond = nanosecond;
+  }
 }

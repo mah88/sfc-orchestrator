@@ -8,68 +8,63 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class FlowTableStatistics {
 
-    @SerializedName("packets-looked-up")
-    @Expose
-    private String packetsLookedUp;
-    @SerializedName("active-flows")
-    @Expose
-    private String activeFlows;
-    @SerializedName("packets-matched")
-    @Expose
-    private String packetsMatched;
+  @SerializedName("packets-looked-up")
+  @Expose
+  private String packetsLookedUp;
 
-    /**
-     * 
-     * @return
-     *     The packetsLookedUp
-     */
-    public String getPacketsLookedUp() {
-        return packetsLookedUp;
-    }
+  @SerializedName("active-flows")
+  @Expose
+  private String activeFlows;
 
-    /**
-     * 
-     * @param packetsLookedUp
-     *     The packets-looked-up
-     */
-    public void setPacketsLookedUp(String packetsLookedUp) {
-        this.packetsLookedUp = packetsLookedUp;
-    }
+  @SerializedName("packets-matched")
+  @Expose
+  private String packetsMatched;
 
-    /**
-     * 
-     * @return
-     *     The activeFlows
-     */
-    public String getActiveFlows() {
-        return activeFlows;
-    }
+  /**
+   *
+   * @return The packetsLookedUp
+   */
+  public String getPacketsLookedUp() {
+    return packetsLookedUp;
+  }
 
-    /**
-     * 
-     * @param activeFlows
-     *     The active-flows
-     */
-    public void setActiveFlows(String activeFlows) {
-        this.activeFlows = activeFlows;
-    }
+  /**
+   *
+   * @param packetsLookedUp The packets-looked-up
+   */
+  public void setPacketsLookedUp(String packetsLookedUp) {
+    this.packetsLookedUp = packetsLookedUp;
+  }
 
-    /**
-     * 
-     * @return
-     *     The packetsMatched
-     */
-    public String getPacketsMatched() {
-        return packetsMatched;
-    }
+  /**
+   *
+   * @return The activeFlows
+   */
+  public String getActiveFlows() {
+    return activeFlows;
+  }
 
-    /**
-     * 
-     * @param packetsMatched
-     *     The packets-matched
-     */
-    public void setPacketsMatched(String packetsMatched) {
-        this.packetsMatched = packetsMatched;
-    }
+  /**
+   *
+   * @param activeFlows The active-flows
+   */
+  public void setActiveFlows(String activeFlows) {
+    this.activeFlows = activeFlows;
+  }
 
+  /**
+   *
+   * @return The packetsMatched
+   */
+  public String getPacketsMatched() {
+    return packetsMatched;
+  }
+
+  /**
+   *
+   * @param packetsMatched The packets-matched
+   */
+  public void setPacketsMatched(String packetsMatched) {
+    this.packetsMatched = packetsMatched;
+  }
 }

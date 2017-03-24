@@ -3,7 +3,9 @@ package org.project.sfc.com.SfcHandler;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
-import org.project.sfc.com.SfcRepository.VNFdictRep;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+//import org.project.sfc.com.SfcRepository.VNFdictRep;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +19,12 @@ import java.util.List;
 public class SFC {
 
   private static SFC instance;
+  private Logger logger;
 
-  private SFC() {}
+  private SFC() {
+    this.logger = LoggerFactory.getLogger(this.getClass());
+
+  }
 
   public static SFC getInstance() {
     if (instance == null) {
@@ -30,42 +36,40 @@ public class SFC {
   static HashMap<String, SFC_Data> SFC_MAP = new HashMap<String, SFC_Data>();
   static List<VNFdict> SFs_MAP = new ArrayList<>();
 
-  public void addVNFs(List<VNFdict> vnf){
+  public void addVNFs(List<VNFdict> vnf) {
 
-    for(int i=0;i<vnf.size();i++){
+    for (int i = 0; i < vnf.size(); i++) {
 
       SFs_MAP.add(vnf.get(i));
-
     }
-
   }
 
-  public void removeVNF(VNFdict vnf){
+  public void removeVNF(VNFdict vnf) {
 
-    for(int i=0;i<SFs_MAP.size();i++){
-      if(SFs_MAP.get(i).getName().equals(vnf.getName())){
+    for (int i = 0; i < SFs_MAP.size(); i++) {
+      if (SFs_MAP.get(i).getName().equals(vnf.getName())) {
         SFs_MAP.remove(i);
       }
     }
   }
 
-  public boolean existVNF(VNFdict vnf){
-    boolean Exist=false;
+  public boolean existVNF(VNFdict vnf) {
+    boolean Exist = false;
 
-    for(int i=0;i<SFs_MAP.size();i++){
-      if(SFs_MAP.get(i).getName().equals(vnf.getName())){
-        Exist= true;
+    for (int i = 0; i < SFs_MAP.size(); i++) {
+      if (SFs_MAP.get(i).getName().equals(vnf.getName())) {
+        Exist = true;
         break;
       }
     }
     return Exist;
   }
 
-  public List<VNFdict> getVNFs(String type){
-    List<VNFdict> vnfs_type=new ArrayList<>();
+  public List<VNFdict> getVNFs(String type) {
+    List<VNFdict> vnfs_type = new ArrayList<>();
 
-    for(int i=0;i<SFs_MAP.size();i++){
-      if(SFs_MAP.get(i).getType().equals(type)){
+    for (int i = 0; i < SFs_MAP.size(); i++) {
+      if (SFs_MAP.get(i).getType().equals(type)) {
         vnfs_type.add(SFs_MAP.get(i));
       }
     }
@@ -116,6 +120,22 @@ public class SFC {
     return SFC_MAP;
   }
 
+  public HashMap<Integer, VNFdict> getChain(String VNFFGR) {
+    HashMap<Integer, VNFdict> chain = null;
+    if (SFC_MAP.get(VNFFGR) != null) {
+      if (SFC_MAP.get(VNFFGR).getChainSFs() != null) {
+        chain = SFC_MAP.get(VNFFGR).getChainSFs();
+
+      } else {
+        logger.warn("NO SFs per CHAIN FOUND ");
+      }
+    } else {
+      System.out.println("NO CHAIN FOUND ");
+    }
+
+    return chain;
+  }
+
   public String getRspID(String nsr_id) {
     String chain_id = SFC_MAP.get(nsr_id).getRspID();
     return chain_id;
@@ -138,9 +158,6 @@ public class SFC {
     HashMap<Integer, VNFdict> VNFs;
     SFCdict SFC_dict_info;
     SFCCdict ClassifierDict;
-
-
-
 
     public String getRspID() {
       return rsp_id;

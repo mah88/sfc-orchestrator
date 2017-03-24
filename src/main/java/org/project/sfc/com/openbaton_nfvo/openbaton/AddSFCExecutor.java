@@ -22,7 +22,6 @@ import javax.annotation.PostConstruct;
 /**
  * Created by maa on 18.01.16.
  */
-
 public class AddSFCExecutor implements Runnable {
 
   private SfcDriverCaller sfcCaller;
@@ -33,7 +32,8 @@ public class AddSFCExecutor implements Runnable {
 
   private NetworkServiceRecord nsr;
 
-  public AddSFCExecutor(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr) throws IOException{
+  public AddSFCExecutor(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr)
+      throws IOException {
     this.properties = ConfigReader.readProperties();
 
     this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
@@ -55,7 +55,8 @@ public class AddSFCExecutor implements Runnable {
 
     boolean response = false;
     try {
-      response = sfcCaller.Create(vnfrs, nsr,properties.getProperty("sfc.sf.deployment.schedulingType"));
+      response =
+          sfcCaller.Create(vnfrs, nsr, properties.getProperty("sfc.sf.deployment.schedulingType"));
     } catch (IOException e) {
       e.printStackTrace();
     }

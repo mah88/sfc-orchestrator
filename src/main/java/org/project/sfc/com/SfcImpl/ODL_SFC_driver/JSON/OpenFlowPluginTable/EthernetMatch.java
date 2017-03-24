@@ -8,26 +8,23 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class EthernetMatch {
 
-    @SerializedName("ethernet-type")
-    @Expose
-    private EthernetType ethernetType;
+  @SerializedName("ethernet-type")
+  @Expose
+  private EthernetType ethernetType;
 
-    /**
-     * 
-     * @return
-     *     The ethernetType
-     */
-    public EthernetType getEthernetType() {
-        return ethernetType;
-    }
+  /**
+   *
+   * @return The ethernetType
+   */
+  public EthernetType getEthernetType() {
+    return ethernetType;
+  }
 
-    /**
-     * 
-     * @param ethernetType
-     *     The ethernet-type
-     */
-    public void setEthernetType(EthernetType ethernetType) {
-        this.ethernetType = ethernetType;
-    }
-
+  /**
+   *
+   * @param ethernetType The ethernet-type
+   */
+  public void setEthernetType(EthernetType ethernetType) {
+    this.ethernetType = ethernetType;
+  }
 }

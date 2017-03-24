@@ -21,7 +21,6 @@ import java.util.Set;
 /**
  * Created by maa on 18.01.16.
  */
-
 public class RemoveSFCExecutor implements Runnable {
   private SfcDriverCaller sfcCaller;
   private Logger logger;
@@ -42,10 +41,18 @@ public class RemoveSFCExecutor implements Runnable {
   @Override
   public void run() {
     logger.info(
-        "[REMOVE-SFC-EXECUTOR] deleting Test_SFC for " + nsrID + " at time " + new Date().getTime());
+        "[REMOVE-SFC-EXECUTOR] deleting Test_SFC for "
+            + nsrID
+            + " at time "
+            + new Date().getTime());
     logger.debug("remmoving Test_SFC for nsr " + nsrID + " with vnfrs: " + vnfrs);
     // boolean response = sfchandler.Delete(nsrID);
-    boolean response = sfcCaller.Delete(nsrID);
+    boolean response = false;
+    try {
+      response = sfcCaller.Delete(nsrID, properties.getProperty("sfc.sf.deployment.schedulingType"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     logger.debug("Response from handler " + response);
     logger.info(
         "[REMOVE-SFC-EXECUTOR] ended Test_SFC removal for "

@@ -52,14 +52,14 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
   private NFVORequestor requestor;
   private Logger logger;
   @Autowired private NfvoConfiguration configuration;
-  @Autowired
-  private MonitoringManager monitoringManager;
+  @Autowired private MonitoringManager monitoringManager;
   @Autowired private SFCAllocator creator;
   @Autowired private Gson mapper;
   private List<String> eventIds;
   private Properties properties;
   private String Prev_NSR;
   private String projectId;
+
   private void init() throws SDKException, IOException, ClassNotFoundException {
 
     this.logger = LoggerFactory.getLogger(this.getClass());
@@ -117,11 +117,12 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
 
     Prev_NSR = "";
   }
+
   private void setProjectId() throws ClassNotFoundException, SDKException {
     if (projectId == null || projectId.isEmpty()) {
       logger.debug("Trying to connect to the NFVO...");
       List<Project> projects = requestor.getProjectAgent().findAll();
-      logger.debug("found " + projects.size() + " projects");
+      logger.debug("Found " + projects.size() + " projects");
 
       for (Project project : projects) {
         if (project.getName().equals("default")) {
@@ -135,14 +136,14 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
 
   public void receiveNewNsr(String message) throws SDKException, ClassNotFoundException {
 
-    logger.debug("[Received New Event ] " + message);
+    logger.debug("[Received NS released Event ] " + message);
     OpenbatonEvent evt;
     setProjectId();
 
     try {
       logger.debug("Trying to deserialize it");
       evt = getOpenbatonEvent(message);
-      logger.debug("Received nfvo event with action: " + evt.getAction());
+      logger.debug("Received NFVO event with action: " + evt.getAction());
       NetworkServiceRecord nsr = getNsrFromPayload(evt.getPayload());
       List<VirtualNetworkFunctionRecord> list_vnfrs = new ArrayList<VirtualNetworkFunctionRecord>();
       if (nsr.getId().equals(Prev_NSR)) {
@@ -152,22 +153,21 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
       } else {
 
         creator.addSFtoChain(nsr.getVnfr(), nsr);
-        boolean lastvnfr=false;
-        int VNFR_counter=0;
-        for(VirtualNetworkFunctionRecord vnfr:nsr.getVnfr()){
-          try{
-            if(VNFR_counter==nsr.getVnfr().size()-1){
-              lastvnfr=true;
+        boolean lastvnfr = false;
+        int VNFR_counter = 0;
+       /* for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
+          try {
+            if (VNFR_counter == nsr.getVnfr().size() - 1) {
+              lastvnfr = true;
             }
-            monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 20, lastvnfr);
-          }
-          catch(NotFoundException e){
+            monitoringManager.start(
+                vnfr, properties.getProperty("sf.monitoring.item"), 10, lastvnfr);
+          } catch (NotFoundException e) {
             logger.error(e.getMessage(), e);
-
           }
           VNFR_counter++;
         }
-
+*/
         Prev_NSR = nsr.getId();
         logger.info(
             "[OPENBATON-EVENT-SUBSCRIPTION] Ended message callback function at "
@@ -181,7 +181,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
 
   public void receiveVNFHealEvent(String message) throws SDKException, ClassNotFoundException {
 
-    logger.debug("[Received New Event ]" + message);
+    logger.debug("[Received VNF Heal Event ]" + message);
     OpenbatonEvent evt;
     setProjectId();
     try {
@@ -189,6 +189,9 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
       evt = getOpenbatonEvent(message);
       logger.debug("Received VNF event with action: " + evt.getAction());
       VirtualNetworkFunctionRecord vnfr = getVnfrFromPayload(evt.getPayload());
+      boolean lastvnfr = true;
+      monitoringManager.stop(vnfr);
+      monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 1, lastvnfr);
       if (evt.getAction().ordinal() == Action.HEAL.ordinal()) {
         for (VirtualDeploymentUnit vdu : vnfr.getVdu()) {
           for (VNFCInstance vnfc_instance : vdu.getVnfc_instance()) {
@@ -202,10 +205,6 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
         }
         creator.ChangeChainPath(vnfr);
       }
-      boolean lastvnfr=true;
-      monitoringManager.stop(vnfr);
-     monitoringManager.start(vnfr,properties.getProperty("sf.monitoring.item"),20,lastvnfr);
-
 
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
@@ -215,10 +214,10 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
 
   public void receiveVNFScaledEvent(String message) throws SDKException, ClassNotFoundException {
 
-    logger.info("[Received New Event ]" + message);
+    logger.info("[Received VNF Scaled Event ]" + message);
     OpenbatonEvent evt;
     setProjectId();
-    boolean flag=false;
+    boolean flag = false;
     try {
       logger.debug("Trying to deserialize it");
       evt = getOpenbatonEvent(message);
@@ -239,8 +238,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
             try {
               if (!vnfc_instance.getState().equals("ACTIVE")) {
                 NotAS = true;
-                logger.info(
-                    "::: It is not AutoScaling");
+                logger.info("::: It is not AutoScaling");
                 break;
               }
             } catch (NullPointerException e) {
@@ -256,10 +254,11 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
         if (!NotAS) {
           logger.info("::: It is an Auto-Scaling Event :::");
 
-          creator.ScalePaths(vnfr);
-          boolean lastvnfr=true;
+          boolean lastvnfr = true;
           monitoringManager.stop(vnfr);
-          monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"),20,lastvnfr);
+          monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 1, lastvnfr);
+          creator.ScalePaths(vnfr);
+
         } else {
           logger.info("::: It is a Fault SfcManagement Event :::");
         }
@@ -282,15 +281,13 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
       logger.debug("Received nfvo event with action: " + evt.getAction());
       NetworkServiceRecord nsr = getNsrFromPayload(evt.getPayload());
 
-      for(VirtualNetworkFunctionRecord vnfr:nsr.getVnfr()){
-        try{
+     /* for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
+        try {
           monitoringManager.stop(vnfr);
-        }
-        catch(NotFoundException e){
+        } catch (NotFoundException e) {
           logger.error(e.getMessage(), e);
-
         }
-      }
+      }*/
       for (VNFForwardingGraphRecord vnffgr : nsr.getVnffgr()) {
         creator.removeSFC(vnffgr.getId());
       }
@@ -300,10 +297,8 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     }
   }
 
-  private OpenbatonEvent getOpenbatonEvent(String message) throws
-                                                           NFVORequestorException,
-                                                           SDKException,
-                                                           ClassNotFoundException {
+  private OpenbatonEvent getOpenbatonEvent(String message)
+      throws NFVORequestorException, SDKException, ClassNotFoundException {
     OpenbatonEvent openbatonEvent;
     setProjectId();
 
@@ -315,10 +310,8 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     return openbatonEvent;
   }
 
-  private NetworkServiceRecord getNsrFromPayload(JsonObject nsrJson) throws
-                                                                     NFVORequestorException,
-                                                                     SDKException,
-                                                                     ClassNotFoundException {
+  private NetworkServiceRecord getNsrFromPayload(JsonObject nsrJson)
+      throws NFVORequestorException, SDKException, ClassNotFoundException {
     NetworkServiceRecord networkServiceRecord;
     setProjectId();
     try {
@@ -329,10 +322,8 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     return networkServiceRecord;
   }
 
-  private VirtualNetworkFunctionRecord getVnfrFromPayload(JsonObject vnfrJson) throws
-                                                                               NFVORequestorException,
-                                                                               SDKException,
-                                                                               ClassNotFoundException {
+  private VirtualNetworkFunctionRecord getVnfrFromPayload(JsonObject vnfrJson)
+      throws NFVORequestorException, SDKException, ClassNotFoundException {
     setProjectId();
     VirtualNetworkFunctionRecord vnfr;
     try {

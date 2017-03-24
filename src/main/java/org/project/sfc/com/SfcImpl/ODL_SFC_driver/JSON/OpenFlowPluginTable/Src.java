@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Src {
 
-    @SerializedName("start")
-    @Expose
-    private String start;
-    @SerializedName("end")
-    @Expose
-    private String end;
+  @SerializedName("start")
+  @Expose
+  private String start;
 
-    /**
-     * 
-     * @return
-     *     The start
-     */
-    public String getStart() {
-        return start;
-    }
+  @SerializedName("end")
+  @Expose
+  private String end;
 
-    /**
-     * 
-     * @param start
-     *     The start
-     */
-    public void setStart(String start) {
-        this.start = start;
-    }
+  /**
+   *
+   * @return The start
+   */
+  public String getStart() {
+    return start;
+  }
 
-    /**
-     * 
-     * @return
-     *     The end
-     */
-    public String getEnd() {
-        return end;
-    }
+  /**
+   *
+   * @param start The start
+   */
+  public void setStart(String start) {
+    this.start = start;
+  }
 
-    /**
-     * 
-     * @param end
-     *     The end
-     */
-    public void setEnd(String end) {
-        this.end = end;
-    }
+  /**
+   *
+   * @return The end
+   */
+  public String getEnd() {
+    return end;
+  }
 
+  /**
+   *
+   * @param end The end
+   */
+  public void setEnd(String end) {
+    this.end = end;
+  }
 }

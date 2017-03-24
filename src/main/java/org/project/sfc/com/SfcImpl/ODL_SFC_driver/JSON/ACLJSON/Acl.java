@@ -8,8 +8,6 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Acl {
 
-
-
   @SerializedName("acl-name")
   @Expose
   private String aclName;
@@ -37,7 +35,6 @@ public class Acl {
   public void setAclName(String aclName) {
     this.aclName = aclName;
   }
-
 
   /**
    *

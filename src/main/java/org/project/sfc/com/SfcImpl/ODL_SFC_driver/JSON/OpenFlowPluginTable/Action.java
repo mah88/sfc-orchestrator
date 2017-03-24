@@ -8,110 +8,103 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class Action {
 
-    @SerializedName("order")
-    @Expose
-    private String order;
-    @SerializedName("openflowplugin-extension-nicira-action:nx-set-nsp")
-    @Expose
-    private NxSetNsp nxSetNsp;
-    @SerializedName("openflowplugin-extension-nicira-action:nx-set-nsi")
-    @Expose
-    private NxSetNsi nxSetNsi;
-    @SerializedName("openflowplugin-extension-nicira-action:nx-resubmit")
-    @Expose
-    private NxResubmit nxResubmit;
-    @SerializedName("openflowplugin-extension-nicira-action:nx-reg-load")
-    @Expose
-    private NxRegLoad nxRegLoad;
+  @SerializedName("order")
+  @Expose
+  private String order;
 
-    /**
-     * 
-     * @return
-     *     The order
-     */
-    public String getOrder() {
-        return order;
-    }
+  @SerializedName("openflowplugin-extension-nicira-action:nx-set-nsp")
+  @Expose
+  private NxSetNsp nxSetNsp;
 
-    /**
-     * 
-     * @param order
-     *     The order
-     */
-    public void setOrder(String order) {
-        this.order = order;
-    }
+  @SerializedName("openflowplugin-extension-nicira-action:nx-set-nsi")
+  @Expose
+  private NxSetNsi nxSetNsi;
 
-    /**
-     * 
-     * @return
-     *     The nxSetNsp
-     */
-    public NxSetNsp getNxSetNsp() {
-        return nxSetNsp;
-    }
+  @SerializedName("openflowplugin-extension-nicira-action:nx-resubmit")
+  @Expose
+  private NxResubmit nxResubmit;
 
-    /**
-     * 
-     * @param nxSetNsp
-     *     The nx-set-nsp
-     */
-    public void setNxSetNsp(NxSetNsp nxSetNsp) {
-        this.nxSetNsp = nxSetNsp;
-    }
+  @SerializedName("openflowplugin-extension-nicira-action:nx-reg-load")
+  @Expose
+  private NxRegLoad nxRegLoad;
 
-    /**
-     * 
-     * @return
-     *     The nxSetNsi
-     */
-    public NxSetNsi getNxSetNsi() {
-        return nxSetNsi;
-    }
+  /**
+   *
+   * @return The order
+   */
+  public String getOrder() {
+    return order;
+  }
 
-    /**
-     * 
-     * @param nxSetNsi
-     *     The nx-set-nsi
-     */
-    public void setNxSetNsi(NxSetNsi nxSetNsi) {
-        this.nxSetNsi = nxSetNsi;
-    }
+  /**
+   *
+   * @param order The order
+   */
+  public void setOrder(String order) {
+    this.order = order;
+  }
 
-    /**
-     * 
-     * @return
-     *     The nxResubmit
-     */
-    public NxResubmit getNxResubmit() {
-        return nxResubmit;
-    }
+  /**
+   *
+   * @return The nxSetNsp
+   */
+  public NxSetNsp getNxSetNsp() {
+    return nxSetNsp;
+  }
 
-    /**
-     * 
-     * @param nxResubmit
-     *     The nx-resubmit
-     */
-    public void setNxResubmit(NxResubmit nxResubmit) {
-        this.nxResubmit = nxResubmit;
-    }
+  /**
+   *
+   * @param nxSetNsp The nx-set-nsp
+   */
+  public void setNxSetNsp(NxSetNsp nxSetNsp) {
+    this.nxSetNsp = nxSetNsp;
+  }
 
-    /**
-     * 
-     * @return
-     *     The nxRegLoad
-     */
-    public NxRegLoad getNxRegLoad() {
-        return nxRegLoad;
-    }
+  /**
+   *
+   * @return The nxSetNsi
+   */
+  public NxSetNsi getNxSetNsi() {
+    return nxSetNsi;
+  }
 
-    /**
-     * 
-     * @param nxRegLoad
-     *     The nx-reg-load
-     */
-    public void setNxRegLoad(NxRegLoad nxRegLoad) {
-        this.nxRegLoad = nxRegLoad;
-    }
+  /**
+   *
+   * @param nxSetNsi The nx-set-nsi
+   */
+  public void setNxSetNsi(NxSetNsi nxSetNsi) {
+    this.nxSetNsi = nxSetNsi;
+  }
 
+  /**
+   *
+   * @return The nxResubmit
+   */
+  public NxResubmit getNxResubmit() {
+    return nxResubmit;
+  }
+
+  /**
+   *
+   * @param nxResubmit The nx-resubmit
+   */
+  public void setNxResubmit(NxResubmit nxResubmit) {
+    this.nxResubmit = nxResubmit;
+  }
+
+  /**
+   *
+   * @return The nxRegLoad
+   */
+  public NxRegLoad getNxRegLoad() {
+    return nxRegLoad;
+  }
+
+  /**
+   *
+   * @param nxRegLoad The nx-reg-load
+   */
+  public void setNxRegLoad(NxRegLoad nxRegLoad) {
+    this.nxRegLoad = nxRegLoad;
+  }
 }

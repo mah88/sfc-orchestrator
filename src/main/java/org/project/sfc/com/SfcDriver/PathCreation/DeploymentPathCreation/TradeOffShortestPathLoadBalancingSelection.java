@@ -10,6 +10,8 @@ import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,58 +28,73 @@ public class TradeOffShortestPathLoadBalancingSelection {
   NeutronClient NC;
   org.project.sfc.com.SfcInterfaces.SFC SFC_driver;
   SfcBroker broker = new SfcBroker();
+  private Logger logger;
 
   //mapCountLoad works for the Type of Service Function
-  private static Map<String, Map<String,Integer>> mapCountLoad = new HashMap<>();
+  private static Map<String, Map<String, Integer>> mapCountLoad = new HashMap<>();
 
   public TradeOffShortestPathLoadBalancingSelection(String type) throws IOException {
     NC = new NeutronClient();
     SFC_driver = broker.getSFC(type);
+    this.logger = LoggerFactory.getLogger(this.getClass());
 
   }
 
-  public VNFdict SelectVNF(VirtualNetworkFunctionRecord vnfr,VNFdict prev_vnf,String Chain_QoS) throws IOException {
+  public void Delete(HashMap<Integer, VNFdict> VNFs){
+
+    for(int i=0;i<VNFs.size();i++){
+      if(mapCountLoad.containsKey(VNFs.get(i).getType())){
+        logger.info("[Found VNF TYPE in mapCountLoad] "+ VNFs.get(i).getType());
+        mapCountLoad.remove(VNFs.get(i).getType());
+        logger.info("[Removed the VNF from mapCountLoad");
+
+      }
+    }
+
+
+  }
+
+  public VNFdict SelectVNF(VirtualNetworkFunctionRecord vnfr, VNFdict prev_vnf, String Chain_QoS)
+      throws IOException {
     List<String> VNF_instances = new ArrayList<String>();
 
     double SfcPriority;
     int countLoad = 0; //Counter for the Load per SF instance
-    int LoadSum=0; // Summation of the Load per SF type
-    Map<String,Double> alpha=new HashMap<>(); //Alpha value per  VNF instance
+    int LoadSum = 0; // Summation of the Load per SF type
+    Map<String, Double> alpha = new HashMap<>(); //Alpha value per  VNF instance
 
-    if(Chain_QoS.equals("gold")){
-      SfcPriority=3;
-    }else if (Chain_QoS.equals("silver")){
-      SfcPriority=2;
-    }else {
-      SfcPriority=1;
+    if (Chain_QoS.equals("gold")) {
+      SfcPriority = 3;
+    } else if (Chain_QoS.equals("silver")) {
+      SfcPriority = 2;
+    } else {
+      SfcPriority = 1;
     }
-    double MaxSfcPriority=3;
-    int MaxDistance=Integer.MIN_VALUE;
-    int MaxLoad=Integer.MIN_VALUE;
+    double MaxSfcPriority = 3;
+    int MaxDistance = Integer.MIN_VALUE;
+    int MaxLoad = Integer.MIN_VALUE;
 
-    System.out.println("**** SELECT VNF using tradeoff algorithm ******  ");
-    if(!mapCountLoad.containsKey(vnfr.getType())) {
-      System.out.println("****Adding VNF TYPE =  ["+vnfr.getType()+" ] to the mapCountLoad");
+    logger.info("[SELECT VNF] using tradeoff delay and load algorithm ");
+    if (!mapCountLoad.containsKey(vnfr.getType())) {
+      logger.debug("[Adding VNF TYPE]  =  [" + vnfr.getType() + " ] to the mapCountLoad");
 
       Map<String, Integer> mapVNFinstanceCountLoad = new HashMap<>();
       mapCountLoad.put(vnfr.getType(), mapVNFinstanceCountLoad);
     }
 
-
     //Summing up the Load of VNF instances
-    if(mapCountLoad.size()!=0) {
-      System.out.println("****Calculating the Load Sum for the VNFs ****");
-      if(mapCountLoad.containsKey(vnfr.getType())) {
+    if (mapCountLoad.size() != 0) {
+      logger.debug("[Calculating the Load Sum] for the VNFs ****");
+      if (mapCountLoad.containsKey(vnfr.getType())) {
         if (mapCountLoad.get(vnfr.getType()).size() != 0) {
-          System.out.println("Calculating the Load Sum for the VNF type [" + vnfr.getType() + "]");
+          logger.debug("[Calculating the Load Sum] for the VNF type [" + vnfr.getType() + "]");
           for (String sfInstanceName : mapCountLoad.get(vnfr.getType()).keySet()) {
             LoadSum = LoadSum + mapCountLoad.get(vnfr.getType()).get(sfInstanceName);
-            System.out.println("**** Load summation:" + LoadSum);
           }
         }
       }
     }
-    System.out.println("**** Load Summation = "+LoadSum);
+    logger.debug("[Load summation] is" + LoadSum);
 
     // Calculating the Maximum Distance and the alpha value
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
@@ -94,89 +111,101 @@ public class TradeOffShortestPathLoadBalancingSelection {
           int distance = getDistance(prev_vnf.getName(), vnfc_instance.getHostname());
           if (distance > MaxDistance) {
             MaxDistance = distance;
-            System.out.println("****Max Distance becomes :" + MaxDistance);
           }
+          logger.debug("[Max Distance] is " + MaxDistance);
 
           //calculate alpha value and get the Max Load
-          System.out.println("****Calculating the Alpha value for the VNFs  [" + vnfr.getType() + "]");
+          logger.debug(
+              "[Calculating the Alpha value] for the VNFs  [" + vnfr.getType() + "]");
         }
         double alpha_value;
         int LoadCounter;
-        if(mapCountLoad.get(vnfr.getType()).containsKey(vnfc_instance.getHostname())) {
+        if (mapCountLoad.get(vnfr.getType()).containsKey(vnfc_instance.getHostname())) {
           LoadCounter = mapCountLoad.get(vnfr.getType()).get(vnfc_instance.getHostname());
-        }else {
-          LoadCounter=0;
-          mapCountLoad.get(vnfr.getType()).put(vnfc_instance.getHostname(),LoadCounter);
+        } else {
+          LoadCounter = 0;
+          mapCountLoad.get(vnfr.getType()).put(vnfc_instance.getHostname(), LoadCounter);
         }
-        System.out.println("**** Load of SF Instance: " +vnfc_instance.getHostname()+"  = "+ LoadCounter);
+        logger.debug(
+            "pLoad of SF Instance] : " + vnfc_instance.getHostname() + "  is " + LoadCounter);
 
-          if(MaxLoad<LoadCounter){
+        if (MaxLoad < LoadCounter) {
 
-            MaxLoad=LoadCounter;
-            System.out.println("**** MAximum Load is SF Instance: " +vnfc_instance.getHostname()+" and it Load = "+ MaxLoad);
+          MaxLoad = LoadCounter;
+          logger.debug(
+              "[Maximum Load] is SF Instance: "
+                  + vnfc_instance.getHostname()
+                  + " and it Load = "
+                  + MaxLoad);
+        }
+        if (LoadSum > 0) {
+          alpha_value =
+              ((double) (LoadSum - LoadCounter) / (2 * LoadSum))
+                  + (SfcPriority / (2 * (MaxSfcPriority)));
 
-          }
-          if(LoadSum>0){
-            alpha_value=((double)(LoadSum-LoadCounter)/(2*LoadSum))+(SfcPriority/(2*(MaxSfcPriority+1)));
-
-          }else {
-            alpha_value=SfcPriority/(2*(MaxSfcPriority+1));
-            System.out.println("**** LoadSUmmation =0 ");
-
-          }
-          alpha.put(vnfc_instance.getHostname(),alpha_value);
-          System.out.println("**** Load of SF Instance: " +vnfc_instance.getHostname()+" = "+ LoadCounter+" and its alpha value = "+alpha_value);
-
+        } else {
+          alpha_value = SfcPriority / (2 * (MaxSfcPriority));
+        }
+        alpha.put(vnfc_instance.getHostname(), alpha_value);
+        logger.debug(
+            "[Load of SF Instance] : "
+                + vnfc_instance.getHostname()
+                + " = "
+                + LoadCounter
+                + " and its alpha value = "
+                + alpha_value);
       }
     }
 
-    System.out.println("**** Max Distance = "+MaxDistance);
 
     VNFdict new_vnf = new VNFdict();
 
-
     int minLoad = Integer.MAX_VALUE;
     if (prev_vnf == null) {
-      System.out.println("**** Previous VNF in the Chain is NULL *****");
+      logger.debug("[ Previous VNF in the Chain is NULL]");
 
       VNFdict firstHopVNF = new VNFdict();
       String VNF_instance_selected = null;
       if (mapCountLoad.size() != 0) {
-        System.out.println("**** mapCountLoad is not EMPTY *****");
+        logger.debug("[ mapCountLoad ] is not EMPTY *****");
         if (mapCountLoad.containsKey(vnfr.getType())) {
-          System.out.println("**** mapCountLoad for the VNF [" + vnfr.getType() + "] is not EMPTY *****");
+          logger.debug(
+              "[ mapCountLoad ] for the VNF [" + vnfr.getType() + "] is not EMPTY *****");
           if (mapCountLoad.get(vnfr.getType()).size() != 0) {
             for (String sfInstance : mapCountLoad.get(vnfr.getType()).keySet()) {
               if (mapCountLoad.get(vnfr.getType()).get(sfInstance) < minLoad) {
-                System.out.println("**** MinLOAD --> " +
-                                   minLoad +
-                                   " <-- is greater than the VNF instance Load [" +
-                                   sfInstance +
-                                   "], it load -->" +
-                                   mapCountLoad.get(vnfr.getType()).get(sfInstance) +
-                                   " <-- *****");
+                logger.debug(
+                    "[ MinLOAD ] --> "
+                        + minLoad
+                        + " <-- is greater than the VNF instance Load ["
+                        + sfInstance
+                        + "], it load -->"
+                        + mapCountLoad.get(vnfr.getType()).get(sfInstance)
+                        + " <-- *****");
 
                 VNF_instance_selected = sfInstance;
-                System.out.println("**** VNF instance Selected is [" + VNF_instance_selected + "] ");
+                logger.debug(
+                    "**** VNF instance Selected is [" + VNF_instance_selected + "] ");
 
                 minLoad = mapCountLoad.get(vnfr.getType()).get(sfInstance);
               }
             }
-          }else {
-            System.out.println("*ERROR*** mapCountLoad for the VNF instance of type [" + vnfr.getType() + "] is EMPTY *****");
-
+          } else {
+            logger.warn(
+                "*[mapCountLoad] for the VNF instance of type ["
+                    + vnfr.getType()
+                    + "] is EMPTY *****");
           }
         } else {
-          System.out.println("**ERROR** VNF type "+vnfr.getType()+" is not exist in the mapCountLoad ###");
-
+          logger.warn(
+              "[VNF type] " + vnfr.getType() + " is not exist in the mapCountLoad ###");
         }
       } else {
-        System.out.println("*ERROR*** mapCountLoad Size is ZERO ###");
-
+        logger.warn("[mapCountLoad] Size is ZERO ");
       }
 
       if (VNF_instance_selected != null) {
-        System.out.println("**** VNF instance is Selected *****");
+        logger.debug("[ VNF instance] is Selected *****");
 
         firstHopVNF.setName(VNF_instance_selected);
         firstHopVNF.setType(vnfr.getType());
@@ -185,7 +214,6 @@ public class TradeOffShortestPathLoadBalancingSelection {
             if (vnfc_instance.getHostname() == VNF_instance_selected) {
               for (Ip ip : vnfc_instance.getIps()) {
                 firstHopVNF.setIP(ip.getIp());
-                System.out.println("[SF-Selections] Get Neutron Pro " + new Date().getTime());
 
                 firstHopVNF.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
 
@@ -196,16 +224,16 @@ public class TradeOffShortestPathLoadBalancingSelection {
         }
         if (mapCountLoad.containsKey((vnfr.getType()))) {
           if (mapCountLoad.get(vnfr.getType()).size() != 0) {
-            if(mapCountLoad.get(vnfr.getType()).containsKey(firstHopVNF.getName())) {
+            if (mapCountLoad.get(vnfr.getType()).containsKey(firstHopVNF.getName())) {
               countLoad = mapCountLoad.get(vnfr.getType()).get(firstHopVNF.getName());
               System.out.println(" First HOP --> Count Load OLD=" + countLoad);
             }
           }
           countLoad = countLoad + 1;
-          System.out.println(" First HOP --> Count Load NEW=" + countLoad);
+          logger.debug(" First HOP --> Count Load NEW=" + countLoad);
           mapCountLoad.get(vnfr.getType()).put(firstHopVNF.getName(), countLoad);
         } else {
-          System.out.println(" Could not select VNF instance: VNF instance name is Null");
+          logger.error(" Could not select VNF instance: VNF instance name is Null");
           return null;
         }
       }
@@ -217,7 +245,6 @@ public class TradeOffShortestPathLoadBalancingSelection {
     int Pathlength;
     double Index;
 
-
     for (VirtualDeploymentUnit vdu : vnfr.getVdu()) {
       for (VNFCInstance vnfc : vdu.getVnfc_instance()) {
         String currentVNFName = vnfc.getHostname();
@@ -225,44 +252,45 @@ public class TradeOffShortestPathLoadBalancingSelection {
         String CurrentVNF_IP = null;
 
         for (Ip ip : vnfc.getIps()) {
-          CurrentVNF_IP=ip.getIp();
-          System.out.println("[SF-Selections] Get Neutron Pro " + new Date().getTime());
+          CurrentVNF_IP = ip.getIp();
           CurrentVNF_NeutronPortID = NC.getNeutronPortID(ip.getIp());
           break;
         }
         Pathlength = getDistance(prev_vnf.getName(), currentVNFName);
-        System.out.println(" Path Length = " +
-                           Pathlength +
-                           " for SF Instance : " +
-                           prev_vnf.getName() +
-                           " and  SF instance: " +
-                           currentVNFName);
-
+        logger.debug(
+            "[ Path Length] = "
+                + Pathlength
+                + " for SF Instance : "
+                + prev_vnf.getName()
+                + " and  SF instance: "
+                + currentVNFName);
 
         int Load = mapCountLoad.get(vnfr.getType()).get(currentVNFName);
         System.out.println(" SF Load = " + Load + " for SF Instance : " + currentVNFName);
 
         double alpha_value = alpha.get(currentVNFName);
-        System.out.println(" SF alpha Value = " + alpha_value + " for SF Instance : " + currentVNFName);
+        logger.debug(
+            " [SF alpha Value] = " + alpha_value + " for SF Instance : " + currentVNFName);
 
-        if (MaxDistance > 0 && MaxLoad >0) {
-          System.out.println("==> Max Disance > 0 and Max Load > 0 " );
-          Index = ((double)((1 - alpha_value) * Load) / MaxLoad) + ((double)(alpha_value * Pathlength) / MaxDistance);
-          System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
-        } else if(MaxLoad > 0){
-          System.out.println("==> Max Load > 0 " );
-          Index = ((double)((1 - alpha_value) * Load) / MaxLoad);
-          System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
-        }else if(MaxDistance > 0){
-          System.out.println("==> Max Disance > 0  " );
-          Index = ((double)(alpha_value * Pathlength) / MaxDistance);
-          System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
-        }else {
-          System.out.println("==> Max Disance = 0 and Max Load = 0 " );
+        if (MaxDistance > 0 && MaxLoad > 0) {
+          logger.debug("[ Max Disance] > 0 and Max Load > 0 ");
+          Index =
+              ((double) ((1 - alpha_value) * Load) / MaxLoad)
+                  + ((double) (alpha_value * Pathlength) / MaxDistance);
+          logger.debug(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+        } else if (MaxLoad > 0) {
+          logger.debug("==> Max Load > 0 ");
+          Index = ((double) ((1 - alpha_value) * Load) / MaxLoad);
+          logger.debug(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+        } else if (MaxDistance > 0) {
+          logger.debug("==> Max Disance > 0  ");
+          Index = ((double) (alpha_value * Pathlength) / MaxDistance);
+          logger.debug(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
+        } else {
+          logger.debug("==> Max Disance = 0 and Max Load = 0 ");
 
-          Index = 1-alpha_value;
+          Index = 1 - alpha_value;
           System.out.println(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
-
         }
         if (Index < minIndex) {
           minIndex = Index;
@@ -270,7 +298,7 @@ public class TradeOffShortestPathLoadBalancingSelection {
           new_vnf.setType(vnfr.getType());
           new_vnf.setNeutronPortId(CurrentVNF_NeutronPortID);
           new_vnf.setIP(CurrentVNF_IP);
-          System.out.println("** Index Value less than the Min Index ** ");
+          logger.debug("[ Index Value ] is less than the Min Index ** ");
         }
       }
     }
@@ -278,96 +306,86 @@ public class TradeOffShortestPathLoadBalancingSelection {
       if (mapCountLoad.get(vnfr.getType()).size() != 0) {
 
         countLoad = mapCountLoad.get(vnfr.getType()).get(new_vnf.getName());
-        System.out.println(" --> Count Load OLD=" + countLoad);
       }
     }
     countLoad = countLoad + 1;
-    System.out.println(" --> Count Load NEW=" + countLoad);
 
     mapCountLoad.get(vnfr.getType()).put(new_vnf.getName(), countLoad);
-    System.out.println(" #####  SELECTED VNF instance= " + new_vnf.getName());
+    logger.debug(" [ SELECTED VNF instance ] = " + new_vnf.getName());
 
     return new_vnf;
   }
 
-
   //Calculate the distance between two VNFs instances
-  public int getDistance(String prev_VNF,String currentVNF) throws IOException {
+  public int getDistance(String prev_VNF, String currentVNF) throws IOException {
     int distance;
-    System.out.println("**** Get Distance between ["+prev_VNF+ "] and ["+ currentVNF+"]");
+    logger.debug("[Get Distance] between [" + prev_VNF + "] and [" + currentVNF + "]");
 
-    String currentVNFLocation=SFC_driver.GetConnectedSFF(currentVNF);
-    System.out.println("**** Location for "+currentVNF+" = "+currentVNFLocation);
+    String currentVNFLocation = SFC_driver.GetConnectedSFF(currentVNF);
+    logger.debug("[Location] for " + currentVNF + " = " + currentVNFLocation);
 
-    String prevVNFLocation=SFC_driver.GetConnectedSFF(prev_VNF);
-    System.out.println("**** Location for "+prev_VNF+" = "+prevVNFLocation);
+    String prevVNFLocation = SFC_driver.GetConnectedSFF(prev_VNF);
+    logger.debug("[Location] for " + prev_VNF + " = " + prevVNFLocation);
 
-
-    if(currentVNFLocation.equals(prevVNFLocation)){
-      distance=0;
-    }else {
-      distance=1;
+    if (currentVNFLocation.equals(prevVNFLocation)) {
+      distance = 0;
+    } else {
+      distance = 1;
     }
 
     return distance;
   }
 
 
-
   public HashMap<Integer, VNFdict> CreatePath(
       Set<VirtualNetworkFunctionRecord> vnfrs,
       VNFForwardingGraphRecord vnffgr,
       NetworkServiceRecord nsr) {
-    System.out.println("[SFP-Creation] Creating Path (1) started  at time " + new Date().getTime());
+    logger.info("[SFP-Create] Creating Path started  " );
 
     HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
     List<VNFdict> vnf_test = new ArrayList<VNFdict>();
     List<String> chain = new ArrayList<String>();
-    VNFdict prev_vnf=null;
+    VNFdict prev_vnf = null;
 
     int i = 0;
     // for getting the VNF instance NAME
     String VNF_NAME;
 
-    System.out.println("[SFP-Creation] Creating Path started  at time " + new Date().getTime());
     for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
 
       for (int counter = 0; counter < nfp.getConnection().size(); counter++) {
-        System.out.println("[COUNTER] " + counter);
 
         for (Map.Entry<String, String> entry : nfp.getConnection().entrySet()) {
 
           Integer k = Integer.valueOf(entry.getKey());
 
           int x = k.intValue();
-          System.out.println("[entry key] " + x);
 
           //need to be adjusted again (use put(entry.key()
           if (counter == x) {
 
             for (VirtualNetworkFunctionRecord vnfr : vnfrs) {
               if (vnfr.getName().equals(entry.getValue())) {
-                System.out.println("[entry Value] " + entry.getValue());
 
                 VNFdict new_vnf = null;
                 try {
-                  new_vnf = SelectVNF(vnfr,prev_vnf,vnffgr.getVendor());
+                  new_vnf = SelectVNF(vnfr, prev_vnf, vnffgr.getVendor());
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
-                if(new_vnf!=null){
-                  prev_vnf=new_vnf;
+                if (new_vnf != null) {
+                  prev_vnf = new_vnf;
                 } else {
-                  System.out.println("Couldn't find a reachable SF for ServiceFunctionType: "+vnfr.getType());
+                  logger.error(
+                      "Couldn't find a reachable SF for ServiceFunctionType: " + vnfr.getType());
                   return null;
                 }
 
                 vnf_test.add(new_vnf);
-                System.out.println("[-------] integer vlaue " + counter);
 
                 vnfdicts.put(counter, vnf_test.get(counter));
 
-                System.out.println("[VNFdicts] integer vlaue " + counter);
               }
             }
           }
@@ -375,7 +393,7 @@ public class TradeOffShortestPathLoadBalancingSelection {
       }
     }
 
-    System.out.println("[SFP-Created] Creating Path Finished  at time " + new Date().getTime());
+    logger.info("[SFP-Create] Creating Path Finished  ");
 
     return vnfdicts;
   }

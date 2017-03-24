@@ -14,10 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Generated("org.jsonschema2pojo")
-//@Entity
+@Entity
 public class SfcDict implements Serializable {
-
-
 
   @SerializedName("status")
   @Expose
@@ -30,6 +28,7 @@ public class SfcDict implements Serializable {
 
   @SerializedName("chain")
   @Expose
+  @ElementCollection(fetch = FetchType.EAGER)
   private List<String> chain = new ArrayList<String>();
 
   @SerializedName("tenant_id")
@@ -44,9 +43,6 @@ public class SfcDict implements Serializable {
   @Expose
   private String infraDriver;
 
-  @SerializedName("attributes")
-  @Expose
-  private Attributes attributes;
 
   @SerializedName("symmetrical")
   @Expose
@@ -63,9 +59,11 @@ public class SfcDict implements Serializable {
 
   @SerializedName("paths")
   @Expose
-  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+  @OneToMany(
+    cascade = {CascadeType.ALL},
+    fetch = FetchType.EAGER
+  )
   private List<SFPdict> paths;
-
 
   /**
    *
@@ -163,21 +161,7 @@ public class SfcDict implements Serializable {
     this.infraDriver = infraDriver;
   }
 
-  /**
-   *
-   * @return The attributes
-   */
-  public Attributes getAttributes() {
-    return attributes;
-  }
 
-  /**
-   *
-   * @param attributes The attributes
-   */
-  public void setAttributes(Attributes attributes) {
-    this.attributes = attributes;
-  }
 
   /**
    *
@@ -203,10 +187,9 @@ public class SfcDict implements Serializable {
     return id;
   }
 
-  public void setId(String ID){
-    this.id= ID;
+  public void setId(String ID) {
+    this.id = ID;
   }
-
 
   /**
    *
@@ -242,16 +225,30 @@ public class SfcDict implements Serializable {
 
   @Override
   public String toString() {
-    return "SfcDict{" +
-           "id='" + id + '\'' +
-           ", name=" + name +
-           ", description=" + description +
-           ", infraDriver=" + infraDriver +
-           ", symmetrical=" + symmetrical +
-           ", CHAIN='" + chain + '\'' +
-           ", Paths='" + paths + '\'' +
-           ", TenantId='" + tenantId + '\'' +
-           ", status='" + status + '\'' +
-           '}';
+    return "SfcDict{"
+        + "id='"
+        + id
+        + '\''
+        + ", name="
+        + name
+        + ", description="
+        + description
+        + ", infraDriver="
+        + infraDriver
+        + ", symmetrical="
+        + symmetrical
+        + ", CHAIN='"
+        + chain
+        + '\''
+        + ", Paths='"
+        + paths
+        + '\''
+        + ", TenantId='"
+        + tenantId
+        + '\''
+        + ", status='"
+        + status
+        + '\''
+        + '}';
   }
 }

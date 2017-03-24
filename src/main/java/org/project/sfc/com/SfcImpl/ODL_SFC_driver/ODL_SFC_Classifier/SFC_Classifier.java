@@ -45,12 +45,13 @@ import java.util.Properties;
 public class SFC_Classifier extends SFCclassifier {
 
   private Properties properties;
-  public String ODL_ip ;
-  public String ODL_port ;
-  public String ODL_username ;
-  public String ODL_password ;
+  public String ODL_ip;
+  public String ODL_port;
+  public String ODL_username;
+  public String ODL_password;
 
-  public String Config_acl_url = "restconf/config/ietf-access-control-list:access-lists/acl/ietf-access-control-list:ipv4-acl/{0}";
+  public String Config_acl_url =
+      "restconf/config/ietf-access-control-list:access-lists/acl/ietf-access-control-list:ipv4-acl/{0}";
   public String Config_netvirtsfc_url =
       "restconf/config/netvirt-sfc-classifier:classifiers/classifier/{0}";
   public MatchTranslation matching_translate = new MatchTranslation();
@@ -59,8 +60,7 @@ public class SFC_Classifier extends SFCclassifier {
 
   private static Logger logger = LoggerFactory.getLogger(SFC_Classifier.class);
 
-  private void init()  {
-
+  private void init() {
 
     this.Config_acl_url = Config_acl_url;
 
@@ -78,15 +78,15 @@ public class SFC_Classifier extends SFCclassifier {
     this.matching_translate = matching_translate;
   }
 
-  public SFC_Classifier() throws IOException{
+  public SFC_Classifier() throws IOException {
     this.properties = ConfigReader.readProperties();
 
     this.ODL_ip = properties.getProperty("sfc.ip");
-    this.ODL_port =  properties.getProperty("sfc.port");
+    this.ODL_port = properties.getProperty("sfc.port");
     this.ODL_username = properties.getProperty("sfc.username");
     this.ODL_password = properties.getProperty("sfc.password");
-
   }
+
   public String getType() {
 
     return "netvirtsfc";
@@ -128,9 +128,9 @@ public class SFC_Classifier extends SFCclassifier {
       request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
       logger.debug(
           "Setting of Classifier has produced http status:"
-          + request.getStatusCode()
-          + " with body: "
-          + request.getBody());
+              + request.getStatusCode()
+              + " with body: "
+              + request.getBody());
 
       if (!request.getStatusCode().is2xxSuccessful()) {
         result = null;
@@ -138,20 +138,20 @@ public class SFC_Classifier extends SFCclassifier {
         result = mapper.fromJson(request.getBody(), Classifiers.class);
         logger.debug(
             "RESULT IS "
-            + request.getStatusCode()
-            + " with body "
-            + mapper.toJson(result, Classifiers.class));
+                + request.getStatusCode()
+                + " with body "
+                + mapper.toJson(result, Classifiers.class));
       }
     } else if (rest_type == "DELETE") {
-      System.out.println("Deleting of SFC CLASSIFIER ");
+      logger.info("Deleting of SFC CLASSIFIER ");
 
       HttpEntity<String> delEntity = new HttpEntity<String>(headers);
       request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
       logger.debug(
           "Deleting Classifier produced http status:"
-          + request.getStatusCode()
-          + " with body: "
-          + request.getBody());
+              + request.getStatusCode()
+              + " with body: "
+              + request.getBody());
 
       if (!request.getStatusCode().is2xxSuccessful()) {
         result = null;
@@ -190,9 +190,9 @@ public class SFC_Classifier extends SFCclassifier {
       request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
       logger.debug(
           "Setting of ACL has produced http status:"
-          + request.getStatusCode()
-          + " with body: "
-          + request.getBody());
+              + request.getStatusCode()
+              + " with body: "
+              + request.getBody());
 
       if (!request.getStatusCode().is2xxSuccessful()) {
         result = null;
@@ -200,19 +200,19 @@ public class SFC_Classifier extends SFCclassifier {
         result = mapper.fromJson(request.getBody(), AccessLists.class);
         logger.debug(
             "RESULT IS "
-            + request.getStatusCode()
-            + " with body "
-            + mapper.toJson(result, AccessLists.class));
+                + request.getStatusCode()
+                + " with body "
+                + mapper.toJson(result, AccessLists.class));
       }
     } else if (rest_type == "DELETE") {
-      System.out.println("Deleting of ACL ");
+      logger.debug("Deleting of ACL ");
       HttpEntity<String> delEntity = new HttpEntity<String>(headers);
       request = template.exchange(Full_URL, HttpMethod.DELETE, delEntity, String.class);
       logger.debug(
           "Deleting of ACL has produced http status:"
-          + request.getStatusCode()
-          + " with body: "
-          + request.getBody());
+              + request.getStatusCode()
+              + " with body: "
+              + request.getBody());
 
       if (!request.getStatusCode().is2xxSuccessful()) {
         result = null;
@@ -228,182 +228,182 @@ public class SFC_Classifier extends SFCclassifier {
   }
 
   /*
-  public HttpResponse sendRest_Classifier(
-      ClassifierJSON datax, String rest_type, String url) {
+    public HttpResponse sendRest_Classifier(
+        ClassifierJSON datax, String rest_type, String url) {
 
-    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
-    String plainCreds = ODL_username + ":" + ODL_password;
-    byte[] plainCredsBytes = plainCreds.getBytes();
-    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-    String base64Creds = new String(base64CredsBytes);
-    RestTemplate template = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Accept", "application/json");
-    headers.setContentType(MediaType.APPLICATION_JSON);
+      String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+      String plainCreds = ODL_username + ":" + ODL_password;
+      byte[] plainCredsBytes = plainCreds.getBytes();
+      byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+      String base64Creds = new String(base64CredsBytes);
+      RestTemplate template = new RestTemplate();
+      HttpHeaders headers = new HttpHeaders();
+      headers.add("Accept", "application/json");
+      headers.setContentType(MediaType.APPLICATION_JSON);
 
-    headers.add("Authorization", "Basic " + base64Creds);
-    Gson mapper = new Gson();
-    Classifiers result = new Classifiers();
-    HttpClient httpClient = HttpClientBuilder.create().build();
+      headers.add("Authorization", "Basic " + base64Creds);
+      Gson mapper = new Gson();
+      Classifiers result = new Classifiers();
+      HttpClient httpClient = HttpClientBuilder.create().build();
 
-    HttpResponse response = null;
-    if (rest_type == "PUT") {
-      Classifiers data = datax.getClassifiers();
-/*
-      HttpEntity<String> putEntity =
-          new HttpEntity<String>(mapper.toJson(data, Classifiers.class), headers);
-      request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
-      logger.debug(
-          "Setting of Classifier has produced http status:"
-              + request.getStatusCode()
-              + " with body: "
-              + request.getBody());
-
-      if (!request.getStatusCode().is2xxSuccessful()) {
-        result = null;
-      } else {
-        result = mapper.fromJson(request.getBody(), Classifiers.class);
+      HttpResponse response = null;
+      if (rest_type == "PUT") {
+        Classifiers data = datax.getClassifiers();
+  /*
+        HttpEntity<String> putEntity =
+            new HttpEntity<String>(mapper.toJson(data, Classifiers.class), headers);
+        request = template.exchange(Full_URL, HttpMethod.PUT, putEntity, String.class);
         logger.debug(
-            "RESULT IS "
+            "Setting of Classifier has produced http status:"
                 + request.getStatusCode()
-                + " with body "
-                + mapper.toJson(result, Classifiers.class));
-      }*/
-   /*   HttpPut Putrequest = new HttpPut(Full_URL);
-      try{
-        StringEntity params =new StringEntity(mapper.toJson(data, Classifiers.class));
-        Putrequest.addHeader("content-type", "application/json");
-        Putrequest.addHeader("Authorization", "Basic " + base64Creds);
-        Putrequest.setEntity(params);
+                + " with body: "
+                + request.getBody());
 
-         response = httpClient.execute(Putrequest);
-        String stringResponse=new BasicResponseHandler().handleResponse(response);
-        logger.debug(
-            "Setting of Classifier has produced http status:"
-            + response.getStatusLine().getStatusCode()
-            + " with body: "
-            + stringResponse);
+        if (!request.getStatusCode().is2xxSuccessful()) {
+          result = null;
+        } else {
+          result = mapper.fromJson(request.getBody(), Classifiers.class);
+          logger.debug(
+              "RESULT IS "
+                  + request.getStatusCode()
+                  + " with body "
+                  + mapper.toJson(result, Classifiers.class));
+        }*/
+  /*   HttpPut Putrequest = new HttpPut(Full_URL);
+        try{
+          StringEntity params =new StringEntity(mapper.toJson(data, Classifiers.class));
+          Putrequest.addHeader("content-type", "application/json");
+          Putrequest.addHeader("Authorization", "Basic " + base64Creds);
+          Putrequest.setEntity(params);
 
-        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
-          result=null;
+           response = httpClient.execute(Putrequest);
+          String stringResponse=new BasicResponseHandler().handleResponse(response);
+          logger.debug(
+              "Setting of Classifier has produced http status:"
+              + response.getStatusLine().getStatusCode()
+              + " with body: "
+              + stringResponse);
 
-        }else{
-          result = mapper.fromJson(stringResponse, Classifiers.class);
+          if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+            result=null;
 
-        }
+          }else{
+            result = mapper.fromJson(stringResponse, Classifiers.class);
 
-      }catch(Exception ex){
-        logger.error(ex.toString());
+          }
 
-      }
-    } else if (rest_type == "DELETE") {
-      System.out.println("Deleting of Test_SFC CLASSIFIER ");
-
-      HttpDelete Deleterequest = new HttpDelete(Full_URL);
-      try{
-        Deleterequest.addHeader("content-type", "application/json");
-        Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
-
-        response = httpClient.execute(Deleterequest);
-        String stringResponse=new BasicResponseHandler().handleResponse(response);
-        logger.debug(
-            "Setting of Classifier has produced http status:"
-            + response.getStatusLine().getStatusCode()
-            + " with body: "
-            + stringResponse);
-        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
-          result=null;
-
-        }else{
-          result = mapper.fromJson(stringResponse, Classifiers.class);
+        }catch(Exception ex){
+          logger.error(ex.toString());
 
         }
+      } else if (rest_type == "DELETE") {
+        System.out.println("Deleting of Test_SFC CLASSIFIER ");
 
-      }catch(Exception ex){
-        logger.error(ex.toString());
+        HttpDelete Deleterequest = new HttpDelete(Full_URL);
+        try{
+          Deleterequest.addHeader("content-type", "application/json");
+          Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
 
+          response = httpClient.execute(Deleterequest);
+          String stringResponse=new BasicResponseHandler().handleResponse(response);
+          logger.debug(
+              "Setting of Classifier has produced http status:"
+              + response.getStatusLine().getStatusCode()
+              + " with body: "
+              + stringResponse);
+          if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+            result=null;
+
+          }else{
+            result = mapper.fromJson(stringResponse, Classifiers.class);
+
+          }
+
+        }catch(Exception ex){
+          logger.error(ex.toString());
+
+        }
+      } else {
+        logger.debug("The REST Request is not exist");
       }
-    } else {
-      logger.debug("The REST Request is not exist");
+
+      return response;
     }
 
-    return response;
-  }
+    public HttpResponse sendRest_ACL(ACLJSON datax, String rest_type, String url) {
 
-  public HttpResponse sendRest_ACL(ACLJSON datax, String rest_type, String url) {
+      String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
+      String plainCreds = ODL_username + ":" + ODL_password;
+      byte[] plainCredsBytes = plainCreds.getBytes();
+      byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+      String base64Creds = new String(base64CredsBytes);
 
-    String Full_URL = "http://" + ODL_ip + ":" + ODL_port + "/" + url;
-    String plainCreds = ODL_username + ":" + ODL_password;
-    byte[] plainCredsBytes = plainCreds.getBytes();
-    byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-    String base64Creds = new String(base64CredsBytes);
+      Gson mapper = new Gson();
+      AccessLists result = new AccessLists();
+      HttpResponse response = null;
+      HttpClient httpClient = HttpClientBuilder.create().build();
 
-    Gson mapper = new Gson();
-    AccessLists result = new AccessLists();
-    HttpResponse response = null;
-    HttpClient httpClient = HttpClientBuilder.create().build();
+      if (rest_type == "PUT") {
+        AccessLists data = datax.getAccessLists();
 
-    if (rest_type == "PUT") {
-      AccessLists data = datax.getAccessLists();
+        HttpPut Putrequest = new HttpPut(Full_URL);
+        try{
+          StringEntity params =new StringEntity(mapper.toJson(data, AccessLists.class));
+          Putrequest.addHeader("content-type", "application/json");
+          Putrequest.addHeader("Authorization", "Basic " + base64Creds);
+          Putrequest.setEntity(params);
 
-      HttpPut Putrequest = new HttpPut(Full_URL);
-      try{
-        StringEntity params =new StringEntity(mapper.toJson(data, AccessLists.class));
-        Putrequest.addHeader("content-type", "application/json");
-        Putrequest.addHeader("Authorization", "Basic " + base64Creds);
-        Putrequest.setEntity(params);
+           response = httpClient.execute(Putrequest);
+          String stringResponse=new BasicResponseHandler().handleResponse(response);
+          logger.debug(
+              "Setting of Classifier has produced http status:"
+              + response.getStatusLine().getStatusCode()
+              + " with body: "
+              + stringResponse);
+          if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+            result=null;
 
-         response = httpClient.execute(Putrequest);
-        String stringResponse=new BasicResponseHandler().handleResponse(response);
-        logger.debug(
-            "Setting of Classifier has produced http status:"
-            + response.getStatusLine().getStatusCode()
-            + " with body: "
-            + stringResponse);
-        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
-          result=null;
+          }else{
+            result = mapper.fromJson(stringResponse, AccessLists.class);
 
-        }else{
-          result = mapper.fromJson(stringResponse, AccessLists.class);
+          }
 
-        }
-
-      }catch(Exception ex){
-        logger.error(ex.toString());
-
-      }
-    } else if (rest_type == "DELETE") {
-      HttpDelete Deleterequest = new HttpDelete(Full_URL);
-      try{
-        Deleterequest.addHeader("content-type", "application/json");
-        Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
-
-        response = httpClient.execute(Deleterequest);
-        String stringResponse=new BasicResponseHandler().handleResponse(response);
-        logger.debug(
-            "Setting of Classifier has produced http status:"
-            + response.getStatusLine().getStatusCode()
-            + " with body: "
-            + stringResponse);
-        if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
-          result=null;
-
-        }else{
-          result = mapper.fromJson(stringResponse, AccessLists.class);
+        }catch(Exception ex){
+          logger.error(ex.toString());
 
         }
+      } else if (rest_type == "DELETE") {
+        HttpDelete Deleterequest = new HttpDelete(Full_URL);
+        try{
+          Deleterequest.addHeader("content-type", "application/json");
+          Deleterequest.addHeader("Authorization", "Basic " + base64Creds);
 
-      }catch(Exception ex){
-        logger.error(ex.toString());
+          response = httpClient.execute(Deleterequest);
+          String stringResponse=new BasicResponseHandler().handleResponse(response);
+          logger.debug(
+              "Setting of Classifier has produced http status:"
+              + response.getStatusLine().getStatusCode()
+              + " with body: "
+              + stringResponse);
+          if(response.getStatusLine().getStatusCode()!=200 && response.getStatusLine().getStatusCode()!=201){
+            result=null;
 
+          }else{
+            result = mapper.fromJson(stringResponse, AccessLists.class);
+
+          }
+
+        }catch(Exception ex){
+          logger.error(ex.toString());
+
+        }
+      } else {
+        logger.debug("The REST Request is not exist");
       }
-    } else {
-      logger.debug("The REST Request is not exist");
+
+      return response;
     }
-
-    return response;
-  }
-*/
+  */
   public ClassifierJSON build_classifier_json(String sfcc_name) {
     ClassifierJSON sfcc_json = new ClassifierJSON();
     sfcc_json.setClassifiers(new Classifiers());
@@ -488,7 +488,7 @@ public class SFC_Classifier extends SFCclassifier {
 
   @Override
   public ResponseEntity<String> Delete_SFC_Classifier(String classifier_name) {
-    System.out.println("$$$$ delete Acl - Test_SFC CLASSIFIER $$$$$$");
+    logger.debug("$$$$ delete Acl - Test_SFC CLASSIFIER $$$$$$");
 
     ResponseEntity<String> sfcc_result =
         this.sendRest_Classifier(
@@ -496,7 +496,7 @@ public class SFC_Classifier extends SFCclassifier {
     if (!sfcc_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to delete NetVirt Classifier");
     } else {
-      System.out.println("Success to delete Test_SFC CLassifier ");
+      logger.debug("Success to delete Test_SFC CLassifier ");
     }
     ResponseEntity<String> acl_result =
         this.sendRest_ACL(
@@ -504,7 +504,7 @@ public class SFC_Classifier extends SFCclassifier {
     if (!acl_result.getStatusCode().is2xxSuccessful()) {
       logger.error("Unable to delete Acl ");
     } else {
-      System.out.println("Success to delete Acl ");
+      logger.debug("Success to delete Acl ");
     }
 
     return acl_result;

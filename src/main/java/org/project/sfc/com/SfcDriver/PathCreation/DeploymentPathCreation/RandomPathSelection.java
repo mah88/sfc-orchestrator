@@ -9,6 +9,8 @@ import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -16,12 +18,14 @@ import java.util.*;
 /**
  * Created by mah on 4/22/16.
  */
-public class RandomPathSelection  {
+public class RandomPathSelection {
 
-    NeutronClient NC;
+  NeutronClient NC;
+  private Logger logger;
 
   public RandomPathSelection() throws IOException {
     NC = new NeutronClient();
+    this.logger = LoggerFactory.getLogger(this.getClass());
   }
 
   public VNFdict SelectVNF(VirtualNetworkFunctionRecord vnfr) {
@@ -44,7 +48,7 @@ public class RandomPathSelection  {
         if (vnfc_instance.getHostname() == VNF_instance_selected) {
           for (Ip ip : vnfc_instance.getIps()) {
             new_vnf.setIP(ip.getIp());
-            System.out.println("[SFP-Creation] Get Neutron Pro " + new Date().getTime());
+            logger.debug("[Select-VNF] Setting the IP  for "+new_vnf.getName() +" : "+new_vnf.getIP());
 
             new_vnf.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
 
@@ -61,7 +65,7 @@ public class RandomPathSelection  {
       Set<VirtualNetworkFunctionRecord> vnfrs,
       VNFForwardingGraphRecord vnffgr,
       NetworkServiceRecord nsr) {
-    System.out.println("[SFP-Creation] Creating Path (1) started  at time " + new Date().getTime());
+    logger.info("[SFP-Create] Creating Path started ");
 
     HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
     List<VNFdict> vnf_test = new ArrayList<VNFdict>();
@@ -71,34 +75,28 @@ public class RandomPathSelection  {
     // for getting the VNF instance NAME
     String VNF_NAME;
 
-    System.out.println("[SFP-Creation] Creating Path started  at time " + new Date().getTime());
     for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
 
       for (int counter = 0; counter < nfp.getConnection().size(); counter++) {
-        System.out.println("[COUNTER] " + counter);
 
         for (Map.Entry<String, String> entry : nfp.getConnection().entrySet()) {
 
           Integer k = Integer.valueOf(entry.getKey());
 
           int x = k.intValue();
-          System.out.println("[entry key] " + x);
 
           //need to be adjusted again (use put(entry.key()
           if (counter == x) {
 
             for (VirtualNetworkFunctionRecord vnfr : vnfrs) {
               if (vnfr.getName().equals(entry.getValue())) {
-                System.out.println("[entry Value] " + entry.getValue());
 
                 VNFdict new_vnf = SelectVNF(vnfr);
 
                 vnf_test.add(new_vnf);
-                System.out.println("[-------] integer vlaue " + counter);
 
                 vnfdicts.put(counter, vnf_test.get(counter));
 
-                System.out.println("[VNFdicts] integer vlaue " + counter);
               }
             }
           }
@@ -106,7 +104,7 @@ public class RandomPathSelection  {
       }
     }
 
-    System.out.println("[SFP-Created] Creating Path Finished  at time " + new Date().getTime());
+    logger.info("[SFP-Create] Creating Path Finished ");
 
     return vnfdicts;
   }

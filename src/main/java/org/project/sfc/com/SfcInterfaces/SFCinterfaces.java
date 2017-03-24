@@ -33,5 +33,4 @@ public interface SFCinterfaces {
   String GetConnectedSFF(String SF_name) throws IOException;
 
   String GetHostID(String SF_Neutron_port_id);
-
-  }
+}

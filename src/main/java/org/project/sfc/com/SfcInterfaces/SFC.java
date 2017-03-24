@@ -18,7 +18,7 @@ public abstract class SFC implements SFCinterfaces {
 
   public SFC() {}
 
-  public SFC(String type) throws IOException{
+  public SFC(String type) throws IOException {
 
     client = new SfcDriverCaller(type);
   }

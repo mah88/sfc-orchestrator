@@ -8,47 +8,43 @@ import com.google.gson.annotations.SerializedName;
 @Generated("org.jsonschema2pojo")
 public class NxmNxReg {
 
-    @SerializedName("reg")
-    @Expose
-    private String reg;
-    @SerializedName("value")
-    @Expose
-    private String value;
+  @SerializedName("reg")
+  @Expose
+  private String reg;
 
-    /**
-     * 
-     * @return
-     *     The reg
-     */
-    public String getReg() {
-        return reg;
-    }
+  @SerializedName("value")
+  @Expose
+  private String value;
 
-    /**
-     * 
-     * @param reg
-     *     The reg
-     */
-    public void setReg(String reg) {
-        this.reg = reg;
-    }
+  /**
+   *
+   * @return The reg
+   */
+  public String getReg() {
+    return reg;
+  }
 
-    /**
-     * 
-     * @return
-     *     The value
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   *
+   * @param reg The reg
+   */
+  public void setReg(String reg) {
+    this.reg = reg;
+  }
 
-    /**
-     * 
-     * @param value
-     *     The value
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   *
+   * @return The value
+   */
+  public String getValue() {
+    return value;
+  }
 
+  /**
+   *
+   * @param value The value
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 }
