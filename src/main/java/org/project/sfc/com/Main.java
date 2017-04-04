@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -17,15 +19,11 @@ import org.springframework.context.annotation.ComponentScan;
  * Created by mah on 1/27/16.
  */
 @SpringBootApplication
+@ComponentScan(basePackages = "org.project.sfc.com")
 @EnableJpaRepositories("org.project.sfc.com.SfcRepository")
 @EntityScan(
-    basePackages = {
-        "org.project.sfc.com.SfcModel.SFCdict",
-        "org.project.sfc.com.SfcModel.SFCCdict"
-
-    }
+  basePackages = {"org.project.sfc.com.SfcModel.SFCdict", "org.project.sfc.com.SfcModel.SFCCdict"}
 )
-@ComponentScan(basePackages = "org.project.sfc.com")
 @EnableScheduling
 public class Main {
 

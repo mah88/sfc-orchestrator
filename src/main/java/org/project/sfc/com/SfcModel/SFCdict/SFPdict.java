@@ -8,6 +8,7 @@ import org.openbaton.catalogue.util.IdGenerator;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.*;
 
@@ -28,11 +29,16 @@ public class SFPdict implements Serializable {
 
   @SerializedName("path sfs")
   @Expose
- /* @OneToMany(
-    cascade = {CascadeType.ALL},
-    fetch = FetchType.EAGER
-  )*/
-  private HashMap<Integer, VNFdict> path_sfs;
+  @ManyToMany(
+      cascade = {
+          CascadeType.MERGE,
+          CascadeType.REFRESH,
+          CascadeType.PERSIST,
+          CascadeType.DETACH /*CascadeType.REMOVE*/
+      },
+      fetch = FetchType.EAGER
+  )
+  private Map<Integer, VNFdict> path_sfs;
 
   @SerializedName("name")
   @Expose
@@ -92,7 +98,7 @@ public class SFPdict implements Serializable {
    *
    * @return The path
    */
-  public HashMap<Integer, VNFdict> getPath_SFs() {
+  public Map<Integer, VNFdict> getPath_SFs() {
     return path_sfs;
   }
 
@@ -100,7 +106,7 @@ public class SFPdict implements Serializable {
    *
    * @param path_sfs The path
    */
-  public void setPath_SFs(HashMap<Integer, VNFdict> path_sfs) {
+  public void setPath_SFs(Map<Integer, VNFdict> path_sfs) {
     this.path_sfs = path_sfs;
   }
   /**

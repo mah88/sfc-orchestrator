@@ -5,7 +5,7 @@ import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.project.sfc.com.SfcRepository.VNFdictRep;
+//import org.project.sfc.com.SfcRepository.VNFdictRepo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,6 @@ public class SFC {
 
   private SFC() {
     this.logger = LoggerFactory.getLogger(this.getClass());
-
   }
 
   public static SFC getInstance() {

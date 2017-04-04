@@ -2,6 +2,7 @@ package org.project.sfc.com.MonitoringAgent;
 
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.openbaton.exceptions.NotFoundException;
+import org.project.sfc.com.SfcRepository.VNFdictRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,11 @@ public class MonitoringManager {
   private Map<String, Map<String, ScheduledFuture>> monitoringTasks;
 
   @Autowired private MonitoringEngine monitoringEngine;
+  @Autowired private VNFdictRepo vnfManag;
 
   @PostConstruct
   public void init() {
-    log.debug(
-    "[ Initialize Monitoring Manager ] ");
+    log.debug("[ Initialize Monitoring Manager ] ");
     this.monitoringTasks = new HashMap<String, Map<String, ScheduledFuture>>();
     this.taskScheduler = new ThreadPoolTaskScheduler();
     this.taskScheduler.setPoolSize(10);
@@ -60,17 +61,8 @@ public class MonitoringManager {
   public void start(VirtualNetworkFunctionRecord vnfr, String Metric, int Period, boolean LastVNFR)
       throws NotFoundException, IOException {
 
-    log.debug(
-        "Creating new MonitoringTask "
-        + vnfr.getName()
-        + " with id: "
-        + vnfr.getId());
-    log.debug(
-        "Creating new MonitoringTask "
-        + vnfr.getName()
-        + " with id: "
-        + vnfr.getId()
-        );
+    log.debug("Creating new MonitoringTask " + vnfr.getName() + " with id: " + vnfr.getId());
+    log.debug("Creating new MonitoringTask " + vnfr.getName() + " with id: " + vnfr.getId());
     if (!monitoringTasks.containsKey(vnfr.getParent_ns_id())) {
       monitoringTasks.put(vnfr.getParent_ns_id(), new HashMap<String, ScheduledFuture>());
     }
@@ -84,39 +76,26 @@ public class MonitoringManager {
     }
 
     MonitoringTask monitoringTask =
-        new MonitoringTask(vnfr, Metric, Period, monitoringEngine, LastVNFR);
+        new MonitoringTask(vnfr, Metric, Period, monitoringEngine, LastVNFR, vnfManag);
 
     ScheduledFuture scheduledFuture =
         taskScheduler.scheduleAtFixedRate(monitoringTask, Period * 1000);
     monitoringTasks.get(vnfr.getParent_ns_id()).put(vnfr.getId(), scheduledFuture);
     log.debug(
-      "Activated Monitoring of VNFR with ID: "
-      + vnfr.getId()
-      + " and Name "
-      + vnfr.getName());
+        "Activated Monitoring of VNFR with ID: " + vnfr.getId() + " and Name " + vnfr.getName());
     log.debug(
-        "Activated Monitoring of VNFR with ID: "
-        + vnfr.getId()
-        + " and Name "
-        + vnfr.getName());
-
+        "Activated Monitoring of VNFR with ID: " + vnfr.getId() + " and Name " + vnfr.getName());
   }
 
   public void stop(VirtualNetworkFunctionRecord vnfr) throws NotFoundException {
-      log.debug(
-    "Deactivating Monitoring for VNFR with id: "
-    + vnfr.getId()
-    );
+    log.debug("Deactivating Monitoring for VNFR with id: " + vnfr.getId());
     if (monitoringTasks.containsKey(vnfr.getParent_ns_id())) {
       if (monitoringTasks.get(vnfr.getParent_ns_id()).containsKey(vnfr.getId())) {
 
         monitoringTasks.get(vnfr.getParent_ns_id()).get(vnfr.getId()).cancel(false);
 
         monitoringTasks.get(vnfr.getParent_ns_id()).remove(vnfr.getId());
-        log.debug(
-          "Deactivated Monitoring for VNFR with id: "
-          + vnfr.getId()
-        );
+        log.debug("Deactivated Monitoring for VNFR with id: " + vnfr.getId());
       } else {
         log.warn("Not Found MonitoringTask for VNFR with id: " + vnfr.getId());
       }

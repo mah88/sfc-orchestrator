@@ -27,11 +27,13 @@ public class UpdateSFPExecutor implements Runnable {
   private VirtualNetworkFunctionRecord vnfr;
   private Properties properties;
 
-  public UpdateSFPExecutor(VirtualNetworkFunctionRecord vnfr) throws IOException {
+  public UpdateSFPExecutor(VirtualNetworkFunctionRecord vnfr, SfcDriverCaller sfcCaller)
+      throws IOException {
 
     this.properties = ConfigReader.readProperties();
 
-    this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
+    //    this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
+    this.sfcCaller = sfcCaller;
 
     this.vnfr = vnfr;
 

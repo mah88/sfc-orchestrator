@@ -5,11 +5,9 @@ package org.project.sfc.com.SfcRepository;
  */
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface VNFdictRep extends CrudRepository<VNFdict, String> {
+@Repository
+public interface VNFdictRepo extends CrudRepository<VNFdict, String>, VNFdictRepoCustom {
   VNFdict findFirstById(String id);
 }
-
-
-
-

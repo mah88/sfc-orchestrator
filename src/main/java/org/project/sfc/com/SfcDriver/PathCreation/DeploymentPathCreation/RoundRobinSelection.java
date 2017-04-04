@@ -33,19 +33,17 @@ public class RoundRobinSelection {
   public RoundRobinSelection() throws IOException {
     NC = new NeutronClient();
     this.logger = LoggerFactory.getLogger(this.getClass());
-
   }
-  public void Delete(HashMap<Integer, VNFdict> VNFs){
 
-    for(int i=0;i<VNFs.size();i++){
-      if(mapCountRoundRobin.containsKey(VNFs.get(i).getType())){
-        logger.info("[Found VNF TYPE in mapCountLoad] "+ VNFs.get(i).getType());
+  public void Delete(Map<Integer, VNFdict> VNFs) {
+
+    for (int i = 0; i < VNFs.size(); i++) {
+      if (mapCountRoundRobin.containsKey(VNFs.get(i).getType())) {
+        logger.info("[Found VNF TYPE in mapCountLoad] " + VNFs.get(i).getType());
         mapCountRoundRobin.remove(VNFs.get(i).getType());
         logger.info("[Removed the VNF from mapCountLoad");
-
       }
     }
-
   }
 
   public VNFdict SelectVNF(VirtualNetworkFunctionRecord vnfr) {
@@ -88,9 +86,12 @@ public class RoundRobinSelection {
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
       for (VNFCInstance vnfc_instance : vdu_x.getVnfc_instance()) {
         if (vnfc_instance.getHostname() == VNF_instance_selected) {
+          new_vnf.setId(vnfc_instance.getId());
+
           for (Ip ip : vnfc_instance.getIps()) {
             new_vnf.setIP(ip.getIp());
-            logger.debug("[Select-VNF] Setting the IP  for "+new_vnf.getName() +" : "+new_vnf.getIP());
+            logger.debug(
+                "[Select-VNF] Setting the IP  for " + new_vnf.getName() + " : " + new_vnf.getIP());
 
             new_vnf.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
 
@@ -138,7 +139,6 @@ public class RoundRobinSelection {
                 vnf_test.add(new_vnf);
 
                 vnfdicts.put(counter, vnf_test.get(counter));
-
               }
             }
           }

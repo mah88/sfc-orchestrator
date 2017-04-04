@@ -34,12 +34,10 @@ public class LoadBalancedPathSelection {
     this.SFC_driver = broker.getSFC(type);
     this.SFC_Classifier_driver = broker.getSfcClassifier(type);
     this.logger = LoggerFactory.getLogger(this.getClass());
-
   }
 
   public void ReadjustVNFsAllocation(VirtualNetworkFunctionRecord vnfr) {
-    logger.info(
-        "[Readjust VNFs Allocation] Start");
+    logger.info("[Readjust VNFs Allocation] Start");
 
     List<SFC.SFC_Data> Chains_data = new ArrayList<>();
     List<VNFdict> VNF_instance_dicts = new ArrayList<>();
@@ -87,8 +85,7 @@ public class LoadBalancedPathSelection {
         total_size_VNF_instances++;
       }
     }
-    logger.debug(
-        "[LB Path Selection] Total Size of VNF instances : " + total_size_VNF_instances);
+    logger.debug("[LB Path Selection] Total Size of VNF instances : " + total_size_VNF_instances);
 
     HashMap<String, SFC.SFC_Data> SelectedSFCs = new HashMap<String, SFC.SFC_Data>();
 
@@ -137,8 +134,7 @@ public class LoadBalancedPathSelection {
                 if (SelectedSFCs.containsKey(RSPID)) {
                   SelectedSFCs.remove(RSPID);
                   logger.debug(
-                      "[LB Path Selection] Selected SFC is Removed, Test_SFC RSP ID:  "
-                          + RSPID);
+                      "[LB Path Selection] Selected SFC is Removed, Test_SFC RSP ID:  " + RSPID);
                 }
               }
               SelectedSFCs.put(
@@ -382,8 +378,7 @@ public class LoadBalancedPathSelection {
     for (int x = 0; x < Chains_data.size(); x++) {
       UpdateChain(Chains_data.get(x), VNF_instance_dicts.get(x));
     }
-    logger.info(
-        "[Readjust VNFs Allocation] END");
+    logger.info("[Readjust VNFs Allocation] END");
   }
 
   private void UpdateChain(SFC.SFC_Data Chain_Data, VNFdict VNF_instance) {
@@ -441,7 +436,6 @@ public class LoadBalancedPathSelection {
     logger.debug("[NEW Classifier updated ] " + SFCC_name);
     logger.debug("[Update SFCC DB] " + Chain_Data.getRspID().substring(5));
     String IDx = Chain_Data.getRspID().substring(5);
-
 
     String VNFFGR_ID = IDx.substring(IDx.indexOf('-') + 1);
     logger.debug("[VNFFGR ID] =" + VNFFGR_ID);

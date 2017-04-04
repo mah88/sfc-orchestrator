@@ -26,11 +26,13 @@ public class ScaleSFPExecutor implements Runnable {
 
   private Properties properties;
 
-  public ScaleSFPExecutor(VirtualNetworkFunctionRecord vnfr) throws IOException {
+  public ScaleSFPExecutor(VirtualNetworkFunctionRecord vnfr, SfcDriverCaller sfcCaller)
+      throws IOException {
 
     this.properties = ConfigReader.readProperties();
 
-    this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
+    //    this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
+    this.sfcCaller = sfcCaller;
 
     this.vnfr = vnfr;
 

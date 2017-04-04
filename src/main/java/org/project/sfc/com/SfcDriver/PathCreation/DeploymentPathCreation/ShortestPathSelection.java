@@ -35,7 +35,6 @@ public class ShortestPathSelection {
     NC = new NeutronClient();
     SFC_driver = broker.getSFC(type);
     this.logger = LoggerFactory.getLogger(this.getClass());
-
   }
 
   private VNFdict SelectVNF(VirtualNetworkFunctionRecord vnfr, VNFdict prev_vnf)
@@ -97,10 +96,10 @@ public class ShortestPathSelection {
 
           break;
         }
-        if(prev_vnf==null){
+        if (prev_vnf == null) {
           length = getDistanceFirstHOP(currentNeutronPortID);
 
-        }else {
+        } else {
           length = getDistance(prev_vnf.getNeutronPortId(), currentNeutronPortID);
         }
 
@@ -109,6 +108,7 @@ public class ShortestPathSelection {
           minLength = length;
           new_vnf.setName(currentVNFName);
           new_vnf.setType(vnfr.getType());
+          new_vnf.setId(vnfc.getId());
 
           new_vnf.setIP(currentIp);
 
@@ -127,11 +127,7 @@ public class ShortestPathSelection {
       throws IOException {
     int distance;
     logger.debug(
-        "[Get Distance] between ["
-            + prev_VNF_neutron_id
-            + "] and ["
-            + currentVNF_neutron_id
-            + "]");
+        "[Get Distance] between [" + prev_VNF_neutron_id + "] and [" + currentVNF_neutron_id + "]");
 
     String currentVNFLocation = SFC_driver.GetHostID(currentVNF_neutron_id);
     logger.debug("[Location] for " + currentVNF_neutron_id + " is " + currentVNFLocation);
@@ -146,13 +142,10 @@ public class ShortestPathSelection {
 
     return distance;
   }
-  private int getDistanceFirstHOP(String currentVNF_neutron_id)
-      throws IOException {
+
+  private int getDistanceFirstHOP(String currentVNF_neutron_id) throws IOException {
     int distance;
-    logger.debug(
-        "[Get Distance for First HOP between] ["
-        + currentVNF_neutron_id
-        + "]");
+    logger.debug("[Get Distance for First HOP between] [" + currentVNF_neutron_id + "]");
 
     String currentVNFLocation = SFC_driver.GetHostID(currentVNF_neutron_id);
     logger.debug("[Location] for " + currentVNF_neutron_id + " = " + currentVNFLocation);
@@ -166,11 +159,12 @@ public class ShortestPathSelection {
 
     return distance;
   }
+
   public HashMap<Integer, VNFdict> CreatePath(
       Set<VirtualNetworkFunctionRecord> vnfrs,
       VNFForwardingGraphRecord vnffgr,
       NetworkServiceRecord nsr) {
-    logger.info("[SFP-Create] Creating Path  started  " );
+    logger.info("[SFP-Create] Creating Path  started  ");
 
     HashMap<Integer, VNFdict> vnfdicts = new HashMap<Integer, VNFdict>();
     List<VNFdict> vnf_test = new ArrayList<VNFdict>();
@@ -215,7 +209,6 @@ public class ShortestPathSelection {
                 vnf_test.add(new_vnf);
 
                 vnfdicts.put(counter, vnf_test.get(counter));
-
               }
             }
           }

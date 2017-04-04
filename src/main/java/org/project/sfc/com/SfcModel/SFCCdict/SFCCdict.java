@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Generated("org.jsonschema2pojo")
+//@Generated("org.jsonschema2pojo")
 @Entity
 public class SFCCdict implements Serializable {
 
@@ -41,8 +41,8 @@ public class SFCCdict implements Serializable {
   @Expose
   private String instanceId;
 
-  @SerializedName("acl_match_criteria")
-  @Expose
+  //  @SerializedName("acl_match_criteria")
+  //  @Expose
   @OneToMany(
     cascade = {CascadeType.ALL},
     fetch = FetchType.EAGER
@@ -52,7 +52,6 @@ public class SFCCdict implements Serializable {
   @SerializedName("infra_driver")
   @Expose
   private String infraDriver;
-
 
   @SerializedName("id")
   @Expose
@@ -174,7 +173,6 @@ public class SFCCdict implements Serializable {
   public void setInfraDriver(String infraDriver) {
     this.infraDriver = infraDriver;
   }
-
 
   /**
    *

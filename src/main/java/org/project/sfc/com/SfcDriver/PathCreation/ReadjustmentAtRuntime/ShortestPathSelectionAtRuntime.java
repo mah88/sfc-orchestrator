@@ -38,7 +38,6 @@ public class ShortestPathSelectionAtRuntime {
     this.SFC_Classifier_driver = broker.getSfcClassifier(type);
     this.NC = new NeutronClient();
     this.logger = LoggerFactory.getLogger(this.getClass());
-
   }
 
   public void ReadjustVNFsAllocation(VirtualNetworkFunctionRecord vnfr) throws IOException {
@@ -81,12 +80,12 @@ public class ShortestPathSelectionAtRuntime {
       Iterator itr = Involved_SFCs.entrySet().iterator();
       while (itr.hasNext()) {
 
-
         Map.Entry Key = (Map.Entry) itr.next();
         logger.debug(
             "[Deleting Involved SFCs ] Involved SFCs :  "
-            + Involved_SFCs.get(Key.getKey()).getRspID());
-        SFC_driver.DeleteSFP(Involved_SFCs.get(Key.getKey()).getRspID(), Involved_SFCs.get(Key.getKey()).isSymm());
+                + Involved_SFCs.get(Key.getKey()).getRspID());
+        SFC_driver.DeleteSFP(
+            Involved_SFCs.get(Key.getKey()).getRspID(), Involved_SFCs.get(Key.getKey()).isSymm());
       }
       Iterator c = Involved_SFCs.entrySet().iterator();
       while (c.hasNext()) {
@@ -154,8 +153,7 @@ public class ShortestPathSelectionAtRuntime {
                   logger.debug("[Previous VNF] Name: " + prev_vnf.getName());
 
                   Distance = getDistance(prev_vnf.getName(), currentVNFName);
-                  logger.debug(
-                      "[Distance between Previous VNF and Current VNF ] = " + Distance);
+                  logger.debug("[Distance between Previous VNF and Current VNF ] = " + Distance);
 
                   if (Distance < minDistance) {
                     minDistance = Distance;
@@ -189,13 +187,8 @@ public class ShortestPathSelectionAtRuntime {
           logger.debug("[Readjust VNFs Allocation] FOUND is true? ]" + foundVNF);
         }
 
-
-
-
-          UpdateChain(Involved_SFCs.get(SFCKey.getKey()), VNF_instances);
+        UpdateChain(Involved_SFCs.get(SFCKey.getKey()), VNF_instances);
         logger.info("[Readjust VNFs Allocation] END]");
-
-
       }
     }
   }
@@ -236,7 +229,7 @@ public class ShortestPathSelectionAtRuntime {
     logger.info("[Shortest Path Selection] SELECT first HOP  ");
     VNFdict firstHopVNF = new VNFdict();
 
-  /*
+    /*
     List<String> VNF_instances = new ArrayList<String>();
 
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
@@ -292,8 +285,7 @@ public class ShortestPathSelectionAtRuntime {
           break;
         }
 
-          length = getDistanceFirstHOP(currentVNFName);
-
+        length = getDistanceFirstHOP(currentVNFName);
 
         logger.debug("[ The distance between it and the prev. node ] = " + length);
 
@@ -310,7 +302,15 @@ public class ShortestPathSelectionAtRuntime {
         }
       }
     }
-    logger.info("[First HOP Selected]  NAME: " + firstHopVNF.getName() + " IP: "+ firstHopVNF.getIP() + " Traffic Load: "+ firstHopVNF.getTrafficLoad() + " Connected SFF: "+ firstHopVNF.getConnectedSFF());
+    logger.info(
+        "[First HOP Selected]  NAME: "
+            + firstHopVNF.getName()
+            + " IP: "
+            + firstHopVNF.getIP()
+            + " Traffic Load: "
+            + firstHopVNF.getTrafficLoad()
+            + " Connected SFF: "
+            + firstHopVNF.getConnectedSFF());
 
     return firstHopVNF;
   }
@@ -332,10 +332,10 @@ public class ShortestPathSelectionAtRuntime {
     return distance;
   }
 
-  private int getDistanceFirstHOP( String currentVNF) throws IOException {
+  private int getDistanceFirstHOP(String currentVNF) throws IOException {
     int distance;
     String currentVNFLocation = SFC_driver.GetConnectedSFF(currentVNF);
-    String prevVNFLocation =  "SFF-192.168.0.16";
+    String prevVNFLocation = "SFF-192.168.0.16";
     if (currentVNFLocation == null) {
       logger.warn(" [ Could not get the connected SFF to one of the VNFs ]  ");
       return 1000;
@@ -355,17 +355,19 @@ public class ShortestPathSelectionAtRuntime {
 
     HashMap<Integer, VNFdict> VNFs = Chain_Data.getChainSFs();
     Iterator count = VNFs.entrySet().iterator();
-    logger.debug("[ Shortest Path Selection < Create Chain > ] SIZE of VNFs in the original Chain:  " + VNFs
-        .size());
-    logger.debug("[ Shortest Path Selection < Create Chain > ] SIZE of VNF instances  : " + VNF_instances.size());
+    logger.debug(
+        "[ Shortest Path Selection < Create Chain > ] SIZE of VNFs in the original Chain:  "
+            + VNFs.size());
+    logger.debug(
+        "[ Shortest Path Selection < Create Chain > ] SIZE of VNF instances  : "
+            + VNF_instances.size());
 
     while (count.hasNext()) {
 
       Map.Entry VNFcounter = (Map.Entry) count.next();
       for (int i = 0; i < VNF_instances.size(); i++) {
 
-
-        if (VNFs.get(VNFcounter.getKey()).getType().equals(VNF_instances.get(i).getType()) ) {
+        if (VNFs.get(VNFcounter.getKey()).getType().equals(VNF_instances.get(i).getType())) {
           logger.debug("[ Shortest Path Selection < Create Chain > Found the same TYPE  ");
 
           int position = Integer.valueOf(VNFcounter.getKey().toString()).intValue();
@@ -380,39 +382,40 @@ public class ShortestPathSelectionAtRuntime {
       }
     }
 
+    Chain_Data.setChainSFs(VNFs);
 
-      Chain_Data.setChainSFs(VNFs);
+    List<SFPdict> newPaths = new ArrayList<>();
+    SFPdict newPath = Chain_Data.getSFCdictInfo().getSfcDict().getPaths().get(0);
+    newPath.setPath_SFs(VNFs);
+    double PathTrafficLoad =
+        Chain_Data.getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
+    newPath.setOldTrafficLoad(PathTrafficLoad);
 
-      List<SFPdict> newPaths = new ArrayList<>();
-      SFPdict newPath = Chain_Data.getSFCdictInfo().getSfcDict().getPaths().get(0);
-      newPath.setPath_SFs(VNFs);
-      double PathTrafficLoad = Chain_Data.getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
-      newPath.setOldTrafficLoad(PathTrafficLoad);
+    newPaths.add(0, newPath);
 
-      newPaths.add(0, newPath);
+    Chain_Data.getSFCdictInfo().getSfcDict().setPaths(newPaths);
 
-      Chain_Data.getSFCdictInfo().getSfcDict().setPaths(newPaths);
+    //SFC_driver.DeleteSFP(Chain_Data.getRspID(), Chain_Data.isSymm());
 
-      //SFC_driver.DeleteSFP(Chain_Data.getRspID(), Chain_Data.isSymm());
+    String new_instance_id = SFC_driver.CreateSFP(Chain_Data.getSFCdictInfo(), VNFs);
 
-      String new_instance_id = SFC_driver.CreateSFP(Chain_Data.getSFCdictInfo(), VNFs);
-
-      String SFCC_name = SFC_Classifier_driver.Create_SFC_Classifer(Chain_Data.getClassifierInfo(), new_instance_id);
+    String SFCC_name =
+        SFC_Classifier_driver.Create_SFC_Classifer(Chain_Data.getClassifierInfo(), new_instance_id);
 
     logger.debug("[Update SFCC DB] " + Chain_Data.getRspID().substring(5));
-      String IDx = Chain_Data.getRspID().substring(5);
+    String IDx = Chain_Data.getRspID().substring(5);
 
-      String VNFFGR_ID = IDx.substring(IDx.indexOf('-') + 1);
+    String VNFFGR_ID = IDx.substring(IDx.indexOf('-') + 1);
     logger.debug("[VNFFGR ID] =" + VNFFGR_ID);
 
-      sfcc_db.update                               (VNFFGR_ID,
-                     new_instance_id,
-                     Chain_Data.getSfccName(),
-                     Chain_Data.getSFCdictInfo().getSfcDict().getSymmetrical(),
-                     VNFs,
-                     Chain_Data.getSFCdictInfo(),
-                     Chain_Data.getClassifierInfo());
+    sfcc_db.update(
+        VNFFGR_ID,
+        new_instance_id,
+        Chain_Data.getSfccName(),
+        Chain_Data.getSFCdictInfo().getSfcDict().getSymmetrical(),
+        VNFs,
+        Chain_Data.getSFCdictInfo(),
+        Chain_Data.getClassifierInfo());
     logger.info("[Update SFCC DB] is done !!");
-
   }
 }

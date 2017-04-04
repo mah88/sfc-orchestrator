@@ -26,8 +26,8 @@ public class SfcDict implements Serializable {
   @Expose
   private String description;
 
-  @SerializedName("chain")
-  @Expose
+  //  @SerializedName("chain")
+  //  @Expose
   @ElementCollection(fetch = FetchType.EAGER)
   private List<String> chain = new ArrayList<String>();
 
@@ -43,7 +43,6 @@ public class SfcDict implements Serializable {
   @Expose
   private String infraDriver;
 
-
   @SerializedName("symmetrical")
   @Expose
   private Boolean symmetrical;
@@ -57,8 +56,8 @@ public class SfcDict implements Serializable {
   @Expose
   private String name;
 
-  @SerializedName("paths")
-  @Expose
+  //  @SerializedName("paths")
+  //  @Expose
   @OneToMany(
     cascade = {CascadeType.ALL},
     fetch = FetchType.EAGER
@@ -160,8 +159,6 @@ public class SfcDict implements Serializable {
   public void setInfraDriver(String infraDriver) {
     this.infraDriver = infraDriver;
   }
-
-
 
   /**
    *

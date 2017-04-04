@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.project.sfc.com.SfcInterfaces.SFC;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mah on 1/13/17.
@@ -26,12 +27,12 @@ public class Test_SFC extends SFC {
   }
 
   @Override
-  public void CreateSFs(HashMap<Integer, VNFdict> vnf_dict) {
+  public void CreateSFs(Map<Integer, VNFdict> vnf_dict) {
     //create SFs
   }
 
   @Override
-  public String CreateSFP(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
+  public String CreateSFP(SFCdict sfc_dict, Map<Integer, VNFdict> vnf_dict) {
     return "created_new_sfp";
   }
 

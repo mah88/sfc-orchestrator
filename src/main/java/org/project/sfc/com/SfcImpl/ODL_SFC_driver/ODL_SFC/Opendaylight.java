@@ -837,7 +837,7 @@ public class Opendaylight extends SFC {
   }
 
   @Override
-  public void CreateSFs(HashMap<Integer, VNFdict> vnf_dict) throws IOException {
+  public void CreateSFs(Map<Integer, VNFdict> vnf_dict) throws IOException {
 
     String dp_loc = "sf-data-plane-locator";
     ServiceFunctions sfs_json = new ServiceFunctions();
@@ -946,10 +946,10 @@ public class Opendaylight extends SFC {
                     .getSFdict()
                     .get(ovs_mapping.get(br_map_counter.getKey()).getSfs().get(sf_id_counter))
                     .getTap_port());
-        logger.debug("SF updated with SFF:" + ovs_mapping.get(br_map_counter.getKey()).getSFFname());
+        logger.debug(
+            "SF updated with SFF:" + ovs_mapping.get(br_map_counter.getKey()).getSFFname());
       }
-      logger.debug(
-          " LATER ---> SF NAME: " + sfs_json.getServiceFunction().get(position).getName());
+      logger.debug(" LATER ---> SF NAME: " + sfs_json.getServiceFunction().get(position).getName());
 
       logger.debug(
           " LATER ---> SFF NAME: "
@@ -1037,7 +1037,7 @@ public class Opendaylight extends SFC {
   }
 
   @Override
-  public String CreateSFP(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
+  public String CreateSFP(SFCdict sfc_dict, Map<Integer, VNFdict> vnf_dict) {
 
     SFPJSON sfp_json = create_sfp_json(sfc_dict, vnf_dict);
     ResponseEntity<String> sfp_result = createODLsfp(sfp_json);
@@ -1081,7 +1081,7 @@ public class Opendaylight extends SFC {
     return rsp_json;
   }
 
-  public static SFPJSON create_sfp_json(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict) {
+  public static SFPJSON create_sfp_json(SFCdict sfc_dict, Map<Integer, VNFdict> vnf_dict) {
     SFPJSON sfp_json = new SFPJSON();
     ServiceFunctionPath sfp = new ServiceFunctionPath();
     sfp.setName("Path-" + sfc_dict.getSfcDict().getName());
@@ -1417,8 +1417,7 @@ public class Opendaylight extends SFC {
       logger.debug(" Bridge ID: " + bridgemapping.get(Bridge_name.getKey()).getNode_ID());
       logger.debug(" Bridge OVS IP: " + bridgemapping.get(Bridge_name.getKey()).getOVSip());
 
-      logger.debug(
-          " Bridge SFs size: " + bridgemapping.get(Bridge_name.getKey()).getSfs().size());
+      logger.debug(" Bridge SFs size: " + bridgemapping.get(Bridge_name.getKey()).getSfs().size());
       logger.debug(
           " Bridge SF dict size: " + bridgemapping.get(Bridge_name.getKey()).getSFdict().size());
 
@@ -1531,8 +1530,7 @@ public class Opendaylight extends SFC {
                 }
               }
               if (new_sf_update == false) {
-                logger.debug(
-                    "NEW SF :::: add sf name " + sf_dicts_list.get(new_sf).getName());
+                logger.debug("NEW SF :::: add sf name " + sf_dicts_list.get(new_sf).getName());
                 int position = temp_sff.getServiceFunctionDictionary().size();
                 logger.debug("NEW SF :::: position :" + position);
 

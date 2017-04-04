@@ -28,14 +28,15 @@ public class RemoveSFCExecutor implements Runnable {
   private String nsrID;
   private Properties properties;
 
-  public RemoveSFCExecutor(String nsrID) throws IOException {
+  public RemoveSFCExecutor(String nsrID, SfcDriverCaller sfcCaller) throws IOException {
     //sfchandler=new SFCcreator();
     this.properties = ConfigReader.readProperties();
 
-    this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
+    //    this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
     this.vnfrs = vnfrs;
     this.nsrID = nsrID;
     this.logger = LoggerFactory.getLogger(this.getClass());
+    this.sfcCaller = sfcCaller;
   }
 
   @Override
@@ -49,7 +50,8 @@ public class RemoveSFCExecutor implements Runnable {
     // boolean response = sfchandler.Delete(nsrID);
     boolean response = false;
     try {
-      response = sfcCaller.Delete(nsrID, properties.getProperty("sfc.sf.deployment.schedulingType"));
+      response =
+          sfcCaller.Delete(nsrID, properties.getProperty("sfc.sf.deployment.schedulingType"));
     } catch (IOException e) {
       e.printStackTrace();
     }

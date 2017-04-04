@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -20,9 +21,9 @@ public interface SFCinterfaces {
 
   void CreateSFC(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict);
 
-  void CreateSFs(HashMap<Integer, VNFdict> vnf_dict) throws IOException;
+  void CreateSFs(Map<Integer, VNFdict> vnf_dict) throws IOException;
 
-  String CreateSFP(SFCdict sfc_dict, HashMap<Integer, VNFdict> vnf_dict);
+  String CreateSFP(SFCdict sfc_dict, Map<Integer, VNFdict> vnf_dict);
 
   ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric);
 

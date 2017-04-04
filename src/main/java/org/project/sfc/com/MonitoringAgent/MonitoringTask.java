@@ -1,5 +1,7 @@
 package org.project.sfc.com.MonitoringAgent;
 
+import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
+import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.openbaton.catalogue.nfvo.Item;
 import org.openbaton.exceptions.MonitoringException;
@@ -10,9 +12,11 @@ import org.openbaton.sdk.api.exception.SDKException;
 import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
+import org.project.sfc.com.SfcRepository.VNFdictRepo;
 import org.project.sfc.com.openbaton_nfvo.utils.ConfigReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +44,15 @@ public class MonitoringTask implements Runnable {
   private int Period;
   private Properties properties;
   private boolean lastVNFR;
+  private VNFdictRepo vnfManag;
 
   public MonitoringTask(
       VirtualNetworkFunctionRecord vnfr,
       String Metric,
       int Period,
       MonitoringEngine monitoringEngine,
-      boolean LastVNFR)
+      boolean LastVNFR,
+      VNFdictRepo vnfrepo)
       throws NotFoundException, IOException {
     this.vnfr = vnfr;
     this.monitoringEngine = monitoringEngine;
@@ -55,18 +61,49 @@ public class MonitoringTask implements Runnable {
     System.out.println("[MonitoringTask] Initializing ");
     this.properties = ConfigReader.readProperties();
     this.lastVNFR = LastVNFR;
+    this.vnfManag=vnfrepo;
   }
 
   public void RegisterMonitoringData(
       VirtualNetworkFunctionRecord vnfr, List<Item> measurementResults)
       throws ClassNotFoundException, SDKException, NotFoundException, VimDriverException {
+    for (VirtualDeploymentUnit vdu:vnfr.getVdu()){
+      for(VNFCInstance vnfc:vdu.getVnfc_instance()){
+        for (Item Measurment : measurementResults) {
+          if(vnfc.getHostname().equals(Measurment.getHostname())){
+            log.debug(" The VNF instance name is matched with the name of vnf name's measrument ");
+            log.debug(" VNFC ID:  "+ vnfc.getId());
 
+            if(vnfManag.exists(vnfc.getId())){
+              log.debug(" The VNF instance is found ");
+              VNFdict vnf=vnfManag.findFirstById(vnfc.getId());
+              vnf.setTrafficLoad(Double.parseDouble(Measurment.getValue()));
+              vnf.setHostNode(monitoringEngine.getLocation(vnfc.getHostname()));
+              vnfManag.update(vnf);
+              log.debug(" The VNF instance is updated by the monitoring information ");
+              log.debug(
+                  "[Register Measurments is done] VNF instance - "
+                  + vnf.getName()
+                  + " -, Traffic Load= "
+                  + vnf.getTrafficLoad()
+                  + " -, Host Node= "
+                  + vnf.getHostNode());
+            }else{
+              log.error(
+                  "[Register Measurments Failed] Can not find Measurments for instance: " + vnfc.getHostname());
+            }
+          }
+        }
+
+      }
+    }
+ /*
     SFC sfc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
     HashMap<String, SFC.SFC_Data> All_SFCs = sfc_db.getAllSFCs();
     List<VNFdict> vnfs = sfc_db.getVNFs(vnfr.getType());
     List<String> Assigned = new ArrayList<String>();
 
-    for (int i = 0; i < vnfs.size(); i++) {
+   for (int i = 0; i < vnfs.size(); i++) {
       for (Item Measurment : measurementResults) {
         if (vnfs.get(i).getName().equals(Measurment.getHostname())
             && !Assigned.contains(vnfs.get(i).getName())) {
@@ -77,12 +114,12 @@ public class MonitoringTask implements Runnable {
           " -, Traffic Load= " +
           vnfs.get(i).getTrafficLoad() +
           " -, Host Node= " +
-          vnfs.get(i).getHostNode());*/
+          vnfs.get(i).getHostNode());
           Assigned.add(vnfs.get(i).getName());
         }
       }
-    }
-    boolean flag = false;
+    }*/
+  /*  boolean flag = false;
     Iterator it = All_SFCs.entrySet().iterator();
     while (it.hasNext()) {
       Map.Entry SFCdata_counter = (Map.Entry) it.next();
@@ -113,7 +150,7 @@ public class MonitoringTask implements Runnable {
     if (flag != true) {
       log.error(
           "[Register Measurments Failed] Can not find Measurments for instance: " + vnfr.getName());
-    }
+    }*/
   }
 
   public void SetSfcTrafficLoad(String SDN_controller_type) throws IOException {
@@ -152,11 +189,11 @@ public class MonitoringTask implements Runnable {
     log.debug("[MonitoringTask] running ");
 
     if (vnfr != null) {
-     log.debug("[MonitoringTask] ");
+      log.debug("[MonitoringTask] ");
 
       List<Item> measurementResults = null;
       try {
-           log.debug("Request measurements for VNFR " + vnfr.getId());
+        log.debug("Request measurements for VNFR " + vnfr.getId());
         measurementResults =
             monitoringEngine.getRawMeasurementResults(
                 vnfr, Metric, Integer.toString(Period)); //get results every 30 sec

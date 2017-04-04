@@ -1,20 +1,20 @@
-package org.project.sfc.com.SfcRepository.SfcManagement;
+package org.project.sfc.com.SfcRepository;
 
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 
 /**
  * Created by mah on 3/21/17.
  */
-public interface VnfManagementInterface {
+public interface VNFdictRepoCustom {
 
   //  This operation allows adding new VNF in the VNF repository. */
-  VNFdict add(VNFdict vnfDict) ;
+  VNFdict add(VNFdict vnfDict);
 
   /** This operation allows deleting an existing VNF from the VNF repository. */
-  void delete(VNFdict vnfDict) ;
+  void remove(VNFdict vnfDict);
 
   /** This operation allows updating the VNF  in the VNF repository. */
-  VNFdict update(VNFdict new_vnf) ;
+  VNFdict update(VNFdict new_vnf);
 
   /**
    * This operation allows querying the information of the VNF in the VNF repository.
@@ -25,4 +25,6 @@ public interface VnfManagementInterface {
    * This operation allows querying the information of VNF in the VNF repository.
    */
   VNFdict query(String id);
+
+  VNFdict findbyName(String name);
 }

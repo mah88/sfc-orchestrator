@@ -6,8 +6,10 @@ package org.project.sfc.com.openbaton_nfvo.openbaton;
 import org.openbaton.catalogue.mano.record.NetworkServiceRecord;
 
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
+import org.project.sfc.com.SfcDriver.SfcDriverCaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 
@@ -24,6 +26,8 @@ public class SFCAllocator {
   private final ScheduledExecutorService qtScheduler = Executors.newScheduledThreadPool(1);
   private Logger logger;
 
+  @Autowired private SfcDriverCaller sfcDriverCaller;
+
   @PostConstruct
   private void init() {
     this.logger = LoggerFactory.getLogger(this.getClass());
@@ -38,7 +42,7 @@ public class SFCAllocator {
             + " to create a Test_SFC at time "
             + new Date().getTime());
     logger.debug("Creating ADD Thread");
-    AddSFCExecutor aqe = new AddSFCExecutor(vnfrs, nsrId);
+    AddSFCExecutor aqe = new AddSFCExecutor(vnfrs, nsrId, sfcDriverCaller);
     qtScheduler.schedule(aqe, 100, TimeUnit.MILLISECONDS);
     logger.info(
         "[Test_SFC-ALLOCATOR] scheduled thread to handle the NSR"
@@ -56,7 +60,7 @@ public class SFCAllocator {
             + " to change SFP at time "
             + new Date().getTime());
     logger.debug("Creating Update Thread");
-    UpdateSFPExecutor aqe = new UpdateSFPExecutor(vnfr);
+    UpdateSFPExecutor aqe = new UpdateSFPExecutor(vnfr, sfcDriverCaller);
     qtScheduler.schedule(aqe, 100, TimeUnit.MILLISECONDS);
     logger.info(
         "[Test_SFC-ALLOCATOR-ChangePath] scheduled thread to handle the VNFR"
@@ -74,7 +78,7 @@ public class SFCAllocator {
             + " to change SFP at time "
             + new Date().getTime());
     logger.debug("Creating Scale Thread");
-    ScaleSFPExecutor aqe = new ScaleSFPExecutor(vnfr);
+    ScaleSFPExecutor aqe = new ScaleSFPExecutor(vnfr, sfcDriverCaller);
     qtScheduler.schedule(aqe, 100, TimeUnit.MILLISECONDS);
     logger.info(
         "[Test_SFC-ALLOCATOR-ScalePaths] scheduled thread to handle the VNFR"
@@ -91,7 +95,7 @@ public class SFCAllocator {
             + " to remove a Test_SFC at time "
             + new Date().getTime());
     logger.debug("Creating REMOVE Thread");
-    RemoveSFCExecutor rqe = new RemoveSFCExecutor(nsrId);
+    RemoveSFCExecutor rqe = new RemoveSFCExecutor(nsrId, sfcDriverCaller);
     qtScheduler.schedule(rqe, 10, TimeUnit.SECONDS);
     logger.info(
         "[Test_SFC-ALLOCATOR] scheduled thread to handle the NSR"

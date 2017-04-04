@@ -53,7 +53,6 @@ public class MonitoringEngine {
 
   private MonitoringManager monitoringManager;
 
-
   public void initializeMonitor() throws NotFoundException {
     log.debug("[Initialize Monitoring Engine]");
     try {
@@ -168,14 +167,14 @@ public class MonitoringEngine {
             + metric
             + ".");
     measurementResults.addAll(monitor.queryPMJob(hostnames, metrics, period));
-     log.debug(
-    "Got all measurement results for vnfr "
-    + vnfr.getId()
-    + " on metric "
-    + metric
-    + " -> "
-    + measurementResults
-    + ".");
+    log.debug(
+        "Got all measurement results for vnfr "
+            + vnfr.getId()
+            + " on metric "
+            + metric
+            + " -> "
+            + measurementResults
+            + ".");
     return measurementResults;
   }
 
@@ -201,12 +200,7 @@ public class MonitoringEngine {
       }
     }
 
-    log.debug(
-    "Got Location for VNF instance "
-    + vnf_instance_name
-    + " -> "
-    + Location
-    + ".");
+    log.debug("Got Location for VNF instance " + vnf_instance_name + " -> " + Location + ".");
     return Location;
   }
 }

@@ -32,13 +32,15 @@ public class AddSFCExecutor implements Runnable {
 
   private NetworkServiceRecord nsr;
 
-  public AddSFCExecutor(Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr)
+  public AddSFCExecutor(
+      Set<VirtualNetworkFunctionRecord> vnfrs, NetworkServiceRecord nsr, SfcDriverCaller sfcCaller)
       throws IOException {
     this.properties = ConfigReader.readProperties();
 
-    this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
+    //    this.sfcCaller = new SfcDriverCaller(properties.getProperty("sfc.driver"));
     this.vnfrs = vnfrs;
     this.nsr = nsr;
+    this.sfcCaller = sfcCaller;
 
     this.logger = LoggerFactory.getLogger(this.getClass());
   }

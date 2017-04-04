@@ -3,6 +3,7 @@ package org.project.sfc.com.SfcInterfaces;
 import org.project.sfc.com.SfcDriver.SfcDriverCaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -14,13 +15,13 @@ import java.io.IOException;
 public abstract class SFC implements SFCinterfaces {
 
   protected Logger log = LoggerFactory.getLogger(this.getClass());
-  protected SfcDriverCaller client;
+  @Autowired protected SfcDriverCaller client;
 
   public SFC() {}
 
   public SFC(String type) throws IOException {
 
-    client = new SfcDriverCaller(type);
+    //    client = new SfcDriverCaller(type);
   }
 
   public SfcDriverCaller getClient() {

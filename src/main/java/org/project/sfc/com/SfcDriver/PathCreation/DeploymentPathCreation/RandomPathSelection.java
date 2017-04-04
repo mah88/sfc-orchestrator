@@ -46,9 +46,12 @@ public class RandomPathSelection {
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
       for (VNFCInstance vnfc_instance : vdu_x.getVnfc_instance()) {
         if (vnfc_instance.getHostname() == VNF_instance_selected) {
+          new_vnf.setId(vnfc_instance.getId());
+
           for (Ip ip : vnfc_instance.getIps()) {
             new_vnf.setIP(ip.getIp());
-            logger.debug("[Select-VNF] Setting the IP  for "+new_vnf.getName() +" : "+new_vnf.getIP());
+            logger.debug(
+                "[Select-VNF] Setting the IP  for " + new_vnf.getName() + " : " + new_vnf.getIP());
 
             new_vnf.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
 
@@ -96,7 +99,6 @@ public class RandomPathSelection {
                 vnf_test.add(new_vnf);
 
                 vnfdicts.put(counter, vnf_test.get(counter));
-
               }
             }
           }
