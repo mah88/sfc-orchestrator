@@ -37,7 +37,7 @@ git clone https://github.com/mah88/sfc-orchestrator.git
 ```
 
 ## Configuration files description:
-# application.properties
+### application.properties
 
 Parameter                                    | Description
 ---------------------------------------------|--------------------------------------------------------------------
@@ -50,7 +50,7 @@ spring.rabbitmq.username                     | Username for authorization of Rab
 spring.rabbitmq.password                     | Password for authorization of RabbitMQ
 logging.level.*                              | Log level of the defined modules
 
-# sfco.properties
+### sfco.properties
 
 Parameter                                    | Description
 ---------------------------------------------|--------------------------------------------------------------------
@@ -168,7 +168,7 @@ image:
 ### Creating the Network Service Descriptor:
 
 Here is the NSD that you can use. It includes the VNF Forwarding Graph Descriptor which includes the Network Forwarding Path and the Policy dedicated to it. 
-The VNFD part of the NSD includes the ids of the VNF Descriptors which are involved in this NSD. The VNFFGD the dependent virtual network links, the Network Forwarding Path and the Involved VNFDs in this VNFFGD. The Network Forwarding Path consists of connection and policy. The connection constructs the order of the Service Functions (VNFs) in the Service Function Chain. The policy consists of the ACL matching criteria that is used to classify the traffic and directs the matched ones to this chain.
+The VNFD part of the NSD includes the ids of the VNF Descriptors which are involved in this NSD. The VNFFGD the dependent virtual network links, the Network Forwarding Path and the Involved VNFDs in this VNFFGD. The Network Forwarding Path consists of connection and policy. The connection constructs the order of the Service Functions (VNFs) in the Service Function Chain. The policy consists of the ACL matching criteria that is used to classify the traffic and directs the matched ones to this chain. The policy is also contains qos_level which is used for identifing the QoS for each chain.
 
 ```json
 {
