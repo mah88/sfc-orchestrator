@@ -38,7 +38,7 @@ git clone https://github.com/mah88/sfc-orchestrator.git
 
 Now the Full System Architecture should look like the following figure:
 
-[https://cloud.githubusercontent.com/assets/16783194/25136571/b3371c82-2455-11e7-8ea7-70ef9693e632.jpg]
+![Full System](https://cloud.githubusercontent.com/assets/16783194/25136571/b3371c82-2455-11e7-8ea7-70ef9693e632.jpg)
 
 ## Configuration files description:
 ### application.properties
