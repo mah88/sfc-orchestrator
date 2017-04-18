@@ -1,5 +1,6 @@
 # SFC ORCHESTRATOR
 
+## Short Intro:
 This project is the first version of SFC Orchestrator that provides SFC Control layer as stated in [IETF SFC working group specs] (https://datatracker.ietf.org/doc/draft-ietf-sfc-control-plane/) and the SFC Management Plane in [ONF SFC specs](https://www.opennetworking.org/images/stories/downloads/sdn-resources/onf-specifications/L4-L7_Service_Function_Chaining_Solution_Architecture.pdf). It manages the Network Service Requests occured by the NFV Orchestrator - [Open Baton](http://openbaton.github.io/) - and translates these requests which include VNF Forwarding Graphs into Service Function Chains and Paths using OpenDaylight SDN Control - [SFC Project](https://wiki.opendaylight.org/view/Service_Function_Chaining:Main) - that provides SFC Data plane functionality.
 
 ## Prerequests 
@@ -41,6 +42,7 @@ Now the Full System Architecture should look like the following figure:
 ![Full System](https://cloud.githubusercontent.com/assets/16783194/25136571/b3371c82-2455-11e7-8ea7-70ef9693e632.jpg)
 
 ## Configuration files description:
+
 ### application.properties
 
 Parameter                                    | Description
