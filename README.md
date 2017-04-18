@@ -5,7 +5,7 @@ This project is the first version of SFC Orchestrator that provides SFC Control 
 ## Prerequests 
 
 1. Open Baton Zabbix plugin running (see the [doc of Zabbix plugin](https://github.com/openbaton/docs/blob/develop/docs/zabbix-plugin.md))
-2. [Open Baton 3.0.1](https://github.com/openbaton/NFVO/tree/3.0.1) running
+2. [Open Baton 3.0.1](https://github.com/openbaton/NFVO/tree/3.0.0) running
 3. [Generic VNFM 3.0.1](https://github.com/openbaton/generic-vnfm/tree/3.0.1) running
 4. [OPNFV Apex deployment with the SFC scenario](http://artifacts.opnfv.org/apex/docs/installation-instructions/index.html)
 5. [mysql server](https://dev.mysql.com/doc/refman/5.7/en/linux-installation.html) running
@@ -17,14 +17,15 @@ In Case you need Auto Scaling:
 
 ## Create the database
 You need root access to mysql-server in order to create a new database called sfco. Once you access into mysql, execute the following operation:
-
+```
 create database sfco;
-
+```
 Once the database has been created, you can create a user which will be used by the SFC Orchestrator to access and store data on the database. If you decide to use the root user you can skip this step. 
 
 Grant the access to the database "sfco", to the user, running the following command:
-
+```
 GRANT ALL PRIVILEGES ON sfco.* TO sfcouser@'%' IDENTIFIED BY 'changeme';
+```
 
 Modify sfco.properties file in order to use different credentials for the database.
 
