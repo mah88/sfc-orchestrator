@@ -38,7 +38,7 @@ git clone https://github.com/mah88/sfc-orchestrator.git
 
 Now the Full System Architecture should look like the following figure:
 
-https://cloud.githubusercontent.com/assets/16783194/25136571/b3371c82-2455-11e7-8ea7-70ef9693e632.jpg
+[https://cloud.githubusercontent.com/assets/16783194/25136571/b3371c82-2455-11e7-8ea7-70ef9693e632.jpg]
 
 ## Configuration files description:
 ### application.properties
@@ -123,10 +123,62 @@ Refering to [Open Baton VNF Packages usage](http://openbaton.github.io/documenta
                     ]
                 }
      
+            ],
+   # In case you need fault management with high availablity, add the following part
+  "fault_management_policy":[
+    {
+      "name":"SERVICE FUNCTION is not reachable",
+      "isVNFAlarm": false,
+      "criteria":[
+      {
+        "parameter_ref":"agent.ping",
+        "function":"nodata(40)",
+        "vnfc_selector":"at_least_one",
+        "comparison_operator":"=",
+        "threshold":"1"
+      }
+      ],
+      "period":20,
+      "severity":"CRITICAL"
+    }
+   ],
+  "high_availability":{
+    "resiliencyLevel":"ACTIVE_STANDBY_STATELESS",
+    "redundancyScheme":"1:N"
+ },
+            "monitoring_parameter":[
+            "agent.ping"
+          ]
+        }
+    ],
+    #In case you need auto scaling policy add the following part
+    "auto_scale_policy": [
+       {
+            "name": "scale-out",
+            "threshold": 100,
+            "period": 30,
+            "cooldown": 90,
+	    "comparisonOperator": ">=",
+            "mode": "REACTIVE",
+            "type": "WEIGHTED",
+            "alarms": [
+                {
+                    "metric": "net.if.in[eth0]", 
+                    "statistic": "max",
+                    "comparisonOperator": ">",
+                    "threshold": 10000000,
+                    "weight": 1
+                }
+            ],
+            "actions": [
+                {
+                    "type": "SCALE_OUT",
+                    "value": "1"
+                }
             ]
         }
-    ]
-      ,
+    ],
+      
     "virtual_link": [
         {
             "name": "test-network"
