@@ -1,7 +1,6 @@
 # SFC ORCHESTRATOR
 
-## Short Intro:
-This project is the first version of SFC Orchestrator that provides SFC Control layer as stated in [IETF SFC working group specs] (https://datatracker.ietf.org/doc/draft-ietf-sfc-control-plane/) and the SFC Management Plane in [ONF SFC specs](https://www.opennetworking.org/images/stories/downloads/sdn-resources/onf-specifications/L4-L7_Service_Function_Chaining_Solution_Architecture.pdf). It manages the Network Service Requests occured by the NFV Orchestrator - [Open Baton](http://openbaton.github.io/) - and translates these requests which include VNF Forwarding Graphs into Service Function Chains and Paths using OpenDaylight SDN Control - [SFC Project](https://wiki.opendaylight.org/view/Service_Function_Chaining:Main) - that provides SFC Data plane functionality.
+This project is the first version of SFC Orchestrator that provides SFC Control layer as stated in [IETF SFC working group specs](https://datatracker.ietf.org/doc/draft-ietf-sfc-control-plane/) and the SFC Management Plane in [ONF SFC specs](https://www.opennetworking.org/images/stories/downloads/sdn-resources/onf-specifications/L4-L7_Service_Function_Chaining_Solution_Architecture.pdf). It manages the Network Service Requests occured by the NFV Orchestrator - [Open Baton](http://openbaton.github.io/) - and translates these requests which include VNF Forwarding Graphs into Service Function Chains and Paths using OpenDaylight SDN Control - [SFC Project](https://wiki.opendaylight.org/view/Service_Function_Chaining:Main) - that provides SFC Data plane functionality.
 
 ## Prerequests 
 
@@ -292,3 +291,8 @@ Now all is ready and when you launch the NSD, the VNFs will be deployed in the c
 
 
 During the Runtime Phase, Scaling-out may occurs or a healing for failed VNF instance is executed. Then the SFC Orchestrator will know about these changes in the network topology and start updating the Chain Paths (SFPs) using one of the SF scheduling algorithm (which is already configured in the properties file as discussed before).
+
+
+## Extensible SFC Orchestrator
+
+SFC Orchestrator uses an abstracted model for SFC, which provides the opportunity for extending the code with different SFC drivers that make use of the APIs provided by [ONOS SFC](https://wiki.onosproject.org/pages/viewpage.action?pageId=4163192) or [Openstack networking-sfc-api](https://docs.openstack.org/developer/networking-sfc/api.html) or any other SFC Implementations.
