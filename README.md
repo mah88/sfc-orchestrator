@@ -7,7 +7,7 @@ This project is the first version of SFC Orchestrator that provides SFC Control 
 1. Open Baton Zabbix plugin running (see the [doc of Zabbix plugin](https://github.com/openbaton/docs/blob/develop/docs/zabbix-plugin.md))
 2. [Open Baton 3.0.1](https://github.com/openbaton/NFVO/tree/3.0.0) running
 3. [Generic VNFM 3.0.0](https://github.com/openbaton/generic-vnfm/tree/3.0.0) running
-4. [OPNFV Apex deployment with the SFC scenario](http://artifacts.opnfv.org/apex/docs/installation-instructions/index.html)
+4. [OPNFV Apex deployment with the SFC scenario](http://artifacts.opnfv.org/apex/docs/installation-instructions/index.html) Or any Openstack deployment has a running [ODL SFC](https://wiki.opendaylight.org/view/Service_Function_Chaining:Main)
 5. [mysql server](https://dev.mysql.com/doc/refman/5.7/en/linux-installation.html) running
 
 In Case you need Fault Management:
