@@ -9,9 +9,13 @@ This project is the first version of SFC Orchestrator that provides SFC Control 
 3. [Generic VNFM 3.0.0](https://github.com/openbaton/generic-vnfm/tree/3.0.0) running
 4. [OPNFV Apex deployment with the SFC scenario](http://artifacts.opnfv.org/apex/docs/installation-instructions/index.html)
 5. [mysql server](https://dev.mysql.com/doc/refman/5.7/en/linux-installation.html) running
+
 In Case you need Fault Management:
+
 6. [Open Baton Fault Management](https://github.com/openbaton/fm-system) running
+
 In Case you need Auto Scaling:
+
 7. [Open Baton AutoScaling Engine](https://github.com/openbaton/autoscaling-engine) running
 
 
