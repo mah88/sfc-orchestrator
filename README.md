@@ -88,6 +88,14 @@ Starting the SFC Orchestrator using the provided script with the following comma
 `````
 ./sfc-orch.sh start
 `````
+The SFC Orchestrator will registers four events in the NFVO:
+
+Event                                    | Description
+-----------------------------------------|--------------------------------------------------------------------
+SFC-event-NSR-Created                    | When event INSTANTIATE_FINISH is triggered in the NFVO, it informs the SFC Orchestrator about it with the NSR details in order to create the required SFCs in this NS.
+SFC-event-NSR-Relased                    | When event RELEASE_RESOURCES_FINISH is triggered in the NFVO, it informs the SFC Orchestrator about it with the NSR details in order to remove all SFCs created for this NS.
+SFC-event-VNF-Scaled                     | When event SCALED is triggered in the NFVO, it informs the SFC Orchestrator about it with the VNF Record details in order to update all SFCs involves that VNF.
+SFC-event-VNF-Healed                     | When event HEAL is triggered in the NFVO, it informs the SFC Orchestrator about it with the VNF Record details in order to update all SFCs involves that VNF.                
 
 ## How to use it 
 
@@ -124,34 +132,32 @@ Refering to [Open Baton VNF Packages usage](http://openbaton.github.io/documenta
                 }
      
             ],
-   # In case you need fault management with high availablity, add the following part
-  "fault_management_policy":[
-    {
-      "name":"SERVICE FUNCTION is not reachable",
-      "isVNFAlarm": false,
-      "criteria":[
-      {
-        "parameter_ref":"agent.ping",
-        "function":"nodata(40)",
-        "vnfc_selector":"at_least_one",
-        "comparison_operator":"=",
-        "threshold":"1"
-      }
-      ],
-      "period":20,
-      "severity":"CRITICAL"
-    }
-   ],
-  "high_availability":{
-    "resiliencyLevel":"ACTIVE_STANDBY_STATELESS",
-    "redundancyScheme":"1:N"
- },
-            "monitoring_parameter":[
-            "agent.ping"
-          ]
-        }
-    ],
-    #In case you need auto scaling policy add the following part
+        "fault_management_policy":[
+            {
+                 "name":"SERVICE FUNCTION is not reachable",
+                 "isVNFAlarm": false,
+                 "criteria":[
+                               {
+                                  "parameter_ref":"agent.ping",
+                                  "function":"nodata(40)",
+                                  "vnfc_selector":"at_least_one",
+                                  "comparison_operator":"=",
+                                  "threshold":"1"
+                                }
+                            ],
+                 "period":20,
+                 "severity":"CRITICAL"
+               }
+             ],
+        "high_availability":{
+        "resiliencyLevel":"ACTIVE_STANDBY_STATELESS",
+        "redundancyScheme":"1:N"
+          },
+         "monitoring_parameter":[
+              "agent.ping"
+             ]
+           }
+         ],
     "auto_scale_policy": [
        {
             "name": "scale-out",
@@ -283,4 +289,4 @@ The VNFD part of the NSD includes the ids of the VNF Descriptors which are invol
 Now all is ready and when you launch the NSD, the VNFs will be deployed in the cloud network and an Event of Instantiate Finish will appears at the NFV Orchestrator which means that the SFC Orchestrator will start deploying the chain in the network.
 
 
-
+During the Runtime Phase, Scaling-out may occurs or a healing for failed VNF instance is executed. Then the SFC Orchestrator will know about these changes in the network topology and start updating the Chain Paths (SFPs) using one of the SF scheduling algorithm (which is already configured in the properties file as discussed before).
