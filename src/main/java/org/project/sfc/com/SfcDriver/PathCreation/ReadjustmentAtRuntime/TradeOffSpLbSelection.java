@@ -4,13 +4,25 @@ import org.openbaton.catalogue.mano.common.Ip;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
-import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
+import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
+import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SFPdict;
+import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
+import org.project.sfc.com.SfcModel.SFCdict.Status;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
+import org.project.sfc.com.SfcRepository.SFCCdictRepo;
+import org.project.sfc.com.SfcRepository.SFCdictRepo;
+import org.project.sfc.com.SfcRepository.SFPdictRepo;
+import org.project.sfc.com.SfcRepository.VNFdictRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,20 +32,35 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Created by mah on 1/26/17.
  */
+@Service
+@ConfigurationProperties
 public class TradeOffSpLbSelection {
 
   NeutronClient NC;
-  SFC sfcc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
+  // SFC sfcc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
   org.project.sfc.com.SfcInterfaces.SFC SFC_driver;
   org.project.sfc.com.SfcInterfaces.SFCclassifier SFC_Classifier_driver;
   SfcBroker broker = new SfcBroker();
   private static Map<String, Map<String, Integer>> mapCountLoad = new HashMap<>();
   private Logger logger;
+  @Autowired private VNFdictRepo vnfManag;
+  @Autowired private SFCdictRepo sfcManag;
+  @Autowired private SFCCdictRepo classiferManag;
+  @Autowired private SFPdictRepo sfpManag;
 
-  public TradeOffSpLbSelection(String type) throws IOException {
+  @Value("${sfc.driver:ODL}")
+  private String type;
+
+  @Value("${sfc.sf.loadthreshold:1000000}")
+  private String LoadThreshold;
+
+  @PostConstruct
+  public void init() throws IOException {
 
     this.SFC_driver = broker.getSFC(type);
     this.SFC_Classifier_driver = broker.getSfcClassifier(type);
@@ -44,9 +71,9 @@ public class TradeOffSpLbSelection {
   public void ReadjustVNFsAllocation(VirtualNetworkFunctionRecord vnfr) throws IOException {
     logger.info("[ReadJust VNFs Allocation] using tradeoff Selection Algorithm ");
 
-    HashMap<String, SFC.SFC_Data> All_SFCs = sfcc_db.getAllSFCs();
-    HashMap<String, SFC.SFC_Data> Involved_SFCs = new HashMap<String, SFC.SFC_Data>();
-    int total_size_SFCs;
+    Iterable<SfcDict> All_SFCs = sfcManag.query();
+    HashMap<String, SfcDict> Involved_SFCs = new HashMap<String, SfcDict>();
+    long total_size_SFCs;
     Map<String, Double> alpha = new HashMap<>(); //Alpha value per  VNF instance
 
     double MaxSfcPriority = 3;
@@ -54,8 +81,8 @@ public class TradeOffSpLbSelection {
     double MaxLoad = Double.MIN_VALUE;
 
     if (All_SFCs != null) {
-      logger.debug("[ ALL SFCs number ] =  " + All_SFCs.size());
-      total_size_SFCs = All_SFCs.size();
+      logger.debug("[ ALL SFCs number ] =  " + sfcManag.count());
+      total_size_SFCs = sfcManag.count();
     } else {
       total_size_SFCs = 0;
       logger.debug("SFC Data base is Empty : Can not get the stored chains data  ");
@@ -63,22 +90,29 @@ public class TradeOffSpLbSelection {
     logger.debug("[ReadJust VNFs Allocation] Get Involved SFCs for this VNF ");
 
     //Get Involved SFCs for this VNF
-    Iterator it = All_SFCs.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry SFCdata_counter = (Map.Entry) it.next();
-      HashMap<Integer, VNFdict> VNFs = All_SFCs.get(SFCdata_counter.getKey()).getChainSFs();
+    //Iterator it = All_SFCs.entrySet().iterator();
+    // while (it.hasNext()) {
+
+    Map<String, Boolean> Involved = new HashMap<String, Boolean>();
+    for (SfcDict sfcData : All_SFCs) {
+      boolean flag = false;
+
+      // Map.Entry SFCdata_counter = (Map.Entry) it.next();
+      Map<Integer, VNFdict> VNFs = sfcData.getPaths().get(0).getPath_SFs();
       Iterator vnfs_count = VNFs.entrySet().iterator();
       while (vnfs_count.hasNext()) {
         Map.Entry VNFcounter = (Map.Entry) vnfs_count.next();
         if (VNFs.get(VNFcounter.getKey()).getType().equals(vnfr.getType())) {
-          Involved_SFCs.put(
-              All_SFCs.get(SFCdata_counter.getKey()).getRspID(),
-              All_SFCs.get(SFCdata_counter.getKey()));
-          logger.debug(
-              "[Tradeoff Path Selection] Involved SFCs :  "
-                  + All_SFCs.get(SFCdata_counter.getKey()).getRspID());
+          Involved_SFCs.put(sfcData.getInstanceId(), sfcData);
+          logger.debug("[Tradeoff Path Selection] Involved SFCs :  " + sfcData.getInstanceId());
+          flag = true;
+          logger.debug(" INVOLVED  SFC");
         }
       }
+
+      Involved.put(sfcData.getId(), flag);
+
+      SFC_driver.DeleteSFP(sfcData.getInstanceId(), sfcData.getSymmetrical());
     }
 
     if (Involved_SFCs.size() > 0) {
@@ -90,9 +124,7 @@ public class TradeOffSpLbSelection {
         Map.Entry Key = (Map.Entry) itr.next();
         logger.debug(
             "[Deleting Involved SFCs ] Involved SFCs :  "
-                + Involved_SFCs.get(Key.getKey()).getRspID());
-        SFC_driver.DeleteSFP(
-            Involved_SFCs.get(Key.getKey()).getRspID(), Involved_SFCs.get(Key.getKey()).isSymm());
+                + Involved_SFCs.get(Key.getKey()).getInstanceId());
       }
       Iterator c = Involved_SFCs.entrySet().iterator();
 
@@ -101,24 +133,19 @@ public class TradeOffSpLbSelection {
         List<VNFdict> VNF_instances = new ArrayList<>();
         Map.Entry SFCKey = (Map.Entry) c.next();
 
-        HashMap<Integer, VNFdict> ChainSFs = Involved_SFCs.get(SFCKey.getKey()).getChainSFs();
+        Map<Integer, VNFdict> ChainSFs =
+            Involved_SFCs.get(SFCKey.getKey()).getPaths().get(0).getPath_SFs();
         Iterator vnfs_count = ChainSFs.entrySet().iterator();
         VNFdict Previous_vnf = new VNFdict();
         boolean foundVNF = false;
-        double SfcPriority =
-            Involved_SFCs.get(SFCKey.getKey())
-                .getSFCdictInfo()
-                .getSfcDict()
-                .getPaths()
-                .get(0)
-                .getQoS();
-
+        double SfcPriority = Involved_SFCs.get(SFCKey.getKey()).getPaths().get(0).getQoS();
+        logger.debug("[SFC Priority] =  " + SfcPriority);
         for (int position : ChainSFs.keySet()) {
           double LoadSum = 0; // Summation of the Load per SF type
 
           // Calculating the Maximum Distance
           // List<VNFdict> SF_instances=getSFs(ChainSFs.get(position).getType());
-          List<VNFdict> SF_instances = sfcc_db.getVNFs(ChainSFs.get(position).getType());
+          List<VNFdict> SF_instances = vnfManag.findbyType(ChainSFs.get(position).getType());
           logger.debug(
               "(*<**>*) VNFs size is :"
                   + SF_instances.size()
@@ -199,7 +226,7 @@ public class TradeOffSpLbSelection {
           if (foundVNF == true) {
             VNFdict SelectedVNFdict = new VNFdict();
             //List<VNFdict> SFs=getSFs(ChainSFs.get(position).getType());
-            List<VNFdict> SFs = sfcc_db.getVNFs(ChainSFs.get(position).getType());
+            List<VNFdict> SFs = vnfManag.findbyType(ChainSFs.get(position).getType());
             double minIndex = Double.MAX_VALUE;
             int Pathlength;
             double Index;
@@ -270,100 +297,118 @@ public class TradeOffSpLbSelection {
             // if (SFposition > 0) {
             for (VirtualDeploymentUnit vdu : vnfr.getVdu()) {
               for (VNFCInstance vnfc : vdu.getVnfc_instance()) {
-                String currentVNFName = vnfc.getHostname();
-                logger.debug("[Current VNF] Name: " + currentVNFName);
+                if (vnfc.getState().equals("ACTIVE")) {
+                  String currentVNFName = vnfc.getHostname();
+                  logger.debug("[Current VNF] Name: " + currentVNFName);
 
-                double Load = 0;
+                  double Load = 0;
 
-                if (SFposition > 0) {
-                  VNFdict prev_vnf = ChainSFs.get(SFposition - 1);
-                  logger.debug("[Previous VNF] Name: " + prev_vnf.getName());
-                  Pathlength = getDistance(prev_vnf.getName(), currentVNFName);
-                } else {
-                  Pathlength = getDistanceFirstHOP(currentVNFName);
-                }
-                // if(ChainSFs.get(SFposition).getName().equals(currentVNFName)){
-                int size = sfcc_db.getVNFs(ChainSFs.get(position).getType()).size();
-                for (int u = 0; u < size; u++) {
-                  if (sfcc_db
-                      .getVNFs(ChainSFs.get(position).getType())
-                      .get(u)
-                      .getName()
-                      .equals(vnfc.getHostname())) {
-                    logger.debug("[CURRENT VNF] Name is found in the Chains : " + currentVNFName);
-
-                    Load =
-                        sfcc_db.getVNFs(ChainSFs.get(position).getType()).get(u).getTrafficLoad();
+                  if (SFposition > 0) {
+                    VNFdict prev_vnf = ChainSFs.get(SFposition - 1);
+                    logger.debug("[Previous VNF] Name: " + prev_vnf.getName());
+                    Pathlength = getDistance(prev_vnf.getName(), currentVNFName);
+                  } else {
+                    Pathlength = getDistanceFirstHOP(currentVNFName);
                   }
-                }
-                //   }
+                  // if(ChainSFs.get(SFposition).getName().equals(currentVNFName)){
+                  int size = vnfManag.findbyType(ChainSFs.get(position).getType()).size();
+                  for (int u = 0; u < size; u++) {
+                    if (vnfManag
+                        .findbyType(ChainSFs.get(position).getType())
+                        .get(u)
+                        .getName()
+                        .equals(vnfc.getHostname())) {
+                      logger.debug("[CURRENT VNF] Name is found in the Chains : " + currentVNFName);
 
-                logger.debug("[CURRENT VNF] LOAD = : " + Load);
+                      Load =
+                          vnfManag
+                              .findbyType(ChainSFs.get(position).getType())
+                              .get(u)
+                              .getTrafficLoad();
+                    }
+                  }
+                  //   }
 
-                double alpha_value;
-                if (alpha.containsKey(currentVNFName)) {
-                  alpha_value = alpha.get(currentVNFName);
-                  logger.debug(
-                      " The VNF instance  aplha value= "
-                          + alpha_value
-                          + " for SF Instance : "
-                          + currentVNFName);
+                  logger.debug("[CURRENT VNF] LOAD = : " + Load);
 
-                } else {
-                  alpha_value = 0.5 + (SfcPriority / (2 * (MaxSfcPriority)));
-                  logger.debug(
-                      " The New VNF instance  aplha value= "
-                          + alpha_value
-                          + " for SF Instance : "
-                          + currentVNFName);
-                }
+                  double alpha_value;
+                  if (alpha.containsKey(currentVNFName)) {
+                    alpha_value = alpha.get(currentVNFName);
+                    logger.debug(
+                        " The VNF instance  aplha value= "
+                            + alpha_value
+                            + " for SF Instance : "
+                            + currentVNFName);
+                  } else {
+                    alpha_value = 0.5 + (SfcPriority / (2 * (MaxSfcPriority)));
+                    logger.debug(
+                        " The New VNF instance  aplha value= "
+                            + alpha_value
+                            + " for SF Instance : "
+                            + currentVNFName);
+                  }
 
-                if (MaxDistance > 0 && MaxLoad > 0) {
-                  logger.debug("==> Max Disance > 0 and Max Load > 0 ");
-                  Index =
-                      ((double) ((1 - alpha_value) * Load) / MaxLoad)
-                          + ((double) (alpha_value * Pathlength) / MaxDistance);
-                  logger.debug(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
-                } else if (MaxLoad > 0) {
-                  logger.debug("==> Max Load > 0 ");
-                  Index = ((double) ((1 - alpha_value) * Load) / MaxLoad);
-                  logger.debug(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
-                } else if (MaxDistance > 0) {
-                  logger.debug("==> Max Disance > 0  ");
-                  Index = ((double) (alpha_value * Pathlength) / MaxDistance);
-                  logger.debug(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
-                } else {
-                  logger.debug("==> Max Disance = 0 and Max Load = 0 ");
+                  if (MaxDistance > 0 && MaxLoad > 0) {
+                    logger.debug("==> Max Disance > 0 and Max Load > 0 ");
+                    Index =
+                        ((double) ((1 - alpha_value) * Load) / MaxLoad)
+                            + ((double) (alpha_value * Pathlength) / MaxDistance);
+                    logger.debug(
+                        " Index Value = " + Index + " for SF Instance : " + currentVNFName);
+                  } else if (MaxLoad > 0) {
+                    logger.debug("==> Max Load > 0 ");
+                    Index = ((double) ((1 - alpha_value) * Load) / MaxLoad);
+                    logger.debug(
+                        " Index Value = " + Index + " for SF Instance : " + currentVNFName);
+                  } else if (MaxDistance > 0) {
+                    logger.debug("==> Max Disance > 0  ");
+                    Index = ((double) (alpha_value * Pathlength) / MaxDistance);
+                    logger.debug(
+                        " Index Value = " + Index + " for SF Instance : " + currentVNFName);
+                  } else {
+                    logger.debug("==> Max Disance = 0 and Max Load = 0 ");
 
-                  Index = 1 - alpha_value;
-                  logger.debug(" Index Value = " + Index + " for SF Instance : " + currentVNFName);
-                }
-                if (Index < minIndex && (Load <= 10000000 || SfcPriority == MaxSfcPriority)) {
-                  logger.debug(
-                      " LOAD = "
-                          + Load
-                          + "and SFC PRIORITY = "
-                          + SfcPriority
-                          + " --> for SF Instance : "
-                          + currentVNFName);
-                  minIndex = Index;
-                  SelectedVNFdict.setName(currentVNFName);
-                  SelectedVNFdict.setType(vnfr.getType());
-                  for (Ip ip : vnfc.getIps()) {
-                    SelectedVNFdict.setIP(ip.getIp());
+                    Index = 1 - alpha_value;
+                    logger.debug(
+                        " Index Value = " + Index + " for SF Instance : " + currentVNFName);
+                  }
+                  logger.debug(" Load Threshold = " + Double.valueOf(LoadThreshold));
+                  logger.debug(" min Index = " + minIndex);
+                  logger.debug(" sfc  priority = " + SfcPriority);
 
-                    SelectedVNFdict.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
-                    break;
+                  if (Index < minIndex
+                      && (Load <= Double.valueOf(LoadThreshold) || SfcPriority == MaxSfcPriority)) {
+                    logger.debug(
+                        " LOAD = "
+                            + Load
+                            + "and SFC PRIORITY = "
+                            + SfcPriority
+                            + " --> for SF Instance : "
+                            + currentVNFName);
+                    minIndex = Index;
+                    SelectedVNFdict = vnfManag.findbyName(currentVNFName);
+                    /*SelectedVNFdict.setName(currentVNFName);
+                    SelectedVNFdict.setType(vnfr.getType());
+                    for (Ip ip : vnfc.getIps()) {
+                      SelectedVNFdict.setIP(ip.getIp());
+
+                      SelectedVNFdict.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
+                      break;
+                    }*/
                   }
                 }
               }
             }
+            logger.info("[selected SF] Selected VNF : ");
+
+            logger.info("[selected SF] Selected VNF : " + SelectedVNFdict.getName());
 
             VNF_instances.add(SelectedVNFdict);
 
             foundVNF = true;
             Previous_vnf = SelectedVNFdict;
-            logger.info("[SF-Selections] Selected VNF : " + SelectedVNFdict.getName());
+            logger.info("[SF-Selections] Selected VNF NAME : " + SelectedVNFdict.getName());
+            logger.info("[SF-Selections] Selected VNF ID : " + SelectedVNFdict.getId());
 
             /*   } else {
               System.out.println("[Read Just VNFs Allocation] Select first HOP ]");
@@ -386,8 +431,41 @@ public class TradeOffSpLbSelection {
         logger.info("[UPDATING Chain Paths finished]");
       }
     }
-  }
+    logger.debug("[Update the not Involved SFCs]");
 
+    Iterator inv_itr = Involved.entrySet().iterator();
+    while (inv_itr.hasNext()) {
+
+      Map.Entry Key = (Map.Entry) inv_itr.next();
+
+      String SFC_ID = (String) Key.getKey();
+      Boolean involved = Involved.get(Key.getKey());
+      logger.debug("[Involved SFCs ? ] SFC ID " + SFC_ID + " ? " + involved);
+
+      if (involved == false) {
+        Map<Integer, VNFdict> Path_SFs =
+            sfcManag.findFirstById(SFC_ID).getPaths().get(0).getPath_SFs();
+        Iterator path_itr = Path_SFs.entrySet().iterator();
+        List<VNFdict> pathVNFs = new ArrayList<>();
+        while (path_itr.hasNext()) {
+          Map.Entry PathKey = (Map.Entry) path_itr.next();
+          pathVNFs.add(Path_SFs.get(PathKey.getKey()));
+        }
+        logger.debug("==> Do the Update to the chain with  ID " + SFC_ID);
+
+        UpdateChain(sfcManag.findFirstById(SFC_ID), pathVNFs);
+      }
+    }
+    List<VNFdict> vnf_list = vnfManag.findAllbyType(vnfr.getType());
+
+    for (int i = 0; i < vnf_list.size(); i++) {
+      if (vnf_list.get(i).getStatus() == Status.INACTIVE) {
+        vnfManag.delete(vnf_list.get(i));
+        logger.debug("Removed the VNF instance: " + vnf_list.get(i) + " from the data base");
+      }
+    }
+  }
+  /*
   private List<VNFdict> getSFs(String SF_TYPE) {
 
     HashMap<String, SFC.SFC_Data> All_SFCs = sfcc_db.getAllSFCs();
@@ -412,9 +490,10 @@ public class TradeOffSpLbSelection {
 
     return SFsList;
   }
+  */
 
   private VNFdict SelectFirstHop(VirtualNetworkFunctionRecord vnfr) {
-    List<VNFdict> SFs = sfcc_db.getVNFs(vnfr.getType());
+    List<VNFdict> SFs = vnfManag.findbyType(vnfr.getType());
     double minLoad = Double.MAX_VALUE;
     double Load = 0;
     VNFdict FirstHop = new VNFdict();
@@ -508,11 +587,11 @@ public class TradeOffSpLbSelection {
     return distance;
   }
 
-  private void UpdateChain(SFC.SFC_Data Chain_Data, List<VNFdict> VNF_instances) {
+  private void UpdateChain(SfcDict Chain_Data, List<VNFdict> VNF_instances) {
 
     logger.info("[ TDL Path Selection < Create Chain > ]  ");
 
-    HashMap<Integer, VNFdict> VNFs = Chain_Data.getChainSFs();
+    Map<Integer, VNFdict> VNFs = Chain_Data.getPaths().get(0).getPath_SFs();
     Iterator count = VNFs.entrySet().iterator();
     logger.debug("[ TDL Path Selection < Create Chain > ] SIZE of VNFs  " + VNFs.size());
 
@@ -539,40 +618,49 @@ public class TradeOffSpLbSelection {
       }
     }
 
-    Chain_Data.setChainSFs(VNFs);
+    Chain_Data.getPaths().get(0).setPath_SFs(VNFs);
 
     List<SFPdict> newPaths = new ArrayList<>();
-    SFPdict newPath = Chain_Data.getSFCdictInfo().getSfcDict().getPaths().get(0);
+    SFPdict newPath = Chain_Data.getPaths().get(0);
     newPath.setPath_SFs(VNFs);
-    double PathTrafficLoad =
-        Chain_Data.getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
+    double PathTrafficLoad = Chain_Data.getPaths().get(0).getPathTrafficLoad();
     newPath.setOldTrafficLoad(PathTrafficLoad);
 
     newPaths.add(0, newPath);
 
-    Chain_Data.getSFCdictInfo().getSfcDict().setPaths(newPaths);
+    Chain_Data.setPaths(newPaths);
 
     //SFC_driver.DeleteSFP(Chain_Data.getRspID(), Chain_Data.isSymm());
+    SFCdict sfc_info = new SFCdict();
+    sfc_info.setSfcDict(Chain_Data);
 
-    String new_instance_id = SFC_driver.CreateSFP(Chain_Data.getSFCdictInfo(), VNFs);
+    String new_instance_id = SFC_driver.CreateSFP(sfc_info, VNFs);
 
-    String SFCC_name =
-        SFC_Classifier_driver.Create_SFC_Classifer(Chain_Data.getClassifierInfo(), new_instance_id);
+    //String SFCC_name =
+    //  SFC_Classifier_driver.Create_SFC_Classifer(Chain_Data.getClassifierInfo(), new_instance_id);
 
-    logger.debug("[NEW Classifier updated ] " + SFCC_name);
-    logger.debug("[Update SFCC DB] " + Chain_Data.getRspID().substring(5));
-    String IDx = Chain_Data.getRspID().substring(5);
+    logger.debug("[Update SFCC DB] " + Chain_Data.getInstanceId().substring(5));
+    String IDx = Chain_Data.getInstanceId().substring(5);
 
     String VNFFGR_ID = IDx.substring(IDx.indexOf('-') + 1);
 
-    sfcc_db.update(
-        VNFFGR_ID,
-        new_instance_id,
-        Chain_Data.getSfccName(),
-        Chain_Data.getSFCdictInfo().getSfcDict().getSymmetrical(),
-        VNFs,
-        Chain_Data.getSFCdictInfo(),
-        Chain_Data.getClassifierInfo());
-    logger.info("[Update SFCC DB] is done !!");
+    String SFCC_name =
+        SFC_Classifier_driver.Create_SFC_Classifer(
+            classiferManag.query("sfcc-" + VNFFGR_ID), new_instance_id);
+
+    logger.debug("[NEW Classifier Updated ] " + SFCC_name);
+
+    logger.debug("[new instance id ] =  " + new_instance_id);
+    SFCCdict updated_classifier = classiferManag.query("sfcc-" + VNFFGR_ID);
+    updated_classifier.setInstanceId(new_instance_id);
+    Chain_Data.setInstanceId(new_instance_id);
+    classiferManag.update(updated_classifier);
+    sfpManag.update(newPath);
+    sfcManag.update(Chain_Data);
+
+    logger.info("[NEW Classifier Updated ] " + SFCC_name);
+    logger.info("[new instance id ] =  " + new_instance_id);
+
+    logger.info("[Update DB] is done !!");
   }
 }

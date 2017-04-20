@@ -9,7 +9,6 @@ import org.openbaton.exceptions.NotFoundException;
 
 import org.openbaton.exceptions.VimDriverException;
 import org.openbaton.sdk.api.exception.SDKException;
-import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.project.sfc.com.SfcRepository.VNFdictRepo;
@@ -61,65 +60,65 @@ public class MonitoringTask implements Runnable {
     System.out.println("[MonitoringTask] Initializing ");
     this.properties = ConfigReader.readProperties();
     this.lastVNFR = LastVNFR;
-    this.vnfManag=vnfrepo;
+    this.vnfManag = vnfrepo;
   }
 
   public void RegisterMonitoringData(
       VirtualNetworkFunctionRecord vnfr, List<Item> measurementResults)
       throws ClassNotFoundException, SDKException, NotFoundException, VimDriverException {
-    for (VirtualDeploymentUnit vdu:vnfr.getVdu()){
-      for(VNFCInstance vnfc:vdu.getVnfc_instance()){
+    for (VirtualDeploymentUnit vdu : vnfr.getVdu()) {
+      for (VNFCInstance vnfc : vdu.getVnfc_instance()) {
         for (Item Measurment : measurementResults) {
-          if(vnfc.getHostname().equals(Measurment.getHostname())){
+          if (vnfc.getHostname().equals(Measurment.getHostname())) {
             log.debug(" The VNF instance name is matched with the name of vnf name's measrument ");
-            log.debug(" VNFC ID:  "+ vnfc.getId());
+            log.debug(" VNFC ID:  " + vnfc.getId());
 
-            if(vnfManag.exists(vnfc.getId())){
+            if (vnfManag.exists(vnfc.getId())) {
               log.debug(" The VNF instance is found ");
-              VNFdict vnf=vnfManag.findFirstById(vnfc.getId());
+              VNFdict vnf = vnfManag.findFirstById(vnfc.getId());
               vnf.setTrafficLoad(Double.parseDouble(Measurment.getValue()));
               vnf.setHostNode(monitoringEngine.getLocation(vnfc.getHostname()));
               vnfManag.update(vnf);
               log.debug(" The VNF instance is updated by the monitoring information ");
               log.debug(
                   "[Register Measurments is done] VNF instance - "
-                  + vnf.getName()
-                  + " -, Traffic Load= "
-                  + vnf.getTrafficLoad()
-                  + " -, Host Node= "
-                  + vnf.getHostNode());
-            }else{
+                      + vnf.getName()
+                      + " -, Traffic Load= "
+                      + vnf.getTrafficLoad()
+                      + " -, Host Node= "
+                      + vnf.getHostNode());
+            } else {
               log.error(
-                  "[Register Measurments Failed] Can not find Measurments for instance: " + vnfc.getHostname());
+                  "[Register Measurments Failed] Can not find Measurments for instance: "
+                      + vnfc.getHostname());
             }
           }
         }
-
       }
     }
- /*
-    SFC sfc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
-    HashMap<String, SFC.SFC_Data> All_SFCs = sfc_db.getAllSFCs();
-    List<VNFdict> vnfs = sfc_db.getVNFs(vnfr.getType());
-    List<String> Assigned = new ArrayList<String>();
+    /*
+     SFC sfc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
+     HashMap<String, SFC.SFC_Data> All_SFCs = sfc_db.getAllSFCs();
+     List<VNFdict> vnfs = sfc_db.getVNFs(vnfr.getType());
+     List<String> Assigned = new ArrayList<String>();
 
-   for (int i = 0; i < vnfs.size(); i++) {
-      for (Item Measurment : measurementResults) {
-        if (vnfs.get(i).getName().equals(Measurment.getHostname())
-            && !Assigned.contains(vnfs.get(i).getName())) {
-          vnfs.get(i).setTrafficLoad(Double.parseDouble(Measurment.getValue()));
-          vnfs.get(i).setHostNode(monitoringEngine.getLocation(vnfs.get(i).getName()));
-          /* log.info("[Register Measurments is done to the VNFs] VNF instance - " +
-          vnfs.get(i).getName() +
-          " -, Traffic Load= " +
-          vnfs.get(i).getTrafficLoad() +
-          " -, Host Node= " +
-          vnfs.get(i).getHostNode());
-          Assigned.add(vnfs.get(i).getName());
-        }
-      }
-    }*/
-  /*  boolean flag = false;
+    for (int i = 0; i < vnfs.size(); i++) {
+       for (Item Measurment : measurementResults) {
+         if (vnfs.get(i).getName().equals(Measurment.getHostname())
+             && !Assigned.contains(vnfs.get(i).getName())) {
+           vnfs.get(i).setTrafficLoad(Double.parseDouble(Measurment.getValue()));
+           vnfs.get(i).setHostNode(monitoringEngine.getLocation(vnfs.get(i).getName()));
+           /* log.info("[Register Measurments is done to the VNFs] VNF instance - " +
+           vnfs.get(i).getName() +
+           " -, Traffic Load= " +
+           vnfs.get(i).getTrafficLoad() +
+           " -, Host Node= " +
+           vnfs.get(i).getHostNode());
+           Assigned.add(vnfs.get(i).getName());
+         }
+       }
+     }*/
+    /*  boolean flag = false;
     Iterator it = All_SFCs.entrySet().iterator();
     while (it.hasNext()) {
       Map.Entry SFCdata_counter = (Map.Entry) it.next();
@@ -153,13 +152,14 @@ public class MonitoringTask implements Runnable {
     }*/
   }
 
+  // NEEd to be Fixed
   public void SetSfcTrafficLoad(String SDN_controller_type) throws IOException {
     SfcBroker broker = new SfcBroker();
     org.project.sfc.com.SfcInterfaces.SFC SFC_driver;
     SFC_driver = broker.getSFC(SDN_controller_type);
 
-    SFC sfc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
-    HashMap<String, SFC.SFC_Data> All_SFCs = sfc_db.getAllSFCs();
+    /* SFC sfc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
+    HashMap<String, Sfcdict> All_SFCs = sfc_db.getAllSFCs();
     Iterator it = All_SFCs.entrySet().iterator();
 
     HashMap<String, List<String>> InvolvedServices = new HashMap<String, List<String>>();
@@ -181,7 +181,7 @@ public class MonitoringTask implements Runnable {
             All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).setPathTrafficLoad(Double.parseDouble(BytesCount)+oldtafficLoad);
             log.info("Updated Path TRAFFIC LOAD ==>  " + All_SFCs.get(SFCdata_counter.getKey()).getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad());
       */
-    }
+    //  }
   }
 
   @Override

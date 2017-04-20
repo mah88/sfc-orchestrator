@@ -13,9 +13,7 @@ import org.openbaton.catalogue.nfvo.Network;
 import org.openbaton.catalogue.nfvo.VimInstance;
 import org.openbaton.exceptions.NotFoundException;
 import org.project.sfc.com.MonitoringAgent.MonitoringManager;
-import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.openbaton_nfvo.configurations.NfvoConfiguration;
-//import org.project.sfc.com.openbaton_nfvo.configurations.SfcConfiguration;
 import org.project.sfc.com.openbaton_nfvo.openbaton.OpenbatonEvent;
 import org.project.sfc.com.openbaton_nfvo.utils.ConfigReader;
 import org.project.sfc.com.openbaton_nfvo.utils.ConfigurationBeans;
@@ -155,18 +153,18 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
         creator.addSFtoChain(nsr.getVnfr(), nsr);
         boolean lastvnfr = false;
         int VNFR_counter = 0;
-       for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
-                  try {
-                    if (VNFR_counter == nsr.getVnfr().size() - 1) {
-                      lastvnfr = true;
-                    }
-                    monitoringManager.start(
-                        vnfr, properties.getProperty("sf.monitoring.item"), 10, lastvnfr);
-                  } catch (NotFoundException e) {
-                    logger.error(e.getMessage(), e);
-                  }
-                  VNFR_counter++;
-                }
+        for (VirtualNetworkFunctionRecord vnfr : nsr.getVnfr()) {
+          try {
+            if (VNFR_counter == nsr.getVnfr().size() - 1) {
+              lastvnfr = true;
+            }
+            monitoringManager.start(
+                vnfr, properties.getProperty("sf.monitoring.item"), 60, lastvnfr);
+          } catch (NotFoundException e) {
+            logger.error(e.getMessage(), e);
+          }
+          VNFR_counter++;
+        }
 
         Prev_NSR = nsr.getId();
         logger.info(
@@ -191,7 +189,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
       VirtualNetworkFunctionRecord vnfr = getVnfrFromPayload(evt.getPayload());
       boolean lastvnfr = true;
       monitoringManager.stop(vnfr);
-      monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 1, lastvnfr);
+      monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 60, lastvnfr);
       if (evt.getAction().ordinal() == Action.HEAL.ordinal()) {
         for (VirtualDeploymentUnit vdu : vnfr.getVdu()) {
           for (VNFCInstance vnfc_instance : vdu.getVnfc_instance()) {
@@ -256,7 +254,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
 
           boolean lastvnfr = true;
           monitoringManager.stop(vnfr);
-          monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 1, lastvnfr);
+          monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 60, lastvnfr);
           creator.ScalePaths(vnfr);
 
         } else {

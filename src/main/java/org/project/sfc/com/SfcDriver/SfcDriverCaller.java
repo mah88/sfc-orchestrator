@@ -14,7 +14,6 @@ import org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime.LoadBala
 import org.project.sfc.com.SfcDriver.PathCreation.DeploymentPathCreation.RandomPathSelection;
 import org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime.ShortestPathSelectionAtRuntime;
 import org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime.TradeOffSpLbSelection;
-import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
 import org.project.sfc.com.SfcModel.SFCCdict.AclMatchCriteria;
@@ -22,6 +21,7 @@ import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SFPdict;
 import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
+import org.project.sfc.com.SfcModel.SFCdict.Status;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.project.sfc.com.SfcRepository.SFCCdictRepo;
 import org.project.sfc.com.SfcRepository.SFCdictRepo;
@@ -59,9 +59,9 @@ public class SfcDriverCaller {
   SfcBroker broker = new SfcBroker();
   org.project.sfc.com.SfcInterfaces.SFC SFC_driver;
   org.project.sfc.com.SfcInterfaces.SFCclassifier SFC_Classifier_driver;
-  LoadBalancedPathSelection LBPath;
-  ShortestPathSelectionAtRuntime SPpath;
-  TradeOffSpLbSelection TOS;
+  @Autowired private LoadBalancedPathSelection LBPath;
+  @Autowired private ShortestPathSelectionAtRuntime SPpath;
+  @Autowired private TradeOffSpLbSelection TOS;
   String SDN_Controller_driver_type;
   @Autowired private VNFdictRepo vnfManag;
   @Autowired private SFCdictRepo sfcManag;
@@ -78,9 +78,9 @@ public class SfcDriverCaller {
     SFC_Classifier_driver = broker.getSfcClassifier(sfcDriver);
     NC = new NeutronClient();
 
-    LBPath = new LoadBalancedPathSelection(sfcDriver);
-    SPpath = new ShortestPathSelectionAtRuntime(sfcDriver);
-    TOS = new TradeOffSpLbSelection(sfcDriver);
+    //  LBPath = new LoadBalancedPathSelection(sfcDriver);
+    //SPpath = new ShortestPathSelectionAtRuntime();
+    // TOS = new TradeOffSpLbSelection(sfcDriver);
 
     SDN_Controller_driver_type = sfcDriver;
     log.debug("Finished init method of SdcDriverCaller");
@@ -114,12 +114,14 @@ public class SfcDriverCaller {
     }
     List<Map<Integer, VNFdict>> list_vnf_dicts = new ArrayList<Map<Integer, VNFdict>>();
 
-   // Iterator it = All_SFCs.iterator();
+    VNFCInstance Active_VNFCI = getActiveVNF(vnfr);
+
+    // Iterator it = All_SFCs.iterator();
     boolean Found_flag = false;
-   // while (it.hasNext()) {
-    for(SfcDict sfcData:All_SFCs){
+    // while (it.hasNext()) {
+    for (SfcDict sfcData : All_SFCs) {
       //Map.Entry SFCdata_counter = (Map.Entry) it.next();
-     // SfcDict sfcData = (SfcDict) SFCdata_counter.getValue();
+      // SfcDict sfcData = (SfcDict) SFCdata_counter.getValue();
       log.debug("[Adding SFs  for Chain : ]  " + sfcData.getName());
 
       Map<Integer, VNFdict> VNFs = sfcData.getPaths().get(0).getPath_SFs();
@@ -140,19 +142,20 @@ public class SfcDriverCaller {
             Found_flag = true;
             if (vnfManag.exists(VNFs.get(position).getId())) {
               log.debug("[REMOVE FAILED VNF from the Database] -->" + VNFs.get(position).getName());
-              vnfManag.delete(VNFs.get(position));
+              VNFs.get(position).setStatus(Status.INACTIVE);
+              vnfManag.update(VNFs.get(position));
             }
 
             VNFs.remove(position);
 
-            if (getActiveVNF(vnfr) != null) {
-              log.debug("[NEW SF will be added  ] " + getActiveVNF(vnfr).getHostname());
+            if (Active_VNFCI != null) {
+              log.debug("[NEW SF will be added  ] " + Active_VNFCI.getHostname());
 
               VNFdict newVnf = new VNFdict();
-              newVnf.setName(getActiveVNF(vnfr).getHostname());
+              newVnf.setName(Active_VNFCI.getHostname());
               newVnf.setType(vnfr.getType());
-              newVnf.setId(getActiveVNF(vnfr).getId());
-              for (Ip ip : getActiveVNF(vnfr).getIps()) {
+              newVnf.setId(Active_VNFCI.getId());
+              for (Ip ip : Active_VNFCI.getIps()) {
                 newVnf.setIP(ip.getIp());
                 newVnf.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
                 System.out.println(
@@ -164,11 +167,11 @@ public class SfcDriverCaller {
                 break;
               }
               VNFs.put(position, newVnf);
-              log.debug("[ADDed the NEW SF ] " + getActiveVNF(vnfr).getHostname());
+              log.debug("[ADDed the NEW SF ] " + Active_VNFCI.getHostname());
               if (newVnf != null) {
                 //sfcc_db.addVNFs(vnfs_list);
                 vnfManag.add(newVnf);
-                log.debug("[ADDed the NEW SF to data base] " + getActiveVNF(vnfr).getHostname());
+                log.debug("[ADDed the NEW SF to data base] " + Active_VNFCI.getHostname());
               }
               break;
             }
@@ -190,27 +193,29 @@ public class SfcDriverCaller {
 
     if (Found_flag == false) {
       log.debug("[The ODL SF was not used in any Chain path ]  ");
-      VNFdict vnf_dict = new VNFdict();
-      vnf_dict.setName(getFaildVNFname(vnfr));
+      VNFdict vnf_dict = vnfManag.findbyName(getFaildVNFname(vnfr));
       if (vnfManag.exists(vnf_dict.getId())) {
         log.debug("[REMOVE FAILED VNF from the Database] -->" + getFaildVNFname(vnfr));
-        vnfManag.delete(vnfManag.findbyName(vnf_dict.getName()));
+        vnf_dict.setStatus(Status.INACTIVE);
+
+        vnfManag.update(vnf_dict);
       }
       log.debug("[REMOVE the SF from the data base ]  ");
     }
     if (sfscheduler.equals("roundrobin")) {
 
-      Iterator it_ = All_SFCs.iterator();
+      //  Iterator it_ = All_SFCs.iterator();
       int counter = 0;
       if (sfcManag.query() != null) {
         log.debug("[Creating Paths - ALL SFCs number ] =  " + sfcManag.count());
       }
 
-      while (it_.hasNext()) {
+      for (SfcDict sfcData : All_SFCs) {
+
         log.debug("[Counter] =  " + counter);
 
-        Map.Entry SFCdata_counter_ = (Map.Entry) it_.next();
-        SfcDict sfcData = (SfcDict) SFCdata_counter_.getValue();
+        //    Map.Entry SFCdata_counter_ = (Map.Entry) it_.next();
+        //    SfcDict sfcData = (SfcDict) SFCdata_counter_.getValue();
 
         log.debug("[Create new Path ] for Chain  " + sfcData.getName());
         log.debug("[VNF dicts list ]  " + list_vnf_dicts.get(counter));
@@ -234,7 +239,7 @@ public class SfcDriverCaller {
 
         String new_instance_id = SFC_driver.CreateSFP(sfc_info, list_vnf_dicts.get(counter));
         log.debug("[NEW Path Updated ] " + new_instance_id);
-        String IDx = ((String) SFCdata_counter_.getKey()).substring(5);
+        String IDx = sfcData.getInstanceId().substring(5);
 
         String VNFFGR_ID = IDx.substring(IDx.indexOf('-') + 1);
         log.debug("[VNFFGR ID] " + VNFFGR_ID);
@@ -245,7 +250,7 @@ public class SfcDriverCaller {
 
         log.debug("[NEW Classifier Updated ] " + SFCC_name);
 
-        log.debug("[Key of the Test_SFC ] =  " + (String) SFCdata_counter_.getKey());
+        log.debug("[Key of the SFC ] =  " + sfcData.getId());
         log.debug("[new instance id ] =  " + new_instance_id);
         SFCCdict updated_classifier = classiferManag.query("sfcc-" + VNFFGR_ID);
         sfcData.setInstanceId(new_instance_id);
@@ -269,6 +274,14 @@ public class SfcDriverCaller {
 
         counter++;
       }
+      List<VNFdict> vnf_list = vnfManag.findAllbyType(vnfr.getType());
+
+      for (int i = 0; i < vnf_list.size(); i++) {
+        if (vnf_list.get(i).getStatus() == Status.INACTIVE) {
+          vnfManag.delete(vnf_list.get(i));
+          log.debug("Removed the VNF instance: " + vnf_list.get(i) + " from the data base");
+        }
+      }
     } else if (sfscheduler.equals("tradeoff")) {
       TOS.ReadjustVNFsAllocation(vnfr);
     } else if (sfscheduler.equals("shortestpath")) {
@@ -276,6 +289,16 @@ public class SfcDriverCaller {
     } else {
       log.debug("ERROR : The SF Scheduler is not detected ");
     }
+
+    // Deleting the failed VNF from database
+    /* List<VNFdict> vnf_list=vnfManag.findAllbyType(vnfr.getType());
+
+    for(int i=0;i<vnf_list.size();i++){
+      if(vnf_list.get(i).getStatus()==Status.INACTIVE){
+        vnfManag.delete(vnf_list.get(i));
+        log.debug("Removed the VNF instance: "+vnf_list.get(i)+" from the data base");
+      }
+    }*/
   }
 
   public String getFaildVNFname(VirtualNetworkFunctionRecord vnfr) {
@@ -391,6 +414,7 @@ public class SfcDriverCaller {
 
           if (!vnfManag.exists(VnfDict.getId())) {
             vnf_list.add(VnfDict);
+            vnfManag.add(VnfDict);
 
             NewVNFs.put(Counter, VnfDict);
             Counter++;
@@ -405,7 +429,11 @@ public class SfcDriverCaller {
         SFC_driver.CreateSFs(NewVNFs);
 
         for (int a = 0; a < NewVNFs.size(); a++) {
-          NewVNFs.get(a).setConnectedSFF(SFC_driver.GetConnectedSFF(NewVNFs.get(a).getName()));
+          //NewVNFs.get(a).setConnectedSFF(SFC_driver.GetConnectedSFF(NewVNFs.get(a).getName()));
+          VNFdict vnf = vnfManag.findbyName(NewVNFs.get(a).getName());
+          vnf.setConnectedSFF(SFC_driver.GetConnectedSFF(NewVNFs.get(a).getName()));
+          vnfManag.update(vnf);
+          log.debug("[Update OF SFs with connected SFF]");
         }
       }
     }
@@ -421,9 +449,9 @@ public class SfcDriverCaller {
       //Get Involved SFCs for this VNF
       //Iterator itr = All_SFCs.iterator();
       //while (itr.hasNext()) {
-      for(SfcDict sfcData:All_SFCs){
-       // Map.Entry SFCdata_counter = (Map.Entry) itr.next();
-       // SfcDict sfcData = (SfcDict) SFCdata_counter.getValue();
+      for (SfcDict sfcData : All_SFCs) {
+        // Map.Entry SFCdata_counter = (Map.Entry) itr.next();
+        // SfcDict sfcData = (SfcDict) SFCdata_counter.getValue();
 
         Map<Integer, VNFdict> VNFs = sfcData.getPaths().get(0).getPath_SFs();
         Iterator vnfs_count = VNFs.entrySet().iterator();
@@ -535,10 +563,18 @@ public class SfcDriverCaller {
         SFC_driver.CreateSFs(VNFs);
 
         for (int a = 0; a < VNFs.size(); a++) {
-          VNFs.get(a).setConnectedSFF(SFC_driver.GetConnectedSFF(VNFs.get(a).getName()));
+          //  VNFs.get(a).setConnectedSFF(SFC_driver.GetConnectedSFF(VNFs.get(a).getName()));
+          VNFdict vnf = vnfManag.findbyName(VNFs.get(a).getName());
+          vnf.setConnectedSFF(SFC_driver.GetConnectedSFF(VNFs.get(a).getName()));
+          vnfManag.update(vnf);
+          log.debug("[Update of SFs with connected SFF]");
         }
 
         list_vnf_dicts.add(VNFs);
+        SFC_driver.DeleteSFP(
+            Involved_SFCs.get(SFCdata_counter.getKey()).getInstanceId(),
+            Involved_SFCs.get(SFCdata_counter.getKey()).getSymmetrical());
+
         scale_counter++;
       }
 
@@ -563,9 +599,6 @@ public class SfcDriverCaller {
         newPaths.add(0, newPath);
         //  Involved_SFCs.get(SFCdata_counter_.getKey()).setChainSFs(list_vnf_dicts.get(counter));
         Involved_SFCs.get(SFCdata_counter_.getKey()).setPaths(newPaths);
-        SFC_driver.DeleteSFP(
-            Involved_SFCs.get(SFCdata_counter_.getKey()).getInstanceId(),
-            Involved_SFCs.get(SFCdata_counter_.getKey()).getSymmetrical());
 
         SFCdict sfc_info = new SFCdict();
         sfc_info.setSfcDict(Involved_SFCs.get(SFCdata_counter_.getKey()));
@@ -589,6 +622,9 @@ public class SfcDriverCaller {
         updated_classifier.setInstanceId(new_instance_id);
         Involved_SFCs.get(SFCdata_counter_.getKey()).setInstanceId(new_instance_id);
         classiferManag.update(updated_classifier);
+        log.debug("[new Path id ] =  " + newPath.getId());
+        log.debug("[new Path  ] =  " + newPath.toString());
+
         sfpManag.update(newPath);
         sfcManag.update(Involved_SFCs.get(SFCdata_counter_.getKey()));
 
@@ -830,12 +866,22 @@ public class SfcDriverCaller {
     Path.setId("Path-" + nsr.getName() + "-" + vnffgr.getId());
     Path.setName("Path-" + nsr.getName() + "-" + vnffgr.getId());
     Path.setParentChainId(vnffgr.getId());
-    if (vnffgr.getVendor().equals("gold")) {
-      Path.setQoS(3);
-    } else if (vnffgr.getVendor().equals("silver")) {
-      Path.setQoS(2);
-    } else {
-      Path.setQoS(1);
+
+    for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
+      String QoS_level = nfp.getPolicy().getQoSLevel();
+
+      if (QoS_level == null) {
+        log.warn(" QoS level is null");
+        QoS_level = "bronze";
+      }
+
+      if (QoS_level.equals("gold")) {
+        Path.setQoS(3);
+      } else if (QoS_level.equals("silver")) {
+        Path.setQoS(2);
+      } else {
+        Path.setQoS(1);
+      }
     }
 
     Paths.add(0, Path);
@@ -928,10 +974,10 @@ public class SfcDriverCaller {
     }
     log.info("delete NSR ID:  " + vnffgID);
 
-    SfcDict sfc=sfcManag.query(vnffgID);
-    SFCCdict sfcc=classiferManag.query("sfcc-" + vnffgID);
+    SfcDict sfc = sfcManag.query(vnffgID);
+    SFCCdict sfcc = classiferManag.query("sfcc-" + vnffgID);
 
-    String rsp_id =sfc.getInstanceId();
+    String rsp_id = sfc.getInstanceId();
 
     String sffc_name = sfcc.getName();
     log.debug("SFC  id to be deleted:  " + rsp_id);
@@ -942,7 +988,7 @@ public class SfcDriverCaller {
     String VNFFGR_ID = IDx.substring(IDx.indexOf('-') + 1);
     log.debug("[VNFFGR ID] =" + VNFFGR_ID);
 
-    Map<Integer, VNFdict> Chain =sfc.getPaths().get(0).getPath_SFs();
+    Map<Integer, VNFdict> Chain = sfc.getPaths().get(0).getPath_SFs();
 
     if (Chain == null) {
       log.error("[Could not find this chain in Data Base] ");
@@ -956,8 +1002,7 @@ public class SfcDriverCaller {
 
     ResponseEntity<String> result = SFC_Classifier_driver.Delete_SFC_Classifier(sffc_name);
     log.info("Delete SFC Classifier :  " + result.getStatusCode().is2xxSuccessful());
-    ResponseEntity<String> sfc_result =
-        SFC_driver.DeleteSFC(rsp_id, sfc.getSymmetrical());
+    ResponseEntity<String> sfc_result = SFC_driver.DeleteSFC(rsp_id, sfc.getSymmetrical());
     log.info("Delete SFC   :  " + sfc_result.getStatusCode().is2xxSuccessful());
 
     if (result != null && sfc_result != null) {

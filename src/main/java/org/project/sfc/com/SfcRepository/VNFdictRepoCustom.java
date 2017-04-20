@@ -2,6 +2,8 @@ package org.project.sfc.com.SfcRepository;
 
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 
+import java.util.List;
+
 /**
  * Created by mah on 3/21/17.
  */
@@ -27,4 +29,8 @@ public interface VNFdictRepoCustom {
   VNFdict query(String id);
 
   VNFdict findbyName(String name);
+
+  List<VNFdict> findbyType(String type);
+
+  List<VNFdict> findAllbyType(String type);
 }

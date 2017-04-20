@@ -3,13 +3,24 @@ package org.project.sfc.com.SfcDriver.PathCreation.ReadjustmentAtRuntime;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
-import org.project.sfc.com.SfcHandler.SFC;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
+import org.project.sfc.com.SfcModel.SFCCdict.SFCCdict;
+import org.project.sfc.com.SfcModel.SFCdict.SFCdict;
 import org.project.sfc.com.SfcModel.SFCdict.SFPdict;
+import org.project.sfc.com.SfcModel.SFCdict.SfcDict;
+import org.project.sfc.com.SfcModel.SFCdict.Status;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
+import org.project.sfc.com.SfcRepository.SFCCdictRepo;
+import org.project.sfc.com.SfcRepository.SFCdictRepo;
+import org.project.sfc.com.SfcRepository.SFPdictRepo;
+import org.project.sfc.com.SfcRepository.VNFdictRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,55 +29,70 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Created by mah on 11/14/16.
  */
+@Service
+@ConfigurationProperties
 public class LoadBalancedPathSelection {
   NeutronClient NC;
-  SFC sfcc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
+  //SFC sfcc_db = org.project.sfc.com.SfcHandler.SFC.getInstance();
   org.project.sfc.com.SfcInterfaces.SFC SFC_driver;
   org.project.sfc.com.SfcInterfaces.SFCclassifier SFC_Classifier_driver;
   SfcBroker broker = new SfcBroker();
   private Logger logger;
+  @Autowired private VNFdictRepo vnfManag;
+  @Autowired private SFCdictRepo sfcManag;
+  @Autowired private SFCCdictRepo classiferManag;
+  @Autowired private SFPdictRepo sfpManag;
 
-  public LoadBalancedPathSelection(String type) throws IOException {
+  @Value("${sfc.driver:ODL}")
+  private String type;
+
+  @PostConstruct
+  public void init() throws IOException {
 
     this.SFC_driver = broker.getSFC(type);
     this.SFC_Classifier_driver = broker.getSfcClassifier(type);
+    this.NC = new NeutronClient();
     this.logger = LoggerFactory.getLogger(this.getClass());
   }
 
   public void ReadjustVNFsAllocation(VirtualNetworkFunctionRecord vnfr) {
     logger.info("[Readjust VNFs Allocation] Start");
 
-    List<SFC.SFC_Data> Chains_data = new ArrayList<>();
+    List<SfcDict> Chains_data = new ArrayList<>();
     List<VNFdict> VNF_instance_dicts = new ArrayList<>();
     HashMap<String, Double> PrevVNFTrafficLoad = new HashMap<String, Double>();
 
-    HashMap<String, SFC.SFC_Data> All_SFCs = sfcc_db.getAllSFCs();
-    HashMap<String, SFC.SFC_Data> Involved_SFCs = new HashMap<String, SFC.SFC_Data>();
-
+    Iterable<SfcDict> All_SFCs = sfcManag.query();
+    HashMap<String, SfcDict> Involved_SFCs = new HashMap<String, SfcDict>();
+    long total_size_SFCs;
     if (All_SFCs != null) {
-      logger.debug("[ ALL SFCs number ] =  " + All_SFCs.size());
+      logger.debug("[ ALL SFCs number ] =  " + sfcManag.count());
+      total_size_SFCs = sfcManag.count();
+
+    } else {
+      total_size_SFCs = 0;
+      logger.debug("SFC Data base is Empty : Can not get the stored chains data  ");
     }
-    int total_size_SFCs = All_SFCs.size();
     logger.debug("[Read Just VNFs Allocation] Get Involved SFCs for this VNF ");
 
     //Get Involved SFCs for this VNF
-    Iterator it = All_SFCs.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry SFCdata_counter = (Map.Entry) it.next();
-      HashMap<Integer, VNFdict> VNFs = All_SFCs.get(SFCdata_counter.getKey()).getChainSFs();
+    // Iterator it = All_SFCs.entrySet().iterator();
+    //  while (it.hasNext()) {
+    //  Map.Entry SFCdata_counter = (Map.Entry) it.next();
+    //  HashMap<Integer, VNFdict> VNFs = All_SFCs.get(SFCdata_counter.getKey()).getChainSFs();
+    for (SfcDict sfcData : All_SFCs) {
+      Map<Integer, VNFdict> VNFs = sfcData.getPaths().get(0).getPath_SFs();
       Iterator vnfs_count = VNFs.entrySet().iterator();
       while (vnfs_count.hasNext()) {
         Map.Entry VNFcounter = (Map.Entry) vnfs_count.next();
         if (VNFs.get(VNFcounter.getKey()).getType().equals(vnfr.getType())) {
-          Involved_SFCs.put(
-              All_SFCs.get(SFCdata_counter.getKey()).getRspID(),
-              All_SFCs.get(SFCdata_counter.getKey()));
-          logger.debug(
-              "[LB Path Selection] Involved SFCs :  "
-                  + All_SFCs.get(SFCdata_counter.getKey()).getRspID());
+          Involved_SFCs.put(sfcData.getInstanceId(), sfcData);
+          logger.debug("[LB Path Selection] Involved SFCs :  " + sfcData.getInstanceId());
         }
       }
     }
@@ -75,19 +101,22 @@ public class LoadBalancedPathSelection {
 
     for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
       for (VNFCInstance vnfc_instance : vdu_x.getVnfc_instance()) {
-        PrevVNFTrafficLoad.put(vnfc_instance.getHostname(), 0.0);
-        logger.debug(
-            "[PrevVNFTAFFICload] VNF instance name : "
-                + vnfc_instance.getHostname()
-                + " Load: "
-                + PrevVNFTrafficLoad.get(vnfc_instance.getHostname()));
+        if (vnfc_instance.getState().equals("ACTIVE")) {
 
-        total_size_VNF_instances++;
+          PrevVNFTrafficLoad.put(vnfc_instance.getHostname(), 0.0);
+          logger.debug(
+              "[PrevVNFTAFFICload] VNF instance name : "
+                  + vnfc_instance.getHostname()
+                  + " Load: "
+                  + PrevVNFTrafficLoad.get(vnfc_instance.getHostname()));
+
+          total_size_VNF_instances++;
+        }
       }
     }
     logger.debug("[LB Path Selection] Total Size of VNF instances : " + total_size_VNF_instances);
 
-    HashMap<String, SFC.SFC_Data> SelectedSFCs = new HashMap<String, SFC.SFC_Data>();
+    HashMap<String, SfcDict> SelectedSFCs = new HashMap<String, SfcDict>();
 
     logger.debug(
         "[LB Path Selection] Levels of Selections = "
@@ -107,23 +136,13 @@ public class LoadBalancedPathSelection {
           while (c.hasNext()) {
             Map.Entry SFCKey = (Map.Entry) c.next();
 
-            if (Involved_SFCs.get(SFCKey.getKey())
-                    .getSFCdictInfo()
-                    .getSfcDict()
-                    .getPaths()
-                    .get(0)
-                    .getPathTrafficLoad()
+            if (Involved_SFCs.get(SFCKey.getKey()).getPaths().get(0).getPathTrafficLoad()
                 >= MaxLoad) {
               logger.debug(
                   "This Test_SFC:  "
-                      + Involved_SFCs.get(SFCKey.getKey()).getRspID()
+                      + Involved_SFCs.get(SFCKey.getKey()).getInstanceId()
                       + " has Load = "
-                      + Involved_SFCs.get(SFCKey.getKey())
-                          .getSFCdictInfo()
-                          .getSfcDict()
-                          .getPaths()
-                          .get(0)
-                          .getPathTrafficLoad()
+                      + Involved_SFCs.get(SFCKey.getKey()).getPaths().get(0).getPathTrafficLoad()
                       + " higher than the Max Load < "
                       + MaxLoad
                       + " >");
@@ -138,15 +157,9 @@ public class LoadBalancedPathSelection {
                 }
               }
               SelectedSFCs.put(
-                  Involved_SFCs.get(SFCKey.getKey()).getRspID(),
+                  Involved_SFCs.get(SFCKey.getKey()).getInstanceId(),
                   Involved_SFCs.get(SFCKey.getKey()));
-              MaxLoad =
-                  Involved_SFCs.get(SFCKey.getKey())
-                      .getSFCdictInfo()
-                      .getSfcDict()
-                      .getPaths()
-                      .get(0)
-                      .getPathTrafficLoad();
+              MaxLoad = Involved_SFCs.get(SFCKey.getKey()).getPaths().get(0).getPathTrafficLoad();
               RSPID = SFCKey.getKey().toString();
               logger.debug(
                   "[LB Path Selection] Selected SFC at round "
@@ -174,7 +187,7 @@ public class LoadBalancedPathSelection {
         int recentQoS = 0;
         String RSPID = null;
         String SelectedVNFinstance = null;
-        SFC.SFC_Data selectedChain = null;
+        SfcDict selectedChain = null;
         logger.debug("[ Selected Chains ]  size:  " + SelectedSFCs.size());
 
         while (counter.hasNext()) {
@@ -182,27 +195,18 @@ public class LoadBalancedPathSelection {
           System.out.println(
               "[ Selected Chain ]  QoS:  "
                   + SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                      .getSFCdictInfo()
-                      .getSfcDict()
                       .getPaths()
                       .get(0)
                       .getQoS());
           logger.debug("[ Recent   QoS ] :  " + recentQoS);
 
-          if (SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                  .getSFCdictInfo()
-                  .getSfcDict()
-                  .getPaths()
-                  .get(0)
-                  .getQoS()
+          if (SelectedSFCs.get(involved_SFC_data_counter.getKey()).getPaths().get(0).getQoS()
               > recentQoS) {
             logger.debug(
                 "[ SFC Selection ] :  "
-                    + SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID()
+                    + SelectedSFCs.get(involved_SFC_data_counter.getKey()).getInstanceId()
                     + " has QoS Priority= "
                     + SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                        .getSFCdictInfo()
-                        .getSfcDict()
                         .getPaths()
                         .get(0)
                         .getQoS()
@@ -212,19 +216,12 @@ public class LoadBalancedPathSelection {
 
             Load =
                 SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                    .getSFCdictInfo()
-                    .getSfcDict()
                     .getPaths()
                     .get(0)
                     .getPathTrafficLoad();
             selectedChain = SelectedSFCs.get(involved_SFC_data_counter.getKey());
             recentQoS =
-                SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                    .getSFCdictInfo()
-                    .getSfcDict()
-                    .getPaths()
-                    .get(0)
-                    .getQoS();
+                SelectedSFCs.get(involved_SFC_data_counter.getKey()).getPaths().get(0).getQoS();
             RSPID = involved_SFC_data_counter.getKey().toString();
 
             logger.debug(
@@ -235,20 +232,13 @@ public class LoadBalancedPathSelection {
                     + " RSP ID= "
                     + RSPID);
 
-          } else if (SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                  .getSFCdictInfo()
-                  .getSfcDict()
-                  .getPaths()
-                  .get(0)
-                  .getQoS()
+          } else if (SelectedSFCs.get(involved_SFC_data_counter.getKey()).getPaths().get(0).getQoS()
               == recentQoS) {
             logger.debug(
                 "[SFC Selection] :  "
-                    + SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID()
+                    + SelectedSFCs.get(involved_SFC_data_counter.getKey()).getInstanceId()
                     + " has QoS Priority= "
                     + SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                        .getSFCdictInfo()
-                        .getSfcDict()
                         .getPaths()
                         .get(0)
                         .getQoS()
@@ -256,8 +246,6 @@ public class LoadBalancedPathSelection {
                     + recentQoS
                     + " >");
             if (SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                    .getSFCdictInfo()
-                    .getSfcDict()
                     .getPaths()
                     .get(0)
                     .getPathTrafficLoad()
@@ -265,11 +253,9 @@ public class LoadBalancedPathSelection {
               selectedChain = SelectedSFCs.get(involved_SFC_data_counter.getKey());
               logger.debug(
                   "[SFC Selection] :  "
-                      + SelectedSFCs.get(involved_SFC_data_counter.getKey()).getRspID()
+                      + SelectedSFCs.get(involved_SFC_data_counter.getKey()).getInstanceId()
                       + " has Load= "
                       + SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                          .getSFCdictInfo()
-                          .getSfcDict()
                           .getPaths()
                           .get(0)
                           .getPathTrafficLoad()
@@ -278,18 +264,11 @@ public class LoadBalancedPathSelection {
                       + " >");
               Load =
                   SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                      .getSFCdictInfo()
-                      .getSfcDict()
                       .getPaths()
                       .get(0)
                       .getPathTrafficLoad();
               recentQoS =
-                  SelectedSFCs.get(involved_SFC_data_counter.getKey())
-                      .getSFCdictInfo()
-                      .getSfcDict()
-                      .getPaths()
-                      .get(0)
-                      .getQoS();
+                  SelectedSFCs.get(involved_SFC_data_counter.getKey()).getPaths().get(0).getQoS();
               RSPID = involved_SFC_data_counter.getKey().toString();
             }
           }
@@ -339,12 +318,12 @@ public class LoadBalancedPathSelection {
                   + SelectedVNFinstance);
         }
 
-        Iterator it_new = All_SFCs.entrySet().iterator();
+        //Iterator it_new = All_SFCs.entrySet().iterator();
         VNFdict SelectedVNFdict = null;
-        while (it_new.hasNext()) {
+        for (SfcDict sfcData : All_SFCs) {
 
-          Map.Entry SFCdata_counter = (Map.Entry) it_new.next();
-          HashMap<Integer, VNFdict> VNFs = All_SFCs.get(SFCdata_counter.getKey()).getChainSFs();
+          // Map.Entry SFCdata_counter = (Map.Entry) it_new.next();
+          Map<Integer, VNFdict> VNFs = sfcData.getPaths().get(0).getPath_SFs();
           Iterator vnfs_count = VNFs.entrySet().iterator();
           while (vnfs_count.hasNext()) {
 
@@ -357,7 +336,7 @@ public class LoadBalancedPathSelection {
 
             if (VNFs.get(VNFcounter.getKey()).getName().equals(SelectedVNFinstance)) {
 
-              SelectedVNFdict = VNFs.get(VNFcounter.getKey());
+              SelectedVNFdict = vnfManag.findbyName(VNFs.get(VNFcounter.getKey()).getName());
               logger.debug("[Selected VNFdict]" + SelectedVNFdict);
 
               break;
@@ -366,7 +345,7 @@ public class LoadBalancedPathSelection {
         }
         logger.info(
             "[ CreatChain ]  chain RSPID  "
-                + selectedChain.getRspID()
+                + selectedChain.getInstanceId()
                 + " VSelected VNF instance= "
                 + SelectedVNFdict.getName());
 
@@ -379,13 +358,21 @@ public class LoadBalancedPathSelection {
       UpdateChain(Chains_data.get(x), VNF_instance_dicts.get(x));
     }
     logger.info("[Readjust VNFs Allocation] END");
+    List<VNFdict> vnf_list = vnfManag.findAllbyType(vnfr.getType());
+
+    for (int i = 0; i < vnf_list.size(); i++) {
+      if (vnf_list.get(i).getStatus() == Status.INACTIVE) {
+        vnfManag.delete(vnf_list.get(i));
+        logger.debug("Removed the VNF instance: " + vnf_list.get(i) + " from the data base");
+      }
+    }
   }
 
-  private void UpdateChain(SFC.SFC_Data Chain_Data, VNFdict VNF_instance) {
+  private void UpdateChain(SfcDict Chain_Data, VNFdict VNF_instance) {
 
     logger.debug("[ LB Path Selection < Create Chain > ]  ");
 
-    HashMap<Integer, VNFdict> VNFs = Chain_Data.getChainSFs();
+    Map<Integer, VNFdict> VNFs = Chain_Data.getPaths().get(0).getPath_SFs();
     Iterator count = VNFs.entrySet().iterator();
     logger.debug("[ LB Path Selection < Create Chain > ] SIZE of VNFs  " + VNFs.size());
 
@@ -412,42 +399,47 @@ public class LoadBalancedPathSelection {
       }
     }
 
-    Chain_Data.setChainSFs(VNFs);
+    Chain_Data.getPaths().get(0).setPath_SFs(VNFs);
 
     List<SFPdict> newPaths = new ArrayList<>();
-    SFPdict newPath = Chain_Data.getSFCdictInfo().getSfcDict().getPaths().get(0);
+    SFPdict newPath = Chain_Data.getPaths().get(0);
     newPath.setPath_SFs(VNFs);
-    double PathTrafficLoad =
-        Chain_Data.getSFCdictInfo().getSfcDict().getPaths().get(0).getPathTrafficLoad();
+    double PathTrafficLoad = Chain_Data.getPaths().get(0).getPathTrafficLoad();
     newPath.setOldTrafficLoad(PathTrafficLoad);
 
     newPaths.add(0, newPath);
 
-    Chain_Data.getSFCdictInfo().getSfcDict().setPaths(newPaths);
+    Chain_Data.setPaths(newPaths);
 
-    SFC_driver.DeleteSFP(Chain_Data.getRspID(), Chain_Data.isSymm());
-
-    String new_instance_id = SFC_driver.CreateSFP(Chain_Data.getSFCdictInfo(), VNFs);
+    SFC_driver.DeleteSFP(Chain_Data.getInstanceId(), Chain_Data.getSymmetrical());
+    SFCdict sfc_info = new SFCdict();
+    sfc_info.setSfcDict(Chain_Data);
+    String new_instance_id = SFC_driver.CreateSFP(sfc_info, VNFs);
     logger.debug("[NEW Path readjusted ] " + new_instance_id);
 
-    String SFCC_name =
-        SFC_Classifier_driver.Create_SFC_Classifer(Chain_Data.getClassifierInfo(), new_instance_id);
-
-    logger.debug("[NEW Classifier updated ] " + SFCC_name);
-    logger.debug("[Update SFCC DB] " + Chain_Data.getRspID().substring(5));
-    String IDx = Chain_Data.getRspID().substring(5);
+    logger.debug("[Update SFCC DB] " + Chain_Data.getInstanceId().substring(5));
+    String IDx = Chain_Data.getInstanceId().substring(5);
 
     String VNFFGR_ID = IDx.substring(IDx.indexOf('-') + 1);
-    logger.debug("[VNFFGR ID] =" + VNFFGR_ID);
 
-    sfcc_db.update(
-        VNFFGR_ID,
-        new_instance_id,
-        Chain_Data.getSfccName(),
-        Chain_Data.getSFCdictInfo().getSfcDict().getSymmetrical(),
-        VNFs,
-        Chain_Data.getSFCdictInfo(),
-        Chain_Data.getClassifierInfo());
-    logger.info("[Update SFCC DB] is done !!");
+    String SFCC_name =
+        SFC_Classifier_driver.Create_SFC_Classifer(
+            classiferManag.query("sfcc-" + VNFFGR_ID), new_instance_id);
+
+    logger.debug("[NEW Classifier updated ] " + SFCC_name);
+    logger.debug("[NEW Classifier Updated ] " + SFCC_name);
+
+    logger.debug("[new instance id ] =  " + new_instance_id);
+    SFCCdict updated_classifier = classiferManag.query("sfcc-" + VNFFGR_ID);
+    updated_classifier.setInstanceId(new_instance_id);
+    Chain_Data.setInstanceId(new_instance_id);
+    classiferManag.update(updated_classifier);
+    sfpManag.update(newPath);
+    sfcManag.update(Chain_Data);
+
+    logger.info("[NEW Classifier Updated ] " + SFCC_name);
+    logger.info("[new instance id ] =  " + new_instance_id);
+
+    logger.info("[Update DB] is done !!");
   }
 }

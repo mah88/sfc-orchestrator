@@ -346,7 +346,11 @@ public class TradeOffShortestPathLoadBalancingSelection {
     String VNF_NAME;
 
     for (NetworkForwardingPath nfp : vnffgr.getNetwork_forwarding_path()) {
-
+      String QoS_level = nfp.getPolicy().getQoSLevel();
+      if (QoS_level == null) {
+        logger.warn(" SFC QoS LEVEL is null");
+        QoS_level = "bronze";
+      }
       for (int counter = 0; counter < nfp.getConnection().size(); counter++) {
 
         for (Map.Entry<String, String> entry : nfp.getConnection().entrySet()) {
@@ -363,7 +367,9 @@ public class TradeOffShortestPathLoadBalancingSelection {
 
                 VNFdict new_vnf = null;
                 try {
-                  new_vnf = SelectVNF(vnfr, prev_vnf, vnffgr.getVendor());
+
+                  logger.debug("QoS Level for the SFC: " + QoS_level);
+                  new_vnf = SelectVNF(vnfr, prev_vnf, QoS_level);
                 } catch (IOException e) {
                   e.printStackTrace();
                 }

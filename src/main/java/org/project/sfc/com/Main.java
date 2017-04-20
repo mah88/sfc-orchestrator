@@ -1,6 +1,5 @@
 package org.project.sfc.com;
 
-import org.project.sfc.com.SfcHandler.SFC;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -30,13 +30,13 @@ public class SFPdict implements Serializable {
   @SerializedName("path sfs")
   @Expose
   @ManyToMany(
-      cascade = {
-          CascadeType.MERGE,
-          CascadeType.REFRESH,
-          CascadeType.PERSIST,
-          CascadeType.DETACH /*CascadeType.REMOVE*/
-      },
-      fetch = FetchType.EAGER
+    cascade = {
+      CascadeType.MERGE,
+      CascadeType.REFRESH,
+      CascadeType.PERSIST,
+      CascadeType.DETACH /*CascadeType.REMOVE*/
+    },
+    fetch = FetchType.EAGER
   )
   private Map<Integer, VNFdict> path_sfs;
 
