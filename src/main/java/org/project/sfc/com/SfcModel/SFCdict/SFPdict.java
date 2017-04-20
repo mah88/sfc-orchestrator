@@ -56,9 +56,7 @@ public class SFPdict implements Serializable {
   @Expose
   private int QoS;
 
-  @SerializedName("rsp instance id")
-  @Expose
-  private String rsp_instance_id;
+
   /**
    *
    * @return The id
@@ -71,13 +69,7 @@ public class SFPdict implements Serializable {
     this.id = ID;
   }
 
-  public String getInstanceId() {
-    return rsp_instance_id;
-  }
 
-  public void setInstanceID(String rspID) {
-    this.rsp_instance_id = rspID;
-  }
   /**
    *
    * @return The parentchainid
@@ -88,7 +80,7 @@ public class SFPdict implements Serializable {
 
   /**
    *
-   * @param Parent Chain ID The parentchainid
+   * @param Parent_Chain ID The parentchainid
    */
   public void setParentChainId(String id) {
     this.ParentChainID = id;
@@ -155,21 +147,19 @@ public class SFPdict implements Serializable {
         + "id='"
         + id
         + '\''
-        + ", ParentChainID="
+        + ", ParentChainID= "
         + ParentChainID
-        + ", path sfs="
+        + ", path sfs= "
         + path_sfs
-        + ", instance id="
-        + rsp_instance_id
-        + ", name="
+        + ", name= "
         + name
-        + ", Path traffic Load='"
+        + ", Path traffic Load= '"
         + PathtrafficLoad
         + '\''
-        + ", old Traffic Load='"
+        + ", old Traffic Load= '"
         + oldTrafficLoad
         + '\''
-        + ", QoS="
+        + ", QoS= "
         + QoS
         + '\''
         + '}';

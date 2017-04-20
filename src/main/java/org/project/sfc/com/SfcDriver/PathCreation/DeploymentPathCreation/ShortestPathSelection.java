@@ -9,6 +9,7 @@ import org.openbaton.catalogue.mano.record.VNFForwardingGraphRecord;
 import org.openbaton.catalogue.mano.record.VirtualNetworkFunctionRecord;
 import org.project.sfc.com.SfcImpl.Broker.SfcBroker;
 import org.project.sfc.com.SfcImpl.ODL_SFC_driver.ODL_SFC.NeutronClient;
+import org.project.sfc.com.SfcModel.SFCdict.Status;
 import org.project.sfc.com.SfcModel.SFCdict.VNFdict;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class ShortestPathSelection {
     }
 
     VNFdict new_vnf = new VNFdict();
-    /*
+
 
     if (prev_vnf == null) {
       System.out.println("**** Previous VNF is null ***");
@@ -64,6 +65,8 @@ public class ShortestPathSelection {
       for (VirtualDeploymentUnit vdu_x : vnfr.getVdu()) {
         for (VNFCInstance vnfc_instance : vdu_x.getVnfc_instance()) {
           if (vnfc_instance.getHostname() == VNF_instance_selected) {
+            firstHopVNF.setId(vnfc_instance.getId());
+            firstHopVNF.setStatus(Status.ACTIVE);
             for (Ip ip : vnfc_instance.getIps()) {
               firstHopVNF.setIP(ip.getIp());
               System.out.println("[SF-Selections] Get Neutron Pro " + new Date().getTime());
@@ -78,7 +81,7 @@ public class ShortestPathSelection {
 
       return firstHopVNF;
     }
-    */
+
 
     logger.debug("[Previous VNF is not null]");
 
@@ -96,12 +99,12 @@ public class ShortestPathSelection {
 
           break;
         }
-        if (prev_vnf == null) {
+      /*  if (prev_vnf == null) {
           length = getDistanceFirstHOP(currentNeutronPortID);
 
-        } else {
+        } else {*/
           length = getDistance(prev_vnf.getNeutronPortId(), currentNeutronPortID);
-        }
+       // }
 
         if (length < minLength) {
 

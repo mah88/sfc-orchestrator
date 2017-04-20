@@ -400,6 +400,7 @@ public class SfcDriverCaller {
           VnfDict.setId(vnfc.getId());
           VnfDict.setName(vnfc.getHostname());
           VnfDict.setType(vnfr.getType());
+          VnfDict.setStatus(Status.ACTIVE);
           for (Ip ip : vnfc.getIps()) {
             VnfDict.setIP(ip.getIp());
             VnfDict.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
@@ -525,6 +526,7 @@ public class SfcDriverCaller {
               newVnf.setName(Scaled_SF_instance_name);
               newVnf.setType(vnfr.getType());
               newVnf.setId(getVNFInstanceName(vnfr, scale_counter).getId());
+              newVnf.setStatus(Status.ACTIVE);
               for (Ip ip : getVNFInstanceName(vnfr, scale_counter).getIps()) {
                 newVnf.setIP(ip.getIp());
                 newVnf.setNeutronPortId(NC.getNeutronPortID(ip.getIp()));
@@ -717,6 +719,7 @@ public class SfcDriverCaller {
           new_vnf.setName(vnfc_instance.getHostname());
           new_vnf.setType(vnfr.getType());
           new_vnf.setId(vnfc_instance.getId());
+          new_vnf.setStatus(Status.ACTIVE);
 
           for (Ip ip : vnfc_instance.getIps()) {
             new_vnf.setIP(ip.getIp());
@@ -836,8 +839,8 @@ public class SfcDriverCaller {
     sfc_dict_test.setId(vnffgr.getId());
 
     sfc_dict_test.setChain(chain);
-    sfc_dict_test.setInfraDriver("ODL");
-    //sfc_dict_test.setStatus("Active");
+    sfc_dict_test.setInfraDriver(sfcDriver);
+    sfc_dict_test.setStatus(Status.ACTIVE);
     sfc_dict_test.setTenantId(NC.getTenantID());
     List<SFPdict> Paths = new ArrayList<SFPdict>();
     SFPdict Path = new SFPdict();

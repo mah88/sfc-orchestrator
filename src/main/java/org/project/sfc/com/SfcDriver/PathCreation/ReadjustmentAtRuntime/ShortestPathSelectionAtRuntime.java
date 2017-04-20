@@ -54,6 +54,9 @@ public class ShortestPathSelectionAtRuntime {
   @Value("${sfc.driver:ODL}")
   private String type;
 
+  @Value("${sfc.sff.ip:192.168.0.16}")
+  private String SFF_IP;
+
   @PostConstruct
   public void init() throws IOException {
 
@@ -98,20 +101,14 @@ public class ShortestPathSelectionAtRuntime {
         }
       }
       Involved.put(sfcData.getId(), flag);
+      logger.debug("[Updating SFCs ] delete first SFC :  " + sfcData.getInstanceId());
 
       SFC_driver.DeleteSFP(sfcData.getInstanceId(), sfcData.getSymmetrical());
     }
 
     if (Involved_SFCs.size() > 0) {
       int SFposition;
-      Iterator itr = Involved_SFCs.entrySet().iterator();
-      while (itr.hasNext()) {
 
-        Map.Entry Key = (Map.Entry) itr.next();
-        logger.debug(
-            "[Deleting Involved SFCs ] Involved SFCs :  "
-                + Involved_SFCs.get(Key.getKey()).getInstanceId());
-      }
       Iterator c = Involved_SFCs.entrySet().iterator();
       while (c.hasNext()) {
 
@@ -404,7 +401,7 @@ public class ShortestPathSelectionAtRuntime {
   private int getDistanceFirstHOP(String currentVNF) throws IOException {
     int distance;
     String currentVNFLocation = SFC_driver.GetConnectedSFF(currentVNF);
-    String prevVNFLocation = "SFF-192.168.0.16";
+    String prevVNFLocation = "SFF-"+SFF_IP;
     if (currentVNFLocation == null) {
       logger.warn(" [ Could not get the connected SFF to one of the VNFs ]  ");
       return 1000;
