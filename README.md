@@ -75,6 +75,7 @@ sfc.password                                 | Password for authorization of SDN
 sfc.sf.deployment.schedulingType             | The Scheduler Algorithm at the Deployment Phase (supported types: random , Shortestpath, roundrobin, tradeoff)
 sfc.sf.runtime.schedulingType                | The Scheduler Algorithm at the Runtime Phase (supported types:  qos-aware-loadbalancer , Shortestpath, roundrobin, tradeoff)
 sf.monitoring.item                           | SF monitoring item from Zabbix (i.e. net.if.in[eth0],system.cpu.load[percpu,avg1])
+sfc.sff.ip                                   | The IP of one of the compute nodes which is a staring point for creating the chains
 openstack.ip                                 | IP of the VIM (OpenStack)
 openstack.username                           | Username for authorization of OpenStack
 openstack.password                           | Password for authorization of OpenStack
