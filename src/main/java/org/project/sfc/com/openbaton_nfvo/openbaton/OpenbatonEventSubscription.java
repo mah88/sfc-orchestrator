@@ -179,28 +179,33 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
 
   public void receiveVNFHealEvent(String message) throws SDKException, ClassNotFoundException {
 
-    logger.debug("[Received VNF Heal Event ]" + message);
+    logger.info("[Received VNF Heal Event ]" + message);
     OpenbatonEvent evt;
     setProjectId();
     try {
       logger.debug("Trying to deserialize it");
       evt = getOpenbatonEvent(message);
-      logger.debug("Received VNF event with action: " + evt.getAction());
+      logger.info("Received VNF event with action: " + evt.getAction());
+      logger.info("Received VNF event with payload: " + evt.getPayload());
       VirtualNetworkFunctionRecord vnfr = getVnfrFromPayload(evt.getPayload());
+
       boolean lastvnfr = true;
-      monitoringManager.stop(vnfr);
-      monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 60, lastvnfr);
+
       if (evt.getAction().ordinal() == Action.HEAL.ordinal()) {
+
         for (VirtualDeploymentUnit vdu : vnfr.getVdu()) {
           for (VNFCInstance vnfc_instance : vdu.getVnfc_instance()) {
+            logger.info("VNFR: " + vnfr.getName());
 
             logger.info(
-                "[OPENBATON-EVENT-SUBSCRIPTION] VNFC instance State: "
+                "[OPENBATON-EVENT-SUBSCRIPTION] FM - VNFC instance State: "
                     + vnfc_instance.getState()
                     + ", VNFC instance Name "
                     + vnfc_instance.getHostname());
           }
         }
+        monitoringManager.stop(vnfr);
+        monitoringManager.start(vnfr, properties.getProperty("sf.monitoring.item"), 60, lastvnfr);
         creator.ChangeChainPath(vnfr);
       }
 
@@ -219,7 +224,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     try {
       logger.debug("Trying to deserialize it");
       evt = getOpenbatonEvent(message);
-      logger.debug("[Received VNF event with action]: " + evt.getAction());
+      logger.info("[Received VNF event with action]: " + evt.getAction());
       VirtualNetworkFunctionRecord vnfr = getVnfrFromPayload(evt.getPayload());
 
       if (evt.getAction().ordinal() == Action.SCALED.ordinal()) {
