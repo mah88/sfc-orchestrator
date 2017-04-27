@@ -94,7 +94,7 @@ Starting the SFC Orchestrator using the provided script with the following comma
 `````
 ./sfc-orch.sh start
 `````
-The SFC Orchestrator will registers four events in the NFVO:
+The SFC Orchestrator will register four events in the NFVO:
 
 Event                                    | Description
 -----------------------------------------|--------------------------------------------------------------------
@@ -233,7 +233,7 @@ image:
 
 ```
 
-### Creating the Network Service Descriptor:
+### Creating a Network Service Descriptor:
 
 Here is the NSD that you can use. It includes the VNF Forwarding Graph Descriptor which includes the Network Forwarding Path and the Policy dedicated to it. 
 The VNFD part of the NSD includes the ids of the VNF Descriptors which are involved in this NSD. The VNFFGD the dependent virtual network links, the Network Forwarding Path and the Involved VNFDs in this VNFFGD. The Network Forwarding Path consists of connection and policy. The connection constructs the order of the Service Functions (VNFs) in the Service Function Chain. The policy consists of the ACL matching criteria that is used to classify the traffic and directs the matched ones to this chain. The policy is also contains qos_level which is used for identifing the QoS for each chain.
