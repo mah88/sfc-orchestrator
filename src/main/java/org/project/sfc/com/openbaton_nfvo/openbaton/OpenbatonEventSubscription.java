@@ -291,8 +291,16 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
           logger.error(e.getMessage(), e);
         }
       }
+      int counter = 0;
       for (VNFForwardingGraphRecord vnffgr : nsr.getVnffgr()) {
-        creator.removeSFC(vnffgr.getId());
+        counter++;
+        if (counter == nsr.getVnffgr().size()) {
+          logger.debug("Deleting Last SFC ");
+
+          creator.removeSFC(vnffgr.getId(), true);
+        } else {
+          creator.removeSFC(vnffgr.getId(), false);
+        }
       }
     } catch (Exception e) {
       logger.warn(e.getMessage(), e);

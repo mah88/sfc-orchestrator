@@ -32,6 +32,12 @@ public class Test_SFC extends SFC {
   }
 
   @Override
+  public void DeleteSFs() {
+    //delete all SFs
+    //
+  }
+
+  @Override
   public String CreateSFP(SFCdict sfc_dict, Map<Integer, VNFdict> vnf_dict) {
     return "created_new_sfp";
   }

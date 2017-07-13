@@ -48,6 +48,18 @@ public class VNFdictRepoImpl implements VNFdictRepoCustom {
 
   @Override
   @Transactional
+  public void removeAll() {
+    Iterable<VNFdict> vnfs = sfRepository.findAll();
+
+    for (VNFdict vnf : vnfs) {
+      log.debug("Deleting SF :" + vnf);
+
+      sfRepository.delete(vnf);
+    }
+  }
+
+  @Override
+  @Transactional
   public VNFdict update(VNFdict new_sf) {
     log.debug("Updating SF : " + new_sf.getName());
 

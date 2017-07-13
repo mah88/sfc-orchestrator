@@ -51,7 +51,6 @@ public class ShortestPathSelection {
 
     VNFdict new_vnf = new VNFdict();
 
-
     if (prev_vnf == null) {
       System.out.println("**** Previous VNF is null ***");
 
@@ -82,7 +81,6 @@ public class ShortestPathSelection {
       return firstHopVNF;
     }
 
-
     logger.debug("[Previous VNF is not null]");
 
     int minLength = Integer.MAX_VALUE;
@@ -99,12 +97,12 @@ public class ShortestPathSelection {
 
           break;
         }
-      /*  if (prev_vnf == null) {
+        /*  if (prev_vnf == null) {
           length = getDistanceFirstHOP(currentNeutronPortID);
 
         } else {*/
-          length = getDistance(prev_vnf.getNeutronPortId(), currentNeutronPortID);
-       // }
+        length = getDistance(prev_vnf.getNeutronPortId(), currentNeutronPortID);
+        // }
 
         if (length < minLength) {
 

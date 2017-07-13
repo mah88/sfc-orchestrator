@@ -23,6 +23,8 @@ public interface SFCinterfaces {
 
   void CreateSFs(Map<Integer, VNFdict> vnf_dict) throws IOException;
 
+  void DeleteSFs();
+
   String CreateSFP(SFCdict sfc_dict, Map<Integer, VNFdict> vnf_dict);
 
   ResponseEntity<String> DeleteSFC(String instance_id, boolean isSymmetric);

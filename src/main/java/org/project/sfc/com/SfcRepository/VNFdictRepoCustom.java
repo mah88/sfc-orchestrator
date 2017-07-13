@@ -14,7 +14,8 @@ public interface VNFdictRepoCustom {
 
   /** This operation allows deleting an existing VNF from the VNF repository. */
   void remove(VNFdict vnfDict);
-
+  /** This operation allows deleting all existing VNFs from the VNF repository. */
+  void removeAll();
   /** This operation allows updating the VNF  in the VNF repository. */
   VNFdict update(VNFdict new_vnf);
 

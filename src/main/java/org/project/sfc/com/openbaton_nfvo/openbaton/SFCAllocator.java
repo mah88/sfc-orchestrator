@@ -88,14 +88,14 @@ public class SFCAllocator {
     logger.debug("Scale Thread created and scheduled");
   }
 
-  public void removeSFC(String nsrId) throws IOException {
+  public void removeSFC(String nsrId, boolean lastSFC) throws IOException {
     logger.info(
         "[Test_SFC-ALLOCATOR] received new set of vnfrs for "
             + nsrId
             + " to remove a Test_SFC at time "
             + new Date().getTime());
     logger.debug("Creating REMOVE Thread");
-    RemoveSFCExecutor rqe = new RemoveSFCExecutor(nsrId, sfcDriverCaller);
+    RemoveSFCExecutor rqe = new RemoveSFCExecutor(nsrId, sfcDriverCaller, lastSFC);
     qtScheduler.schedule(rqe, 10, TimeUnit.SECONDS);
     logger.info(
         "[Test_SFC-ALLOCATOR] scheduled thread to handle the NSR"

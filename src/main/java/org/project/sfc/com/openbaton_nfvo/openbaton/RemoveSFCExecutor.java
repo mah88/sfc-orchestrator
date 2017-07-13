@@ -27,8 +27,10 @@ public class RemoveSFCExecutor implements Runnable {
   private Set<VirtualNetworkFunctionRecord> vnfrs;
   private String nsrID;
   private Properties properties;
+  private boolean lastSFC;
 
-  public RemoveSFCExecutor(String nsrID, SfcDriverCaller sfcCaller) throws IOException {
+  public RemoveSFCExecutor(String nsrID, SfcDriverCaller sfcCaller, boolean lastSFC)
+      throws IOException {
     //sfchandler=new SFCcreator();
     this.properties = ConfigReader.readProperties();
 
@@ -37,6 +39,7 @@ public class RemoveSFCExecutor implements Runnable {
     this.nsrID = nsrID;
     this.logger = LoggerFactory.getLogger(this.getClass());
     this.sfcCaller = sfcCaller;
+    this.lastSFC = lastSFC;
   }
 
   @Override
@@ -51,7 +54,8 @@ public class RemoveSFCExecutor implements Runnable {
     boolean response = false;
     try {
       response =
-          sfcCaller.Delete(nsrID, properties.getProperty("sfc.sf.deployment.schedulingType"));
+          sfcCaller.Delete(
+              nsrID, properties.getProperty("sfc.sf.deployment.schedulingType"), lastSFC);
     } catch (IOException e) {
       e.printStackTrace();
     }

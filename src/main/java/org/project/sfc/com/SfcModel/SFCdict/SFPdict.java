@@ -56,7 +56,6 @@ public class SFPdict implements Serializable {
   @Expose
   private int QoS;
 
-
   /**
    *
    * @return The id
@@ -69,7 +68,6 @@ public class SFPdict implements Serializable {
     this.id = ID;
   }
 
-
   /**
    *
    * @return The parentchainid
@@ -80,7 +78,7 @@ public class SFPdict implements Serializable {
 
   /**
    *
-   * @param Parent_Chain ID The parentchainid
+   * @param_parentchainid
    */
   public void setParentChainId(String id) {
     this.ParentChainID = id;

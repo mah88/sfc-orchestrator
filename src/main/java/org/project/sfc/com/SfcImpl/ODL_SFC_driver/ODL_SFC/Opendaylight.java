@@ -76,8 +76,11 @@ public class Opendaylight extends SFC {
 
   public String Config_SF_URL =
       "restconf/config/service-function:service-functions/service-function/{0}/";
+  public String Config_SFs_URL = "restconf/config/service-function:service-functions/";
   public String Config_SFF_URL =
       "restconf/config/service-function-forwarder:service-function-forwarders/service-function-forwarder/{0}/";
+  public String Config_SFFs_URL =
+      "restconf/config/service-function-forwarder:service-function-forwarders/";
   public String Config_SFC_URL =
       "restconf/config/service-function-chain:service-function-chains/service-function-chain/{0}/";
   public String Config_SFP_URL =
@@ -723,6 +726,11 @@ public class Opendaylight extends SFC {
     ResponseEntity<String> sff_result = this.sendRest_SFF(sffJSON, "DELETE", this.Config_SFF_URL);
     return sff_result;
   }
+
+  public ResponseEntity<String> deleteODLsffs() {
+    ResponseEntity<String> sff_result = this.sendRest_SFF(null, "DELETE", this.Config_SFFs_URL);
+    return sff_result;
+  }
   //ODL SFs Stuff (Create, Update, Delete)
   public ResponseEntity<String> createODLsf(SFJSON sfJSON) {
     com.google.gson.Gson gson = new com.google.gson.Gson();
@@ -751,6 +759,12 @@ public class Opendaylight extends SFC {
   public ResponseEntity<String> deleteODLsf(String sf_name) {
     ResponseEntity<String> sf_result =
         this.sendRest_SF(null, "DELETE", MessageFormat.format(this.Config_SF_URL, sf_name));
+    return sf_result;
+  }
+
+  public ResponseEntity<String> deleteODLsfs() {
+    ResponseEntity<String> sf_result =
+        this.sendRest_SF(null, "DELETE", MessageFormat.format(this.Config_SFs_URL, ""));
     return sf_result;
   }
   //ODL Test_SFC stuff (Create, Update, Delete)
@@ -2095,6 +2109,13 @@ public class Opendaylight extends SFC {
     deleteODLsfc(instance_id.substring(5));
 
     return rsp_result;
+  }
+
+  @Override
+  public void DeleteSFs() {
+
+    deleteODLsfs();
+    deleteODLsffs();
   }
 
   @Override

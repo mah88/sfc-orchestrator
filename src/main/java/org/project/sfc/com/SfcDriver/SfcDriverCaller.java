@@ -963,7 +963,8 @@ public class SfcDriverCaller {
     }
   }
 
-  public boolean Delete(String vnffgID, String SfSchedulingType) throws IOException {
+  public boolean Delete(String vnffgID, String SfSchedulingType, boolean lastSFC)
+      throws IOException {
     if (SfSchedulingType.equals("roundrobin")) {
       RoundRobinSelection RRS = new RoundRobinSelection();
       RRS.Delete(sfcManag.query(vnffgID).getPaths().get(0).getPath_SFs());
@@ -1016,6 +1017,11 @@ public class SfcDriverCaller {
         log.info("[ Removed classifier from DB  ]  ");
         sfcManag.remove(sfcManag.query(vnffgID));
         log.info("[ Removed SFC from DB  ]  ");
+        if (lastSFC == true) {
+          SFC_driver.DeleteSFs();
+          vnfManag.removeAll();
+          log.info("[ Removed All SFs from DB  ]  ");
+        }
         return true;
       } else {
         return false;

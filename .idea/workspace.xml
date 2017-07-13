@@ -1,11 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b782f797-36e3-4e0b-a889-24fe87d5c329" name="Default" comment="">
+    <list default="true" id="b782f797-36e3-4e0b-a889-24fe87d5c329" name="Default" comment="Deleting SFs from data base and ODL when NS is released">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/cache.properties.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/fileHashes.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/outputFileStates.bin" afterPath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/outputFileStates.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.3/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcDriver/PathCreation/DeploymentPathCreation/ShortestPathSelection.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcDriver/PathCreation/DeploymentPathCreation/ShortestPathSelection.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/ShortestPathSelectionAtRuntime.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/ShortestPathSelectionAtRuntime.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcDriver/SfcDriverCaller.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcDriver/SfcDriverCaller.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight$Brdict.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight$Brdict.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight$BridgeMapping.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight$BridgeMapping.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight$SF_dict.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight$SF_dict.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcInterfaces/SFCinterfaces.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcInterfaces/SFCinterfaces.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcModel/SFCdict/SFPdict.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcModel/SFCdict/SFPdict.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcRepository/VNFdictRepoCustom.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcRepository/VNFdictRepoCustom.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.class" afterPath="$PROJECT_DIR$/build/classes/main/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/resources/main/sfco.properties" afterPath="$PROJECT_DIR$/build/resources/main/sfco.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/DeploymentPathCreation/ShortestPathSelection.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/DeploymentPathCreation/ShortestPathSelection.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/ShortestPathSelectionAtRuntime.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/ShortestPathSelectionAtRuntime.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/TradeOffSpLbSelection.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/TradeOffSpLbSelection.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoCustom.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoCustom.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/sfco.properties" afterPath="$PROJECT_DIR$/src/main/resources/sfco.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java" afterPath="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java" />
     </list>
     <ignored path="org-controller.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -72,8 +103,8 @@
       <file leaf-file-name="SfcDriverCaller.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-277.12903">
-              <caret line="721" column="43" selection-start-line="721" selection-start-column="43" selection-end-line="721" selection-end-column="43" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="1020" column="27" selection-start-line="1020" selection-start-column="27" selection-end-line="1020" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -81,100 +112,155 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SFPdict.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java">
+      <file leaf-file-name="VNFdictRepoImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="82" column="19" selection-start-line="82" selection-start-column="19" selection-end-line="82" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SfcDict.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SfcDict.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ShortestPathSelection.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/DeploymentPathCreation/ShortestPathSelection.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.548388">
-              <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
+              <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
               <folding>
-                <element signature="e#5752#5770#0" expanded="true" />
-                <element signature="e#5816#5825#0" expanded="true" />
-                <element signature="e#5867#5875#0" expanded="true" />
+                <element signature="imports" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sfco.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/sfco.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="41" selection-start-line="32" selection-start-column="41" selection-end-line="32" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SfcBroker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SfcBroker.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OpenbatonEventSubscription.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="OpenbatonEventSubscription.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.23717949">
-              <caret line="190" column="0" selection-start-line="190" selection-start-column="0" selection-end-line="190" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="295" column="18" selection-start-line="295" selection-start-column="18" selection-end-line="295" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SfcBroker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Broker/SfcBroker.java">
+      <file leaf-file-name="SFCAllocator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+              <caret line="98" column="52" selection-start-line="98" selection-start-column="52" selection-end-line="98" selection-end-column="52" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MonitoringEngine.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringEngine.java">
+      <file leaf-file-name="SFCdriver.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/Interfaces/SFCdriver.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="192" column="0" selection-start-line="192" selection-start-column="0" selection-end-line="192" selection-end-column="0" />
+              <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#447#448#0" expanded="false" />
+                <element signature="e#473#474#0" expanded="false" />
+                <element signature="e#1022#1023#0" expanded="false" />
+                <element signature="e#1049#1050#0" expanded="false" />
+                <element signature="e#1103#1104#0" expanded="false" />
+                <element signature="e#1141#1142#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ShortestPathSelectionAtRuntime.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/ShortestPathSelectionAtRuntime.java">
+      <file leaf-file-name="Opendaylight.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="53" column="26" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
+              <caret line="2115" column="0" selection-start-line="2114" selection-start-column="14" selection-end-line="2114" selection-end-column="23" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#51556#51557#0" expanded="false" />
+                <element signature="e#51585#51586#0" expanded="false" />
+                <element signature="e#51629#51630#0" expanded="false" />
+                <element signature="e#51663#51664#0" expanded="false" />
+                <element signature="e#51695#51696#0" expanded="false" />
+                <element signature="e#51722#51723#0" expanded="false" />
+                <element signature="e#51763#51764#0" expanded="false" />
+                <element signature="e#51795#51796#0" expanded="false" />
+                <element signature="e#51831#51832#0" expanded="false" />
+                <element signature="e#51860#51861#0" expanded="false" />
+                <element signature="e#51905#51906#0" expanded="false" />
+                <element signature="e#51939#51940#0" expanded="false" />
+                <element signature="e#51973#51974#0" expanded="false" />
+                <element signature="e#52001#52002#0" expanded="false" />
+                <element signature="e#52044#52045#0" expanded="false" />
+                <element signature="e#52077#52078#0" expanded="false" />
+                <element signature="e#52111#52112#0" expanded="false" />
+                <element signature="e#52139#52140#0" expanded="false" />
+                <element signature="e#52182#52183#0" expanded="false" />
+                <element signature="e#52215#52216#0" expanded="false" />
+                <element signature="e#52248#52249#0" expanded="false" />
+                <element signature="e#52276#52277#0" expanded="false" />
+                <element signature="e#52320#52321#0" expanded="false" />
+                <element signature="e#52355#52356#0" expanded="false" />
+                <element signature="e#73444#73445#0" expanded="false" />
+                <element signature="e#73467#73468#0" expanded="false" />
+                <element signature="e#73525#73526#0" expanded="false" />
+                <element signature="e#73551#73552#0" expanded="false" />
+                <element signature="e#73587#73588#0" expanded="false" />
+                <element signature="e#73611#73612#0" expanded="false" />
+                <element signature="e#73655#73656#0" expanded="false" />
+                <element signature="e#73683#73684#0" expanded="false" />
+                <element signature="e#73715#73716#0" expanded="false" />
+                <element signature="e#73742#73743#0" expanded="false" />
+                <element signature="e#73785#73786#0" expanded="false" />
+                <element signature="e#73818#73819#0" expanded="false" />
+                <element signature="e#73852#73853#0" expanded="false" />
+                <element signature="e#73880#73881#0" expanded="false" />
+                <element signature="e#73923#73924#0" expanded="false" />
+                <element signature="e#73957#73958#0" expanded="false" />
+                <element signature="e#73991#73992#0" expanded="false" />
+                <element signature="e#74020#74021#0" expanded="false" />
+                <element signature="e#74067#74068#0" expanded="false" />
+                <element signature="e#74105#74106#0" expanded="false" />
+                <element signature="e#74139#74140#0" expanded="false" />
+                <element signature="e#74167#74168#0" expanded="false" />
+                <element signature="e#74212#74213#0" expanded="false" />
+                <element signature="e#74247#74248#0" expanded="false" />
+                <element signature="e#74342#74343#0" expanded="false" />
+                <element signature="e#74371#74372#0" expanded="false" />
+                <element signature="e#74415#74416#0" expanded="false" />
+                <element signature="e#74449#74450#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Test_SFC.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="34" column="4" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SFPdict.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.16206482">
+              <caret line="80" column="12" selection-start-line="80" selection-start-column="12" selection-end-line="80" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SFCinterfaces.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="25" column="16" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RemoveSFCExecutor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="31" column="26" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -765,10 +851,8 @@
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFC.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCclassifier.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/AddSFCExecutor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/ScaleSFPExecutor.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/UpdateSFPExecutor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SfcDict.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCCdict/AclMatchCriteria.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/SFPdictRepoCustom.java" />
@@ -778,16 +862,11 @@
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/BeanConfiguration.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/SFCdictRepoImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/SFCCdictRepoImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcHandler/SFC.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcHandler/SFCcreator.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/MonitoringAgent/MonitoringTask.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/VNFdict.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoCustom.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/LoadBalancedPathSelection.java" />
         <option value="$PROJECT_DIR$/src/main/resources/application.properties" />
@@ -797,10 +876,17 @@
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/DeploymentPathCreation/RandomPathSelection.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/DeploymentPathCreation/ShortestPathSelection.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/ShortestPathSelectionAtRuntime.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java" />
         <option value="$PROJECT_DIR$/src/main/resources/sfco.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoCustom.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java" />
       </list>
     </option>
   </component>
@@ -815,10 +901,10 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
-    <option name="width" value="1855" />
-    <option name="height" value="1176" />
+    <option name="x" value="64" />
+    <option name="y" value="-4" />
+    <option name="width" value="1857" />
+    <option name="height" value="1205" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -845,6 +931,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1090,10 +1177,6 @@
               <option name="myItemId" value="SfcImpl" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Test_SFC_driver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1126,10 +1209,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="ODL_SFC_driver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ODL_SFC_Classifier" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1168,74 +1247,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="ODL_SFC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="org-controller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SFC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SfcImpl" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ODL_SFC_driver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="org-controller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SFC" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SfcImpl" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Broker" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1527,7 +1538,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="PackagesPane" />
     </panes>
@@ -1924,7 +1934,13 @@
       <option name="project" value="LOCAL" />
       <updated>1492696924652</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="fixing a bug related to ODL SFC in deleting Paths">
+      <created>1493114692192</created>
+      <option name="number" value="00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1493114692192</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1937,8 +1953,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1855" height="1176" extended-state="6" />
-    <editor active="false" />
+    <frame x="64" y="-4" width="1857" height="1205" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1946,23 +1962,23 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32993513" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28359592" sideWeight="0.49806523" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2215014" sideWeight="0.50193477" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32993513" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20018536" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31288004" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32993513" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946378" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30569375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2493049" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32993513" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28359592" sideWeight="0.49806523" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2493049" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1983,7 +1999,8 @@
     <MESSAGE value="Adding different algorithms of Path Creation in deployment and running time phase" />
     <MESSAGE value="Adjusting the database" />
     <MESSAGE value="fixing a bug related to ODL SFC in deleting Paths" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing a bug related to ODL SFC in deleting Paths" />
+    <MESSAGE value="Deleting SFs from data base and ODL when NS is released" />
+    <option name="LAST_COMMIT_MESSAGE" value="Deleting SFs from data base and ODL when NS is released" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2013,13 +2030,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/ScaleSFPExecutor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/UpdateSFPExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2045,13 +2055,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/SFCdictRepo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -2097,13 +2100,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="49" selection-start-line="23" selection-start-column="49" selection-end-line="23" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC_Classifier/SFC_Classifier.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2122,17 +2118,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33238637">
           <caret line="62" column="10" selection-start-line="62" selection-start-column="10" selection-end-line="62" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="66" selection-start-line="30" selection-start-column="57" selection-end-line="30" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2141,13 +2126,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="80" column="69" selection-start-line="80" selection-start-column="54" selection-end-line="80" selection-end-column="69" />
         </state>
       </provider>
     </entry>
@@ -2162,7 +2140,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="83" column="14" selection-start-line="83" selection-start-column="14" selection-end-line="83" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2173,13 +2150,6 @@
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="74" selection-start-line="10" selection-start-column="74" selection-end-line="10" selection-end-column="74" />
         </state>
       </provider>
     </entry>
@@ -2194,15 +2164,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoCustom.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="43" selection-start-line="34" selection-start-column="43" selection-end-line="34" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2217,24 +2178,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.645161">
-          <caret line="108" column="39" selection-start-line="108" selection-start-column="39" selection-end-line="108" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding>
-            <element signature="e#1225#1226#0" expanded="false" />
-            <element signature="e#1274#1275#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2242,7 +2189,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="9" column="47" selection-start-line="9" selection-start-column="47" selection-end-line="9" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2250,9 +2196,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="358" column="5" selection-start-line="358" selection-start-column="5" selection-end-line="358" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2260,23 +2203,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="9" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2547" column="49" selection-start-line="2547" selection-start-column="34" selection-end-line="2547" selection-end-column="49" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2293,8 +2219,8 @@
         <state vertical-scroll-proportion="-30.0">
           <caret line="62" column="24" selection-start-line="62" selection-start-column="24" selection-end-line="62" selection-end-column="24" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3629#3646#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#3629#3646#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2327,7 +2253,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2335,7 +2260,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2351,19 +2275,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/DeploymentPathCreation/ShortestPathSelection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.548388">
-          <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
-          <folding>
-            <element signature="e#5752#5770#0" expanded="true" />
-            <element signature="e#5816#5825#0" expanded="true" />
-            <element signature="e#5867#5875#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="67" column="25" selection-start-line="67" selection-start-column="25" selection-end-line="67" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2375,39 +2294,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="82" column="19" selection-start-line="82" selection-start-column="19" selection-end-line="82" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/PathCreation/ReadjustmentAtRuntime/ShortestPathSelectionAtRuntime.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="53" column="26" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-277.12903">
-          <caret line="721" column="43" selection-start-line="721" selection-start-column="43" selection-end-line="721" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/sfco.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="41" selection-start-line="32" selection-start-column="41" selection-end-line="32" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2415,16 +2308,179 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="192" column="0" selection-start-line="192" selection-start-column="0" selection-end-line="192" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/sfco.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="28" selection-start-line="45" selection-start-column="28" selection-end-line="45" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="74" selection-start-line="10" selection-start-column="74" selection-end-line="10" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/Interfaces/SFCdriver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#447#448#0" expanded="false" />
+            <element signature="e#473#474#0" expanded="false" />
+            <element signature="e#1022#1023#0" expanded="false" />
+            <element signature="e#1049#1050#0" expanded="false" />
+            <element signature="e#1103#1104#0" expanded="false" />
+            <element signature="e#1141#1142#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/SFCAllocator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="98" column="52" selection-start-line="98" selection-start-column="52" selection-end-line="98" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoCustom.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="16" column="54" selection-start-line="16" selection-start-column="54" selection-end-line="16" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/SFCdictRepo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14405762">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcRepository/VNFdictRepoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/OpenbatonEventSubscription.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23717949">
-          <caret line="190" column="0" selection-start-line="190" selection-start-column="0" selection-end-line="190" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="295" column="18" selection-start-line="295" selection-start-column="18" selection-end-line="295" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcDriver/SfcDriverCaller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1020" column="27" selection-start-line="1020" selection-start-column="27" selection-end-line="1020" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/ODL_SFC_driver/ODL_SFC/Opendaylight.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2115" column="0" selection-start-line="2114" selection-start-column="14" selection-end-line="2114" selection-end-column="23" />
+          <folding>
+            <element signature="e#51556#51557#0" expanded="false" />
+            <element signature="e#51585#51586#0" expanded="false" />
+            <element signature="e#51629#51630#0" expanded="false" />
+            <element signature="e#51663#51664#0" expanded="false" />
+            <element signature="e#51695#51696#0" expanded="false" />
+            <element signature="e#51722#51723#0" expanded="false" />
+            <element signature="e#51763#51764#0" expanded="false" />
+            <element signature="e#51795#51796#0" expanded="false" />
+            <element signature="e#51831#51832#0" expanded="false" />
+            <element signature="e#51860#51861#0" expanded="false" />
+            <element signature="e#51905#51906#0" expanded="false" />
+            <element signature="e#51939#51940#0" expanded="false" />
+            <element signature="e#51973#51974#0" expanded="false" />
+            <element signature="e#52001#52002#0" expanded="false" />
+            <element signature="e#52044#52045#0" expanded="false" />
+            <element signature="e#52077#52078#0" expanded="false" />
+            <element signature="e#52111#52112#0" expanded="false" />
+            <element signature="e#52139#52140#0" expanded="false" />
+            <element signature="e#52182#52183#0" expanded="false" />
+            <element signature="e#52215#52216#0" expanded="false" />
+            <element signature="e#52248#52249#0" expanded="false" />
+            <element signature="e#52276#52277#0" expanded="false" />
+            <element signature="e#52320#52321#0" expanded="false" />
+            <element signature="e#52355#52356#0" expanded="false" />
+            <element signature="e#73444#73445#0" expanded="false" />
+            <element signature="e#73467#73468#0" expanded="false" />
+            <element signature="e#73525#73526#0" expanded="false" />
+            <element signature="e#73551#73552#0" expanded="false" />
+            <element signature="e#73587#73588#0" expanded="false" />
+            <element signature="e#73611#73612#0" expanded="false" />
+            <element signature="e#73655#73656#0" expanded="false" />
+            <element signature="e#73683#73684#0" expanded="false" />
+            <element signature="e#73715#73716#0" expanded="false" />
+            <element signature="e#73742#73743#0" expanded="false" />
+            <element signature="e#73785#73786#0" expanded="false" />
+            <element signature="e#73818#73819#0" expanded="false" />
+            <element signature="e#73852#73853#0" expanded="false" />
+            <element signature="e#73880#73881#0" expanded="false" />
+            <element signature="e#73923#73924#0" expanded="false" />
+            <element signature="e#73957#73958#0" expanded="false" />
+            <element signature="e#73991#73992#0" expanded="false" />
+            <element signature="e#74020#74021#0" expanded="false" />
+            <element signature="e#74067#74068#0" expanded="false" />
+            <element signature="e#74105#74106#0" expanded="false" />
+            <element signature="e#74139#74140#0" expanded="false" />
+            <element signature="e#74167#74168#0" expanded="false" />
+            <element signature="e#74212#74213#0" expanded="false" />
+            <element signature="e#74247#74248#0" expanded="false" />
+            <element signature="e#74342#74343#0" expanded="false" />
+            <element signature="e#74371#74372#0" expanded="false" />
+            <element signature="e#74415#74416#0" expanded="false" />
+            <element signature="e#74449#74450#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcImpl/Test_SFC_driver/Test_SFC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="34" column="4" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcInterfaces/SFCinterfaces.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="16" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/openbaton_nfvo/openbaton/RemoveSFCExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="31" column="26" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/project/sfc/com/SfcModel/SFCdict/SFPdict.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16206482">
+          <caret line="80" column="12" selection-start-line="80" selection-start-column="12" selection-end-line="80" selection-end-column="12" />
           <folding />
         </state>
       </provider>

@@ -547,7 +547,7 @@ public class TradeOffSpLbSelection {
   private int getDistanceFirstHOP(String currentVNF) throws IOException {
     int distance;
     String currentVNFLocation = SFC_driver.GetConnectedSFF(currentVNF);
-    String prevVNFLocation = "SFF-"+SFF_IP;
+    String prevVNFLocation = "SFF-" + SFF_IP;
     if (currentVNFLocation == null) {
       logger.warn("ERROR [ Could not get the connected SFF to one of the VNFs ]  ");
       return 1000;
