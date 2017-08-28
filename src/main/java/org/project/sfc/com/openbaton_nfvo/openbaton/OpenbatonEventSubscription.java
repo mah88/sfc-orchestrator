@@ -89,7 +89,7 @@ public class OpenbatonEventSubscription implements CommandLineRunner {
     eventEndpointDeletion.setEvent(Action.RELEASE_RESOURCES_FINISH);
 
     eventEndpointDeletion.setEndpoint(ConfigurationBeans.queueName_eventResourcesReleaseFinish);
-    eventEndpointDeletion.setName("SFC-event-NSR-Relased");
+    eventEndpointDeletion.setName("SFC-event-NSR-Released");
     eventEndpointDeletion = requestor.getEventAgent().create(eventEndpointDeletion);
 
     // For Fault SFCdictRepoImpl
