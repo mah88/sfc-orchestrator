@@ -99,7 +99,7 @@ The SFC Orchestrator will register four events in the NFVO:
 Event                                    | Description
 -----------------------------------------|--------------------------------------------------------------------
 SFC-event-NSR-Created                    | When event INSTANTIATE_FINISH is triggered in the NFVO, it informs the SFC Orchestrator about it with the NSR details in order to create the required SFCs in this NS.
-SFC-event-NSR-Relased                    | When event RELEASE_RESOURCES_FINISH is triggered in the NFVO, it informs the SFC Orchestrator about it with the NSR details in order to remove all SFCs created for this NS.
+SFC-event-NSR-Released                   | When event RELEASE_RESOURCES_FINISH is triggered in the NFVO, it informs the SFC Orchestrator about it with the NSR details in order to remove all SFCs created for this NS.
 SFC-event-VNF-Scaled                     | When event SCALED is triggered in the NFVO, it informs the SFC Orchestrator about it with the VNF Record details in order to update all SFCs involves that VNF.
 SFC-event-VNF-Healed                     | When event HEAL is triggered in the NFVO, it informs the SFC Orchestrator about it with the VNF Record details in order to update all SFCs involves that VNF.                
 
